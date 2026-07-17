@@ -20,7 +20,8 @@ explicitly asked — the site's simplicity is intentional.
 
 ## Structure
 ```
-index.html            → Spanish homepage (root = ES, no redirect)
+index.html             → JS language-redirector only (noindex,nofollow; detects navigator.language,
+                          replaces to /es/ or /en/). NOT the Spanish homepage — that's es/index.html.
 en/                    → English pages (index, about, contact, digital-marketing,
                           international-expansion, thank-you, thank-you-expansion)
 es/                    → Spanish pages (index, sobre-mi, contacto, marketing-digital,

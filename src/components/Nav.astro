@@ -1,0 +1,126 @@
+---
+// EN and ES nav links are NOT mirrors of each other -- see MARKETING.md
+// "Audience / ICP" section. Update this file's two arrays independently.
+interface Props {
+  lang: 'en' | 'es';
+  currentPath: string;
+}
+const { lang, currentPath } = Astro.props;
+
+const NAV = {
+  en: {
+    home: '/en/index.html',
+    links: [
+      { href: '/en/index.html', label: 'Home' },
+      { href: '/en/digital-marketing.html', label: 'Digital Marketing' },
+      { href: '/en/nearshore-staffing.html', label: 'Nearshore Staffing' },
+      { href: '/en/international-expansion.html', label: 'Expand to Colombia' },
+      { href: '/en/about.html', label: 'About' },
+      { href: '/en/contact.html', label: 'Contact' },
+    ],
+    altHref: '/es/index.html',
+    altLabel: 'ES',
+    ctaLabel: 'Schedule a Call',
+  },
+  es: {
+    home: '/es/index.html',
+    links: [
+      { href: '/es/index.html', label: 'Inicio' },
+      { href: '/es/expansion-internacional.html', label: 'Expansión Internacional' },
+      { href: '/es/sobre-mi.html', label: 'Sobre Mí' },
+      { href: '/es/contacto.html', label: 'Contacto' },
+    ],
+    altHref: '/en/index.html',
+    altLabel: 'EN',
+    ctaLabel: 'Agenda una Llamada',
+  },
+};
+
+const d = NAV[lang];
+const ctaHref = 'https://calendly.com/jose-ubik360/30min';
+---
+
+<nav
+  id="main-nav"
+  class="fixed top-0 left-0 right-0 z-50 bg-white/97 backdrop-blur-sm border-b border-gray-100 font-sans transition-shadow"
+>
+  <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+    <a href={d.home} class="flex-shrink-0 flex items-center">
+      <img src="https://ubik360.com/assets/images/ubik360logo.png" alt="Ubik 360" class="h-9 w-auto" />
+    </a>
+
+    <div class="hidden lg:flex items-center gap-8">
+      {d.links.map((l) => {
+        const active = currentPath === l.href;
+        return (
+          <a
+            href={l.href}
+            class={`text-sm font-medium transition-colors whitespace-nowrap ${
+              active ? 'text-brand-red' : 'text-gray-700 hover:text-brand-black'
+            }`}
+          >
+            {l.label}
+          </a>
+        );
+      })}
+    </div>
+
+    <div class="hidden lg:flex items-center gap-4">
+      <a
+        href={d.altHref}
+        class="text-[.8125rem] font-medium text-gray-500 border border-gray-300 rounded-md px-3.5 py-1 transition-colors hover:border-brand-black hover:text-brand-black"
+      >
+        {d.altLabel}
+      </a>
+      <a href={ctaHref} target="_blank" rel="noopener" class="btn-primary text-sm whitespace-nowrap">
+        {d.ctaLabel}
+      </a>
+    </div>
+
+    <button id="nav-hamburger" aria-label="Menu" class="lg:hidden flex p-2 bg-transparent border-none cursor-pointer text-brand-black">
+      <svg id="icon-open" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+      <svg id="icon-close" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="hidden">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+  </div>
+
+  <div id="nav-mobile-menu" class="hidden lg:hidden bg-white px-6 pb-6 border-t border-gray-100">
+    {d.links.map((l) => (
+      <a href={l.href} class="block py-3 text-[.9375rem] font-medium text-brand-black border-b border-gray-100">
+        {l.label}
+      </a>
+    ))}
+    <div class="flex items-center gap-3 pt-4">
+      <a href={d.altHref} class="text-[.8125rem] font-medium text-gray-500 border border-gray-300 rounded-md px-3.5 py-1">
+        {d.altLabel}
+      </a>
+      <a href={ctaHref} target="_blank" rel="noopener" class="btn-primary text-sm">
+        {d.ctaLabel}
+      </a>
+    </div>
+  </div>
+</nav>
+<div class="h-16"></div>
+
+<script>
+  const hamburger = document.getElementById('nav-hamburger');
+  const mobileMenu = document.getElementById('nav-mobile-menu');
+  const iconOpen = document.getElementById('icon-open');
+  const iconClose = document.getElementById('icon-close');
+
+  hamburger?.addEventListener('click', () => {
+    const isOpen = !mobileMenu?.classList.contains('hidden');
+    mobileMenu?.classList.toggle('hidden', isOpen);
+    iconOpen?.classList.toggle('hidden', !isOpen);
+    iconClose?.classList.toggle('hidden', isOpen);
+  });
+
+  const nav = document.getElementById('main-nav');
+  window.addEventListener('scroll', () => {
+    if (!nav) return;
+    nav.style.boxShadow = window.scrollY > 8 ? '0 1px 12px rgba(0,0,0,.08)' : 'none';
+  });
+</script>

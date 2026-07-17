@@ -1,0 +1,24 @@
+---
+import Layout from '../../layouts/Layout.astro';
+// TODO(content): full audience-specific rewrite pending -- see MARKETING.md
+// "Proposed page architecture" table (EN homepage row). This is scaffold-only.
+// No alternatePath/hreflang: the EN and ES homepages are different offers to
+// different audiences, not translations -- see MARKETING.md.
+---
+
+<Layout
+  lang="en"
+  path="/en/"
+  title="Ubik 360 | Digital Marketing & International Business Expansion"
+  description="Reach the Hispanic market, get reliable nearshore staff, and source LatAm vendors -- for businesses in the U.S. and Canada."
+>
+  <section class="max-w-6xl mx-auto px-6 py-24 text-center">
+    <span class="section-tag mb-4">Home (placeholder)</span>
+    <h1 class="text-4xl mb-5" style="color:var(--black);">EN homepage content pending rewrite</h1>
+    <p class="text-lg mb-8" style="color:#4b5563;">See MARKETING.md for the planned content.</p>
+    <div class="flex flex-col sm:flex-row justify-center gap-3">
+      <a href="/en/digital-marketing.html" class="btn-primary">Digital Marketing</a>
+      <a href="/en/nearshore-staffing.html" class="btn-outline">Nearshore Staffing</a>
+    </div>
+  </section>
+</Layout>

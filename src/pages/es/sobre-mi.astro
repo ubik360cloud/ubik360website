@@ -1,0 +1,22 @@
+---
+import Layout from '../../layouts/Layout.astro';
+// TODO(content): full port pending -- neutral page (bio doesn't change by
+// audience direction), same pattern as en/about.astro (already fully ported
+// as the reference implementation). Port the Spanish content from the legacy
+// es/sobre-mi.html using en/about.astro as the structural template.
+---
+
+<Layout
+  lang="es"
+  path="/es/sobre-mi.html"
+  alternatePath="/en/about.html"
+  title="Sobre Mí | José Villegas | Ubik 360"
+  description="15+ años construyendo negocios en Colombia, EE.UU. y Canadá. Emprendedor, CMO y consultor de expansión internacional. La historia detrás de Ubik 360."
+>
+  <section class="max-w-6xl mx-auto px-6 py-24 text-center">
+    <span class="section-tag mb-4">Sobre Mí (placeholder)</span>
+    <h1 class="text-4xl mb-5" style="color:var(--black);">Contenido pendiente de portar</h1>
+    <p class="text-lg mb-8" style="color:#4b5563;">Usar en/about.astro como plantilla estructural.</p>
+    <a href="https://calendly.com/jose-ubik360/30min" target="_blank" rel="noopener" class="btn-primary">Agenda una Consulta</a>
+  </section>
+</Layout>

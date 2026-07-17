@@ -1,0 +1,109 @@
+---
+import '../styles/global.css';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  lang: 'en' | 'es';
+  title: string;
+  description: string;
+  /** e.g. "/en/digital-marketing.html" — used for canonical + og:url */
+  path: string;
+  ogImage?: string;
+  /** Only set when this page has a genuine 1:1 translation counterpart (about/contact). */
+  alternatePath?: string;
+  /** Raw JSON-LD object(s) for this page (FAQ schema, Person schema, etc). */
+  structuredData?: Record<string, unknown> | Record<string, unknown>[];
+}
+
+const {
+  lang,
+  title,
+  description,
+  path,
+  ogImage = 'https://ubik360.com/assets/images/og-cover.jpg',
+  alternatePath,
+  structuredData,
+} = Astro.props;
+
+const canonical = `https://ubik360.com${path}`;
+const schemaList = structuredData
+  ? Array.isArray(structuredData) ? structuredData : [structuredData]
+  : [];
+---
+
+<!DOCTYPE html>
+<html lang={lang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="/assets/images/favicon.ico" />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content="index, follow" />
+
+    <link rel="canonical" href={canonical} />
+    {alternatePath && (
+      <>
+        <link rel="alternate" hreflang={lang} href={canonical} />
+        <link
+          rel="alternate"
+          hreflang={lang === 'en' ? 'es' : 'en'}
+          href={`https://ubik360.com${alternatePath}`}
+        />
+      </>
+    )}
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content={lang === 'en' ? 'en_US' : 'es_CO'} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content="Ubik 360" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Google Tag Manager -->
+    <script is:inline>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != 'dataLayer' ? '&l=' + l : '';
+        j.async = true;
+        j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, 'script', 'dataLayer', 'GTM-5ZPZ92LP');
+    </script>
+
+    {schemaList.map((schema) => (
+      <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+    ))}
+  </head>
+  <body>
+    <noscript>
+      <iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-5ZPZ92LP"
+        height="0"
+        width="0"
+        style="display:none;visibility:hidden"
+      ></iframe>
+    </noscript>
+
+    <Nav lang={lang} currentPath={path} />
+
+    <slot />
+
+    <Footer lang={lang} />
+
+    <script src="/assets/js/ubik360-chat-widget.js" is:inline></script>
+  </body>
+</html>

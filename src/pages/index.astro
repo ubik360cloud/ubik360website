@@ -1,0 +1,37 @@
+---
+// Client-side language redirector -- ported from the legacy root index.html.
+// noindex,nofollow: this page should never rank; /en/ and /es/ are canonical.
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ubik 360</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="alternate" hreflang="es" href="https://ubik360.com/es/" />
+    <link rel="alternate" hreflang="en" href="https://ubik360.com/en/" />
+    <link rel="alternate" hreflang="x-default" href="https://ubik360.com/en/" />
+    <style>
+      body { margin: 0; font-family: sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; background: #fff; color: #050505; }
+      .fallback { text-align: center; padding: 2rem; }
+      .fallback a { color: #931F1D; font-weight: 600; margin: 0 .75rem; }
+    </style>
+  </head>
+  <body>
+    <noscript>
+      <div class="fallback">
+        <p>Please select your language / Por favor selecciona tu idioma:</p>
+        <a href="/es/">Español</a>
+        <a href="/en/">English</a>
+      </div>
+    </noscript>
+    <script is:inline>
+      (function () {
+        var lang = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
+        window.location.replace(lang.startsWith('es') ? '/es/' : '/en/');
+      })();
+    </script>
+  </body>
+</html>

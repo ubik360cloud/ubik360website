@@ -1,0 +1,109 @@
+@import "tailwindcss";
+
+/* ============================================================
+   UBIK 360 — Brand theme
+   Edit here to update colors/fonts site-wide. Ported from the
+   legacy assets/css/main.css — see MARKETING.md for brand guidelines.
+   ============================================================ */
+@theme {
+  --color-brand-red: #931F1D;
+  --color-brand-red-hover: #7a1917;
+  --color-brand-black: #050505;
+  --color-brand-green: #659157;
+  --color-brand-oak: #CEC5B5;
+
+  --font-sans: 'Inter', sans-serif;
+  --font-serif: 'DM Serif Display', serif;
+}
+
+/* Legacy variable names, aliased so ported page markup (var(--red) etc.)
+   keeps working without a find-replace pass on every inline style. */
+:root {
+  --red: var(--color-brand-red);
+  --black: var(--color-brand-black);
+  --green: var(--color-brand-green);
+  --oak: var(--color-brand-oak);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply font-sans text-brand-black antialiased;
+}
+
+h1, h2, h3, h4 {
+  @apply font-serif;
+}
+
+img {
+  display: block;
+}
+
+a {
+  text-decoration: none;
+}
+
+/* ── Buttons ─────────────────────────────────────────────── */
+.btn-primary {
+  @apply inline-block bg-brand-red text-white px-[1.875rem] py-3 rounded-md font-sans font-medium text-[.9375rem] text-center cursor-pointer transition-colors;
+}
+.btn-primary:hover {
+  background-color: var(--color-brand-red-hover);
+}
+
+.btn-outline {
+  @apply inline-block border-2 border-brand-black text-brand-black px-[calc(1.875rem-2px)] py-[calc(.75rem-2px)] rounded-md font-sans font-medium text-[.9375rem] text-center cursor-pointer transition-colors;
+}
+.btn-outline:hover {
+  @apply bg-brand-black text-white;
+}
+
+.btn-outline-white {
+  @apply inline-block border-2 border-white/40 text-white px-[calc(1.875rem-2px)] py-[calc(.75rem-2px)] rounded-md font-sans font-medium text-[.9375rem] text-center cursor-pointer transition-all;
+}
+.btn-outline-white:hover {
+  @apply border-white bg-white/10;
+}
+
+/* ── Section label ───────────────────────────────────────── */
+.section-tag {
+  @apply block font-sans text-[.6875rem] font-bold tracking-[.12em] uppercase text-brand-green;
+}
+
+/* ── Service card ────────────────────────────────────────── */
+.service-card {
+  @apply border border-gray-200 rounded-2xl p-8 transition-all;
+}
+.service-card:hover {
+  @apply -translate-y-0.5;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, .07);
+}
+
+/* ── Checkmark list ──────────────────────────────────────── */
+.check-list {
+  @apply list-none p-0 m-0;
+}
+.check-list li {
+  @apply flex items-start gap-2.5 text-sm text-gray-600 py-[.3125rem];
+}
+.check-list li::before {
+  content: '';
+  flex-shrink: 0;
+  width: 1rem;
+  height: 1rem;
+  margin-top: .125rem;
+  background-color: var(--color-brand-green);
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='currentColor'%3E%3Cpath fill-rule='evenodd' d='M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z' clip-rule='evenodd'/%3E%3C/svg%3E");
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='currentColor'%3E%3Cpath fill-rule='evenodd' d='M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z' clip-rule='evenodd'/%3E%3C/svg%3E");
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+}
+
+/* ── Expansion step badge ────────────────────────────────── */
+.step-badge {
+  @apply flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-[.6875rem] font-bold text-white mt-[.1875rem];
+}

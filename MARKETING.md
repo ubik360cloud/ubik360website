@@ -101,21 +101,42 @@ audience-first structure. See "Proposed page architecture" below.
 
 ---
 
-## Proposed page architecture (draft — needs Jose sign-off before any rewrite)
+## Proposed page architecture (finalized 2026-07 — pending final HTML rewrite)
 
-Replacing the current "same slugs, translated" structure:
+Replaces the current "same slugs, translated" structure. **Decided:** nearshoring/sourcing gets
+its own dedicated EN page (primary draw for that audience, deserves its own SEO target + lead
+magnet, not a buried section).
 
-| Audience | Page(s) | Core offer | Notes |
-|---|---|---|---|
-| **ES (CO→US/CA)** | `es/expansion-internacional.html` (keep, refocus) | Entity formation, registered agent, banking, local logistics/admin partner, **market-entry marketing strategy for the new market**, event/trade show planning | Already the closest-aligned existing page — the Colombia→US/CA half of `en/international-expansion.html`'s content, expanded with the marketing/events angle that's currently missing. |
-| **ES (marketing)** | Fold into the expansion page rather than a separate `marketing-digital.html` | "How to market once you're in" as a section/step of the expansion journey, not a standalone service | Avoids re-creating a translated version of the EN-only Hispanic-market-marketing offer. |
-| **EN (US/CA reaching in)** | `en/digital-marketing.html` (keep, mostly right already) | Reach the Hispanic market locally (Meta/Google/email) — keep as is | This one's largely fine per the audience model; needs the content-quality pass below regardless. |
-| **EN (nearshoring/sourcing)** | Split out of `en/international-expansion.html`'s "Nearshore Staffing" section into more prominence, possibly its own page | Overseas staffing, LatAm vendor sourcing | Currently buried as one section on the expansion page; for the EN audience this — not entity formation in Colombia — is the primary draw. |
-| **EN (US/CA→Colombia entity-side)** | Keep as secondary section on `en/international-expansion.html` | For the smaller set of EN visitors who do want to set up *in* Colombia | Real but secondary compared to nearshoring/sourcing for this audience. |
+**ES site (audience: Colombia/LatAm business owner, expanding CO → U.S./Canada)**
 
-**Open before rewriting:** exact URL slugs (Spanish slugs should read naturally in Spanish, not
-transliterate the English structure), whether nearshoring/sourcing earns its own EN page or stays
-a prominent section, and how `about`/`contact` (audience-neutral) stay shared.
+| Page | Role | Content |
+|---|---|---|
+| `es/index.html` | Homepage | Hero reframed around going outward: entity formation, local partner on the ground, market-entry marketing, events/trade shows — not a translated version of the EN homepage. |
+| `es/expansion-internacional.html` | **Main/only ES service page** | Entity formation, registered agent, banking, local logistics/admin partnership, **+ NEW: marketing strategy for the destination market** (absorbs what `marketing-digital.html` covered, reframed as "once you're in, how you market there" — not a standalone digital-marketing service), **+ NEW: event/trade show planning in the destination country.** |
+| `es/marketing-digital.html` | **Retired as a standalone page** | Content merges into `expansion-internacional.html` as a section (e.g. `#marketing-en-tu-nuevo-mercado`). Needs a 301 redirect (`.htaccess`) since the URL is likely already indexed — see Technical implications below. |
+| `es/sobre-mi.html`, `es/contacto.html` | Shared/neutral | Stay close translations — bio and contact aren't audience-direction-specific. |
+
+**EN site (audience: U.S./Canada business owner, reaching inward)**
+
+| Page | Role | Content |
+|---|---|---|
+| `en/index.html` | Homepage | Hero splits between the two real EN offers: reach the Hispanic market (marketing) and get overseas staff/sourcing (nearshoring) — replaces the current Track-A/Track-B split. |
+| `en/digital-marketing.html` | Keep, mostly as-is | Already aligned with the audience model (Hispanic-market reach, not Hispanic-owned-business marketing). Gets the content-quality pass below regardless. |
+| `en/nearshore-staffing.html` | **New dedicated page** | Pulled from `international-expansion.html`'s current "Nearshore Staffing" + "Supplier & 3PL Selection" sections: customer service/bookkeeping/back-office/appointment-setter staffing in Colombia, + LatAm vendor/manufacturing sourcing. Own lead magnet (e.g. a cost-comparison download, reusing the existing "Administrative Scale-Up" asset). |
+| `en/international-expansion.html` | Narrows scope | Keeps only the secondary EN use case: U.S./Canada businesses wanting an actual entity/operating presence *in* Colombia (market entry consulting, on-the-ground ops manager, accounting network). Drops the Colombia→US/CA half entirely — that's the ES audience's page, not this one's. |
+| `en/about.html`, `en/contact.html` | Shared/neutral | Unchanged. |
+
+**Technical implications (for whoever implements — dev-conventions detail, not marketing):**
+- `hreflang` alternate tags between EN/ES page pairs currently assert the pages are translations
+  of each other — once content diverges, remove those cross-language `hreflang` links (they'd be
+  actively wrong) or repoint them only where a page genuinely stays 1:1 (about/contact).
+- `es/marketing-digital.html` needs a 301 → `es/expansion-internacional.html#marketing-en-tu-nuevo-mercado`
+  in `.htaccess` once retired, to preserve any existing SEO value / indexed links.
+- `includes/nav.js` link arrays need updating for both languages (ES drops the "Marketing
+  Digital" nav item; EN gains "Nearshore Staffing"). The EN/ES toggle link itself already just
+  points at the other language's homepage (`${alt}index.html`), not a per-page equivalent — no
+  change needed there, and it conveniently avoids a broken-link problem now that pages diverge.
+- `sitemap.xml` needs the new/retired URLs reflected.
 
 ---
 

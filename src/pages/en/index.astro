@@ -1,24 +1,185 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-// TODO(content): full audience-specific rewrite pending -- see MARKETING.md
-// "Proposed page architecture" table (EN homepage row). This is scaffold-only.
+// Homepage copy per MARKETING.md "Homepage Copy -- Draft". EN is the NA-primary
+// version (leads with the North America section); es/index.astro is the
+// LatAm-primary version -- not a translation of this, its own pass.
 // No alternatePath/hreflang: the EN and ES homepages are different offers to
 // different audiences, not translations -- see MARKETING.md.
+
+const orgSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Ubik 360',
+  url: 'https://ubik360.com',
+  logo: 'https://ubik360.com/assets/images/ubik360logo.png',
+  description:
+    'Fractional marketing leadership, growth marketing, and Latin America staff augmentation for North American businesses; go-to-market and market-entry strategy for Latin American businesses expanding into Canada and the U.S.',
+  areaServed: ['US', 'CA', 'CO'],
+  knowsAbout: ['Growth Marketing', 'Fractional CMO', 'Staff Augmentation', 'Market Entry', 'Go-to-Market Strategy'],
+  sameAs: ['https://www.linkedin.com/in/jose-villegas-marketing-manager/'],
+};
 ---
 
 <Layout
   lang="en"
   path="/en/"
-  title="Ubik 360 | Digital Marketing & International Business Expansion"
-  description="Reach the Hispanic market, get reliable nearshore staff, and source LatAm vendors -- for businesses in the U.S. and Canada."
+  title="Ubik 360 | Growth Marketing, Fractional CMO & LatAm Staffing"
+  description="Fractional marketing leadership and Latin America staff augmentation for North American businesses. Go-to-market strategy and market entry for Latin American businesses expanding into Canada and the U.S."
+  structuredData={orgSchema}
 >
-  <section class="max-w-6xl mx-auto px-6 py-24 text-center">
-    <span class="section-tag mb-4">Home (placeholder)</span>
-    <h1 class="text-4xl mb-5" style="color:var(--black);">EN homepage content pending rewrite</h1>
-    <p class="text-lg mb-8" style="color:#4b5563;">See MARKETING.md for the planned content.</p>
-    <div class="flex flex-col sm:flex-row justify-center gap-3">
-      <a href="/en/digital-marketing.html" class="btn-primary">Digital Marketing</a>
-      <a href="/en/nearshore-staffing.html" class="btn-outline">Nearshore Staffing</a>
+  <!-- HERO -->
+  <section style="background:#fff; padding:6rem 0 4rem;">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+      <h1 class="text-4xl lg:text-5xl leading-tight mb-5" style="color:var(--black);">
+        Marketing that performs. Expansion that works.<br />
+        <em style="color:var(--red); font-style:italic;">On both sides of the border.</em>
+      </h1>
+      <p class="text-xl leading-relaxed mb-8 mx-auto" style="color:#4b5563; max-width:40rem;">
+        Fractional marketing leadership and Latin America staff augmentation for North American
+        businesses. Go-to-market strategy and market entry for Latin American businesses
+        expanding into Canada and the U.S.
+      </p>
+      <div class="flex flex-col sm:flex-row justify-center gap-3">
+        <a href="#north-america" class="btn-primary">For North America</a>
+        <a href="#latam" class="btn-outline">For Latin America</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- INTRO -->
+  <section style="background:#f9fafb; padding:3.5rem 0;">
+    <div class="max-w-3xl mx-auto px-6 text-center">
+      <p style="font-size:1.0625rem; color:#374151; line-height:1.8;">
+        Growing a business is straightforward until it crosses a border. North American companies
+        need marketing that performs and staff they can rely on — without the cost of building an
+        offshore team from scratch. Latin American companies need a structured way into markets
+        they don't yet operate in — not just paperwork, but a real go-to-market plan. Ubik 360
+        works both sides of that problem, as one accountable partner.
+      </p>
+    </div>
+  </section>
+
+  <!-- NORTH AMERICA -->
+  <section id="north-america" style="background:#fff; padding:5rem 0;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="max-w-2xl mb-10">
+        <span class="section-tag mb-3">For North America</span>
+        <h2 class="text-3xl lg:text-4xl mb-4" style="color:var(--black);">Marketing leadership and staff you can rely on.</h2>
+        <p class="text-lg leading-relaxed" style="color:#4b5563;">
+          Fractional CMO leadership and growth marketing built around pipeline, revenue, and
+          retention — not impressions. Staff augmentation in Latin America gives your team
+          skilled, accountable people for customer service, back-office, and sales support, at a
+          fraction of local hiring cost.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+        <div class="service-card">
+          <div style="width:2.5rem; height:2.5rem; background:rgba(101,145,87,.12); border-radius:.5rem; display:flex; align-items:center; justify-content:center; margin-bottom:1.25rem;">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="var(--green)" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+          </div>
+          <h3 class="text-xl mb-2" style="color:var(--black);">Fractional CMO</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Senior marketing leadership without the cost of a full-time executive. Strategy, team oversight, and accountability for results.</p>
+        </div>
+        <div class="service-card">
+          <div style="width:2.5rem; height:2.5rem; background:rgba(101,145,87,.12); border-radius:.5rem; display:flex; align-items:center; justify-content:center; margin-bottom:1.25rem;">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="var(--green)" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+          </div>
+          <h3 class="text-xl mb-2" style="color:var(--black);">Growth Marketing</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Paid media, email, and go-to-market strategy tied to pipeline and revenue, with reporting that reflects business results, not vanity metrics.</p>
+        </div>
+        <div class="service-card" style="background-color:var(--oak); border-color:transparent;">
+          <div style="width:2.5rem; height:2.5rem; background:rgba(255,255,255,.45); border-radius:.5rem; display:flex; align-items:center; justify-content:center; margin-bottom:1.25rem;">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="var(--black)" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          </div>
+          <h3 class="text-xl mb-2" style="color:var(--black);">LatAm Staff Augmentation</h3>
+          <p style="font-size:.875rem; color:#3d3d3d; line-height:1.65;">Accountable staff for customer service, back-office, and appointment setting — hired, onboarded, and managed for you.</p>
+        </div>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-3">
+        <a href="https://calendly.com/jose-ubik360/30min" target="_blank" rel="noopener" class="btn-primary">Schedule a Growth Call</a>
+        <a href="/en/digital-marketing.html" class="btn-outline">See Marketing Services</a>
+      </div>
+      <p style="font-size:.8125rem; color:#9ca3af; margin-top:.875rem;">30 minutes, no obligation.</p>
+    </div>
+  </section>
+
+  <!-- LATAM -->
+  <section id="latam" style="background:var(--oak); padding:5rem 0;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="max-w-2xl mb-10">
+        <span class="section-tag mb-3" style="color:var(--red);">For Latin America &amp; Bilingual Markets</span>
+        <h2 class="text-3xl lg:text-4xl mb-4" style="color:var(--black);">A structured way into Canada and the U.S.</h2>
+        <p class="text-lg leading-relaxed" style="color:#3d3d3d;">
+          Expanding north isn't just paperwork. Entity formation and banking get you registered —
+          go-to-market strategy, local operations support, and market-entry marketing get you
+          actually doing business. Ubik 360 manages the full path, not just the legal first step.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+        <div style="background:#fff; border-radius:.875rem; padding:1.75rem;">
+          <h3 class="text-lg mb-2" style="color:var(--black); font-family:'DM Serif Display',serif;">Entity Formation</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Registered agent, banking, and virtual office in the U.S. or Canada.</p>
+        </div>
+        <div style="background:#fff; border-radius:.875rem; padding:1.75rem;">
+          <h3 class="text-lg mb-2" style="color:var(--black); font-family:'DM Serif Display',serif;">Go-to-Market Strategy</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Market-entry marketing built for the destination market, not translated after the fact.</p>
+        </div>
+        <div style="background:#fff; border-radius:.875rem; padding:1.75rem;">
+          <h3 class="text-lg mb-2" style="color:var(--black); font-family:'DM Serif Display',serif;">Local Operations</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Operational efficiency once established — not just incorporation, ongoing support.</p>
+        </div>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-3">
+        <a href="/es/" class="btn-primary">Ver en Español</a>
+        <a href="/en/international-expansion.html" class="btn-outline">Learn More</a>
+      </div>
+      <p style="font-size:.8125rem; color:#6b7280; margin-top:.875rem;">Free initial consultation.</p>
+    </div>
+  </section>
+
+  <!-- WHY UBIK 360 -->
+  <section style="background:var(--black); padding:5rem 0;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="max-w-xl mb-12">
+        <span class="section-tag mb-3" style="color:var(--oak);">Why Ubik 360</span>
+        <h2 class="text-3xl lg:text-4xl" style="color:#fff;">Why businesses work with Ubik 360</h2>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div>
+          <h3 style="font-family:'DM Serif Display',serif; font-size:1.125rem; color:#fff; margin:0 0 .625rem;">One partner, both sides</h3>
+          <p style="font-size:.875rem; color:#9ca3af; line-height:1.65;">No handoff between a North American agency and a separate LatAm consultant — one team, one process, one point of accountability.</p>
+        </div>
+        <div>
+          <h3 style="font-family:'DM Serif Display',serif; font-size:1.125rem; color:#fff; margin:0 0 .625rem;">A structured process</h3>
+          <p style="font-size:.875rem; color:#9ca3af; line-height:1.65;">Discovery, plan, execution, and optimization, with clear milestones at each stage — not an open-ended retainer.</p>
+        </div>
+        <div>
+          <h3 style="font-family:'DM Serif Display',serif; font-size:1.125rem; color:#fff; margin:0 0 .625rem;">Direct access</h3>
+          <p style="font-size:.875rem; color:#9ca3af; line-height:1.65;">You work with the people doing the work — not routed through account managers.</p>
+        </div>
+        <div>
+          <h3 style="font-family:'DM Serif Display',serif; font-size:1.125rem; color:#fff; margin:0 0 .625rem;">Business-term outcomes</h3>
+          <p style="font-size:.875rem; color:#9ca3af; line-height:1.65;">Pipeline generated, cost saved, markets entered — not vanity metrics.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section style="background:#fff; padding:5rem 0;">
+    <div class="max-w-3xl mx-auto px-6 text-center">
+      <span class="section-tag mb-4">Take the First Step</span>
+      <h2 class="text-3xl lg:text-4xl mb-5" style="color:var(--black);">Ready to move?</h2>
+      <p style="color:#4b5563; font-size:1.125rem; line-height:1.7; max-width:30rem; margin:0 auto 2.5rem;">
+        A 30-minute call is enough to know if this is a fit — no obligation, straight answers.
+      </p>
+      <a href="https://calendly.com/jose-ubik360/30min" target="_blank" rel="noopener" class="btn-primary" style="font-size:1rem; padding:1rem 2.5rem;">
+        Schedule a Growth Call
+      </a>
     </div>
   </section>
 </Layout>

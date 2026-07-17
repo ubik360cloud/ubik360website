@@ -1,0 +1,27 @@
+---
+import Layout from '../../layouts/Layout.astro';
+// Generic Spanish thank-you page (mirrors en/thank-you.astro), used by both
+// es/contacto.astro and es/expansion-internacional.astro's lead form.
+---
+
+<Layout
+  lang="es"
+  path="/es/gracias.html"
+  title="Gracias | Ubik 360"
+  description="Gracias por contactarnos."
+>
+  <section style="background:#fff; min-height:calc(100vh - 4rem); display:flex; align-items:center; padding:5rem 0;">
+    <div class="max-w-3xl mx-auto px-6 text-center">
+      <span class="section-tag mb-4" style="display:block;">Confirmado</span>
+      <h1 class="text-4xl lg:text-5xl mb-5" style="color:var(--black);">Gracias — recibido.</h1>
+      <p style="color:#4b5563; font-size:1.125rem; line-height:1.75; max-width:32rem; margin:0 auto 2.5rem;">
+        Te contactaremos en menos de 24 horas. Mientras tanto, puedes agendar un espacio en
+        nuestro calendario.
+      </p>
+      <a href="https://calendly.com/jose-ubik360/30min" target="_blank" rel="noopener" class="btn-primary">Agenda una Llamada de 30 Minutos</a>
+      <p style="margin-top:3rem;">
+        <a href="/es/index.html" style="font-size:.875rem; color:#9ca3af;">← Volver al inicio</a>
+      </p>
+    </div>
+  </section>
+</Layout>

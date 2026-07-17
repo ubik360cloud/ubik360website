@@ -1,20 +1,299 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-// TODO(content): NEW page per MARKETING.md page architecture -- pulls the
-// "Nearshore Staffing" + "Supplier & 3PL Selection" content currently
-// buried in the legacy international-expansion.html into its own page.
+// New page per MARKETING.md -- pulled out of the old international-expansion.html's
+// buried "Nearshore Staffing" + "Supplier & 3PL Selection" sections. Reuses the
+// existing "Administrative Scale-Up" lead magnet asset (public/assets/downloads/),
+// which already fits this page's topic well.
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'Why hire staff in Colombia instead of locally?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Colombia offers skilled, bilingual talent in customer service, bookkeeping, and back-office roles at 50-70% less than equivalent U.S. or Canadian salaries, with time zones just 1 to 3 hours behind the U.S. East Coast.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Who manages the staff day to day?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Ubik 360 acts as your on-the-ground operations manager — handling hiring, onboarding, and day-to-day supervision, with direct reporting back to you.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What roles can be staffed this way?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Customer service, bookkeeping, back-office/data entry, and appointment setting are the most common. Vendor and manufacturing sourcing in Latin America is available as a related service.',
+      },
+    },
+  ],
+};
 ---
 
 <Layout
   lang="en"
   path="/en/nearshore-staffing.html"
   title="Nearshore Staffing & LatAm Vendor Sourcing | Ubik 360"
-  description="Reliable overseas staff in Colombia and LatAm vendor/manufacturing sourcing -- without the full-time-hire overhead."
+  description="Reliable staff in Colombia for customer service, bookkeeping, and back-office roles — plus LatAm vendor and manufacturing sourcing. Managed for you."
+  structuredData={faqSchema}
 >
-  <section class="max-w-6xl mx-auto px-6 py-24 text-center">
-    <span class="section-tag mb-4">Nearshore Staffing (placeholder)</span>
-    <h1 class="text-4xl mb-5" style="color:var(--black);">New page pending content</h1>
-    <p class="text-lg mb-8" style="color:#4b5563;">See MARKETING.md "Proposed page architecture" for what belongs here.</p>
-    <a href="https://calendly.com/jose-ubik360/30min" target="_blank" rel="noopener" class="btn-primary">Schedule a Call</a>
+  <!-- HERO -->
+  <section style="background:#fff; padding:5rem 0 4rem;">
+    <div class="max-w-3xl mx-auto px-6">
+      <span class="section-tag mb-4">Nearshore Staffing &amp; Sourcing</span>
+      <h1 class="text-4xl lg:text-5xl leading-tight mb-5" style="color:var(--black);">
+        Local hiring is slow, expensive, and hard to retain. There's a better way to staff up.
+      </h1>
+      <p class="text-xl leading-relaxed mb-8" style="color:#4b5563;">
+        Skilled, accountable staff in Colombia for the roles that are hardest to fill locally —
+        plus vendor and manufacturing sourcing across Latin America. Managed for you, start to
+        finish.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-3">
+        <a href="#form" class="btn-primary">Get the Free Guide</a>
+        <a href="https://calendly.com/jose-ubik360/30min" target="_blank" rel="noopener" class="btn-outline">Schedule a Call</a>
+      </div>
+    </div>
   </section>
+
+  <!-- VALUE STRIP -->
+  <section style="background:var(--black); padding:3.5rem 0;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
+        <div>
+          <p style="color:var(--red); font-family:'DM Serif Display',serif; font-size:1.75rem; margin:0 0 .25rem;">50-70%</p>
+          <p style="color:#9ca3af; font-size:.875rem; line-height:1.6;">lower cost than equivalent local hires, for the same skill level.</p>
+        </div>
+        <div>
+          <p style="color:var(--red); font-family:'DM Serif Display',serif; font-size:1.75rem; margin:0 0 .25rem;">1-3 hrs</p>
+          <p style="color:#9ca3af; font-size:.875rem; line-height:1.6;">time difference from the U.S. East Coast — real-time collaboration.</p>
+        </div>
+        <div>
+          <p style="color:var(--red); font-family:'DM Serif Display',serif; font-size:1.75rem; margin:0 0 .25rem;">0</p>
+          <p style="color:#9ca3af; font-size:.875rem; line-height:1.6;">headcount for you to manage — hiring and supervision are handled.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ROLES -->
+  <section style="background:#fff; padding:5rem 0;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="max-w-2xl mb-12">
+        <span class="section-tag mb-3">Roles We Staff</span>
+        <h2 class="text-3xl lg:text-4xl mb-4" style="color:var(--black);">Reduce manual work without adding headcount.</h2>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div class="service-card">
+          <h3 class="text-lg mb-2" style="color:var(--black);">Customer Service</h3>
+          <p style="font-size:.8125rem; color:#4b5563; line-height:1.6;">Bilingual support via chat, email, and phone. Ticket management and escalation handling.</p>
+        </div>
+        <div class="service-card">
+          <h3 class="text-lg mb-2" style="color:var(--black);">Bookkeeping</h3>
+          <p style="font-size:.8125rem; color:#4b5563; line-height:1.6;">Accounts payable/receivable, reconciliations, and monthly financial reporting.</p>
+        </div>
+        <div class="service-card">
+          <h3 class="text-lg mb-2" style="color:var(--black);">Back-Office</h3>
+          <p style="font-size:.8125rem; color:#4b5563; line-height:1.6;">Data entry, order processing, and administrative documentation.</p>
+        </div>
+        <div class="service-card">
+          <h3 class="text-lg mb-2" style="color:var(--black);">Appointment Setters</h3>
+          <p style="font-size:.8125rem; color:#4b5563; line-height:1.6;">Prospecting, lead qualification, and sales appointment scheduling.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOURCING -->
+  <section id="sourcing" style="background:var(--oak); padding:5rem 0;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="max-w-2xl">
+        <span class="section-tag mb-3" style="color:var(--red);">Also Available</span>
+        <h2 class="text-3xl lg:text-4xl mb-4" style="color:var(--black);">LatAm Vendor &amp; Manufacturing Sourcing</h2>
+        <p style="font-size:1.0625rem; color:#3d3d3d; line-height:1.8;">
+          Identifying, vetting, and negotiating with logistics and manufacturing providers in
+          Colombia and the wider region — support expansion of your supply chain without an
+          on-the-ground team of your own.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section style="background:#fff; padding:5rem 0;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="max-w-xl mb-12">
+        <span class="section-tag mb-3">The Process</span>
+        <h2 class="text-3xl lg:text-4xl" style="color:var(--black);">How staffing works</h2>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div>
+          <div style="width:3rem; height:3rem; border-radius:9999px; border:2px solid var(--red); display:flex; align-items:center; justify-content:center; margin-bottom:1.25rem;">
+            <span style="font-family:'DM Serif Display',serif; font-size:1.25rem; color:var(--red);">1</span>
+          </div>
+          <h3 style="font-family:'DM Serif Display',serif; font-size:1.0625rem; color:var(--black); margin:0 0 .5rem;">Define the role</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">What the role needs to cover and what success looks like.</p>
+        </div>
+        <div>
+          <div style="width:3rem; height:3rem; border-radius:9999px; border:2px solid var(--red); display:flex; align-items:center; justify-content:center; margin-bottom:1.25rem;">
+            <span style="font-family:'DM Serif Display',serif; font-size:1.25rem; color:var(--red);">2</span>
+          </div>
+          <h3 style="font-family:'DM Serif Display',serif; font-size:1.0625rem; color:var(--black); margin:0 0 .5rem;">Source &amp; hire</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Candidates identified, screened, and hired in Colombia.</p>
+        </div>
+        <div>
+          <div style="width:3rem; height:3rem; border-radius:9999px; border:2px solid var(--red); display:flex; align-items:center; justify-content:center; margin-bottom:1.25rem;">
+            <span style="font-family:'DM Serif Display',serif; font-size:1.25rem; color:var(--red);">3</span>
+          </div>
+          <h3 style="font-family:'DM Serif Display',serif; font-size:1.0625rem; color:var(--black); margin:0 0 .5rem;">Onboard</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Trained and set up on your systems and processes.</p>
+        </div>
+        <div>
+          <div style="width:3rem; height:3rem; border-radius:9999px; border:2px solid var(--red); display:flex; align-items:center; justify-content:center; margin-bottom:1.25rem;">
+            <span style="font-family:'DM Serif Display',serif; font-size:1.25rem; color:var(--red);">4</span>
+          </div>
+          <h3 style="font-family:'DM Serif Display',serif; font-size:1.0625rem; color:var(--black); margin:0 0 .5rem;">Manage</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Day-to-day supervision handled — you get the output, not the management overhead.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LEAD MAGNET + FORM -->
+  <section id="form" style="background:var(--black); padding:5rem 0;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 items-start">
+        <div>
+          <span class="section-tag mb-3" style="color:var(--oak);">Free Resource</span>
+          <h2 class="text-3xl lg:text-4xl mb-4" style="color:#fff;">Administrative Scale-Up: Colombia as Your Operational Hub</h2>
+          <p style="color:#9ca3af; font-size:1rem; line-height:1.75; margin-bottom:1.5rem;">
+            How North American businesses lower cost and reduce manual work with bilingual
+            Colombian staff — managed end to end by Ubik 360.
+          </p>
+          <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:.75rem;">
+            <li style="display:flex; align-items:flex-start; gap:.75rem; font-size:.9375rem; color:#d1d5db;">
+              <span style="flex-shrink:0; width:1.375rem; height:1.375rem; border-radius:9999px; background:var(--red); color:#fff; display:flex; align-items:center; justify-content:center; font-size:.6875rem; font-weight:700; margin-top:.125rem;">✓</span>
+              The real cost comparison: local hire vs. nearshore staff
+            </li>
+            <li style="display:flex; align-items:flex-start; gap:.75rem; font-size:.9375rem; color:#d1d5db;">
+              <span style="flex-shrink:0; width:1.375rem; height:1.375rem; border-radius:9999px; background:var(--red); color:#fff; display:flex; align-items:center; justify-content:center; font-size:.6875rem; font-weight:700; margin-top:.125rem;">✓</span>
+              Three roles that transform operations
+            </li>
+            <li style="display:flex; align-items:flex-start; gap:.75rem; font-size:.9375rem; color:#d1d5db;">
+              <span style="flex-shrink:0; width:1.375rem; height:1.375rem; border-radius:9999px; background:var(--red); color:#fff; display:flex; align-items:center; justify-content:center; font-size:.6875rem; font-weight:700; margin-top:.125rem;">✓</span>
+              A 30-day launch roadmap, role definition to first deliverable
+            </li>
+          </ul>
+        </div>
+
+        <div style="background:#fff; border-radius:1rem; padding:2.25rem;">
+          <h3 style="font-family:'DM Serif Display',serif; font-size:1.5rem; color:var(--black); margin:0 0 .5rem;">Get the free guide</h3>
+          <p style="font-size:.875rem; color:#6b7280; margin:0 0 1.75rem;">We'll follow up about applying this to your specific roles.</p>
+          <form id="lead-form" action="https://formspree.io/f/mlganpda" method="POST" novalidate>
+            <input type="hidden" name="_subject" value="New lead — Administrative Scale-Up" />
+            <input type="hidden" name="pagina_origen" value="en/nearshore-staffing.html" />
+            <input type="hidden" name="_next" value="https://ubik360.com/en/thank-you.html" />
+            <div style="margin-bottom:1.125rem;">
+              <label for="name" class="text-sm font-medium block mb-1.5" style="color:var(--black);">Full name <span style="color:var(--red);">*</span></label>
+              <input type="text" id="name" name="name" class="w-full px-4 py-2.5 border border-gray-300 rounded-md text-[.9375rem]" required autocomplete="name" />
+            </div>
+            <div style="margin-bottom:1.125rem;">
+              <label for="email" class="text-sm font-medium block mb-1.5" style="color:var(--black);">Email address <span style="color:var(--red);">*</span></label>
+              <input type="email" id="email" name="email" class="w-full px-4 py-2.5 border border-gray-300 rounded-md text-[.9375rem]" required autocomplete="email" />
+            </div>
+            <button type="submit" class="btn-primary" style="width:100%; padding:.875rem; font-size:1rem;">Download Free Guide</button>
+            <p style="font-size:.75rem; color:#9ca3af; margin:.875rem 0 0; text-align:center;">No spam. Your information stays private.</p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section style="background:#fff; padding:5rem 0;">
+    <div class="max-w-3xl mx-auto px-6">
+      <div class="text-center mb-12">
+        <span class="section-tag mb-3">FAQ</span>
+        <h2 class="text-3xl lg:text-4xl" style="color:var(--black);">Common questions</h2>
+      </div>
+      <div id="faq-list">
+        <div class="faq-item">
+          <button class="faq-question">
+            Why hire staff in Colombia instead of locally?
+            <svg class="faq-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer">Colombia offers skilled, bilingual talent in customer service, bookkeeping, and back-office roles at 50-70% less than equivalent U.S. or Canadian salaries, with time zones just 1 to 3 hours behind the U.S. East Coast.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            Who manages the staff day to day?
+            <svg class="faq-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer">Ubik 360 acts as your on-the-ground operations manager — handling hiring, onboarding, and day-to-day supervision, with direct reporting back to you.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            What roles can be staffed this way?
+            <svg class="faq-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer">Customer service, bookkeeping, back-office/data entry, and appointment setting are the most common. Vendor and manufacturing sourcing in Latin America is available as a related service.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section style="background:var(--oak); padding:5rem 0;">
+    <div class="max-w-3xl mx-auto px-6 text-center">
+      <span class="section-tag mb-4" style="color:var(--red);">Next Step</span>
+      <h2 class="text-3xl lg:text-4xl mb-5" style="color:var(--black);">Ready to lower operating cost?</h2>
+      <p style="color:#3d3d3d; font-size:1.125rem; line-height:1.7; max-width:30rem; margin:0 auto 2.5rem;">
+        A 30-minute call to map which roles make sense to move first.
+      </p>
+      <a href="https://calendly.com/jose-ubik360/30min" target="_blank" rel="noopener" class="btn-primary" style="font-size:1rem; padding:1rem 2.5rem;">
+        Schedule Your Free Call
+      </a>
+    </div>
+  </section>
+
+  <script>
+    document.querySelectorAll('.faq-question').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const item = btn.closest('.faq-item');
+        const isOpen = item?.classList.contains('open');
+        document.querySelectorAll('.faq-item').forEach((i) => i.classList.remove('open'));
+        if (!isOpen) item?.classList.add('open');
+      });
+    });
+
+    const form = document.getElementById('lead-form') as HTMLFormElement | null;
+    form?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const btn = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+      fetch(form.action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } })
+        .then((res) => {
+          if (res.ok) {
+            window.location.href = '/en/thank-you.html';
+          } else {
+            btn.disabled = false;
+            btn.textContent = 'Download Free Guide';
+            alert('Something went wrong. Please try again.');
+          }
+        })
+        .catch(() => {
+          btn.disabled = false;
+          btn.textContent = 'Download Free Guide';
+          alert('Connection error. Check your internet and try again.');
+        });
+    });
+  </script>
 </Layout>

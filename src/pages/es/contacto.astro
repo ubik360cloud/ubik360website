@@ -1,21 +1,173 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-// TODO(content): full port pending -- neutral page, same pattern as
-// en/contact.astro (already fully ported as the reference implementation,
-// including the WhatsApp-number bug fix). Port using it as the template.
+// Spanish adaptation of en/contact.astro -- includes the same WhatsApp-number
+// fix (real number, not the legacy 555 placeholder).
 ---
 
 <Layout
   lang="es"
   path="/es/contacto.html"
   alternatePath="/en/contact.html"
-  title="Contacto | Ubik 360 — Marketing Digital y Expansión Internacional"
-  description="Ponte en contacto con José Villegas sobre marketing digital o expansión internacional."
+  title="Contacto | Ubik 360 — Marketing y Expansión Internacional"
+  description="Ponte en contacto con Ubik 360 sobre marketing, aumento de personal en LatAm, o expansión internacional. Nos reunimos por Google Meet, en un café, o vamos a tu oficina."
 >
-  <section class="max-w-6xl mx-auto px-6 py-24 text-center">
-    <span class="section-tag mb-4">Contacto (placeholder)</span>
-    <h1 class="text-4xl mb-5" style="color:var(--black);">Contenido pendiente de portar</h1>
-    <p class="text-lg mb-8" style="color:#4b5563;">Usar en/contact.astro como plantilla estructural.</p>
-    <a href="https://calendly.com/jose-ubik360/30min" target="_blank" rel="noopener" class="btn-primary">Agenda una Llamada</a>
+  <!-- HERO -->
+  <section style="background:#fff; padding:6rem 0 4rem;">
+    <div class="max-w-3xl mx-auto px-6 text-center">
+      <span class="section-tag mb-4" style="display:block;">Contacto</span>
+      <h1 style="font-size:clamp(2.25rem,5vw,3.25rem); line-height:1.15; color:var(--black); margin:0 0 1.25rem;">
+        Hablemos de<br />tu negocio
+      </h1>
+      <p style="font-size:1.125rem; color:#4b5563; line-height:1.75; max-width:36rem; margin:0 auto;">
+        Sin oficina fija — nos adaptamos a ti. Podemos conectar por Google Meet, tomar un café
+        cerca, o ir a tu oficina para conocer tu operación de primera mano.
+      </p>
+    </div>
   </section>
+
+  <!-- THREE WAYS TO CONNECT -->
+  <section style="background:var(--oak); padding:4rem 0;">
+    <div class="max-w-5xl mx-auto px-6">
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1.5rem;">
+        <div style="background:#fff; border-radius:.75rem; padding:2rem; text-align:center;">
+          <h3 style="font-size:1.125rem; margin:0 0 .5rem; color:var(--black);">Agenda un horario</h3>
+          <p style="font-size:.875rem; color:#6b7280; line-height:1.65; margin:0 0 1.5rem;">Elige el horario que te funcione. 30 minutos, gratis, sin compromiso.</p>
+          <a href="https://calendly.com/jose-ubik360/30min" target="_blank" rel="noopener" class="btn-primary" style="width:100%; display:block; font-size:.875rem;">Ver disponibilidad</a>
+        </div>
+        <div style="background:#fff; border-radius:.75rem; padding:2rem; text-align:center;">
+          <h3 style="font-size:1.125rem; margin:0 0 .5rem; color:var(--black);">Google Meet</h3>
+          <p style="font-size:.875rem; color:#6b7280; line-height:1.65; margin:0 0 1.5rem;">Ideal si estás en otra ciudad o país. La misma conversación, sin viajar.</p>
+          <a href="https://calendly.com/jose-ubik360/30min" target="_blank" rel="noopener" class="btn-outline" style="width:100%; display:block; font-size:.875rem;">Agenda una videollamada</a>
+        </div>
+        <div style="background:#fff; border-radius:.75rem; padding:2rem; text-align:center;">
+          <h3 style="font-size:1.125rem; margin:0 0 .5rem; color:var(--black);">En persona</h3>
+          <p style="font-size:.875rem; color:#6b7280; line-height:1.65; margin:0 0 1.5rem;">Vamos a tu oficina o nos reunimos en un café. Preferimos ver tu negocio en su propio entorno.</p>
+          <a href="#form" class="btn-outline" style="width:100%; display:block; font-size:.875rem;">Cuéntame más</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT FORM -->
+  <section id="form" style="background:#fff; padding:5rem 0;">
+    <div class="max-w-2xl mx-auto px-6">
+      <div class="text-center" style="margin-bottom:3rem;">
+        <span class="section-tag mb-3" style="display:block;">Envía un Mensaje</span>
+        <h2 style="font-size:clamp(1.75rem,4vw,2.5rem); color:var(--black); margin:0 0 1rem;">Cuéntanos qué está pasando</h2>
+        <p style="font-size:1rem; color:#6b7280; line-height:1.7; max-width:30rem; margin:0 auto;">Respondemos en menos de 24 horas. Si prefieres hablar directamente, usa el calendario arriba.</p>
+      </div>
+
+      <form id="contact-form" action="https://formspree.io/f/mlganpda" method="POST" novalidate>
+        <input type="hidden" name="pagina_origen" value="es/contacto.html" />
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.25rem; margin-bottom:1.25rem;">
+          <div>
+            <label class="text-sm font-medium block mb-1.5" style="color:var(--black);" for="nombre">Nombre *</label>
+            <input class="w-full px-4 py-2.5 border border-gray-300 rounded-md text-[.9375rem]" type="text" id="nombre" name="nombre" required placeholder="Tu nombre" />
+          </div>
+          <div>
+            <label class="text-sm font-medium block mb-1.5" style="color:var(--black);" for="empresa">Empresa</label>
+            <input class="w-full px-4 py-2.5 border border-gray-300 rounded-md text-[.9375rem]" type="text" id="empresa" name="empresa" placeholder="Tu empresa" />
+          </div>
+        </div>
+
+        <div style="margin-bottom:1.25rem;">
+          <label class="text-sm font-medium block mb-1.5" style="color:var(--black);" for="email">Correo electrónico *</label>
+          <input class="w-full px-4 py-2.5 border border-gray-300 rounded-md text-[.9375rem]" type="email" id="email" name="email" required placeholder="tucorreo@empresa.com" />
+        </div>
+
+        <div style="margin-bottom:1.25rem;">
+          <span class="text-sm font-medium block mb-2.5" style="color:var(--black);">¿Cómo prefieres que te contactemos?</span>
+          <div style="display:flex; gap:1.5rem;">
+            <label style="display:flex; align-items:center; gap:.5rem; cursor:pointer; font-size:.9375rem;">
+              <input type="radio" name="metodo_contacto" value="Email" checked style="accent-color:var(--green); width:1rem; height:1rem;" id="pref-email" />
+              Email
+            </label>
+            <label style="display:flex; align-items:center; gap:.5rem; cursor:pointer; font-size:.9375rem;">
+              <input type="radio" name="metodo_contacto" value="Teléfono / WhatsApp" style="accent-color:var(--green); width:1rem; height:1rem;" id="pref-phone" />
+              Teléfono / WhatsApp
+            </label>
+          </div>
+        </div>
+
+        <div id="phone-group" style="display:none; margin-bottom:1.25rem;">
+          <label class="text-sm font-medium block mb-1.5" style="color:var(--black);" for="telefono">Teléfono / WhatsApp</label>
+          <input class="w-full px-4 py-2.5 border border-gray-300 rounded-md text-[.9375rem]" type="tel" id="telefono" name="telefono" placeholder="+57 300 000 0000" />
+        </div>
+
+        <div style="margin-bottom:1.25rem;">
+          <label class="text-sm font-medium block mb-1.5" style="color:var(--black);" for="servicio">¿En qué te podemos ayudar? *</label>
+          <select class="w-full px-4 py-2.5 border border-gray-300 rounded-md text-[.9375rem]" id="servicio" name="servicio" required>
+            <option value="" disabled selected>Selecciona una opción</option>
+            <option value="Expansión Internacional">Expansión Internacional</option>
+            <option value="Marketing en Nuevo Mercado">Marketing en Nuevo Mercado</option>
+            <option value="Otro">Otro / Aún no estoy seguro</option>
+          </select>
+        </div>
+
+        <div style="margin-bottom:2rem;">
+          <label class="text-sm font-medium block mb-1.5" style="color:var(--black);" for="mensaje">Cuéntanos sobre tu negocio y qué necesitas *</label>
+          <textarea class="w-full px-4 py-2.5 border border-gray-300 rounded-md text-[.9375rem]" style="resize:vertical; min-height:9rem;" id="mensaje" name="mensaje" required placeholder="¿Qué está pasando en tu negocio? ¿Qué resultado buscas? Entre más contexto compartas, mejor preparados estaremos para la conversación."></textarea>
+        </div>
+
+        <button type="submit" class="btn-primary" style="width:100%; font-size:1rem; padding:1rem;">Enviar Mensaje</button>
+        <p style="margin-top:1rem; font-size:.8125rem; color:#9ca3af; text-align:center;">Tu información es privada. No la compartimos con terceros.</p>
+      </form>
+    </div>
+  </section>
+
+  <!-- DIRECT CONTACT STRIP -->
+  <section style="background:var(--black); padding:4rem 0;">
+    <div class="max-w-4xl mx-auto px-6">
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:2rem; text-align:center;">
+        <div>
+          <p style="font-size:.75rem; color:#9ca3af; text-transform:uppercase; letter-spacing:.1em; margin:0 0 .375rem;">Email</p>
+          <a href="mailto:jose@ubik360.com" style="color:#fff; font-size:.9375rem; font-weight:500;">jose@ubik360.com</a>
+        </div>
+        <div>
+          <p style="font-size:.75rem; color:#9ca3af; text-transform:uppercase; letter-spacing:.1em; margin:0 0 .375rem;">WhatsApp</p>
+          <a href="https://wa.me/12265030456" target="_blank" rel="noopener" style="color:#fff; font-size:.9375rem; font-weight:500;">Enviar mensaje</a>
+        </div>
+        <div>
+          <p style="font-size:.75rem; color:#9ca3af; text-transform:uppercase; letter-spacing:.1em; margin:0 0 .375rem;">LinkedIn</p>
+          <a href="https://www.linkedin.com/in/jose-villegas-marketing-manager/" target="_blank" rel="noopener" style="color:#fff; font-size:.9375rem; font-weight:500;">Conectar</a>
+        </div>
+        <div>
+          <p style="font-size:.75rem; color:#9ca3af; text-transform:uppercase; letter-spacing:.1em; margin:0 0 .375rem;">Tiempo de respuesta</p>
+          <p style="color:#fff; font-size:.9375rem; font-weight:500; margin:0;">Menos de 24 horas</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const emailRadio = document.getElementById('pref-email');
+    const phoneRadio = document.getElementById('pref-phone');
+    const phoneGroup = document.getElementById('phone-group');
+    emailRadio?.addEventListener('change', () => { if (phoneGroup) phoneGroup.style.display = 'none'; });
+    phoneRadio?.addEventListener('change', () => { if (phoneGroup) phoneGroup.style.display = 'block'; });
+
+    const form = document.getElementById('contact-form') as HTMLFormElement | null;
+    form?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const btn = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+      btn.disabled = true;
+      btn.textContent = 'Enviando…';
+      fetch(form.action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } })
+        .then((res) => {
+          if (res.ok) {
+            window.location.href = '/es/gracias.html';
+          } else {
+            btn.disabled = false;
+            btn.textContent = 'Enviar Mensaje';
+            alert('Algo salió mal. Por favor intenta de nuevo.');
+          }
+        })
+        .catch(() => {
+          btn.disabled = false;
+          btn.textContent = 'Enviar Mensaje';
+          alert('Error de conexión. Revisa tu internet e intenta de nuevo.');
+        });
+    });
+  </script>
 </Layout>

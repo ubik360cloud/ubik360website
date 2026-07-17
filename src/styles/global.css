@@ -107,3 +107,31 @@ a {
 .step-badge {
   @apply flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-[.6875rem] font-bold text-white mt-[.1875rem];
 }
+
+/* ── FAQ accordion (AEO pages) ──────────────────────────────
+   Used by digital-marketing/nearshore-staffing/international-expansion/
+   expansion-internacional. Each page toggles `.open` via a tiny inline
+   <script> -- see any of those pages for the pattern. */
+.faq-item {
+  @apply border-b border-gray-200;
+}
+.faq-question {
+  @apply w-full flex justify-between items-center py-5 bg-transparent border-none cursor-pointer font-sans text-base font-medium text-left gap-4;
+  color: var(--color-brand-black);
+}
+.faq-question:hover {
+  color: var(--color-brand-red);
+}
+.faq-icon {
+  @apply flex-shrink-0 w-5 h-5 text-gray-500 transition-transform duration-200;
+}
+.faq-answer {
+  @apply text-[.9375rem] text-gray-600 leading-[1.75] pb-5 hidden;
+}
+.faq-item.open .faq-answer {
+  display: block;
+}
+.faq-item.open .faq-icon {
+  transform: rotate(180deg);
+}
+

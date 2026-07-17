@@ -1,20 +1,257 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-// TODO(content): full rewrite pending -- MARKETING.md says this page is
-// "mostly right already" per the audience model, but still needs the
-// content-quality pass (open with the visitor's problem, not credentials).
+// Rewritten per MARKETING.md: general growth marketing/fractional CMO for
+// any NA business (not Hispanic-market-specific -- that was the old
+// framing). Auto-dealerships are the flagship proof vertical, not a gate on
+// who the page is for -- "lead broad, prove narrow." Old "Hispanic Market
+// Accelerator" lead magnet is superseded; using a direct contact CTA here
+// until a new lead magnet asset is written (flagged as a follow-up).
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: "What's included in Ubik 360's growth marketing service?",
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Campaign management across paid media (Meta, Google) and email, plus go-to-market strategy — each channel set up with conversion tracking and reporting tied to pipeline and revenue, not impressions or reach.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What is a fractional CMO and how does it help my business?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'A fractional CMO is senior marketing leadership on a part-time or contract basis — a fraction of the cost of a full-time hire. They set strategy, oversee execution and any existing team or agencies, and stay accountable for results.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Is Ubik 360 only for auto dealerships?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: "No. Auto dealerships are where much of the proven, hands-on experience comes from, but the underlying method — audit the funnel, fix what's leaking, build a plan around real milestones, execute and adjust — applies to any business with a real pipeline to grow.",
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How long does it take to see results?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Early signals — clicks, leads, initial conversions — typically appear within 2 to 4 weeks. Real optimization happens in months 2-3 once there is enough data to work with. Consistent, scalable growth usually shows up between months 3 and 6.',
+      },
+    },
+  ],
+};
 ---
 
 <Layout
   lang="en"
   path="/en/digital-marketing.html"
-  title="Digital Marketing Services | Growth Marketing & Fractional CMO | Ubik 360"
-  description="Growth marketing, go-to-market strategy, and fractional CMO services to reach the Hispanic market in the U.S. and Canada."
+  title="Growth Marketing & Fractional CMO | Ubik 360"
+  description="Fractional CMO leadership and growth marketing for North American businesses — built around pipeline and revenue, not impressions."
+  structuredData={faqSchema}
 >
-  <section class="max-w-6xl mx-auto px-6 py-24 text-center">
-    <span class="section-tag mb-4">Digital Marketing (placeholder)</span>
-    <h1 class="text-4xl mb-5" style="color:var(--black);">Content pending rewrite</h1>
-    <p class="text-lg mb-8" style="color:#4b5563;">See MARKETING.md for the content-quality plan for this page.</p>
-    <a href="https://calendly.com/jose-ubik360/30min" target="_blank" rel="noopener" class="btn-primary">Schedule a Call</a>
+  <!-- HERO -->
+  <section style="background:#fff; padding:5rem 0 4rem;">
+    <div class="max-w-3xl mx-auto px-6">
+      <span class="section-tag mb-4">Growth Marketing &amp; Fractional CMO</span>
+      <h1 class="text-4xl lg:text-5xl leading-tight mb-5" style="color:var(--black);">
+        Marketing spend that isn't producing pipeline is a cost, not an investment.
+      </h1>
+      <p class="text-xl leading-relaxed mb-8" style="color:#4b5563;">
+        Senior marketing leadership and growth marketing built around revenue — not a full-time
+        executive hire, and not another agency retainer that reports on reach instead of results.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-3">
+        <a href="https://calendly.com/jose-ubik360/30min" target="_blank" rel="noopener" class="btn-primary">Schedule a Growth Call</a>
+        <a href="#how-it-works" class="btn-outline">See How It Works</a>
+      </div>
+    </div>
   </section>
+
+  <!-- PAIN STRIP -->
+  <section style="background:var(--black); padding:3.5rem 0;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
+        <div>
+          <p style="color:#fff; font-size:.9375rem; font-weight:600; margin:0 0 .375rem;">No senior marketing oversight</p>
+          <p style="color:#9ca3af; font-size:.875rem; line-height:1.6;">Not ready for a full-time CMO, but growth has stalled without one.</p>
+        </div>
+        <div>
+          <p style="color:#fff; font-size:.9375rem; font-weight:600; margin:0 0 .375rem;">Spend without a clear return</p>
+          <p style="color:#9ca3af; font-size:.875rem; line-height:1.6;">Campaigns are running, but no one can say what they're actually producing.</p>
+        </div>
+        <div>
+          <p style="color:#fff; font-size:.9375rem; font-weight:600; margin:0 0 .375rem;">Burned by agencies before</p>
+          <p style="color:#9ca3af; font-size:.875rem; line-height:1.6;">Overpromised, underdelivered, reported on the wrong metrics.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section style="background:#fff; padding:5rem 0;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="max-w-2xl mb-12">
+        <span class="section-tag mb-3">What's Included</span>
+        <h2 class="text-3xl lg:text-4xl mb-4" style="color:var(--black);">Marketing that reduces guesswork.</h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="service-card">
+          <h3 class="text-xl mb-2" style="color:var(--black);">Growth Marketing</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65; margin-bottom:1.25rem;">Paid media and email built to acquire customers and improve conversion — not just drive traffic.</p>
+          <ul class="check-list">
+            <li>Meta Ads (Facebook &amp; Instagram)</li>
+            <li>Google Ads (Search &amp; Display)</li>
+            <li>Email marketing &amp; automation</li>
+          </ul>
+        </div>
+        <div id="go-to-market" class="service-card">
+          <h3 class="text-xl mb-2" style="color:var(--black);">Go-to-Market Strategy</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65; margin-bottom:1.25rem;">A plan for launching or scaling in a market, built and executed alongside your team.</p>
+          <ul class="check-list">
+            <li>Positioning &amp; messaging</li>
+            <li>Channel selection</li>
+            <li>Execution with your existing team</li>
+          </ul>
+        </div>
+        <div id="fractional-cmo" class="service-card" style="background-color:var(--oak); border-color:transparent;">
+          <h3 class="text-xl mb-2" style="color:var(--black);">Fractional CMO</h3>
+          <p style="font-size:.875rem; color:#3d3d3d; line-height:1.65; margin-bottom:1.25rem;">Senior marketing leadership without the cost of a full-time executive.</p>
+          <ul class="check-list">
+            <li style="color:#3d3d3d;">Strategy &amp; team oversight</li>
+            <li style="color:#3d3d3d;">Agency/freelancer management</li>
+            <li style="color:#3d3d3d;">KPI reporting tied to revenue</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROOF -->
+  <section style="background:#f9fafb; padding:5rem 0;">
+    <div class="max-w-4xl mx-auto px-6">
+      <span class="section-tag mb-3">Proven Experience</span>
+      <h2 class="text-3xl lg:text-4xl mb-6" style="color:var(--black);">Where the method comes from.</h2>
+      <p style="font-size:1.0625rem; color:#4b5563; line-height:1.85; margin-bottom:1rem;">
+        A large share of Ubik 360's hands-on marketing experience is with auto dealership groups —
+        a competitive, high-volume environment where wasted spend shows up fast. The same
+        discipline applies regardless of industry: audit the funnel, find where potential
+        customers actually drop off, fix that first, then scale what's working.
+      </p>
+      <p style="font-size:1.0625rem; color:#4b5563; line-height:1.85;">
+        That method doesn't change by vertical. If your business has a real pipeline — leads,
+        appointments, transactions — the same process applies.
+      </p>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section id="how-it-works" style="background:var(--black); padding:5rem 0;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="max-w-xl mb-12">
+        <span class="section-tag mb-3" style="color:var(--oak);">The Process</span>
+        <h2 class="text-3xl lg:text-4xl" style="color:#fff;">How it works</h2>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div>
+          <div style="width:3rem; height:3rem; border-radius:9999px; border:2px solid var(--red); display:flex; align-items:center; justify-content:center; margin-bottom:1.25rem;">
+            <span style="font-family:'DM Serif Display',serif; font-size:1.25rem; color:var(--red);">1</span>
+          </div>
+          <h3 style="font-family:'DM Serif Display',serif; font-size:1.125rem; color:#fff; margin:0 0 .625rem;">Discovery</h3>
+          <p style="font-size:.875rem; color:#9ca3af; line-height:1.65;">Channels, metrics, and goals reviewed together. No cost, no obligation.</p>
+        </div>
+        <div>
+          <div style="width:3rem; height:3rem; border-radius:9999px; border:2px solid var(--red); display:flex; align-items:center; justify-content:center; margin-bottom:1.25rem;">
+            <span style="font-family:'DM Serif Display',serif; font-size:1.25rem; color:var(--red);">2</span>
+          </div>
+          <h3 style="font-family:'DM Serif Display',serif; font-size:1.125rem; color:#fff; margin:0 0 .625rem;">Plan</h3>
+          <p style="font-size:.875rem; color:#9ca3af; line-height:1.65;">A plan tailored to your business, market, and budget, with clear success metrics.</p>
+        </div>
+        <div>
+          <div style="width:3rem; height:3rem; border-radius:9999px; border:2px solid var(--red); display:flex; align-items:center; justify-content:center; margin-bottom:1.25rem;">
+            <span style="font-family:'DM Serif Display',serif; font-size:1.25rem; color:var(--red);">3</span>
+          </div>
+          <h3 style="font-family:'DM Serif Display',serif; font-size:1.125rem; color:#fff; margin:0 0 .625rem;">Execute</h3>
+          <p style="font-size:.875rem; color:#9ca3af; line-height:1.65;">Campaigns launched and run alongside your team — not handed off after the deck.</p>
+        </div>
+        <div>
+          <div style="width:3rem; height:3rem; border-radius:9999px; border:2px solid var(--red); display:flex; align-items:center; justify-content:center; margin-bottom:1.25rem;">
+            <span style="font-family:'DM Serif Display',serif; font-size:1.25rem; color:var(--red);">4</span>
+          </div>
+          <h3 style="font-family:'DM Serif Display',serif; font-size:1.125rem; color:#fff; margin:0 0 .625rem;">Adjust</h3>
+          <p style="font-size:.875rem; color:#9ca3af; line-height:1.65;">Weekly review of what the data shows, with changes made accordingly.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section style="background:#fff; padding:5rem 0;">
+    <div class="max-w-3xl mx-auto px-6">
+      <div class="text-center mb-12">
+        <span class="section-tag mb-3">FAQ</span>
+        <h2 class="text-3xl lg:text-4xl" style="color:var(--black);">Common questions</h2>
+      </div>
+      <div id="faq-list">
+        <div class="faq-item">
+          <button class="faq-question">
+            What's included in the growth marketing service?
+            <svg class="faq-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer">Campaign management across paid media (Meta, Google) and email, plus go-to-market strategy — each channel set up with conversion tracking and reporting tied to pipeline and revenue, not impressions or reach.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            What is a fractional CMO and how does it help my business?
+            <svg class="faq-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer">Senior marketing leadership on a part-time or contract basis — a fraction of the cost of a full-time hire. Strategy, oversight of execution and any existing team or agencies, and accountability for results.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            Is Ubik 360 only for auto dealerships?
+            <svg class="faq-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer">No. Auto dealerships are where much of the proven, hands-on experience comes from, but the underlying method applies to any business with a real pipeline to grow.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            How long does it take to see results?
+            <svg class="faq-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer">Early signals — clicks, leads, initial conversions — typically appear within 2 to 4 weeks. Real optimization happens in months 2-3. Consistent, scalable growth usually shows up between months 3 and 6.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section style="background:var(--oak); padding:5rem 0;">
+    <div class="max-w-3xl mx-auto px-6 text-center">
+      <span class="section-tag mb-4" style="color:var(--red);">Next Step</span>
+      <h2 class="text-3xl lg:text-4xl mb-5" style="color:var(--black);">Ready to fix the funnel?</h2>
+      <p style="color:#3d3d3d; font-size:1.125rem; line-height:1.7; max-width:30rem; margin:0 auto 2.5rem;">
+        A 30-minute call to understand your business and lay out exactly what a plan would look like.
+      </p>
+      <a href="https://calendly.com/jose-ubik360/30min" target="_blank" rel="noopener" class="btn-primary" style="font-size:1rem; padding:1rem 2.5rem;">
+        Schedule Your Free Call
+      </a>
+    </div>
+  </section>
+
+  <script>
+    const faqButtons = document.querySelectorAll('.faq-question');
+    faqButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const item = btn.closest('.faq-item');
+        const isOpen = item?.classList.contains('open');
+        document.querySelectorAll('.faq-item').forEach((i) => i.classList.remove('open'));
+        if (!isOpen) item?.classList.add('open');
+      });
+    });
+  </script>
 </Layout>

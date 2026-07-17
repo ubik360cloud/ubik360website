@@ -1,9 +1,40 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-// TODO(content): scope NARROWS per MARKETING.md -- drops the Colombia->US/CA
-// direction and nearshoring section (those move to es/expansion-internacional.html
-// and en/nearshore-staffing.html respectively). Keeps only: EN businesses
-// wanting an entity/operating presence IN Colombia.
+// Narrowed scope per MARKETING.md -- drops the Colombia->US/CA direction
+// (that's es/expansion-internacional.html's job) and the nearshoring
+// section (moved to its own en/nearshore-staffing.html). Keeps only: NA
+// businesses wanting an entity/operating presence IN Colombia.
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'What does it cost to expand into Colombia?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Costs vary by entry model — distribution, direct operations, or staff augmentation. Operating costs, especially qualified personnel, are considerably lower than in the U.S. or Canada. A free initial consultation identifies the most cost-effective model for your industry and goals.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Is it safe to operate a business in Colombia?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Colombia has changed substantially over the past 15 years. With the right local guidance, foreign companies operate there every day without issue.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How is the tax structure handled for a foreign-owned entity?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Ubik 360 works with registered accountants in Colombia who specialize in foreign-owned businesses, covering compliance, local bookkeeping, and tax structure from the start.',
+      },
+    },
+  ],
+};
 ---
 
 <Layout
@@ -11,11 +42,150 @@ import Layout from '../../layouts/Layout.astro';
   path="/en/international-expansion.html"
   title="Expand Your Business Into Colombia | Ubik 360"
   description="Market entry consulting, on-the-ground operations management, and accounting/tax support for U.S. and Canadian businesses expanding into Colombia."
+  structuredData={faqSchema}
 >
-  <section class="max-w-6xl mx-auto px-6 py-24 text-center">
-    <span class="section-tag mb-4">Expand to Colombia (placeholder)</span>
-    <h1 class="text-4xl mb-5" style="color:var(--black);">Content pending narrower rewrite</h1>
-    <p class="text-lg mb-8" style="color:#4b5563;">See MARKETING.md -- this page keeps only the "set up in Colombia" use case.</p>
-    <a href="https://calendly.com/jose-ubik360/30min" target="_blank" rel="noopener" class="btn-primary">Schedule a Call</a>
+  <!-- HERO -->
+  <section style="background:#fff; padding:5rem 0 4rem;">
+    <div class="max-w-3xl mx-auto px-6">
+      <span class="section-tag mb-4">Expand Into Colombia</span>
+      <h1 class="text-4xl lg:text-5xl leading-tight mb-5" style="color:var(--black);">
+        Colombia is one of Latin America's fastest-growing markets. Entering without local
+        knowledge is expensive.
+      </h1>
+      <p class="text-xl leading-relaxed mb-8" style="color:#4b5563;">
+        Market entry consulting, on-the-ground operations management, and a local accounting
+        network — a structured way to lower risk on a market you don't operate in yet.
+      </p>
+      <a href="https://calendly.com/jose-ubik360/30min" target="_blank" rel="noopener" class="btn-primary">Schedule a Call</a>
+    </div>
   </section>
+
+  <!-- SERVICES -->
+  <section style="background:#fff; padding:5rem 0;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="max-w-2xl mb-10">
+        <span class="section-tag mb-3">What's Included</span>
+        <h2 class="text-3xl lg:text-4xl mb-4" style="color:var(--black);">A local presence, without relocating anyone.</h2>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="service-card">
+          <h3 class="text-xl mb-2" style="color:var(--black);">Market Entry Consulting</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.7;">Market analysis, import regulations, recommended legal structure, and a practical roadmap for operating profitably from day one.</p>
+        </div>
+        <div class="service-card">
+          <h3 class="text-xl mb-2" style="color:var(--black);">On-the-Ground Operations Manager</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.7;">Direct representation in Colombia — overseeing operations, supplier relationships, and any local team on your behalf.</p>
+        </div>
+        <div class="service-card">
+          <h3 class="text-xl mb-2" style="color:var(--black);">Supplier &amp; 3PL Selection</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.7;">Identifying, vetting, and negotiating with logistics and manufacturing providers in Colombia.</p>
+        </div>
+        <div class="service-card">
+          <h3 class="text-xl mb-2" style="color:var(--black);">Accounting &amp; Tax Support</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.7;">A network of registered Colombian accountants specializing in foreign-owned businesses — compliance, bookkeeping, and tax structure.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY IT WORKS -->
+  <section style="background:var(--oak); padding:5rem 0;">
+    <div class="max-w-4xl mx-auto px-6">
+      <span class="section-tag mb-3" style="color:var(--red);">Common Concerns</span>
+      <h2 class="text-3xl lg:text-4xl mb-8" style="color:var(--black);">Questions worth answering upfront.</h2>
+      <div style="display:flex; flex-direction:column; gap:.875rem;">
+        <div style="border-left:3px solid var(--red); padding:.875rem 1.125rem; background:rgba(147,31,29,.06); border-radius:0 .5rem .5rem 0;">
+          <strong style="color:var(--black); display:block; margin-bottom:.2rem; font-size:.875rem;">Is it safe to do business in Colombia?</strong>
+          <p style="margin:0; font-size:.875rem; color:#4b5563; line-height:1.6;">Colombia has changed substantially over the past 15 years. With the right local guidance, foreign companies operate there every day without issue.</p>
+        </div>
+        <div style="border-left:3px solid var(--red); padding:.875rem 1.125rem; background:rgba(147,31,29,.06); border-radius:0 .5rem .5rem 0;">
+          <strong style="color:var(--black); display:block; margin-bottom:.2rem; font-size:.875rem;">What about the language and culture gap?</strong>
+          <p style="margin:0; font-size:.875rem; color:#4b5563; line-height:1.6;">Bilingual, bicultural fluency bridges negotiation, communication, and supervision — nothing gets lost in translation or context.</p>
+        </div>
+        <div style="border-left:3px solid var(--red); padding:.875rem 1.125rem; background:rgba(147,31,29,.06); border-radius:0 .5rem .5rem 0;">
+          <strong style="color:var(--black); display:block; margin-bottom:.2rem; font-size:.875rem;">How does the tax structure work?</strong>
+          <p style="margin:0; font-size:.875rem; color:#4b5563; line-height:1.6;">Registered Colombian accountants specializing in foreign-owned businesses handle full compliance and an optimized structure from the start.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PARTNER NETWORK -->
+  <section style="background:#fff; padding:5rem 0;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center max-w-2xl mx-auto mb-12">
+        <span class="section-tag mb-3">Partner Network</span>
+        <h2 class="text-3xl lg:text-4xl mb-4" style="color:var(--black);">One point of contact. A real local network behind it.</h2>
+        <p style="color:#4b5563; font-size:1.0625rem; line-height:1.75;">For anything requiring local licensing — taxes, regulated accounting — Ubik 360 works with certified partners in Colombia. You deal directly with one point of contact; the rest is coordinated.</p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+        <div style="border:1px solid #e5e7eb; border-radius:.875rem; padding:2rem; text-align:center;">
+          <h3 style="font-family:'DM Serif Display',serif; font-size:1.125rem; margin:0 0 .625rem; color:var(--black);">Colombian Accountants</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Registered accountants specializing in internationally-owned businesses — DIAN, NIT, corporate structure.</p>
+        </div>
+        <div style="border:1px solid #e5e7eb; border-radius:.875rem; padding:2rem; text-align:center;">
+          <h3 style="font-family:'DM Serif Display',serif; font-size:1.125rem; margin:0 0 .625rem; color:var(--black);">3PL Logistics Providers</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Warehousing, fulfillment, and import/export partners in Colombia.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section style="background:#f9fafb; padding:5rem 0;">
+    <div class="max-w-3xl mx-auto px-6">
+      <div class="text-center mb-12">
+        <span class="section-tag mb-3">FAQ</span>
+        <h2 class="text-3xl lg:text-4xl" style="color:var(--black);">Common questions</h2>
+      </div>
+      <div id="faq-list">
+        <div class="faq-item">
+          <button class="faq-question">
+            What does it cost to expand into Colombia?
+            <svg class="faq-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer">Costs vary by entry model — distribution, direct operations, or staff augmentation. Operating costs, especially qualified personnel, are considerably lower than in the U.S. or Canada. A free initial consultation identifies the most cost-effective model for your industry and goals.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            Is it safe to operate a business in Colombia?
+            <svg class="faq-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer">Colombia has changed substantially over the past 15 years. With the right local guidance, foreign companies operate there every day without issue.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            How is the tax structure handled for a foreign-owned entity?
+            <svg class="faq-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer">Ubik 360 works with registered accountants in Colombia who specialize in foreign-owned businesses, covering compliance, local bookkeeping, and tax structure from the start.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section style="background:var(--black); padding:5rem 0;">
+    <div class="max-w-3xl mx-auto px-6 text-center">
+      <span class="section-tag mb-4" style="color:var(--oak);">Take the First Step</span>
+      <h2 class="text-3xl lg:text-4xl mb-5" style="color:#fff;">Ready to explore Colombia?</h2>
+      <p style="color:#9ca3af; font-size:1.125rem; line-height:1.7; max-width:30rem; margin:0 auto 2.5rem;">
+        A 30-minute call. No cost, no commitment — a clear picture of what to do and what to expect.
+      </p>
+      <a href="https://calendly.com/jose-ubik360/30min" target="_blank" rel="noopener" class="btn-primary" style="font-size:1rem; padding:1rem 2.5rem;">
+        Schedule Your Free Consultation
+      </a>
+    </div>
+  </section>
+
+  <script>
+    document.querySelectorAll('.faq-question').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const item = btn.closest('.faq-item');
+        const isOpen = item?.classList.contains('open');
+        document.querySelectorAll('.faq-item').forEach((i) => i.classList.remove('open'));
+        if (!isOpen) item?.classList.add('open');
+      });
+    });
+  </script>
 </Layout>

@@ -1,21 +1,158 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-// TODO(content): full audience-specific rewrite pending -- see MARKETING.md
-// "Proposed page architecture" table (ES homepage row). This is scaffold-only.
+// LatAm-primary homepage per MARKETING.md -- leads with the LatAm section
+// (Colombia/LatAm business expanding to Canada/US), NA section is secondary
+// and points to /en/ for the full English experience. NOT a translation of
+// en/index.astro -- its own pass, LatAm-first ordering.
 // No alternatePath/hreflang: the EN and ES homepages are different offers to
 // different audiences, not translations -- see MARKETING.md.
+
+const orgSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Ubik 360',
+  url: 'https://ubik360.com',
+  logo: 'https://ubik360.com/assets/images/ubik360logo.png',
+  description:
+    'Estrategia de entrada a mercado y expansión estructurada hacia Canadá y Estados Unidos para empresas colombianas y latinoamericanas; liderazgo de marketing fraccional y aumento de personal en LatAm para empresas de Norteamérica.',
+  areaServed: ['CO', 'US', 'CA'],
+  knowsAbout: ['Expansión Internacional', 'Entrada a Mercado', 'Localización', 'Growth Marketing', 'Staff Augmentation'],
+  sameAs: ['https://www.linkedin.com/in/jose-villegas-marketing-manager/'],
+};
 ---
 
 <Layout
   lang="es"
   path="/es/"
-  title="Ubik 360 | Expansión Internacional"
-  description="Incorporación, socio local, marketing en tu nuevo mercado y ferias comerciales -- para empresas colombianas expandiéndose a EE.UU. y Canadá."
+  title="Ubik 360 | Expansión Internacional a Canadá y EE.UU."
+  description="Entrada a mercado, localización y soporte operativo para empresas colombianas y latinoamericanas listas para expandirse a Canadá y Estados Unidos."
+  structuredData={orgSchema}
 >
-  <section class="max-w-6xl mx-auto px-6 py-24 text-center">
-    <span class="section-tag mb-4">Inicio (placeholder)</span>
-    <h1 class="text-4xl mb-5" style="color:var(--black);">Contenido de inicio ES pendiente</h1>
-    <p class="text-lg mb-8" style="color:#4b5563;">Ver MARKETING.md para el contenido planeado.</p>
-    <a href="/es/expansion-internacional.html" class="btn-primary">Expansión Internacional</a>
+  <!-- HERO -->
+  <section style="background:#fff; padding:6rem 0 4rem;">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+      <h1 class="text-4xl lg:text-5xl leading-tight mb-5" style="color:var(--black);">
+        Tu expansión a Canadá y EE.UU.,<br />
+        <em style="color:var(--red); font-style:italic;">con un proceso estructurado de principio a fin.</em>
+      </h1>
+      <p class="text-xl leading-relaxed mb-8 mx-auto" style="color:#4b5563; max-width:40rem;">
+        Entrada a mercado, localización y soporte operativo para empresas listas para invertir en
+        su crecimiento internacional — no solo trámites de incorporación.
+      </p>
+      <div class="flex flex-col sm:flex-row justify-center gap-3">
+        <a href="#latam" class="btn-primary">Expansión a Norteamérica</a>
+        <a href="#norteamerica" class="btn-outline">Servicios para Norteamérica</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- INTRO -->
+  <section style="background:#f9fafb; padding:3.5rem 0;">
+    <div class="max-w-3xl mx-auto px-6 text-center">
+      <p style="font-size:1.0625rem; color:#374151; line-height:1.8;">
+        Crecer un negocio es sencillo hasta que cruza una frontera. Las empresas colombianas y
+        latinoamericanas necesitan una forma estructurada de entrar a mercados donde aún no
+        operan — no solo papeleo, sino un plan real de entrada a mercado. Las empresas de
+        Norteamérica necesitan marketing que funcione y personal confiable, sin el costo de
+        construir un equipo propio desde cero. Ubik 360 trabaja ambos lados de ese problema, como
+        un solo socio responsable.
+      </p>
+    </div>
+  </section>
+
+  <!-- LATAM (PRIMARY) -->
+  <section id="latam" style="background:#fff; padding:5rem 0;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="max-w-2xl mb-10">
+        <span class="section-tag mb-3">Para LatAm y Mercados Bilingües</span>
+        <h2 class="text-3xl lg:text-4xl mb-4" style="color:var(--black);">Un camino estructurado hacia Canadá y EE.UU.</h2>
+        <p class="text-lg leading-relaxed" style="color:#4b5563;">
+          Expandirse al norte no es solo papeleo. La incorporación y la banca te registran — la
+          estrategia de entrada a mercado, el soporte operativo local y el marketing de entrada te
+          ponen a operar de verdad. Ubik 360 gestiona el camino completo, no solo el primer paso
+          legal.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+        <div class="service-card">
+          <h3 class="text-lg mb-2" style="color:var(--black);">Incorporación de Empresa</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Agente registrado, banca y oficina virtual en EE.UU. o Canadá.</p>
+        </div>
+        <div class="service-card">
+          <h3 class="text-lg mb-2" style="color:var(--black);">Estrategia de Entrada a Mercado</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Marketing de entrada construido para el mercado de destino, no traducido después.</p>
+        </div>
+        <div class="service-card" style="background-color:var(--oak); border-color:transparent;">
+          <h3 class="text-lg mb-2" style="color:var(--black);">Operación Local</h3>
+          <p style="font-size:.875rem; color:#3d3d3d; line-height:1.65;">Eficiencia operativa una vez establecidos — no solo incorporación, acompañamiento continuo.</p>
+        </div>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-3">
+        <a href="https://calendly.com/jose-ubik360/30min" target="_blank" rel="noopener" class="btn-primary">Agenda tu Consulta de Expansión</a>
+        <a href="/es/expansion-internacional.html" class="btn-outline">Ver Todos los Servicios</a>
+      </div>
+      <p style="font-size:.8125rem; color:#9ca3af; margin-top:.875rem;">Consulta inicial gratuita.</p>
+    </div>
+  </section>
+
+  <!-- NORTEAMÉRICA (SECONDARY) -->
+  <section id="norteamerica" style="background:var(--oak); padding:5rem 0;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="max-w-2xl mb-10">
+        <span class="section-tag mb-3" style="color:var(--red);">Para Norteamérica</span>
+        <h2 class="text-3xl lg:text-4xl mb-4" style="color:var(--black);">Liderazgo en marketing y personal confiable en LatAm.</h2>
+        <p class="text-lg leading-relaxed" style="color:#3d3d3d;">
+          Para empresas de EE.UU. y Canadá: liderazgo de marketing fraccional, growth marketing y
+          aumento de personal en Latinoamérica — sin el costo de construir cada función
+          internamente.
+        </p>
+      </div>
+      <a href="/en/" class="btn-primary">Ver en Inglés</a>
+    </div>
+  </section>
+
+  <!-- WHY UBIK 360 -->
+  <section style="background:var(--black); padding:5rem 0;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="max-w-xl mb-12">
+        <span class="section-tag mb-3" style="color:var(--oak);">Por Qué Ubik 360</span>
+        <h2 class="text-3xl lg:text-4xl" style="color:#fff;">Por qué las empresas trabajan con Ubik 360</h2>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div>
+          <h3 style="font-family:'DM Serif Display',serif; font-size:1.125rem; color:#fff; margin:0 0 .625rem;">Un solo socio, ambos lados</h3>
+          <p style="font-size:.875rem; color:#9ca3af; line-height:1.65;">Sin transición entre una agencia norteamericana y un consultor separado en LatAm — un equipo, un proceso, un punto de responsabilidad.</p>
+        </div>
+        <div>
+          <h3 style="font-family:'DM Serif Display',serif; font-size:1.125rem; color:#fff; margin:0 0 .625rem;">Un proceso estructurado</h3>
+          <p style="font-size:.875rem; color:#9ca3af; line-height:1.65;">Diagnóstico, plan, ejecución y ajuste, con hitos claros en cada etapa — no un contrato abierto sin fin.</p>
+        </div>
+        <div>
+          <h3 style="font-family:'DM Serif Display',serif; font-size:1.125rem; color:#fff; margin:0 0 .625rem;">Acceso directo</h3>
+          <p style="font-size:.875rem; color:#9ca3af; line-height:1.65;">Trabajas con las personas que hacen el trabajo — no te derivan a gestores de cuenta.</p>
+        </div>
+        <div>
+          <h3 style="font-family:'DM Serif Display',serif; font-size:1.125rem; color:#fff; margin:0 0 .625rem;">Resultados de negocio</h3>
+          <p style="font-size:.875rem; color:#9ca3af; line-height:1.65;">Pipeline generado, costos reducidos, mercados conquistados — no métricas de vanidad.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section style="background:#fff; padding:5rem 0;">
+    <div class="max-w-3xl mx-auto px-6 text-center">
+      <span class="section-tag mb-4">Da el Primer Paso</span>
+      <h2 class="text-3xl lg:text-4xl mb-5" style="color:var(--black);">¿Listo para dar el siguiente paso?</h2>
+      <p style="color:#4b5563; font-size:1.125rem; line-height:1.7; max-width:30rem; margin:0 auto 2.5rem;">
+        Una llamada de 30 minutos es suficiente para saber si esto es adecuado para tu negocio —
+        sin compromiso, respuestas directas.
+      </p>
+      <a href="https://calendly.com/jose-ubik360/30min" target="_blank" rel="noopener" class="btn-primary" style="font-size:1rem; padding:1rem 2.5rem;">
+        Agenda tu Consulta
+      </a>
+    </div>
   </section>
 </Layout>

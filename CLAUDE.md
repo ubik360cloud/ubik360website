@@ -17,12 +17,30 @@ rebuild — see "Migration status" below).
 ## Migration status (as of the Astro rebuild, 2026-07)
 The site was previously plain static HTML with no build step (Tailwind CDN, JS-injected
 nav/footer, hand-maintained sitemap — see MARKETING.md for why that was replaced). The rebuild is
-**in progress on the `astro-migration` branch**, not yet merged to `main`/deployed. Fully ported
-so far: `en/about.astro`, `en/contact.astro` (both include real bug fixes found during the port —
-see "Known fixes" below). Everything else is a placeholder page (clearly marked
-`TODO(content)` in its frontmatter comment) using the real Layout/Nav/Footer, pending the content
-rewrite already planned in MARKETING.md's "Proposed page architecture" table. **When picking up
-this work, grep for `TODO(content)` to find what's still a placeholder.**
+**in progress on the `astro-migration` branch**, not yet merged to `main`/deployed, and **not yet
+deployed anywhere** (no Vercel project connected as of this writing).
+
+**All pages have real content now** (as of the brand-voice/positioning rewrite — see
+MARKETING.md for the full copy strategy this was written against): `en/index.astro`,
+`en/about.astro`, `en/digital-marketing.astro`, `en/nearshore-staffing.astro` (new),
+`en/international-expansion.astro` (narrowed scope), `en/contact.astro`, `en/thank-you.astro`,
+`es/index.astro`, `es/sobre-mi.astro`, `es/expansion-internacional.astro` (absorbed the old
+`marketing-digital.html`), `es/contacto.astro`, `es/gracias.astro`. Nothing is a `TODO(content)`
+placeholder anymore — build verified clean (`npx astro build`, 13 pages, no errors), all internal
+links audited and resolve to real pages/anchors.
+
+**Explicitly NOT done yet (real gaps, not oversights):**
+- No new lead-magnet asset was written for `en/digital-marketing.html` — the old "Hispanic Market
+  Accelerator" was retired (wrong positioning now) and the page currently uses a direct
+  Calendly CTA instead of a gated download. `en/nearshore-staffing.html` reuses the existing
+  "Administrative Scale-Up" asset, which still fits.
+- `en/thank-you-expansion.html`, `es/gracias-checklist.html` (the old lead-magnet-specific
+  thank-you pages) were not recreated — `en/thank-you.astro`/`es/gracias.astro` are generic
+  versions used by every form on the site now.
+- Legal pages (`public/Privacy-Policy.html`, `Terms-of-Service.html`) and the lead-magnet
+  downloads in `public/assets/downloads/` are still unconverted legacy HTML, copied as-is.
+- Nothing has been deployed. Vercel project setup, DNS cutover from Hostinger, and a final
+  content read-through by Jose are all still ahead of going live.
 
 ## Structure
 ```
@@ -38,12 +56,13 @@ src/components/Footer.astro → same pattern; EN has 3 columns, ES has 2 (fewer 
 src/styles/global.css   → Tailwind v4 CSS-first theme (@theme block = brand tokens as real
                           Tailwind colors) + legacy `--red`/`--black`/`--green`/`--oak` variable
                           aliases so ported page markup keeps working without a find-replace pass
-src/pages/en/            → English pages (about, contact, thank-you fully/partially ported;
-                          digital-marketing, nearshore-staffing [new], international-expansion
-                          [narrowed scope] are placeholders)
-src/pages/es/            → Spanish pages (sobre-mi, contacto placeholders pending port using the
-                          EN equivalents as templates; expansion-internacional placeholder pending
-                          full rewrite — becomes the single main ES service page)
+src/pages/en/            → English pages, all with real content (index, about, digital-marketing,
+                          nearshore-staffing [new], international-expansion [narrowed to the
+                          Colombia-entity use case only], contact, thank-you)
+src/pages/es/            → Spanish pages, all with real content (index [LatAm-first, not a
+                          translation of en/index], sobre-mi, expansion-internacional [absorbed
+                          the old marketing-digital.html + added market-entry marketing/events],
+                          contacto, gracias)
 src/pages/index.astro    → JS language-redirector (noindex,nofollow), ported from the legacy root
                           index.html — NOT a homepage, just picks /en/ or /es/ by browser language
 public/assets/           → images, downloads (legacy lead-magnet HTML, unconverted), chat widget JS

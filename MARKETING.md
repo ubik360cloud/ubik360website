@@ -303,6 +303,74 @@ magnet, not a buried section).
 
 ---
 
+## About Page Copy — Draft (2026-07, not yet executed into pages)
+
+> Rewrite of `en/about.astro`'s content (currently still the old résumé-led port — see CLAUDE.md
+> "Migration status"). Per Jose's brief: human but business-first, credibility through experience/
+> perspective/method/client outcomes — not résumé, vanity metrics, or hobby content (explicitly:
+> no "20 books a year," no personal-hobby color). A personal detail earns its place only if it
+> supports trust or explains how Jose works. Two personal facts passed that bar and one didn't:
+> - **Kept, reframed:** introversion / comfort mastering-and-presenting a topic vs. small talk →
+>   becomes "prepared over networking" as a business-working-style differentiator (section 2).
+> - **Kept, reframed:** family split between Colombia and Canada (adult kids in Canada, Jose
+>   splits time between both countries) → this is literal, lived, ongoing proof of the
+>   cross-border/bilingual reality the business sells, not a vanity credential (section 4). This
+>   is stronger evidence than the old career-stats framing precisely because it's not an
+>   achievement being claimed, it's a fact of daily life.
+> - **Left out:** the evening routine (wine, Netflix, calling the kids) — same category of
+>   irrelevant personal-hobby content as the old "20 books a year" line; doesn't support trust or
+>   explain working method, so it stays out per Jose's own filter.
+>
+> `es/sobre-mi.astro` needs its own pass once this is approved — not a straight translation (same
+> rule as the rest of the site), though About-page content is audience-neutral enough that a
+> close adaptation (not a full rewrite like the service pages) is likely appropriate; confirm
+> with Jose when that page is scheduled.
+
+**1. Opening positioning statement**
+> Ubik 360 exists because most growth problems aren't purely marketing problems or purely
+> expansion problems — they're both, and they usually involve more than one country. I run this
+> practice directly: no bench of account managers, no handoff after the first call. If you work
+> with Ubik 360, you work with the person doing the thinking.
+
+**2. My approach / philosophy**
+> The work speaks before I do. I'd rather walk into a first conversation prepared to answer hard
+> questions about your business than spend it building rapport. That's deliberate — clients don't
+> need a great networker, they need someone who's done the homework and can say plainly what's
+> working, what isn't, and what to do next.
+>
+> That means no inflated timelines, no vague promises, and no dressing up a weak plan to make a
+> first call go smoothly. If something isn't going to work, you hear that in the first
+> conversation — not three months into a retainer.
+
+**3. Why businesses trust Ubik 360**
+> The perspective behind Ubik 360 comes from operating, not observing — building and running
+> businesses across Colombia, the U.S., and Canada, not consulting about those markets from the
+> outside. That's shaped a specific method: understand the business and the market before
+> proposing anything, build a plan around clear milestones instead of an open-ended retainer, and
+> stay accountable for execution — not just strategy.
+>
+> Every engagement follows the same structure: a clear-eyed look at where the business stands
+> today, a plan built around realistic outcomes, hands-on execution, and ongoing adjustment based
+> on what the data actually shows — not what looks good in a report.
+
+**4. Cross-border and bilingual advantage**
+> Cross-border isn't a service category for Ubik 360 — it's daily life. My family is split
+> between Colombia and Canada: my kids live in Canada, and my wife and I split our time between
+> both countries. That's not a credential — it's just the reality that makes the bilingual,
+> bicultural side of this work second nature instead of theoretical.
+>
+> Practically, that means positioning, messaging, and go-to-market plans get built with real
+> cultural and regulatory fluency, not translated after the fact — whether the direction is a
+> Colombian company entering the U.S. or Canadian market, or a North American company building a
+> team or reaching a market in Latin America.
+
+**5. Closing CTA**
+> If your business is ready for marketing that performs, staff you can rely on, or a real plan to
+> cross into a new market — let's talk. Thirty minutes is enough to know if it's a fit.
+> **[Schedule a Call]**
+
+---
+
 ## Content quality pass — findings (2026-07, before any rewrite)
 
 Independent of the audience-architecture fix above, the existing EN copy (both service pages)

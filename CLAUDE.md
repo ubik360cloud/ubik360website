@@ -3,7 +3,30 @@
 > For brand voice, messaging guidelines, audience/ICP, and the marketing backend plan, see
 > [MARKETING.md](./MARKETING.md). This file covers site structure and dev conventions only.
 
-## What this is
+## MIGRATION IN PROGRESS (decided 2026-07, Jose)
+
+Moving from plain static HTML to **Astro, deployed on Vercel**. Not yet built — the sections
+below still describe the current live (Hostinger) site. Rationale, found during a full
+content/code review:
+- Tailwind loaded via `<script src="https://cdn.tailwindcss.com">` on every page — Tailwind's own
+  docs call this dev-only; it ships the full JIT compiler as JS and recompiles styles client-side,
+  hurting page speed and causing visible style-in flash.
+- Nav/footer are empty `<div id="site-nav">`/`<div id="site-footer">` filled by JS after load
+  (`includes/nav.js`/`footer.js`) — causes layout shift, and a crawler/LLM that doesn't fully
+  execute JS may see a page with no navigation (bad for AEO, not just Core Web Vitals).
+- Every page duplicates the same ~60-line `<style>` block inline *and* loads `main.css`
+  separately — redundant CSS shipped per page.
+- `sitemap.xml` is hand-maintained and will drift as pages are added/retired.
+- The planned AI blog generator (see MARKETING.md) works far better against structured content
+  (Markdown + frontmatter, Astro content collections) than hand-built HTML per post.
+- Astro's file-based routing gives `/en/` and `/es/` as genuinely independent route trees, which
+  matches the corrected audience model (see MARKETING.md — EN/ES are NOT translation pairs).
+
+The EN/ES content rewrite already planned in MARKETING.md happens **directly in the Astro
+rebuild**, not twice. Once the migration lands, this file's Structure/Conventions sections below
+get rewritten to match — until then, treat everything past this point as the legacy reference.
+
+## What this is (legacy/current — Hostinger static site)
 Bilingual (EN/ES) static marketing website for **Ubik 360**, José Villegas's
 consultancy. Two service tracks:
 - **Digital Marketing** — growth marketing / fractional CMO for Hispanic
@@ -14,9 +37,6 @@ consultancy. Two service tracks:
 Plain HTML/CSS/JS, no build step, no framework, no package manager. Deployed
 as static files (currently Hostinger; see "Hosting" below). Repo:
 https://github.com/ubik360cloud/ubik360website
-
-**Do not introduce a build system, bundler, or JS framework** unless
-explicitly asked — the site's simplicity is intentional.
 
 ## Structure
 ```
@@ -38,11 +58,16 @@ robots.txt, sitemap.xml, google*.html      → SEO / search console verification
 .htaccess              → Apache caching/compression rules (Hostinger-specific)
 ```
 
-EN and ES are **not directory mirrors** — file names differ per language
-(e.g. `en/digital-marketing.html` ↔ `es/marketing-digital.html`). The
-EN↔ES toggle mapping lives in `includes/nav.js` (`links` arrays) — if you
-add/rename a page, update that mapping and the equivalent page's `hreflang`
-tags together, or the language toggle will 404.
+**EN and ES are not translations of each other — they're different offers to different
+audiences** (Colombia/LatAm business owners expanding outward on ES; US/Canada business owners
+reaching into the Hispanic market + LatAm sourcing/staffing on EN). See MARKETING.md's "Audience /
+ICP" section before touching any EN or ES page — content should NOT be assumed to mirror 1:1.
+Practical implications: `hreflang` alternate tags between an EN/ES page pair are only correct
+where the pages genuinely are the same content in two languages (currently just about/contact) —
+remove `hreflang` cross-links between pages that cover different content, since asserting they're
+translations of each other is actively wrong for SEO. The EN↔ES toggle in `includes/nav.js` links
+to the other language's *homepage*, not a per-page equivalent — that's deliberate, not a bug, and
+avoids a broken-link problem now that pages diverge.
 
 ## Brand tokens (`assets/css/main.css`)
 ```
@@ -90,11 +115,10 @@ scope.
   on Calendly (`https://calendly.com/jose-ubik360/30min`) and/or the chat
   widget.
 
-## Conventions
+## Conventions (legacy site — superseded by the Astro migration above once it lands)
 - Keep pages static HTML; don't add Node tooling.
 - When creating a new page, copy the closest existing page as a template to
-  keep nav/footer includes, meta tags, and hreflang structure consistent.
-- Translate visible text only — keep HTML structure, CSS classes/IDs, and
-  file organization pattern (inline-style nav/footer) unchanged between EN
-  and ES.
+  keep nav/footer includes and meta tags consistent — but write content for
+  its actual audience (see MARKETING.md), don't assume it should translate
+  an existing page in the other language.
 - Keep `sitemap.xml` in sync when adding/removing pages.

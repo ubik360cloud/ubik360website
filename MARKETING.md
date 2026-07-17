@@ -6,6 +6,15 @@
 > nothing here shares infrastructure, code, or data with them. Keep this file and any AI
 > content-generation prompts in sync — drift between them is how brand voice degrades over time.
 
+**Status (2026-07): strategy layer is settled** — positioning, audience/ICP, brand voice, tone
+rules, and NA/LatAm messaging direction are all finalized and internally consistent (see sections
+below). **Copy execution is partial** — full copy decks exist only for the EN homepage and EN
+about page (both drafted below, not yet applied to `.astro` files). Everything else
+(`en/digital-marketing.html`, `en/nearshore-staffing.html`, `en/international-expansion.html`,
+and the entire `es/` side: homepage, about, contact, expansion-internacional) has an agreed
+*direction* but no drafted copy deck yet — those will be written directly against the strategy
+below at execution time, the same way the homepage/about drafts were produced.
+
 ---
 
 ## Positioning (revised 2026-07 — supersedes the earlier résumé-led framing below)
@@ -83,6 +92,20 @@ my business problem and can guide me"* — not *"this person has an impressive c
 - Bilingual (EN/ES) — translate voice, not just words. The calm/strategic register should hold in
   both languages; don't let Spanish copy drift warmer/more personal than the English by default,
   or vice versa, unless the messaging framework below calls for it.
+- **Write for business owners, not marketers writing to other marketers.** No marketing-industry
+  jargon (ROAS, funnel optimization, omnichannel, growth hacking) — a founder who's never worked
+  in marketing should understand every sentence on first read.
+- **Use concrete, plain-English outcome language**, not abstractions: "reduce manual work,"
+  "improve conversion," "support expansion," "modernize systems," "lower risk" — a verb the
+  reader can picture + a business result, not a marketing-speak noun phrase.
+- **Authority comes from clarity, not self-praise.** The way to sound like an expert is to explain
+  something clearly and specifically — not to say "expert" about yourself. If a sentence's only
+  job is to make Ubik 360 sound impressive rather than to inform the reader, cut it.
+- **Separate proof from personality, structurally.** Proof (outcomes, cases, process, experience)
+  belongs in dedicated proof sections/moments — factual, evidence-based, no personal color.
+  Personality (tone, perspective, working style) belongs in voice and framing throughout the
+  copy — not in the proof itself. Don't blend them: a case-outcome sentence shouldn't carry a
+  personality aside, and a philosophy/approach section shouldn't smuggle in unproven claims.
 
 **Approved tone words:** expert, credible, practical, clear, calm, strategic, precise, grounded,
 structured, considered, trustworthy, capable, methodical, outcome-focused, cross-border,
@@ -99,6 +122,10 @@ bilingual-fluent.
   supported with a real outcome/process/example, cut it or soften it to something demonstrable.
 - ❌ Urgency/pressure tactics, spammy CTAs, or generic agency-speak clichés.
 - ❌ Job-application or personal-biography framing — this is a business-outcomes site, not a CV.
+- ❌ Marketer-to-marketer jargon (see "Write for business owners" above) — if a term needs a
+  marketing background to parse, replace it with plain language.
+- ❌ Self-praise as a substitute for clarity ("we're the best at X") — explain the thing, don't
+  rate it.
 
 **Brand tokens** (from `src/styles/global.css` — keep any generated visual assets on-palette):
 `--red: #931F1D` (CTAs) · `--black: #050505` (text) · `--green: #659157` (accents) ·

@@ -157,14 +157,35 @@ translated for tone/idiom only if the same content genuinely applies to both —
 → This is expansion-outward + market-entry marketing, sold as one journey — not a translated
 digital-marketing service page.
 
-**EN visitor = U.S./Canada business owner, reaching inward.** Real pain:
+**EN visitor = U.S./Canada business owner, reaching inward.** Real pain (updated 2026-07 — see
+"Growth marketing: general positioning, not Hispanic-market-specific" below):
 - Reliable overseas/nearshore staff (Colombia/LatAm) without full-time-hire overhead.
-- Marketing to reach the Hispanic market that's already local to them.
+- General growth marketing / fractional CMO leadership — not limited to a single vertical or the
+  Hispanic-market angle.
 - Sourcing vendors/manufacturing partners in LatAm.
-→ Nearshoring + Hispanic-market marketing + sourcing, sold as one journey. The existing
-`en/digital-marketing.html` lead magnet ("Hispanic Market Accelerator... for Home Service
-Businesses") is already aligned with this — it targets businesses wanting to *reach* the
-Hispanic market, not Hispanic-owned businesses themselves. Keep that framing; don't regress it.
+→ Nearshoring + growth marketing/fractional CMO + sourcing, sold as one journey.
+
+**⚠ Superseded asset:** the existing `en/digital-marketing.html` lead magnet ("Hispanic Market
+Accelerator... for Home Service Businesses") was written under the old Hispanic-market-specific
+framing and is now misaligned with general growth marketing positioning. Don't reuse it as-is
+when the page is rewritten — needs a new, broader lead magnet (or a reworked version of it),
+decided at content-execution time.
+
+**Growth marketing: general positioning, not Hispanic-market-specific (resolved 2026-07, Jose):**
+NA growth marketing/fractional CMO is now positioned for **any NA business**, not gated to a
+single industry — Jose's proven niche is **auto-dealerships**, but he doesn't want the pitch
+narrowed to that vertical and lose other opportunities. Resolution: **lead broad, prove
+narrow.** The page's core positioning and headline offer stay general (any growth-stage NA
+business); auto-dealership experience becomes the **flagship proof point** — case
+examples/process description drawn from that work, used as evidence of real results, not as a
+gate on who the service is for. Practical implications for the rewrite:
+- Headline/hero copy: general growth marketing + fractional CMO offer, no industry qualifier.
+- Proof section: lead with auto-dealership case examples/outcomes (per the brand voice rule —
+  process and outcomes, not personal résumé) since that's the strongest evidence available.
+- Optional (future, not urgent): a dedicated auto-dealership-specific section or landing page can
+  exist *alongside* the general page without replacing it, if/when there's enough proof content
+  to justify a dedicated funnel — but the main service page must stay industry-agnostic in its
+  primary framing.
 
 **Implication for "Track A / Track B" labels:** the old model (Track A = digital marketing,
 Track B = international expansion, each mirrored EN/ES) should be replaced by an
@@ -191,8 +212,8 @@ magnet, not a buried section).
 
 | Page | Role | Content |
 |---|---|---|
-| `en/index.html` | Homepage | Hero splits between the two real EN offers: reach the Hispanic market (marketing) and get overseas staff/sourcing (nearshoring) — replaces the current Track-A/Track-B split. |
-| `en/digital-marketing.html` | Keep, mostly as-is | Already aligned with the audience model (Hispanic-market reach, not Hispanic-owned-business marketing). Gets the content-quality pass below regardless. |
+| `en/index.html` | Homepage | Hero splits between the two real EN offers: general growth marketing/fractional CMO, and reliable LatAm staff/sourcing (nearshoring) — replaces the current Track-A/Track-B split. |
+| `en/digital-marketing.html` | **Rewrite needed** | Reposition from Hispanic-market-specific to general growth marketing/fractional CMO for any NA business, with auto-dealership case examples as flagship proof (see Audience/ICP "Growth marketing" note above). Existing "Hispanic Market Accelerator" lead magnet is superseded — needs a new one. Also gets the content-quality pass below. |
 | `en/nearshore-staffing.html` | **New dedicated page** | Pulled from `international-expansion.html`'s current "Nearshore Staffing" + "Supplier & 3PL Selection" sections: customer service/bookkeeping/back-office/appointment-setter staffing in Colombia, + LatAm vendor/manufacturing sourcing. Own lead magnet (e.g. a cost-comparison download, reusing the existing "Administrative Scale-Up" asset). |
 | `en/international-expansion.html` | Narrows scope | Keeps only the secondary EN use case: U.S./Canada businesses wanting an actual entity/operating presence *in* Colombia (market entry consulting, on-the-ground ops manager, accounting network). Drops the Colombia→US/CA half entirely — that's the ES audience's page, not this one's. |
 | `en/about.html`, `en/contact.html` | Shared/neutral | Unchanged. |

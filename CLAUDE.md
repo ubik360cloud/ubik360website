@@ -1,5 +1,8 @@
 # Ubik 360 Website — CLAUDE.md
 
+> For brand voice, messaging guidelines, audience/ICP, and the marketing backend plan, see
+> [MARKETING.md](./MARKETING.md). This file covers site structure and dev conventions only.
+
 ## What this is
 Bilingual (EN/ES) static marketing website for **Ubik 360**, José Villegas's
 consultancy. Two service tracks:

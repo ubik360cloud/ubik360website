@@ -13,18 +13,23 @@
 > **This section replaces the brand voice/positioning that shipped with the Astro migration.**
 > The earlier version leaned on José's personal track record (numbers, entity counts, "I don't
 > tell you what you want to hear") as the primary credibility mechanism. Jose has now redirected
-> this toward an **outcomes-first, business-first** voice — see rationale inline below. The
-> Audience/ICP and page-architecture sections further down were written under the *old* framing
-> and have NOT been reconciled with this update yet — see "Open reconciliation" at the end of
-> this section.
+> this toward an **outcomes-first, business-first** voice. A first draft of this section also
+> included digital transformation/cloud migration/AI as an NA service line — **removed 2026-07**:
+> Jose tested those services in the market last year and got zero leads/interest. Root cause:
+> that demand exists mainly at larger corporations who default to established enterprise
+> providers (NetSuite, SAP, Salesforce, Adecco for staffing) rather than an independent
+> consultant — not a fit for Ubik 360's actual buyer. **Do not reintroduce digital
+> transformation/cloud/AI/DevOps as a service line without Jose explicitly deciding to re-test
+> it.**
 
 **Positioning statement:** Ubik 360 helps growing, founder-led businesses execute their next
-strategic move. In North America, that means digital transformation, cloud migration, AI
-adoption, operational efficiency, and growth marketing that measurably moves the business
-forward. In Latin America and bilingual markets, that means go-to-market strategy, market entry,
-localization, and structured growth support for companies expanding into Canada and the U.S. In
-both cases, Ubik 360 is a strategic partner who understands the business problem first and
-guides execution — not a vendor selling a service, and not a résumé selling a person.
+strategic move. In North America, that means **staff augmentation in Latin America (nearshoring),
+fractional CMO leadership, and growth marketing** that measurably moves the business forward. In
+Latin America and bilingual markets, that means **go-to-market strategy and market entry into
+Canada and the U.S.** — and that market entry goes beyond corporate/legal structure to include
+**local operations efficiency** once established, not just incorporation. In both cases, Ubik 360
+is a strategic partner who understands the business problem first and guides execution — not a
+vendor selling a service, and not a résumé selling a person.
 
 **Brand voice summary:** Expert, credible, and practical. Calm and strategic rather than
 hype-driven — confidence comes from clear thinking and sound process, not from volume or
@@ -34,19 +39,23 @@ special add-on. The voice a capable advisor uses with another business owner: di
 work, quiet about the ego.
 
 **Competitive advantage:** Ubik 360 operates fluently across North American and Latin
-American/bilingual business contexts — the same partner can take a company from "we need to
-modernize" (NA) through "we need to enter that market" (cross-border) without a handoff between
-specialists. Proof lives in **client outcomes, process, and case examples** (anonymized where
-needed — ask Jose for specifics per engagement, businesses generally cannot be named), not in
-personal credentials.
+American/bilingual business contexts — the same partner can staff and grow a NA business's
+marketing function *and* run its LatAm hiring, while also guiding a LatAm company's structured
+entry into Canada/the U.S., without a handoff between specialists. Proof lives in **client
+outcomes, process, and case examples** (anonymized where needed — ask Jose for specifics per
+engagement, businesses generally cannot be named), not in personal credentials.
 
-**Open reconciliation (flag for Jose's next prompt(s), do not resolve automatically):** the
-Audience/ICP section below still frames the EN audience narrowly as "reach the Hispanic market +
-nearshoring/sourcing" and the ES audience as "Colombia → US/CA entity expansion" — the new
-positioning statement above is broader on the NA side (digital transformation/cloud/AI/ops
-efficiency, not Hispanic-market-specific) and roughly consistent on the LatAm side (go-to-market/
-market-entry into Canada/US). The page architecture and content-quality-pass sections further
-down were built on the narrower framing and will need review once this is clarified.
+**Reconciliation status (resolved 2026-07):** this positioning now lines up with the earlier
+Audience/ICP work — NA = nearshoring/staff augmentation + fractional CMO/growth marketing
+(matches the existing `en/nearshore-staffing.html` + `en/digital-marketing.html` page split);
+LatAm = market entry into Canada/US + (newly explicit) local operations efficiency post-entry
+(fits inside `es/expansion-internacional.html`, likely as an addition to its scope). **One open
+question, not yet resolved:** the earlier Audience/ICP section frames NA growth marketing
+specifically as "reach the Hispanic market" — this prompt's "Growth Marketing" is stated more
+generally. Flagging for Jose to confirm in a follow-up: is Hispanic-market-reach still the
+specific angle for `en/digital-marketing.html`, or has that broadened to general growth
+marketing for any NA business? See Audience/ICP section below, which still reflects the
+Hispanic-market-specific framing pending that answer.
 
 ---
 
@@ -100,23 +109,29 @@ bilingual-fluent.
 ## Messaging Framework — North America vs. LatAm/Bilingual
 
 **North America (English)**
-- Core need: modernize and grow — digital transformation, cloud migration, AI adoption,
-  operational efficiency, growth marketing.
+- Core need: **staff augmentation in LatAm (nearshoring)**, **fractional CMO** leadership, and
+  **growth marketing** that measurably moves the business forward. (Not digital
+  transformation/cloud/AI — tested 2025, no market interest; that demand belongs to established
+  enterprise providers like NetSuite/SAP/Salesforce/Adecco, not an independent consultant.)
 - Buyer mindset: pragmatic and ROI-focused; wants a partner who can execute without hand-holding,
   not another vendor pitch.
-- Message frame: the business is ready to modernize; Ubik 360 gets it there without disruption —
-  systems and strategy that measurably run the business better, not just look impressive.
-- Proof to lead with: process and outcomes (efficiency gained, growth generated, transformation
-  executed) — described concretely, client names omitted where required.
+- Message frame: the business needs marketing leadership and/or reliable LatAm staff without the
+  cost/overhead of a full in-house build — Ubik 360 provides both as a working partner, not a
+  one-off project vendor.
+- Proof to lead with: process and outcomes (growth generated, roles filled and retained,
+  efficiency gained from nearshore staffing) — described concretely, client names omitted where
+  required.
 
 **LatAm / Bilingual markets (Spanish)**
-- Core need: expand into Canada/U.S. — go-to-market strategy, market entry, localization,
-  structured cross-border growth support.
+- Core need: expand into Canada/U.S. — go-to-market strategy, market entry, localization, and
+  (explicitly, not just legal/corporate structure) **local operations efficiency** once
+  established — structured cross-border growth support end-to-end, not just incorporation
+  paperwork.
 - Buyer mindset: ambitious but wary of unfamiliar regulatory/market terrain; wants a guide who
   has actually done this and can translate both language and business context.
 - Message frame: expanding into Canada or the U.S. is a structured process, not a leap of faith —
-  Ubik 360 provides the go-to-market plan, the local presence, and the localization that makes
-  the move work.
+  Ubik 360 provides the go-to-market plan, the local presence, the localization, and the
+  operational efficiency that makes the move work long-term, not just on paper.
 - Proof to lead with: the same standard — process, outcomes, case examples — not personal
   biography, even though the cross-border credibility is part of what makes the guidance
   trustworthy; keep that credibility implicit in the quality of the process, not stated as a

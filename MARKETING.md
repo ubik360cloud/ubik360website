@@ -157,6 +157,13 @@ translated for tone/idiom only if the same content genuinely applies to both —
 → This is expansion-outward + market-entry marketing, sold as one journey — not a translated
 digital-marketing service page.
 
+**⚠ ICP refinement (2026-07):** this is specifically **mid-sized and larger businesses ready to
+invest** in expansion (overseas operations, bilingual staff, exports/international customer
+service infrastructure) — not any Colombia/LatAm business regardless of size or readiness. See
+"Market-Specific Copy Directions" below for the full reasoning (an underprepared client who
+expands anyway is likely to fail and blame Ubik 360 for it) and how that shapes LatAm copy/CTAs
+to self-select for readiness.
+
 **EN visitor = U.S./Canada business owner, reaching inward.** Real pain (updated 2026-07 — see
 "Growth marketing: general positioning, not Hispanic-market-specific" below):
 - Reliable overseas/nearshore staff (Colombia/LatAm) without full-time-hire overhead.
@@ -164,6 +171,11 @@ digital-marketing service page.
   Hispanic-market angle.
 - Sourcing vendors/manufacturing partners in LatAm.
 → Nearshoring + growth marketing/fractional CMO + sourcing, sold as one journey.
+
+**⚠ ICP refinement (2026-07):** specifically **founders, SMEs, decision-makers, and business
+owners** — this job-title/company-size definition also drives the Apify cold-lead search filters
+(see "Marketing Backend — Plan" → Lead generation). See "Market-Specific Copy Directions" below
+for the full NA copy direction.
 
 **⚠ Superseded asset:** the existing `en/digital-marketing.html` lead magnet ("Hispanic Market
 Accelerator... for Home Service Businesses") was written under the old Hispanic-market-specific
@@ -371,6 +383,94 @@ magnet, not a buried section).
 
 ---
 
+## Market-Specific Copy Directions — NA vs. LatAm (2026-07)
+
+> Elaborates the Messaging Framework above into working copy directions per market. **New ICP
+> refinement this pass, not previously captured:** NA audience is specifically **founders, SMEs,
+> decision-makers, business owners** — chosen partly because this job-title/company-size
+> definition is what will drive the Apify cold-lead search filters later (see "Marketing Backend
+> — Plan" → Lead generation, cross-referenced below). LatAm audience is refined to **mid-sized and
+> larger businesses specifically ready to invest** in expansion (overseas operations, bilingual
+> staff, exports/international customer service infrastructure) — **not** any Colombia/LatAm
+> business. Jose's stated reason: an underprepared client who expands without that readiness is
+> likely to fail regardless of the plan, and would blame Ubik 360 for it. This is a real
+> qualification/disqualification signal, not just a tone note — LatAm copy should self-select for
+> readiness (see CTA style + hero below), not just describe the service.
+
+### North America
+
+1. **Core promise:** Senior marketing leadership that moves pipeline and revenue, plus reliable
+   Latin America staff — without the cost of building either function in-house.
+2. **Key pain points:** Marketing spend without measurable pipeline/revenue; no senior marketing
+   leadership in-house but not ready for a full-time CMO hire; local hiring for customer
+   service/back-office/appointment-setting roles is slow, expensive, and hard to retain;
+   watching competitors move faster because they've solved "senior marketing + lean ops" already;
+   burned before by agencies that overpromise or internal hires that take months to ramp.
+3. **Key benefits:** Fractional CMO-level leadership without executive overhead; growth marketing
+   tied to pipeline/revenue, not vanity metrics; accountable LatAm staff at a fraction of local
+   hiring cost; one point of accountability instead of juggling an agency + a recruiter + an ops
+   vendor separately; direct access to the person doing the work.
+4. **Best proof types:** Process description (discovery → plan → execution → optimization);
+   concrete outcome language (pipeline generated, cost-per-acquisition improved, roles filled and
+   retained); anonymized case examples — auto-dealerships are the flagship proof vertical (see
+   Audience/ICP "Growth marketing" note above) without gating who the page is for. Never invent a
+   number Jose hasn't confirmed.
+5. **CTA style:** Direct and low-friction. No urgency/pressure language. "Schedule a Growth Call" /
+   "See how it works for your business" — a straightforward booking ask, not a hard sell.
+6. **Words to use:** pipeline, revenue, retention, accountable, structured, direct, practical,
+   measurable, fractional, embedded, senior, reliable, execution.
+7. **Words to avoid:** hype terms (game-changing, revolutionary, unlock, next level), vague
+   superlatives (best-in-class, world-class), filler jargon (synergy, leverage-as-verb,
+   disruptive), and anything résumé/personal-bio-flavored.
+8. **Sample hero section:**
+   > Headline: "Senior marketing leadership. Reliable LatAm staff. Without the full-time
+   > overhead."
+   > Subhead: "Fractional CMO leadership and growth marketing built around pipeline and revenue —
+   > plus staff augmentation in Latin America for the roles that are hard to fill and expensive to
+   > keep local."
+   > CTA: "Schedule a Growth Call"
+
+### LatAm / Bilingual Markets
+
+1. **Core promise:** A structured, accountable path into Canada and the U.S. — market entry,
+   go-to-market strategy, and the operational groundwork to make the move work long-term, not
+   just the legal first step.
+2. **Key pain points:** Uncertainty about legal/regulatory requirements (entity formation,
+   banking, compliance); risk of expanding without the internal readiness to actually execute
+   (bilingual staff, processes, customer-facing infrastructure) — the real failure mode Jose wants
+   to screen for; difficulty finding a guide who understands both the home market and the
+   destination market, not just an incorporation service; language/cultural gaps in marketing and
+   customer communication; fear of costly missteps (wrong state/province, tax structure, a failed
+   launch).
+3. **Key benefits:** One structured process from entity formation through go-to-market to ongoing
+   operations; bicultural, bilingual guidance, not a generic legal/incorporation service;
+   localization done for the destination market, not translated after the fact; a realistic
+   readiness assessment as part of the engagement (helps confirm the business is actually ready
+   before committing — serves the qualification goal above); ongoing operational support post-entry.
+4. **Best proof types:** End-to-end journey narrative (incorporation → first customer → stable
+   operations); anonymized case examples of successful market entries; specifics about the local
+   partner network (CPAs, banking partners) as evidence of a real, working process — not just a
+   claim.
+5. **CTA style:** Warmer and more relational than the NA CTA, but still qualifying, not just
+   inviting — the copy should read as "come talk to us if you're ready to invest in this
+   properly," not "anyone can do this easily." Explicitly **avoid** language that makes expansion
+   sound trivial or fast (see banned words below) — that's exactly what attracts underprepared
+   leads who fail and blame Ubik 360.
+6. **Words to use (Spanish-market register):** estructurado, acompañamiento, socio, cercanía,
+   claridad, resultados reales, preparación, sólido, a la medida.
+7. **Words to avoid:** the general banned-hype list, **plus market-specific additions**: "fácil,"
+   "sin complicaciones," "en días," "garantizado," "sin riesgo" — anything that undersells the
+   effort/investment required, since overselling ease is precisely what produces an underprepared,
+   unhappy client.
+8. **Sample hero section** (written in Spanish — this is the actual visitor-facing language,
+   unlike the homepage copy deck above which is still pending its own LatAm-first ES pass):
+   > Headline: "Tu expansión a Canadá y EE.UU., con un proceso estructurado de principio a fin."
+   > Subhead: "Entrada a mercado, localización y soporte operativo para empresas listas para
+   > invertir en su crecimiento internacional — no solo trámites de incorporación."
+   > CTA: "Agenda tu Consulta de Expansión"
+
+---
+
 ## Content quality pass — findings (2026-07, before any rewrite)
 
 Independent of the audience-architecture fix above, the existing EN copy (both service pages)
@@ -424,9 +524,12 @@ page architecture above) happens **directly in Astro**, not twice.
   actually for, with an ES/EN counterpart only when the topic genuinely serves both audiences.
 - **Email marketing:** own contact/segment/campaign tool (not a third-party SaaS UI) — AI-assisted
   drafting from the brand guidelines above, warm-up sending discipline, engagement tracking.
-- **Lead generation:** Apify-based scrape → verify → promote pipeline. Track A = local business
-  discovery (Google Maps scraper, Hispanic-business-relevant search terms + geography). Track B =
-  company/LinkedIn-style discovery for expansion-minded businesses, likely needing an
+- **Lead generation:** Apify-based scrape → verify → promote pipeline. **NA channel** targets
+  founders/SMEs/decision-makers/business owners (job-title + company-size filters, per the
+  ICP definition in "Market-Specific Copy Directions" above) via a Google Maps/LinkedIn-style
+  discovery step. **LatAm channel** targets mid-sized-and-larger businesses specifically —
+  company-size filtering matters here more than for NA, since the ICP explicitly excludes
+  smaller/underprepared businesses (see "Audience/ICP" ⚠ note above) — likely needing an
   email-finder step since LinkedIn rarely exposes emails directly. Every scrape run cost-capped.
 
 **Build order (per priority decision):**

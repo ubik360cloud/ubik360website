@@ -68,20 +68,71 @@ part of the brand, not just credentials.
 
 ---
 
-## Audience / ICP
+## Audience / ICP — and why EN/ES are NOT translations of each other
 
-**Track A (Digital Marketing) — Hispanic-owned businesses in the U.S. and Canada.**
-Have talent and drive, lack structure and strategic marketing backing. Likely local/regional
-SMBs — retail, services, e-commerce, wholesale — owner-operated or small teams.
+**Critical correction (2026-07, Jose):** `/en/` and `/es/` are two different offers to two
+different audiences on opposite sides of the same border — not a bilingual mirror of one offer.
+The site currently violates this (`es/marketing-digital.html` pitches "reach the Hispanic market
+in the U.S./Canada" to a Spanish-reading Colombian visitor — the wrong offer for that audience).
+**Any future page, blog post, or email must be written FOR its audience's actual direction, then
+translated for tone/idiom only if the same content genuinely applies to both — never assume a
+1:1 page mirror is correct by default.**
 
-**Track B (International Expansion) — two directions:**
-- Colombian companies with a real product wanting to enter the U.S./Canada, held back by
-  language and unfamiliarity with the market (not by lack of ambition or product quality).
-- U.S./Canada companies wanting a foothold in Colombia — need an on-the-ground advisor who
-  knows the culture, compliance, and local partners.
+**ES visitor = Colombia/LatAm business owner, going outward (CO → U.S./Canada).** Real pain:
+- Legally incorporating and operating in the U.S. or Canada.
+- Local logistics and administrative partnerships once there (someone on the ground).
+- Marketing strategy for the *new* market they're entering (not their home market).
+- Event/trade show planning in the destination country.
+→ This is expansion-outward + market-entry marketing, sold as one journey — not a translated
+digital-marketing service page.
 
-Both tracks skew toward founder-led, small-to-mid businesses making a first cross-border or
-first-real-marketing-strategy move — not enterprises with in-house teams already.
+**EN visitor = U.S./Canada business owner, reaching inward.** Real pain:
+- Reliable overseas/nearshore staff (Colombia/LatAm) without full-time-hire overhead.
+- Marketing to reach the Hispanic market that's already local to them.
+- Sourcing vendors/manufacturing partners in LatAm.
+→ Nearshoring + Hispanic-market marketing + sourcing, sold as one journey. The existing
+`en/digital-marketing.html` lead magnet ("Hispanic Market Accelerator... for Home Service
+Businesses") is already aligned with this — it targets businesses wanting to *reach* the
+Hispanic market, not Hispanic-owned businesses themselves. Keep that framing; don't regress it.
+
+**Implication for "Track A / Track B" labels:** the old model (Track A = digital marketing,
+Track B = international expansion, each mirrored EN/ES) should be replaced by an
+audience-first structure. See "Proposed page architecture" below.
+
+---
+
+## Proposed page architecture (draft — needs Jose sign-off before any rewrite)
+
+Replacing the current "same slugs, translated" structure:
+
+| Audience | Page(s) | Core offer | Notes |
+|---|---|---|---|
+| **ES (CO→US/CA)** | `es/expansion-internacional.html` (keep, refocus) | Entity formation, registered agent, banking, local logistics/admin partner, **market-entry marketing strategy for the new market**, event/trade show planning | Already the closest-aligned existing page — the Colombia→US/CA half of `en/international-expansion.html`'s content, expanded with the marketing/events angle that's currently missing. |
+| **ES (marketing)** | Fold into the expansion page rather than a separate `marketing-digital.html` | "How to market once you're in" as a section/step of the expansion journey, not a standalone service | Avoids re-creating a translated version of the EN-only Hispanic-market-marketing offer. |
+| **EN (US/CA reaching in)** | `en/digital-marketing.html` (keep, mostly right already) | Reach the Hispanic market locally (Meta/Google/email) — keep as is | This one's largely fine per the audience model; needs the content-quality pass below regardless. |
+| **EN (nearshoring/sourcing)** | Split out of `en/international-expansion.html`'s "Nearshore Staffing" section into more prominence, possibly its own page | Overseas staffing, LatAm vendor sourcing | Currently buried as one section on the expansion page; for the EN audience this — not entity formation in Colombia — is the primary draw. |
+| **EN (US/CA→Colombia entity-side)** | Keep as secondary section on `en/international-expansion.html` | For the smaller set of EN visitors who do want to set up *in* Colombia | Real but secondary compared to nearshoring/sourcing for this audience. |
+
+**Open before rewriting:** exact URL slugs (Spanish slugs should read naturally in Spanish, not
+transliterate the English structure), whether nearshoring/sourcing earns its own EN page or stays
+a prominent section, and how `about`/`contact` (audience-neutral) stay shared.
+
+---
+
+## Content quality pass — findings (2026-07, before any rewrite)
+
+Independent of the audience-architecture fix above, the existing EN copy (both service pages)
+leans too heavily on José-centric framing — credentials and personal story presented before the
+visitor's problem, e.g. hero copy that opens with credential stats rather than the reader's
+situation. Fix direction for the rewrite (both new audience-specific pages):
+- **Open with the visitor's problem/question**, not José's track record. Credentials support the
+  answer; they shouldn't BE the opening pitch.
+- **FAQ/concern-card sections already do this well** (`en/international-expansion.html`'s
+  "The questions I get most" pattern) — extend that pattern earlier in the page, not just lower
+  down. It's the strongest user-centered writing already on the site.
+- Numbers/stats stay (they're real and are the credibility differentiator per the Brand
+  Guidelines above) — but reposition them as proof *after* the pain point is named, not as the
+  lead.
 
 ---
 
@@ -99,11 +150,14 @@ deploys. Not shared with any other business.
 - **Backend:** Node/Express (or similar lightweight API), deployed on DigitalOcean App Platform
   or Vercel serverless functions — pick based on where the rest of Ubik 360 infra lands.
 - **Database:** Supabase Postgres — admin-key-gated `/admin/*` routes, public read-only where needed.
-- **Blog:** Astro → MDX, deployed on a `blog.ubik360.com` subdomain (Vercel), keeping the main
-  static site untouched. AI-generated (Claude), brand-voice-prompted from this file's guidelines
+- **Blog:** static HTML pages under `ubik360.com/blog/` (folder, not a subdomain — Jose's
+  preference for this site), generated by an AI tool (Claude) and committed straight into this
+  repo alongside the rest of the static site. Brand-voice-prompted from this file's guidelines
   section, with cover + in-article images and a **syndication kit**: per-post AI-drafted copy for
   LinkedIn (post + first comment), Medium.com (subtitle, tags, canonical import link), and social
-  captions — one generation pass, copy-paste distribution.
+  captions — one generation pass, copy-paste distribution. **Bilingual posts follow the audience
+  model above** — a post isn't auto-translated EN↔ES; it's written for whichever audience it's
+  actually for, with an ES/EN counterpart only when the topic genuinely serves both audiences.
 - **Email marketing:** own contact/segment/campaign tool (not a third-party SaaS UI) — AI-assisted
   drafting from the brand guidelines above, warm-up sending discipline, engagement tracking.
 - **Lead generation:** Apify-based scrape → verify → promote pipeline. Track A = local business
@@ -129,8 +183,10 @@ generation, a higher email sending tier, Apollo.io for Track B corporate lead-ge
 
 - Exact repo/hosting home for the new backend (own repo vs. folder in `ubik360website`) — lean
   toward a separate repo once Phase 1 scoping starts, to keep the static site simple.
-- Blog subdomain vs. `/blog/` path on the main site — subdomain (Astro) keeps the static site
-  untouched and matches the proven pattern; confirm before building.
+- **Decided:** blog lives at `ubik360.com/blog/` (folder in this repo), not a subdomain.
+- Finalize the page architecture table above (slugs, whether nearshoring/sourcing gets its own
+  EN page) before rewriting `digital-marketing.html`/`international-expansion.html`/
+  `marketing-digital.html`/`expansion-internacional.html`.
 - Whether paid engagements (e.g. a bookable "Market Entry Checklist" or productized package) ever
   need payment processing — out of scope until asked for.
 

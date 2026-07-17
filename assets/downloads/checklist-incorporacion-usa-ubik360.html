@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checklist de Incorporación 2026 | Ubik 360</title>
+  <meta name="robots" content="noindex, nofollow">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --red: #931F1D;
+      --black: #050505;
+      --green: #659157;
+      --oak: #CEC5B5;
+      --oak-light: #F0ECE5;
+      --gray: #4b5563;
+      --light-gray: #f3f4f6;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--black);
+      background: #fff;
+      -webkit-font-smoothing: antialiased;
+      font-size: 9.5pt;
+      line-height: 1.5;
+    }
+
+    h1, h2, h3, h4 { font-family: 'DM Serif Display', serif; }
+
+    .page {
+      width: 8.5in;
+      min-height: 11in;
+      margin: 0 auto;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+    }
+
+    @media screen {
+      body { background: #e5e7eb; padding: 2rem 0; }
+      .page { box-shadow: 0 4px 32px rgba(0,0,0,.18); margin-bottom: 2rem; }
+    }
+
+    @media print {
+      body { background: #fff; padding: 0; }
+      .page { box-shadow: none; margin: 0; page-break-after: always; }
+      .no-print { display: none !important; }
+    }
+
+    /* ── PAGE HEADER (shared) ── */
+    .pg-header {
+      background: var(--black);
+      padding: .6rem 0.5in;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+
+    .pg-header img { height: 26px; width: auto; }
+    .pg-header-logo-text { font-family: 'DM Serif Display', serif; font-size: 12pt; color: #fff; }
+    .pg-header-label { font-size: 7pt; color: rgba(255,255,255,.45); letter-spacing: .1em; text-transform: uppercase; }
+
+    /* ── PAGE FOOTER ── */
+    .pg-footer {
+      padding: .4rem 0.5in;
+      border-top: 1px solid #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+      margin-top: auto;
+    }
+
+    .pg-footer-left { font-size: 7pt; color: #9ca3af; }
+    .pg-footer-right { font-size: 7pt; color: #9ca3af; }
+
+    /* ── PAGE 1: HERO BAND ── */
+    .hero-band {
+      background: var(--black);
+      padding: .85rem 0.5in 1rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-band::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 100%; height: 4px;
+      background: var(--red);
+    }
+
+    .hero-meta {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      margin-bottom: .6rem;
+    }
+
+    .hero-tag {
+      font-family: 'Inter', sans-serif;
+      font-size: 7pt; font-weight: 700;
+      letter-spacing: .14em; text-transform: uppercase;
+      color: var(--red);
+      border: 1px solid rgba(147,31,29,.5);
+      padding: .2rem .6rem; border-radius: 2px;
+    }
+
+    .hero-year {
+      font-family: 'Inter', sans-serif;
+      font-size: 7pt; font-weight: 600;
+      color: rgba(255,255,255,.4);
+      letter-spacing: .08em;
+    }
+
+    .hero-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 26pt; line-height: 1.1;
+      color: #fff;
+      margin-bottom: .4rem;
+    }
+
+    .hero-title span { color: var(--red); }
+
+    .hero-subtitle {
+      font-size: 9pt; line-height: 1.55;
+      color: rgba(255,255,255,.6);
+      max-width: 5.5in;
+    }
+
+    /* ── BODY ── */
+    .pg-body { padding: .45in 0.5in .3in; flex: 1; }
+
+    /* ── SECTION HEADERS ── */
+    .step-header {
+      display: flex;
+      align-items: center;
+      gap: .65rem;
+      margin-bottom: .55rem;
+      padding-bottom: .45rem;
+      border-bottom: 2px solid var(--black);
+    }
+
+    .step-badge {
+      background: var(--red);
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 7.5pt; font-weight: 700;
+      letter-spacing: .06em; text-transform: uppercase;
+      padding: .25rem .6rem; border-radius: 3px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .step-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 14pt; color: var(--black);
+      line-height: 1.1;
+    }
+
+    /* ── THREE-COLUMN STATE COMPARISON ── */
+    .state-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: .55rem;
+      margin-bottom: .75rem;
+    }
+
+    .state-card {
+      border-radius: 5px;
+      padding: .6rem .7rem;
+      position: relative;
+    }
+
+    .state-card.florida { background: rgba(101,145,87,.1); border: 1.5px solid rgba(101,145,87,.4); }
+    .state-card.delaware { background: rgba(147,31,29,.07); border: 1.5px solid rgba(147,31,29,.2); }
+    .state-card.wyoming { background: rgba(5,5,5,.04); border: 1.5px solid #d1d5db; }
+
+    .state-badge {
+      display: inline-block;
+      font-family: 'Inter', sans-serif;
+      font-size: 6.5pt; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase;
+      padding: .15rem .45rem; border-radius: 2px;
+      margin-bottom: .35rem;
+    }
+
+    .state-card.florida .state-badge { background: var(--green); color: #fff; }
+    .state-card.delaware .state-badge { background: var(--red); color: #fff; }
+    .state-card.wyoming .state-badge { background: var(--black); color: #fff; }
+
+    .state-name {
+      font-family: 'DM Serif Display', serif;
+      font-size: 12pt; color: var(--black);
+      margin-bottom: .3rem; line-height: 1;
+    }
+
+    .state-ideal {
+      font-size: 7.5pt; color: var(--gray);
+      margin-bottom: .4rem; line-height: 1.4;
+    }
+
+    .state-cost {
+      font-size: 8pt; font-weight: 700;
+      color: var(--green);
+    }
+
+    .state-pros { list-style: none; margin-top: .35rem; }
+
+    .state-pros li {
+      font-size: 7.5pt; color: var(--gray);
+      line-height: 1.4; margin-bottom: .2rem;
+      padding-left: .8rem; position: relative;
+    }
+
+    .state-pros li::before {
+      content: '✓';
+      position: absolute; left: 0;
+      color: var(--green); font-size: 7pt; font-weight: 700;
+    }
+
+    .recommended-flag {
+      position: absolute;
+      top: .4rem; right: .5rem;
+      font-size: 6pt; font-weight: 700;
+      color: var(--green); letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    /* ── CHECKLIST ITEMS ── */
+    .checklist-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .35rem .85rem;
+      margin-bottom: .65rem;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: .45rem;
+    }
+
+    .check-box {
+      width: 14px; height: 14px;
+      border: 1.5px solid #d1d5db;
+      border-radius: 2px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .check-label { font-size: 8.5pt; color: var(--black); line-height: 1.4; }
+    .check-label span { font-size: 7.5pt; color: var(--gray); display: block; line-height: 1.35; }
+
+    /* ── DOCS TABLE ── */
+    .docs-table { width: 100%; border-collapse: collapse; font-size: 8pt; margin-bottom: .7rem; }
+
+    .docs-table th {
+      background: var(--black);
+      color: #fff;
+      padding: .35rem .6rem;
+      text-align: left;
+      font-family: 'Inter', sans-serif;
+      font-size: 7pt; font-weight: 700;
+      letter-spacing: .06em; text-transform: uppercase;
+    }
+
+    .docs-table td {
+      padding: .32rem .6rem;
+      border-bottom: 1px solid #e5e7eb;
+      color: var(--gray);
+      vertical-align: top;
+    }
+
+    .docs-table td:first-child { font-weight: 600; color: var(--black); width: 38%; }
+    .docs-table tr:nth-child(even) td { background: var(--light-gray); }
+    .docs-table tr:last-child td { border-bottom: none; }
+
+    .docs-table .cost-cell { color: var(--green); font-weight: 700; white-space: nowrap; }
+
+    /* ── SECTION SEPARATOR ── */
+    .section-sep {
+      height: 1px;
+      background: #e5e7eb;
+      margin: .65rem 0;
+    }
+
+    /* ── ERROR CARDS ── */
+    .error-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: .5rem;
+      margin-bottom: .65rem;
+    }
+
+    .error-card {
+      background: rgba(147,31,29,.05);
+      border: 1px solid rgba(147,31,29,.2);
+      border-top: 3px solid var(--red);
+      border-radius: 4px;
+      padding: .6rem .7rem;
+    }
+
+    .error-num {
+      font-family: 'DM Serif Display', serif;
+      font-size: 18pt; color: var(--red);
+      line-height: 1; margin-bottom: .3rem;
+    }
+
+    .error-title {
+      font-family: 'Inter', sans-serif;
+      font-size: 8pt; font-weight: 700;
+      color: var(--black);
+      margin-bottom: .3rem; line-height: 1.3;
+    }
+
+    .error-desc { font-size: 7.5pt; color: var(--gray); line-height: 1.45; margin-bottom: .4rem; }
+
+    .error-fix {
+      font-size: 7.5pt; font-weight: 600;
+      color: var(--green);
+      padding-top: .3rem;
+      border-top: 1px solid rgba(147,31,29,.15);
+      line-height: 1.4;
+    }
+
+    .error-fix::before { content: '→ '; }
+
+    /* ── AUTHOR STRIP ── */
+    .author-strip {
+      background: var(--oak-light);
+      border-radius: 5px;
+      padding: .6rem .85rem;
+      display: flex;
+      align-items: center;
+      gap: .85rem;
+      margin-bottom: .6rem;
+    }
+
+    .author-strip img {
+      width: 38px; height: 38px;
+      border-radius: 50%; object-fit: cover;
+      border: 2px solid var(--red);
+      flex-shrink: 0;
+    }
+
+    .author-strip-name { font-size: 9pt; font-weight: 700; color: var(--black); margin-bottom: .1rem; }
+    .author-strip-bio { font-size: 7.5pt; color: var(--gray); line-height: 1.4; }
+
+    /* ── CTA STRIP ── */
+    .cta-strip {
+      background: var(--black);
+      border-radius: 5px;
+      padding: .7rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .cta-strip-text h4 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 13pt; color: #fff;
+      margin-bottom: .2rem; line-height: 1.2;
+    }
+
+    .cta-strip-text p { font-size: 8pt; color: rgba(255,255,255,.6); margin: 0; }
+
+    .cta-strip-btn {
+      background: var(--red); color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 8pt; font-weight: 700;
+      padding: .5rem 1.1rem; border-radius: 3px;
+      text-decoration: none; white-space: nowrap;
+      flex-shrink: 0; letter-spacing: .04em;
+    }
+
+    /* ── INFO PILLS ── */
+    .info-row { display: flex; gap: .45rem; flex-wrap: wrap; margin-bottom: .5rem; }
+
+    .info-pill {
+      background: var(--light-gray);
+      border: 1px solid #e5e7eb;
+      border-radius: 20px;
+      padding: .2rem .65rem;
+      font-size: 7.5pt; color: var(--black);
+      font-weight: 500;
+      display: flex; align-items: center; gap: .3rem;
+    }
+
+    .info-pill .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%; background: var(--green);
+      flex-shrink: 0;
+    }
+
+    /* ── BANK LOGOS ROW ── */
+    .bank-row {
+      display: flex; gap: .5rem; flex-wrap: wrap;
+      margin-top: .35rem;
+    }
+
+    .bank-tag {
+      background: var(--black);
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 7pt; font-weight: 700;
+      padding: .2rem .55rem; border-radius: 3px;
+      letter-spacing: .04em;
+    }
+
+    /* ── PRINT BTN ── */
+    .print-bar { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 999; }
+
+    .print-btn {
+      background: var(--red); color: #fff;
+      border: none; padding: .6rem 1.2rem;
+      border-radius: 4px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600; font-size: 8.5pt; cursor: pointer;
+      box-shadow: 0 4px 16px rgba(0,0,0,.3);
+      display: flex; align-items: center; gap: .4rem;
+    }
+
+    .print-btn:hover { background: #7a1917; }
+
+    @media print { .print-bar { display: none; } }
+  </style>
+</head>
+<body>
+
+<div class="print-bar no-print">
+  <button class="print-btn" onclick="window.print()">
+    <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
+    </svg>
+    Guardar como PDF
+  </button>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     PÁGINA 1
+═══════════════════════════════════════ -->
+<div class="page">
+
+  <div class="pg-header">
+    <img src="../images/ubik360logo.png" alt="Ubik 360" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+    <span style="display:none;" class="pg-header-logo-text">Ubik<span style="color:var(--red);">360</span></span>
+    <div class="pg-header-label">Guía de Expansión Internacional</div>
+  </div>
+
+  <!-- Hero band -->
+  <div class="hero-band">
+    <div class="hero-meta">
+      <div class="hero-tag">Checklist Paso a Paso</div>
+      <div class="hero-year">Actualizado 2026</div>
+    </div>
+    <h1 class="hero-title">
+      De Colombia a EE.UU.<br><span>Sin Errores.</span>
+    </h1>
+    <p class="hero-subtitle">
+      Todo lo que necesitas para incorporar tu LLC en EE.UU. desde Colombia: estado, documentos, EIN, agente registrado, y los 3 errores que bloquean las cuentas bancarias.
+    </p>
+  </div>
+
+  <div class="pg-body">
+
+    <!-- PASO 1 -->
+    <div class="step-header">
+      <div class="step-badge">Paso 1</div>
+      <div class="step-title">Elige el Estado Correcto</div>
+    </div>
+
+    <div class="state-grid">
+
+      <div class="state-card florida">
+        <div class="recommended-flag">Recomendado</div>
+        <div class="state-badge">Mejor para ventas locales</div>
+        <div class="state-name">Florida</div>
+        <div class="state-ideal">Negocios con clientes en EE.UU., home services, retail, servicios.</div>
+        <div class="state-cost">$125/año · Sin impuesto estatal sobre renta</div>
+        <ul class="state-pros">
+          <li>Gran comunidad hispana y colombiana</li>
+          <li>Costos bajos de mantenimiento anual</li>
+          <li>Apertura bancaria más sencilla con dirección local</li>
+        </ul>
+      </div>
+
+      <div class="state-card delaware">
+        <div class="state-badge">Para inversores</div>
+        <div class="state-name">Delaware</div>
+        <div class="state-ideal">Startups que buscan capital externo o expansión internacional.</div>
+        <div class="state-cost">$300/año (Franchise Tax) + $50 registro</div>
+        <ul class="state-pros">
+          <li>Reputación establecida ante inversores</li>
+          <li>Ley corporativa más flexible y predecible</li>
+          <li>No requiere que operes en Delaware</li>
+        </ul>
+      </div>
+
+      <div class="state-card wyoming">
+        <div class="state-badge">Máxima privacidad</div>
+        <div class="state-name">Wyoming</div>
+        <div class="state-ideal">Negocios 100% digitales o sin presencia física en EE.UU.</div>
+        <div class="state-cost">$60/año · Sin impuesto estatal sobre renta</div>
+        <ul class="state-pros">
+          <li>Opción más económica del mercado</li>
+          <li>Alta privacidad: no revela dueños en registro público</li>
+          <li>Ideal para e-commerce y servicios remotos</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- PASO 2 -->
+    <div class="step-header" style="margin-top:.55rem;">
+      <div class="step-badge">Paso 2</div>
+      <div class="step-title">Documentos y Registro — En Este Orden</div>
+    </div>
+
+    <table class="docs-table">
+      <thead>
+        <tr>
+          <th>Trámite</th>
+          <th>Dónde se hace</th>
+          <th>Costo aprox.</th>
+          <th>Tiempo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Nombre de la LLC <span style="font-weight:400; font-size:7.5pt; color:var(--gray);">(debe incluir "LLC")</span></td>
+          <td>Verificar disponibilidad en Secretary of State del estado elegido</td>
+          <td class="cost-cell">Gratis</td>
+          <td>1–2 días</td>
+        </tr>
+        <tr>
+          <td>Agente Registrado</td>
+          <td>Servicio externo (Northwest, Registered Agents Inc., ZenBusiness)</td>
+          <td class="cost-cell">$50–$150/año</td>
+          <td>Inmediato</td>
+        </tr>
+        <tr>
+          <td>Articles of Organization</td>
+          <td>Portal web del Secretary of State (en línea, sin ir a EE.UU.)</td>
+          <td class="cost-cell">$50–$500</td>
+          <td>1–5 días hábiles</td>
+        </tr>
+        <tr>
+          <td>EIN (Tax ID Federal)</td>
+          <td>IRS.gov — formulario SS-4 en línea para no residentes (o por fax/correo)</td>
+          <td class="cost-cell">Gratis</td>
+          <td>Online: inmediato · Fax: 4–6 semanas</td>
+        </tr>
+        <tr>
+          <td>Operating Agreement</td>
+          <td>Documento interno — no se presenta al estado. Necesario para bancos.</td>
+          <td class="cost-cell">$0–$300</td>
+          <td>1–3 días</td>
+        </tr>
+        <tr>
+          <td>Certificate of Organization</td>
+          <td>Lo emite el Secretary of State tras aprobar tu registro. Guárdalo.</td>
+          <td class="cost-cell">Incluido</td>
+          <td>Automático al aprobar</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- PASO 3 mini -->
+    <div class="step-header" style="margin-top:.5rem;">
+      <div class="step-badge">Paso 3</div>
+      <div class="step-title">Licencias, Cumplimiento y Operating Agreement</div>
+    </div>
+
+    <div class="checklist-grid">
+      <div class="check-item">
+        <div class="check-box"></div>
+        <div class="check-label">Verifica si tu industria requiere licencia federal
+          <span>Construcción, salud, transporte, alimentos → sí. Servicios digitales → generalmente no.</span>
+        </div>
+      </div>
+      <div class="check-item">
+        <div class="check-box"></div>
+        <div class="check-label">Licencia estatal o municipal si operas físicamente
+          <span>Depende del condado. En FL: sunbiz.org. En WY: wysos.wyo.gov.</span>
+        </div>
+      </div>
+      <div class="check-item">
+        <div class="check-box"></div>
+        <div class="check-label">Operating Agreement firmado y guardado
+          <span>Los bancos lo exigen. No tiene que presentarse al estado.</span>
+        </div>
+      </div>
+      <div class="check-item">
+        <div class="check-box"></div>
+        <div class="check-label">Annual Report o Reporte Anual
+          <span>Fecha límite varía por estado. FL: 1 mayo. WY: primer aniversario de registro.</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="pg-footer">
+    <div class="pg-footer-left">Ubik 360 · ubik360.com · jose@ubik360.com</div>
+    <div class="pg-footer-right">Página 1 de 2</div>
+  </div>
+
+</div><!-- /page 1 -->
+
+
+<!-- ═══════════════════════════════════════
+     PÁGINA 2
+═══════════════════════════════════════ -->
+<div class="page">
+
+  <div class="pg-header">
+    <img src="../images/ubik360logo.png" alt="Ubik 360" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+    <span style="display:none;" class="pg-header-logo-text">Ubik<span style="color:var(--red);">360</span></span>
+    <div class="pg-header-label">Checklist de Incorporación 2026 · De Colombia a EE.UU.</div>
+  </div>
+
+  <div class="pg-body">
+
+    <!-- ERRORES BANCARIOS -->
+    <div class="step-header">
+      <div class="step-badge" style="background:var(--black);">Sección crítica</div>
+      <div class="step-title">Los 3 Errores Que Bloquean Tu Cuenta Bancaria</div>
+    </div>
+
+    <p style="font-size:8.5pt; color:var(--gray); margin-bottom:.6rem; line-height:1.5;">
+      Tener tu LLC aprobada no garantiza que te abran una cuenta bancaria. Estos tres errores son los responsables del 90% de los rechazos para empresarios colombianos y latinoamericanos.
+    </p>
+
+    <div class="error-grid">
+      <div class="error-card">
+        <div class="error-num">01</div>
+        <div class="error-title">Usar la dirección del agente registrado</div>
+        <div class="error-desc">Muchos empresarios usan la dirección de su Registered Agent como dirección del negocio. Los bancos como Mercury, Chase y Bank of America la detectan automáticamente y rechazan la solicitud por ser una dirección genérica de servicio.</div>
+        <div class="error-fix">Usa una dirección real: oficina física, coworking, o dirección de un contacto de confianza en EE.UU.</div>
+      </div>
+
+      <div class="error-card">
+        <div class="error-num">02</div>
+        <div class="error-title">Documentación incompleta al momento de aplicar</div>
+        <div class="error-desc">El banco solicita al mismo tiempo: Certificate of Organization, EIN Confirmation Letter del IRS, Operating Agreement firmado, y pasaporte vigente del dueño. Si falta cualquiera de estos, el proceso se detiene o se rechaza.</div>
+        <div class="error-fix">Prepara los 4 documentos antes de abrir cualquier cuenta. Escanea en PDF de alta calidad.</div>
+      </div>
+
+      <div class="error-card">
+        <div class="error-num">03</div>
+        <div class="error-title">Intentar abrir cuenta en banco tradicional sin visita física</div>
+        <div class="error-desc">Chase, Wells Fargo y Bank of America generalmente exigen presencia física para no residentes. Sin visa o sin poder estar en EE.UU., el proceso queda bloqueado indefinidamente—incluso si tienes todos los documentos correctos.</div>
+        <div class="error-fix">Usa bancos digitales diseñados para no residentes — proceso 100% remoto desde Colombia.</div>
+      </div>
+    </div>
+
+    <!-- BANCOS DIGITALES -->
+    <div style="background: var(--oak-light); border-radius:5px; padding:.6rem .85rem; margin-bottom:.65rem;">
+      <div style="font-family:'Inter',sans-serif; font-size:8pt; font-weight:700; color:var(--black); margin-bottom:.35rem; text-transform:uppercase; letter-spacing:.06em;">Bancos digitales recomendados para no residentes</div>
+      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:.5rem;">
+        <div>
+          <div style="font-weight:700; font-size:8.5pt; color:var(--black); margin-bottom:.15rem;">Mercury</div>
+          <div style="font-size:7.5pt; color:var(--gray); line-height:1.4;">Favorito de startups. 100% online, sin comisiones, acepta no residentes con EIN + documentos.</div>
+        </div>
+        <div>
+          <div style="font-weight:700; font-size:8.5pt; color:var(--black); margin-bottom:.15rem;">Wise Business</div>
+          <div style="font-size:7.5pt; color:var(--gray); line-height:1.4;">Ideal para negocios con clientes fuera de EE.UU. Transferencias internacionales con tasa interbancaria.</div>
+        </div>
+        <div>
+          <div style="font-weight:700; font-size:8.5pt; color:var(--black); margin-bottom:.15rem;">Relay</div>
+          <div style="font-size:7.5pt; color:var(--gray); line-height:1.4;">Excelente para manejo de nómina y múltiples cuentas. Sin comisión mensual, acepta no residentes.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CHECKLIST FINAL DE APERTURA BANCARIA -->
+    <div class="step-header">
+      <div class="step-badge" style="background:var(--green);">Checklist</div>
+      <div class="step-title">Documentos Para Abrir Tu Cuenta Bancaria</div>
+    </div>
+
+    <div class="checklist-grid" style="margin-bottom:.6rem;">
+      <div class="check-item">
+        <div class="check-box"></div>
+        <div class="check-label">Certificate of Organization (emitido por el estado)
+          <span>Versión oficial, no el recibo de pago del registro.</span>
+        </div>
+      </div>
+      <div class="check-item">
+        <div class="check-box"></div>
+        <div class="check-label">EIN Confirmation Letter del IRS
+          <span>El documento CP 575 o carta de confirmación. No el número solo.</span>
+        </div>
+      </div>
+      <div class="check-item">
+        <div class="check-box"></div>
+        <div class="check-label">Operating Agreement firmado por todos los miembros
+          <span>Debe incluir porcentajes de participación y estructura de decisiones.</span>
+        </div>
+      </div>
+      <div class="check-item">
+        <div class="check-box"></div>
+        <div class="check-label">Pasaporte vigente del dueño o dueños
+          <span>Copia escaneada en alta resolución. Algunos bancos piden selfie con pasaporte.</span>
+        </div>
+      </div>
+      <div class="check-item">
+        <div class="check-box"></div>
+        <div class="check-label">Dirección de negocio real (no del agente registrado)
+          <span>Coworking, oficina virtual legítima, o dirección de contacto de confianza.</span>
+        </div>
+      </div>
+      <div class="check-item">
+        <div class="check-box"></div>
+        <div class="check-label">Descripción del negocio lista para responder
+          <span>"¿A qué se dedica la empresa y cómo genera ingresos?" — ten la respuesta preparada.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION SEP -->
+    <div class="section-sep"></div>
+
+    <!-- AUTHOR + CTA -->
+    <div class="author-strip">
+      <img
+        src="https://ubik360.com/assets/images/jose-villegas.png"
+        alt="José Villegas"
+        onerror="this.style.display='none';"
+      >
+      <div>
+        <div class="author-strip-name">José Villegas — Fundador, Ubik 360</div>
+        <div class="author-strip-bio">He incorporado empresas propias en EE.UU., Canadá y Colombia. Lo que está en este checklist no salió de un manual—salió de hacerlo, equivocarse, y aprender el camino correcto. Si tu empresa colombiana está lista para operar en Norteamérica, este proceso ya lo conozco de adentro.</div>
+      </div>
+    </div>
+
+    <div class="cta-strip">
+      <div class="cta-strip-text">
+        <h4>¿Listo para dar el siguiente paso?</h4>
+        <p>30 minutos. Sin compromiso. Te digo exactamente qué necesitas según tu tipo de negocio y estado de destino.</p>
+      </div>
+      <a href="https://calendly.com/jose-ubik360/30min" class="cta-strip-btn">Agendar llamada gratuita</a>
+    </div>
+
+  </div>
+
+  <div class="pg-footer">
+    <div class="pg-footer-left">© 2025 Ubik 360. Todos los derechos reservados. ubik360.com · jose@ubik360.com</div>
+    <div class="pg-footer-right">Página 2 de 2</div>
+  </div>
+
+</div><!-- /page 2 -->
+
+</body>
+</html>

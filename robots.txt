@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+
+# Block conversion/thank-you pages from indexing
+Disallow: /en/thank-you.html
+Disallow: /en/thank-you-expansion.html
+Disallow: /es/gracias.html
+Disallow: /es/gracias-checklist.html
+
+# Block lead magnet files (HTML guides — not indexable content)
+Disallow: /assets/downloads/
+
+Sitemap: https://ubik360.com/sitemap.xml

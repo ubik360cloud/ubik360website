@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Administrative Scale-Up | Ubik 360</title>
+  <meta name="robots" content="noindex, nofollow">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --red: #931F1D;
+      --black: #050505;
+      --green: #659157;
+      --oak: #CEC5B5;
+      --oak-light: #F0ECE5;
+      --gray: #4b5563;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--black);
+      background: #fff;
+      -webkit-font-smoothing: antialiased;
+      font-size: 10pt;
+      line-height: 1.6;
+    }
+
+    h1, h2, h3, h4 { font-family: 'DM Serif Display', serif; }
+
+    .page {
+      width: 8.5in;
+      min-height: 11in;
+      margin: 0 auto;
+      background: #fff;
+      position: relative;
+    }
+
+    @media screen {
+      body { background: #e5e7eb; padding: 2rem 0; }
+      .page { box-shadow: 0 4px 32px rgba(0,0,0,.18); margin-bottom: 2rem; }
+    }
+
+    @media print {
+      body { background: #fff; padding: 0; }
+      .page { box-shadow: none; margin: 0; page-break-after: always; }
+      .no-print { display: none !important; }
+    }
+
+    /* ── COVER ── */
+    .cover {
+      background: var(--black);
+      min-height: 11in;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cover-accent {
+      position: absolute;
+      top: 0; right: 0;
+      width: 40%; height: 100%;
+      background: linear-gradient(135deg, transparent 40%, rgba(147,31,29,.12) 100%);
+      pointer-events: none;
+    }
+
+    /* Colombia flag-inspired accent bar — subtle nod to the country */
+    .cover-flag-bar {
+      position: absolute;
+      top: 0; left: 0;
+      width: 6px; height: 100%;
+      background: linear-gradient(to bottom, #FCD116 33.3%, #003087 33.3% 66.6%, #CE1126 66.6%);
+      opacity: .35;
+    }
+
+    .cover-stripe {
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 100%; height: 6px;
+      background: var(--red);
+    }
+
+    .cover-top {
+      padding: 2.5rem 3rem 0 3.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .cover-logo img { height: 52px; width: auto; display: block; }
+
+    .cover-tag {
+      font-family: 'Inter', sans-serif;
+      font-size: 8pt;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--red);
+      border: 1px solid rgba(147,31,29,.5);
+      padding: .3rem .8rem;
+      border-radius: 2px;
+    }
+
+    .cover-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 3rem 3rem 2.5rem 3.5rem;
+    }
+
+    .cover-eyebrow {
+      font-family: 'Inter', sans-serif;
+      font-size: 9pt;
+      font-weight: 600;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 1.25rem;
+    }
+
+    .cover-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 42pt;
+      line-height: 1.1;
+      color: #fff;
+      margin-bottom: 1.5rem;
+    }
+
+    .cover-title span { color: var(--red); }
+
+    .cover-subtitle {
+      font-size: 12pt;
+      line-height: 1.65;
+      color: rgba(255,255,255,.72);
+      max-width: 4.8in;
+      margin-bottom: 2.5rem;
+    }
+
+    .cover-divider {
+      width: 3rem; height: 3px;
+      background: var(--red);
+      margin-bottom: 2.5rem;
+    }
+
+    .cover-stats {
+      display: flex;
+      gap: 2.5rem;
+    }
+
+    .cover-stat-num {
+      font-family: 'DM Serif Display', serif;
+      font-size: 26pt;
+      color: #fff;
+      line-height: 1;
+      margin-bottom: .25rem;
+    }
+
+    .cover-stat-label {
+      font-size: 8pt;
+      color: rgba(255,255,255,.55);
+      letter-spacing: .04em;
+      line-height: 1.4;
+      max-width: 1.5in;
+    }
+
+    .cover-footer {
+      padding: 1.5rem 3rem 2rem 3.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid rgba(255,255,255,.1);
+    }
+
+    .cover-author { display: flex; align-items: center; gap: .85rem; }
+
+    .cover-author-photo {
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--red);
+    }
+
+    .cover-author-photo-fallback {
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      background: var(--red);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'DM Serif Display', serif;
+      font-size: 16pt; color: #fff;
+      border: 2px solid var(--red);
+      flex-shrink: 0;
+    }
+
+    .cover-author-name { font-weight: 600; font-size: 9pt; color: #fff; line-height: 1.3; }
+    .cover-author-title { font-size: 8pt; color: rgba(255,255,255,.5); line-height: 1.3; }
+    .cover-url { font-size: 8pt; color: rgba(255,255,255,.4); letter-spacing: .04em; }
+
+    /* ── INNER PAGES ── */
+    .inner { min-height: 11in; display: flex; flex-direction: column; }
+
+    .inner-header {
+      background: var(--black);
+      padding: .65rem 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .inner-header img { height: 28px; width: auto; }
+    .inner-header-logo-text { font-family: 'DM Serif Display', serif; font-size: 13pt; color: #fff; }
+    .inner-header-title { font-size: 7.5pt; color: rgba(255,255,255,.45); letter-spacing: .08em; text-transform: uppercase; }
+
+    .inner-body { flex: 1; padding: .55in 3rem .5in; }
+
+    .inner-footer {
+      padding: .5rem 3rem;
+      border-top: 1px solid #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .inner-footer-left, .inner-footer-right { font-size: 7.5pt; color: #9ca3af; }
+
+    /* ── TYPOGRAPHY ── */
+    .section-tag {
+      display: inline-block;
+      font-family: 'Inter', sans-serif;
+      font-size: 7.5pt; font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: .6rem;
+    }
+
+    .page-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 26pt; line-height: 1.15;
+      color: var(--black);
+      margin-bottom: .75rem;
+    }
+
+    .page-intro {
+      font-size: 11pt; line-height: 1.7;
+      color: var(--gray);
+      margin-bottom: 1.5rem;
+      max-width: 6in;
+    }
+
+    .rule { width: 2.5rem; height: 3px; background: var(--red); margin-bottom: 1.4rem; }
+
+    h3.section-heading {
+      font-family: 'DM Serif Display', serif;
+      font-size: 17pt; color: var(--black);
+      margin-bottom: .5rem; line-height: 1.2;
+    }
+
+    p { margin-bottom: .8rem; font-size: 9.5pt; line-height: 1.65; color: var(--gray); }
+    p:last-child { margin-bottom: 0; }
+
+    /* ── CALLOUTS ── */
+    .callout {
+      background: var(--oak-light);
+      border-left: 4px solid var(--red);
+      padding: .9rem 1.1rem;
+      margin: 1.1rem 0;
+      border-radius: 0 4px 4px 0;
+    }
+
+    .callout p { margin: 0; font-size: 9.5pt; color: var(--black); font-weight: 500; }
+
+    .callout-dark {
+      background: var(--black);
+      border-left: 4px solid var(--red);
+      padding: .9rem 1.1rem;
+      margin: 1.1rem 0;
+      border-radius: 0 4px 4px 0;
+    }
+
+    .callout-dark p { margin: 0; font-size: 9.5pt; color: rgba(255,255,255,.85); }
+    .callout-dark strong { color: #fff; }
+
+    .callout-green {
+      background: rgba(101,145,87,.08);
+      border-left: 4px solid var(--green);
+      padding: .9rem 1.1rem;
+      margin: 1.1rem 0;
+      border-radius: 0 4px 4px 0;
+    }
+
+    .callout-green p { margin: 0; font-size: 9.5pt; color: var(--black); }
+
+    /* ── STAT CARDS ── */
+    .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: .75rem; margin: 1.25rem 0; }
+
+    .stat-card { background: var(--black); padding: .9rem 1rem; border-radius: 6px; text-align: center; }
+    .stat-card-num { font-family: 'DM Serif Display', serif; font-size: 22pt; color: #fff; line-height: 1; margin-bottom: .2rem; }
+    .stat-card-num span { color: var(--red); }
+    .stat-card-label { font-size: 7.5pt; color: rgba(255,255,255,.55); line-height: 1.4; }
+
+    /* ── ROLE CARDS ── */
+    .role-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: .85rem; margin: 1.1rem 0; }
+
+    .role-card {
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      padding: 1rem;
+    }
+
+    .role-card-badge {
+      display: inline-block;
+      background: rgba(147,31,29,.08);
+      color: var(--red);
+      font-family: 'Inter', sans-serif;
+      font-size: 7pt;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: .2rem .5rem;
+      border-radius: 2px;
+      margin-bottom: .55rem;
+    }
+
+    .role-card h4 {
+      font-family: 'Inter', sans-serif;
+      font-size: 9.5pt;
+      font-weight: 700;
+      color: var(--black);
+      margin-bottom: .3rem;
+    }
+
+    .role-card p { font-size: 8.5pt; margin-bottom: .5rem; }
+
+    .role-card-cost {
+      font-family: 'Inter', sans-serif;
+      font-size: 8.5pt;
+      font-weight: 700;
+      color: var(--green);
+    }
+
+    .role-card-cost-old {
+      font-size: 7.5pt;
+      color: #9ca3af;
+      text-decoration: line-through;
+      margin-left: .3rem;
+    }
+
+    /* ── COMPARISON TABLE ── */
+    .compare-table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 9pt; }
+
+    .compare-table th {
+      padding: .5rem .75rem;
+      text-align: left;
+      font-family: 'Inter', sans-serif;
+      font-size: 8pt;
+      font-weight: 700;
+      letter-spacing: .04em;
+    }
+
+    .compare-table th:first-child { background: #f3f4f6; color: var(--black); }
+    .compare-table th:nth-child(2) { background: rgba(147,31,29,.08); color: var(--red); }
+    .compare-table th:nth-child(3) { background: var(--black); color: #fff; }
+
+    .compare-table td { padding: .45rem .75rem; border-bottom: 1px solid #e5e7eb; color: var(--gray); vertical-align: top; }
+    .compare-table tr:last-child td { border-bottom: none; }
+    .compare-table td:nth-child(2) { color: var(--red); }
+    .compare-table td:nth-child(3) { color: var(--green); font-weight: 600; }
+
+    .compare-table .summary-row td { background: var(--oak-light); font-weight: 700; color: var(--black); border-top: 2px solid var(--oak); }
+    .compare-table .summary-row td:nth-child(2) { color: var(--red); }
+    .compare-table .summary-row td:nth-child(3) { color: var(--green); }
+
+    /* ── STEPS ── */
+    .step-list { margin: 1rem 0; }
+
+    .step { display: flex; gap: .85rem; margin-bottom: .85rem; align-items: flex-start; }
+
+    .step-num {
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      background: var(--red);
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 9pt; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; margin-top: 1px;
+    }
+
+    .step-content h4 { font-family: 'Inter', sans-serif; font-size: 9.5pt; font-weight: 700; color: var(--black); margin-bottom: .2rem; }
+    .step-content p { font-size: 9pt; margin: 0; }
+
+    /* ── TWO COLUMNS ── */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin: 1rem 0; }
+
+    /* ── CHECKLIST ── */
+    .checklist { list-style: none; margin: .6rem 0; }
+
+    .checklist li {
+      display: flex; align-items: flex-start; gap: .5rem;
+      font-size: 9pt; color: var(--gray);
+      margin-bottom: .4rem; line-height: 1.5;
+    }
+
+    .checklist li::before {
+      content: '';
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: rgba(101,145,87,.2);
+      border: 1.5px solid var(--green);
+      flex-shrink: 0; margin-top: 1px;
+    }
+
+    /* ── PULL QUOTE ── */
+    .pull-quote {
+      border-left: 4px solid var(--red);
+      padding: .7rem 1rem;
+      margin: 1.1rem 0;
+      background: var(--oak-light);
+    }
+
+    .pull-quote p {
+      font-family: 'DM Serif Display', serif;
+      font-size: 12pt; color: var(--black);
+      font-style: italic; line-height: 1.5; margin: 0;
+    }
+
+    /* ── "UBIK ADVANTAGE" BOX ── */
+    .advantage-box {
+      background: var(--black);
+      border-radius: 8px;
+      padding: 1.1rem 1.25rem;
+      margin: 1.1rem 0;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 1rem;
+      align-items: start;
+    }
+
+    .advantage-icon {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: var(--red);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .advantage-box h4 {
+      font-family: 'Inter', sans-serif;
+      font-size: 9pt; font-weight: 700;
+      color: var(--red);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-bottom: .35rem;
+    }
+
+    .advantage-box p { font-size: 9pt; color: rgba(255,255,255,.75); margin: 0; }
+
+    /* ── CTA ── */
+    .cta-section {
+      background: var(--black);
+      padding: 1.25rem 1.5rem;
+      border-radius: 8px;
+      margin-top: 1.25rem;
+      text-align: center;
+    }
+
+    .cta-section h3 { font-family: 'DM Serif Display', serif; font-size: 18pt; color: #fff; margin-bottom: .5rem; line-height: 1.2; }
+    .cta-section p { font-size: 9.5pt; color: rgba(255,255,255,.65); margin-bottom: 1rem; }
+
+    .cta-btn {
+      display: inline-block;
+      background: var(--red); color: #fff;
+      padding: .55rem 1.5rem;
+      border-radius: 4px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600; font-size: 9pt;
+      text-decoration: none;
+      letter-spacing: .03em;
+    }
+
+    /* ── PRINT BUTTON ── */
+    .print-bar { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 999; }
+
+    .print-btn {
+      background: var(--red); color: #fff;
+      border: none;
+      padding: .65rem 1.4rem;
+      border-radius: 4px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600; font-size: 9pt;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(0,0,0,.3);
+      display: flex; align-items: center; gap: .4rem;
+    }
+
+    .print-btn:hover { background: #7a1917; }
+
+    @media print { .print-bar { display: none; } }
+
+    .mt-sm { margin-top: .6rem; }
+    .mt-md { margin-top: 1rem; }
+    .mt-lg { margin-top: 1.5rem; }
+  </style>
+</head>
+<body>
+
+<div class="print-bar no-print">
+  <button class="print-btn" onclick="window.print()">
+    <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
+    </svg>
+    Save as PDF
+  </button>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     PAGE 1 — COVER
+═══════════════════════════════════════ -->
+<div class="page">
+  <div class="cover">
+    <div class="cover-accent"></div>
+    <div class="cover-flag-bar"></div>
+    <div class="cover-stripe"></div>
+
+    <div class="cover-top">
+      <div class="cover-logo">
+        <img src="../images/ubik360logo.png" alt="Ubik 360" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+        <span style="display:none; font-family:'DM Serif Display',serif; font-size:20pt; color:#fff;">Ubik<span style="color:var(--red)">360</span></span>
+      </div>
+      <div class="cover-tag">Operational Strategy Guide</div>
+    </div>
+
+    <div class="cover-body">
+      <div class="cover-eyebrow">Ubik 360 · Business Operations Series</div>
+
+      <h1 class="cover-title">
+        Administrative<br><span>Scale-Up</span>
+      </h1>
+
+      <p class="cover-subtitle">
+        How U.S. and Canadian businesses are cutting admin costs by up to 70%—without sacrificing quality, losing control, or managing anyone abroad.
+      </p>
+
+      <div class="cover-divider"></div>
+
+      <div class="cover-stats">
+        <div>
+          <div class="cover-stat-num">70<span>%</span></div>
+          <div class="cover-stat-label">Potential reduction in back-office labor costs</div>
+        </div>
+        <div>
+          <div class="cover-stat-num"><span>$</span>15k</div>
+          <div class="cover-stat-label">Average annual cost for a bilingual admin in Colombia</div>
+        </div>
+        <div>
+          <div class="cover-stat-num">0<span>hr</span></div>
+          <div class="cover-stat-label">Time spent managing your Colombian team—we handle it</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cover-footer">
+      <div class="cover-author">
+        <img
+          src="https://ubik360.com/assets/images/jose-villegas.png"
+          alt="José Villegas"
+          class="cover-author-photo"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+        >
+        <div class="cover-author-photo-fallback" style="display:none;">J</div>
+        <div>
+          <div class="cover-author-name">José Villegas</div>
+          <div class="cover-author-title">Founder &amp; Operations Strategist · Ubik 360</div>
+        </div>
+      </div>
+      <div class="cover-url">ubik360.com</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     PAGE 2 — THE PROBLEM
+═══════════════════════════════════════ -->
+<div class="page">
+  <div class="inner">
+    <div class="inner-header">
+      <img src="../images/ubik360logo.png" alt="Ubik 360" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+      <span style="display:none;" class="inner-header-logo-text">Ubik<span style="color:var(--red);">360</span></span>
+      <div class="inner-header-title">Administrative Scale-Up</div>
+    </div>
+
+    <div class="inner-body">
+      <span class="section-tag">The Problem</span>
+      <h2 class="page-title">Your Admin Costs Are<br>Eating Your Margins</h2>
+      <div class="rule"></div>
+
+      <p class="page-intro">
+        Hiring an administrative employee in the U.S. or Canada isn't just a salary decision anymore. By the time you add employer taxes, benefits, paid leave, and turnover cost, a $45,000 admin role costs your business closer to $65,000–$75,000 per year. And that's before you factor in quiet quitting.
+      </p>
+
+      <div class="stat-row">
+        <div class="stat-card">
+          <div class="stat-card-num"><span>$</span>65<span>k+</span></div>
+          <div class="stat-card-label">True annual cost of a U.S. admin employee</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-num">59<span>%</span></div>
+          <div class="stat-card-label">Of U.S. workers are "quietly quitting" their roles</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-num">2<span>x</span></div>
+          <div class="stat-card-label">Average cost to replace a departing employee</div>
+        </div>
+      </div>
+
+      <p>The problem isn't the people—it's the model. You're using a system designed for an era when all work had to happen in the same building. Back-office work—bookkeeping, scheduling, data entry, customer follow-up, appointment setting—doesn't require geographic proximity. It requires reliability, communication, and skill. All of which exist in abundance in Colombia.</p>
+
+      <div class="two-col mt-md">
+        <div>
+          <h3 class="section-heading" style="font-size:13pt;">The Old Model</h3>
+          <ul class="checklist mt-sm">
+            <li>Hire locally at U.S./Canada market rates</li>
+            <li>Pay 25–35% on top for employer taxes and benefits</li>
+            <li>Invest 2–4 weeks onboarding a new hire</li>
+            <li>Lose them in 18 months to a competitor offering more</li>
+            <li>Repeat the entire cycle</li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="section-heading" style="font-size:13pt;">The New Model</h3>
+          <ul class="checklist mt-sm">
+            <li>Hire bilingual Colombian professionals at nearshore rates</li>
+            <li>Managed onboarding, supervision, and accountability included</li>
+            <li>Operating in your time zone from day one</li>
+            <li>Lower turnover driven by career growth and compensation alignment</li>
+            <li>Scale up or down without HR overhead</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pull-quote mt-md">
+        <p>"Stop hiring $50,000-a-year admins for tasks that can be done at the same quality level for $15,000. The money you save is margin you keep—or revenue you can reinvest."</p>
+      </div>
+    </div>
+
+    <div class="inner-footer">
+      <div class="inner-footer-left">Ubik 360 · ubik360.com · jose@ubik360.com</div>
+      <div class="inner-footer-right">Page 2</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     PAGE 3 — THE ROLES
+═══════════════════════════════════════ -->
+<div class="page">
+  <div class="inner">
+    <div class="inner-header">
+      <img src="../images/ubik360logo.png" alt="Ubik 360" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+      <span style="display:none;" class="inner-header-logo-text">Ubik<span style="color:var(--red);">360</span></span>
+      <div class="inner-header-title">Administrative Scale-Up</div>
+    </div>
+
+    <div class="inner-body">
+      <span class="section-tag">The Roles</span>
+      <h2 class="page-title">Three Positions That<br>Transform Your Operations</h2>
+      <div class="rule"></div>
+
+      <p>These aren't entry-level hires. Colombian professionals in these roles typically hold university degrees, speak professional-level English, and have experience working with U.S. and Canadian clients. Here's what each one does for your business—and what it actually costs.</p>
+
+      <div class="role-grid mt-md">
+        <div class="role-card">
+          <div class="role-card-badge">Finance</div>
+          <h4>Bookkeeper</h4>
+          <p>Handles accounts payable and receivable, bank reconciliations, expense tracking, payroll support, and monthly financial reporting. Proficient in QuickBooks, Xero, or your preferred platform.</p>
+          <div>
+            <span class="role-card-cost">$14k–$18k/yr</span>
+            <span class="role-card-cost-old">vs. $55k+ locally</span>
+          </div>
+        </div>
+
+        <div class="role-card">
+          <div class="role-card-badge">Sales Support</div>
+          <h4>Appointment Setter</h4>
+          <p>Handles inbound leads, qualifies prospects against your criteria, follows up with cold and warm contacts, and books directly to your calendar. Bilingual—works Spanish or English leads equally well.</p>
+          <div>
+            <span class="role-card-cost">$12k–$16k/yr</span>
+            <span class="role-card-cost-old">vs. $45k+ locally</span>
+          </div>
+        </div>
+
+        <div class="role-card">
+          <div class="role-card-badge">Operations</div>
+          <h4>Back-Office Admin</h4>
+          <p>Manages email and calendar, prepares reports and presentations, handles CRM data entry, coordinates vendors, and keeps daily operations running without pulling your attention away from growth.</p>
+          <div>
+            <span class="role-card-cost">$13k–$17k/yr</span>
+            <span class="role-card-cost-old">vs. $50k+ locally</span>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="section-heading mt-lg">The Real Cost Comparison</h3>
+
+      <table class="compare-table mt-sm">
+        <thead>
+          <tr>
+            <th>Role</th>
+            <th>U.S./Canada Cost (Total)</th>
+            <th>Colombia (Nearshore)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Bookkeeper</td>
+            <td>$65,000–$75,000/yr</td>
+            <td>$14,000–$18,000/yr</td>
+          </tr>
+          <tr>
+            <td>Appointment Setter</td>
+            <td>$55,000–$65,000/yr</td>
+            <td>$12,000–$16,000/yr</td>
+          </tr>
+          <tr>
+            <td>Back-Office Admin</td>
+            <td>$60,000–$70,000/yr</td>
+            <td>$13,000–$17,000/yr</td>
+          </tr>
+          <tr class="summary-row">
+            <td>3-Person Team Total</td>
+            <td>$180,000–$210,000/yr</td>
+            <td>$39,000–$51,000/yr</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="callout-green">
+        <p>Total employer cost in Colombia includes a mandatory 35–40% benefit load (health, pension, severance) on top of salary. The numbers above reflect the <strong>all-in cost</strong>, not just base pay. Even with benefits, the savings are transformative.</p>
+      </div>
+    </div>
+
+    <div class="inner-footer">
+      <div class="inner-footer-left">Ubik 360 · ubik360.com · jose@ubik360.com</div>
+      <div class="inner-footer-right">Page 3</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     PAGE 4 — THE UBIK ADVANTAGE
+═══════════════════════════════════════ -->
+<div class="page">
+  <div class="inner">
+    <div class="inner-header">
+      <img src="../images/ubik360logo.png" alt="Ubik 360" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+      <span style="display:none;" class="inner-header-logo-text">Ubik<span style="color:var(--red);">360</span></span>
+      <div class="inner-header-title">Administrative Scale-Up</div>
+    </div>
+
+    <div class="inner-body">
+      <span class="section-tag">The Ubik Advantage</span>
+      <h2 class="page-title">You Don't Manage<br>Anyone in Colombia.<br>I Do.</h2>
+      <div class="rule"></div>
+
+      <p class="page-intro">
+        The biggest fear U.S. and Canadian business owners have about nearshore staffing isn't the cost or the quality—it's the management. <em>"How do I supervise someone I can't see? What if things fall through the cracks? What if there's a cultural disconnect I can't navigate?"</em>
+      </p>
+
+      <p>That's exactly the problem Ubik 360 was built to solve. I don't just find you talent—I act as your on-the-ground operations manager in Colombia. You set the goals, define the deliverables, and approve the output. Everything in between is mine to handle.</p>
+
+      <div class="advantage-box">
+        <div class="advantage-icon">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+          </svg>
+        </div>
+        <div>
+          <h4>What "managed nearshore" means</h4>
+          <p>I handle hiring, onboarding, performance reviews, cultural alignment, and day-to-day supervision. Your team in Colombia reports to me. I report results to you. You stay in your lane—running your business—while I run the operational layer underneath it.</p>
+        </div>
+      </div>
+
+      <h3 class="section-heading mt-md">What I Handle on Your Behalf</h3>
+
+      <div class="two-col mt-sm">
+        <div>
+          <ul class="checklist">
+            <li>Candidate sourcing and vetting</li>
+            <li>Skills assessment and role-fit evaluation</li>
+            <li>Contract structuring and compliance</li>
+            <li>Onboarding to your tools and workflows</li>
+            <li>Daily check-ins and performance tracking</li>
+          </ul>
+        </div>
+        <div>
+          <ul class="checklist">
+            <li>Cultural and communication coaching</li>
+            <li>Issue resolution before it reaches you</li>
+            <li>Replacement pipeline if someone leaves</li>
+            <li>Monthly reporting on output and results</li>
+            <li>Continuous optimization of team structure</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout mt-md">
+        <p>You'll interact with your Colombian team member as a professional colleague. What you won't do is manage their performance, navigate HR issues, or figure out Colombian labor law. That's already covered.</p>
+      </div>
+
+      <h3 class="section-heading mt-md">Why Colombia Works for This</h3>
+      <p>Not every country is well-suited for nearshore operations. Colombia has a specific combination of factors that make it unusually effective for U.S. and Canadian businesses:</p>
+
+      <div class="two-col mt-sm">
+        <div>
+          <ul class="checklist">
+            <li>Time-zone alignment: Colombia is EST year-round (no daylight saving), meaning your team works your exact business hours</li>
+            <li>English proficiency: university-educated professionals with strong written and spoken English</li>
+            <li>Tech-forward workforce: high adoption of U.S. tools—Slack, Notion, HubSpot, QuickBooks</li>
+          </ul>
+        </div>
+        <div>
+          <ul class="checklist">
+            <li>Cultural proximity: strong U.S. media and business culture influence—minimal adjustment required</li>
+            <li>Government investment in innovation: Colombia's tech sector has grown over 30% in the last 5 years</li>
+            <li>Stable internet infrastructure in major cities: Bogotá, Medellín, Cali, Barranquilla</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="inner-footer">
+      <div class="inner-footer-left">Ubik 360 · ubik360.com · jose@ubik360.com</div>
+      <div class="inner-footer-right">Page 4</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     PAGE 5 — HOW TO START
+═══════════════════════════════════════ -->
+<div class="page">
+  <div class="inner">
+    <div class="inner-header">
+      <img src="../images/ubik360logo.png" alt="Ubik 360" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+      <span style="display:none;" class="inner-header-logo-text">Ubik<span style="color:var(--red);">360</span></span>
+      <div class="inner-header-title">Administrative Scale-Up</div>
+    </div>
+
+    <div class="inner-body">
+      <span class="section-tag">Getting Started</span>
+      <h2 class="page-title">From Decision to<br>First Deliverable<br>in 30 Days</h2>
+      <div class="rule"></div>
+
+      <p>Most businesses spend more time deliberating about nearshore staffing than it actually takes to implement it. Here's how the process works from the moment you say yes.</p>
+
+      <div class="step-list mt-md">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h4>Role Definition Call (Days 1–3)</h4>
+            <p>We map out exactly what you need: tasks, tools, hours, communication cadence, and success metrics. This 60-minute conversation prevents 90% of the problems that come from vague job descriptions and misaligned expectations.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h4>Candidate Sourcing &amp; Vetting (Days 4–12)</h4>
+            <p>I source from my existing network and vetted talent pool. Every candidate is screened for English proficiency, relevant experience, and cultural fit with your business type. You receive 2–3 finalist profiles with my recommendation on who to move forward with.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h4>Your Interview (Days 13–15)</h4>
+            <p>You meet your top candidate on a video call. I'm present to facilitate and translate context where needed. You make the final call. If it's not the right fit, we move to the next candidate—no delay, no restart.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <h4>Onboarding (Days 16–25)</h4>
+            <p>I handle the contract, tool access, and workflow orientation. Your new team member starts contributing within the first week—not the first month. I run daily check-ins for the first two weeks to ensure everything is on track.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-content">
+            <h4>First Deliverable (Day 30)</h4>
+            <p>By the end of the first month, your team member is fully operational. You've already received measurable output—processed invoices, booked appointments, organized inbox, completed reports—whatever your role requires. The ROI clock starts on Day 1, not Day 90.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout-dark mt-md">
+        <p><strong>No long-term lock-in to start.</strong> We begin with a 90-day engagement. If the arrangement isn't delivering results after 90 days, we adjust the role, the person, or the structure. You're not signing a multi-year staffing contract.</p>
+      </div>
+    </div>
+
+    <div class="inner-footer">
+      <div class="inner-footer-left">Ubik 360 · ubik360.com · jose@ubik360.com</div>
+      <div class="inner-footer-right">Page 5</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     PAGE 6 — CTA
+═══════════════════════════════════════ -->
+<div class="page">
+  <div class="inner">
+    <div class="inner-header">
+      <img src="../images/ubik360logo.png" alt="Ubik 360" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+      <span style="display:none;" class="inner-header-logo-text">Ubik<span style="color:var(--red);">360</span></span>
+      <div class="inner-header-title">Administrative Scale-Up</div>
+    </div>
+
+    <div class="inner-body">
+      <span class="section-tag">Your Next Step</span>
+      <h2 class="page-title">The Margin Is Already<br>There. You Just Have<br>to Claim It.</h2>
+      <div class="rule"></div>
+
+      <p class="page-intro">
+        The savings don't require a new revenue stream, a new product, or a new market. They're already inside your current operations—locked behind a staffing model that made sense twenty years ago but doesn't anymore.
+      </p>
+
+      <h3 class="section-heading">What a 30-Minute Call Covers</h3>
+      <p>If you want to know whether the Administrative Scale-Up model applies to your business, book a free strategy call. No fluff. In 30 minutes we'll cover:</p>
+
+      <div class="step-list mt-sm">
+        <div class="step">
+          <div class="step-num" style="background:var(--green);">✓</div>
+          <div class="step-content">
+            <h4>Which roles in your business are candidates for nearshore</h4>
+            <p>Not every position is a fit—and I won't recommend roles that aren't. We'll look at your current org chart and identify specifically where this creates real leverage for you.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num" style="background:var(--green);">✓</div>
+          <div class="step-content">
+            <h4>Your realistic annual savings number</h4>
+            <p>A real estimate—not a range from a brochure—based on your actual roles and current compensation. You'll leave the call knowing the exact number you're leaving on the table each year.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num" style="background:var(--green);">✓</div>
+          <div class="step-content">
+            <h4>A clear picture of what "managed nearshore" looks like for your business</h4>
+            <p>What the day-to-day actually looks like once you have a Colombian team member operating within your workflow—so there are no surprises after you commit.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="cta-section">
+        <h3>Book Your Free Strategy Call</h3>
+        <p>30 minutes. No commitment. I'll show you exactly where the savings are and how fast you can capture them.</p>
+        <a href="https://calendly.com/jose-ubik360/30min" class="cta-btn">Schedule at calendly.com/jose-ubik360/30min</a>
+      </div>
+
+      <div style="display:flex; align-items:center; gap:1.5rem; margin-top:1.1rem; padding-top:1.1rem; border-top:1px solid #e5e7eb;">
+        <img
+          src="https://ubik360.com/assets/images/jose-villegas.png"
+          alt="José Villegas"
+          style="width:50px; height:50px; border-radius:50%; object-fit:cover; border:2px solid var(--red); flex-shrink:0;"
+          onerror="this.style.display='none';"
+        >
+        <div>
+          <div style="font-weight:600; font-size:9.5pt; color:var(--black); margin-bottom:.2rem;">José Villegas</div>
+          <div style="font-size:8.5pt; color:var(--gray); line-height:1.5;">Founder, Ubik 360 · International Expansion &amp; Operations Strategist<br>
+          <span style="color:var(--red);">jose@ubik360.com</span> · ubik360.com</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="inner-footer">
+      <div class="inner-footer-left">© 2025 Ubik 360. All rights reserved. ubik360.com</div>
+      <div class="inner-footer-right">Page 6</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

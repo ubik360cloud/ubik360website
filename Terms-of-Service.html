@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+if (window.location.hostname.startsWith('www.')) {
+window.location.href = window.location.href.replace('www.', '');
+}
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Terms of Service | Ubik 360 Enterprises</title>
+<link rel="icon" type="image/png" href="https://static.readdy.ai/image/f26820c46156987b718323285b022977/820a1203f3dafdd6a238d30d37806e0b.png">
+<meta name="description" content="Terms of Service for Ubik 360 Enterprises. Read our legal agreement outlining service usage, user responsibilities, payment terms, and more.">
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'#F6EC2F',secondary:'#625E12'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+<style>
+:where([class^="ri-"])::before { content: "\f3c2"; }
+@font-face {
+font-family: 'Compose Monotype';
+src: url('https://fonts.cdnfonts.com/css/compose-monotype') format('woff2');
+font-weight: normal;
+font-style: normal;
+}
+.font-compose {
+font-family: 'Compose Monotype', monospace;
+}
+body {
+font-family: 'Barlow', sans-serif;
+}
+.dropdown {
+display: none;
+position: absolute;
+top: 100%;
+left: 0;
+z-index: 50;
+}
+.dropdown-trigger:hover .dropdown {
+display: block;
+}
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+-webkit-appearance: none;
+margin: 0;
+}
+.toc-link.active {
+color: #625E12;
+font-weight: 600;
+}
+.back-to-top {
+display: none;
+position: fixed;
+bottom: 30px;
+right: 30px;
+z-index: 99;
+}
+</style>
+</head>
+  <!-- Header -->
+  <!--#include virtual="/header.html" -->
+<!-- Main Content -->
+<main class="pt-[140px] pb-20">
+    <div class="container mx-auto px-6">
+        <div class="flex items-center mb-8">
+            <a href="https://readdy.ai/home/f3d1d9c3-3956-47bb-ab57-5d1d21ec1f08/f0ac15cb-c832-426e-82c1-351b35ac03f9" data-readdy="true" class="flex items-center text-gray-600 hover:text-secondary transition">
+                <div class="w-5 h-5 flex items-center justify-center mr-2">
+                    <i class="ri-arrow-left-line"></i>
+                </div>
+                <span>Back to Home</span>
+            </a>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Table of Contents (Desktop) -->
+            <div class="hidden lg:block w-64 flex-shrink-0">
+                <div class="bg-white rounded-lg shadow-sm p-6 sticky top-[160px]">
+                    <h3 class="text-lg font-bold text-gray-900 mb-4">Table of Contents</h3>
+                    <ul class="space-y-3" id="toc">
+                        <li><a href="#introduction" class="toc-link text-gray-600 hover:text-secondary transition">Introduction</a></li>
+                        <li><a href="#service-usage" class="toc-link text-gray-600 hover:text-secondary transition">1. Service Usage</a></li>
+                        <li><a href="#user-responsibilities" class="toc-link text-gray-600 hover:text-secondary transition">2. User Responsibilities</a></li>
+                        <li><a href="#payment-terms" class="toc-link text-gray-600 hover:text-secondary transition">3. Payment Terms</a></li>
+                        <li><a href="#intellectual-property" class="toc-link text-gray-600 hover:text-secondary transition">4. Intellectual Property</a></li>
+                        <li><a href="#limitation-liability" class="toc-link text-gray-600 hover:text-secondary transition">5. Limitation of Liability</a></li>
+                        <li><a href="#privacy-practices" class="toc-link text-gray-600 hover:text-secondary transition">6. Privacy Practices</a></li>
+                        <li><a href="#termination" class="toc-link text-gray-600 hover:text-secondary transition">7. Termination</a></li>
+                        <li><a href="#dispute-resolution" class="toc-link text-gray-600 hover:text-secondary transition">8. Dispute Resolution</a></li>
+                        <li><a href="#modifications" class="toc-link text-gray-600 hover:text-secondary transition">9. Modifications</a></li>
+                        <li><a href="#contact-us" class="toc-link text-gray-600 hover:text-secondary transition">10. Contact Us</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="flex-grow">
+                <div class="bg-white rounded-lg shadow-sm p-8 md:p-10">
+                    <h1 class="font-compose text-3xl md:text-4xl font-bold text-gray-900 mb-6">Terms of Service</h1>
+                    <p class="text-gray-500 mb-8">Last Updated: July 2, 2025</p>
+
+                    <!-- Table of Contents (Mobile) -->
+                    <div class="lg:hidden mb-8">
+                        <div class="bg-gray-50 rounded-lg p-4">
+                            <button id="tocToggle" class="flex items-center justify-between w-full text-left">
+                                <span class="font-bold text-gray-900">Table of Contents</span>
+                                <div class="w-5 h-5 flex items-center justify-center">
+                                    <i class="ri-arrow-down-s-line"></i>
+                                </div>
+                            </button>
+                            <ul id="tocMobile" class="hidden mt-4 space-y-2">
+                                <li><a href="#introduction" class="toc-link text-gray-600 hover:text-secondary transition">Introduction</a></li>
+                                <li><a href="#service-usage" class="toc-link text-gray-600 hover:text-secondary transition">1. Service Usage</a></li>
+                                <li><a href="#user-responsibilities" class="toc-link text-gray-600 hover:text-secondary transition">2. User Responsibilities</a></li>
+                                <li><a href="#payment-terms" class="toc-link text-gray-600 hover:text-secondary transition">3. Payment Terms</a></li>
+                                <li><a href="#intellectual-property" class="toc-link text-gray-600 hover:text-secondary transition">4. Intellectual Property</a></li>
+                                <li><a href="#limitation-liability" class="toc-link text-gray-600 hover:text-secondary transition">5. Limitation of Liability</a></li>
+                                <li><a href="#privacy-practices" class="toc-link text-gray-600 hover:text-secondary transition">6. Privacy Practices</a></li>
+                                <li><a href="#termination" class="toc-link text-gray-600 hover:text-secondary transition">7. Termination</a></li>
+                                <li><a href="#dispute-resolution" class="toc-link text-gray-600 hover:text-secondary transition">8. Dispute Resolution</a></li>
+                                <li><a href="#modifications" class="toc-link text-gray-600 hover:text-secondary transition">9. Modifications</a></li>
+                                <li><a href="#contact-us" class="toc-link text-gray-600 hover:text-secondary transition">10. Contact Us</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Introduction -->
+                    <section id="introduction" class="mb-10">
+                        <p class="text-lg text-gray-700 mb-6">Welcome to Ubik 360 Enterprises. These Terms of Service ("Terms") govern your access to and use of Ubik 360's services, including our website, cloud services, digital transformation solutions, and other offerings (collectively, the "Services"). By accessing or using our Services, you agree to be bound by these Terms and our Privacy Policy.</p>
+                        <p class="text-lg text-gray-700">Please read these Terms carefully. If you do not agree with these Terms, you must not access or use our Services. If you are accessing or using the Services on behalf of a company or other legal entity, you represent that you have the authority to bind such entity to these Terms.</p>
+                    </section>
+
+                    <!-- Service Usage -->
+                    <section id="service-usage" class="mb-10">
+                        <h2 class="font-compose text-2xl font-bold text-gray-900 mb-4">1. Service Usage</h2>
+                        <div class="pl-4 border-l-4 border-gray-100">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-3">1.1 Service Description</h3>
+                            <p class="text-gray-700 mb-4">Ubik 360 provides various digital transformation services, including but not limited to cloud migration, infrastructure as a service (IaaS), platform as a service (PaaS), DevOps, AI digital marketing, AI automation, business analytics, and application development services. The specific features and functionality of each Service will be described in the applicable service agreement or order form.</p>
+                            
+                            <h3 class="text-xl font-semibold text-gray-800 mb-3">1.2 Service Availability</h3>
+                            <p class="text-gray-700 mb-4">We strive to ensure that our Services are available 24/7. However, we do not guarantee that the Services will be available at all times. We may experience hardware, software, or other problems, or need to perform maintenance related to the Services, resulting in interruptions, delays, or errors. We reserve the right to change, revise, update, suspend, discontinue, or otherwise modify the Services at any time without notice.</p>
+                            
+                            <h3 class="text-xl font-semibold text-gray-800 mb-3">1.3 Account Registration</h3>
+                            <p class="text-gray-700 mb-4">Some of our Services require you to register for an account. When you register, you agree to provide accurate, current, and complete information about yourself and to update such information as necessary. You are solely responsible for safeguarding your account credentials and for all activity that occurs under your account.</p>
+                            
+                            <h3 class="text-xl font-semibold text-gray-800 mb-3">1.4 Service Level Agreements</h3>
+                            <p class="text-gray-700">For certain Services, we may offer specific service level agreements (SLAs) that define expected performance metrics, availability commitments, and remedies for failure to meet these standards. These SLAs will be provided separately and form part of these Terms when applicable to your Services.</p>
+                        </div>
+                    </section>
+
+                    <!-- User Responsibilities -->
+                    <section id="user-responsibilities" class="mb-10">
+                        <h2 class="font-compose text-2xl font-bold text-gray-900 mb-4">2. User Responsibilities</h2>
+                        <div class="pl-4 border-l-4 border-gray-100">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-3">2.1 Acceptable Use</h3>
+                            <p class="text-gray-700 mb-4">You agree to use the Services only for lawful purposes and in accordance with these Terms. You agree not to use the Services:</p>
+                            <ul class="list-disc pl-6 mb-4 text-gray-700 space-y-2">
+                                <li>In any way that violates any applicable federal, provincial, local, or international law or regulation.</li>
+                                <li>To transmit, or procure the sending of, any advertising or promotional material, including any "junk mail," "chain letter," "spam," or any other similar solicitation.</li>
+                                <li>To impersonate or attempt to impersonate Ubik 360, a Ubik 360 employee, another user, or any other person or entity.</li>
+                                <li>To engage in any other conduct that restricts or inhibits anyone's use or enjoyment of the Services, or which may harm Ubik 360 or users of the Services.</li>
+                            </ul>
+                            
+                            <h3 class="text-xl font-semibold text-gray-800 mb-3">2.2 Content Responsibility</h3>
+                            <p class="text-gray-700 mb-4">You are solely responsible for all data, information, software, text, images, and other content that you upload, post, publish, display, transmit, or otherwise use while using the Services ("Content"). You represent and warrant that:</p>
+                            <ul class="list-disc pl-6 mb-4 text-gray-700 space-y-2">
+                                <li>You own or have the necessary licenses, rights, consents, and permissions to use and authorize Ubik 360 to use all Content as described in these Terms.</li>
+                                <li>Your Content does not and will not infringe, violate, or misappropriate any third-party right, including any copyright, trademark, patent, trade secret, moral right, privacy right, right of publicity, or any other intellectual property or proprietary right.</li>
+                            </ul>
+                            
+                            <h3 class="text-xl font-semibold text-gray-800 mb-3">2.3 Security</h3>
+                            <p class="text-gray-700">You are responsible for implementing reasonable security measures for your use of the Services, including securing your account credentials, implementing appropriate access controls, and promptly notifying Ubik 360 of any unauthorized access to or use of your account.</p>
+                        </div>
+                    </section>
+
+                    <!-- Payment Terms -->
+                    <section id="payment-terms" class="mb-10">
+                        <h2 class="font-compose text-2xl font-bold text-gray-900 mb-4">3. Payment Terms</h2>
+                        <div class="pl-4 border-l-4 border-gray-100">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-3">3.1 Fees and Billing</h3>
+                            <p class="text-gray-700 mb-4">The fees for the Services will be specified in the applicable service agreement or order form. Unless otherwise specified, all fees are quoted in Canadian dollars and are exclusive of applicable taxes. You agree to pay all fees and charges incurred through your account in accordance with the billing terms in effect at the time a fee or charge becomes payable.</p>
+                            
+                            <h3 class="text-xl font-semibold text-gray-800 mb-3">3.2 Payment Methods</h3>
+                            <p class="text-gray-700 mb-4">We accept various payment methods, which will be specified during the checkout process. By providing a payment method, you represent that you are authorized to use the payment method and authorize us to charge your payment method for all fees associated with your use of the Services.</p>
+                            
+                            <h3 class="text-xl font-semibold text-gray-800 mb-3">3.3 Subscription Services</h3>
+                            <p class="text-gray-700 mb-4">For subscription-based Services, you will be billed in advance on a recurring basis according to the billing cycle specified in your service agreement. Unless otherwise stated, subscriptions automatically renew for additional periods equal to the initial subscription term unless canceled before the renewal date.</p>
+                            
+                            <h3 class="text-xl font-semibold text-gray-800 mb-3">3.4 Late Payments</h3>
+                            <p class="text-gray-700 mb-4">If your payment is not received by the due date, we may (a) assess late charges at the rate of 1.5% of the outstanding balance per month, or the maximum rate permitted by law, whichever is lower, (b) suspend your access to the Services until payment is received, and/or (c) terminate your access to the Services.</p>
+                            
+                            <h3 class="text-xl font-semibold text-gray-800 mb-3">3.5 Refunds</h3>
+                            <p class="text-gray-700">Unless otherwise specified in the applicable service agreement or required by law, all fees are non-refundable. In certain circumstances, we may, at our sole discretion, issue refunds or credits.</p>
+                        </div>
+                    </section>
+
+                    <!-- Intellectual Property -->
+                    <section id="intellectual-property" class="mb-10">
+                        <h2 class="font-compose text-2xl font-bold text-gray-900 mb-4">4. Intellectual Property Rights</h2>
+                        <div class="pl-4 border-l-4 border-gray-100">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-3">4.1 Ubik 360 Intellectual Property</h3>
+                            <p class="text-gray-700 mb-4">The Services and all content, features, and functionality thereof, including but not limited to all information, software, text, displays, images, video, and audio, and the design, selection, and arrangement thereof, are owned by Ubik 360, its licensors, or other providers of such material and are protected by Canadian and international copyright, trademark, patent, trade secret, and other intellectual property or proprietary rights laws.</p>
+                            
+                            <h3 class="text-xl font-semibold text-gray-800 mb-3">4.2 License to Use Services</h3>
+                            <p class="text-gray-700 mb-4">Subject to these Terms, Ubik 360 grants you a limited, non-exclusive, non-transferable, revocable license to access and use the Services for your internal business purposes. This license does not include any resale or commercial use of the Services or its contents; any collection and use of any product listings, descriptions, or prices; any derivative use of the Services or their contents; or any use of data mining, robots, or similar data gathering and extraction tools.</p>
+                            
+                            <h3 class="text-xl font-semibold text-gray-800 mb-3">4.3 Your Content</h3>
+                            <p class="text-gray-700 mb-4">You retain all rights in and to your Content. By uploading, posting, publishing, displaying, transmitting, or otherwise using Content with the Services, you grant Ubik 360 a worldwide, non-exclusive, royalty-free license to use, reproduce, modify, adapt, publish, translate, distribute, and display such Content solely for the purpose of providing the Services to you.</p>
+                            
+                            <h3 class="text-xl font-semibold text-gray-800 mb-3">4.4 Feedback</h3>
+                            <p class="text-gray-700">If you provide Ubik 360 with any feedback, suggestions, or recommendations regarding the Services ("Feedback"), you hereby grant Ubik 360 an unlimited, irrevocable, perpetual, sublicensable, transferable, royalty-free license to use such Feedback for any purpose, including but not limited to incorporating it into the Services or other products or services.</p>
+                        </div>
+                    </section>
+
+                    <!-- Limitation of Liability -->
+                    <section id="limitation-liability" class="mb-10">
+                        <h2 class="font-compose text-2xl font-bold text-gray-900 mb-4">5. Limitation of Liability</h2>
+                        <div class="pl-4 border-l-4 border-gray-100">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-3">5.1 Disclaimer of Warranties</h3>
+                            <p class="text-gray-700 mb-4">THE SERVICES ARE PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT, OR COURSE OF PERFORMANCE.</p>
+                            <p class="text-gray-700 mb-4">UBIK 360 DOES NOT WARRANT THAT: (A) THE SERVICES WILL FUNCTION UNINTERRUPTED, SECURE, OR AVAILABLE AT ANY PARTICULAR TIME OR LOCATION; (B) ANY ERRORS OR DEFECTS WILL BE CORRECTED; (C) THE SERVICES ARE FREE OF VIRUSES OR OTHER HARMFUL COMPONENTS; OR (D) THE RESULTS OF USING THE SERVICES WILL MEET YOUR REQUIREMENTS.</p>
+                            
+                            <h3 class="text-xl font-semibold text-gray-800 mb-3">5.2 Limitation of Liability</h3>
+                            <p class="text-gray-700 mb-4">TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL UBIK 360, ITS AFFILIATES, DIRECTORS, EMPLOYEES, AGENTS, OR LICENSORS BE LIABLE FOR ANY INDIRECT, PUNITIVE, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR EXEMPLARY DAMAGES, INCLUDING WITHOUT LIMITATION DAMAGES FOR LOSS OF PROFITS, GOODWILL, USE, DATA, OR OTHER INTANGIBLE LOSSES, THAT RESULT FROM THE USE OF, OR INABILITY TO USE, THE SERVICES.</p>
+                            <p class="text-gray-700 mb-4">IN NO EVENT WILL UBIK 360'S TOTAL LIABILITY TO YOU FOR ALL DAMAGES, LOSSES, OR CAUSES OF ACTION EXCEED THE AMOUNT YOU HAVE PAID UBIK 360 IN THE LAST SIX (6) MONTHS, OR, IF GREATER, ONE HUNDRED DOLLARS ($100).</p>
+                            
+                            <h3 class="text-xl font-semibold text-gray-800 mb-3">5.3 Exclusions</h3>
+                            <p class="text-gray-700">Some jurisdictions do not allow the exclusion of certain warranties or the limitation or exclusion of liability for certain types of damages. Accordingly, some of the above limitations may not apply to you.</p>
+                        </div>
+                    </section>
+
+                    <!-- Privacy Practices -->
+                    <section id="privacy-practices" class="mb-10">
+                        <h2 class="font-compose text-2xl font-bold text-gray-900 mb-4">6. Privacy Practices</h2>
+                        <div class="pl-4 border-l-4 border-gray-100">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-3">6.1 Privacy Policy</h3>
+                            <p class="text-gray-700 mb-4">Your use of the Services is subject to Ubik 360's Privacy Policy, which is incorporated into these Terms by reference. Please review our Privacy Policy to understand our practices regarding the collection, use, and disclosure of your personal information.</p>
+                            
+                            <h3 class="text-xl font-semibold text-gray-800 mb-3">6.2 Data Processing</h3>
+                            <p class="text-gray-700 mb-4">When you use our Services, we may process personal data on your behalf. In such cases, you remain the data controller, and Ubik 360 acts as a data processor. Our obligations as a data processor are set out in our Data Processing Agreement, which will be provided separately when applicable.</p>
+                            
+                            <h3 class="text-xl font-semibold text-gray-800 mb-3">6.3 Data Security</h3>
+                            <p class="text-gray-700 mb-4">We implement appropriate technical and organizational measures to protect your data. However, no method of transmission over the Internet or electronic storage is 100% secure. Therefore, while we strive to use commercially acceptable means to protect your personal information, we cannot guarantee its absolute security.</p>
+                            
+                            <h3 class="text-xl font-semibold text-gray-800 mb-3">6.4 Data Retention</h3>
+                            <p class="text-gray-700">We retain your personal information for as long as necessary to provide the Services and fulfill the purposes outlined in our Privacy Policy, unless a longer retention period is required or permitted by law.</p>
+                        </div>
+                    </section>
+
+                    <!-- Termination -->
+                    <section id="termination" class="mb-10">
+                        <h2 class="font-compose text-2xl font-bold text-gray-900 mb-4">7. Termination</h2>
+                        <div class="pl-4 border-l-4 border-gray-100">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-3">7.1 Termination by You</h3>
+                            <p class="text-gray-700 mb-4">You may terminate your use of the Services at any time by following the cancellation procedures specified in your service agreement or by contacting our customer support. If you terminate a subscription before the end of your current paid term, your subscription will continue until the end of your current term unless otherwise specified in your service agreement.</p>
+                            
+                            <h3 class="text-xl font-semibold text-gray-800 mb-3">7.2 Termination by Ubik 360</h3>
+                            <p class="text-gray-700 mb-4">Ubik 360 may terminate or suspend your access to the Services immediately, without prior notice or liability, for any reason, including, without limitation, if you breach these Terms. Upon termination, your right to use the Services will immediately cease.</p>
+                            
+                            <h3 class="text-xl font-semibold text-gray-800 mb-3">7.3 Effects of Termination</h3>
+                            <p class="text-gray-700 mb-4">Upon termination of your access to the Services:</p>
+                            <ul class="list-disc pl-6 mb-4 text-gray-700 space-y-2">
+                                <li>All licenses and rights to use the Services will terminate.</li>
+                                <li>You may lose access to your Content stored within the Services.</li>
+                                <li>Ubik 360 may delete your Content after a reasonable period following termination.</li>
+                                <li>Any outstanding payment obligations will become immediately due.</li>
+                            </ul>
+                            
+                            <h3 class="text-xl font-semibold text-gray-800 mb-3">7.4 Survival</h3>
+                            <p class="text-gray-700">The provisions of these Terms which by their nature should survive termination shall survive termination, including, without limitation, ownership provisions, warranty disclaimers, indemnity, and limitations of liability.</p>
+                        </div>
+                    </section>
+
+                    <!-- Dispute Resolution -->
+                    <section id="dispute-resolution" class="mb-10">
+                        <h2 class="font-compose text-2xl font-bold text-gray-900 mb-4">8. Dispute Resolution</h2>
+                        <div class="pl-4 border-l-4 border-gray-100">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-3">8.1 Governing Law</h3>
+                            <p class="text-gray-700 mb-4">These Terms and your use of the Services shall be governed by and construed in accordance with the laws of the Province of Ontario and the federal laws of Canada applicable therein, without giving effect to any choice or conflict of law provision or rule.</p>
+                            
+                            <h3 class="text-xl font-semibold text-gray-800 mb-3">8.2 Informal Dispute Resolution</h3>
+                            <p class="text-gray-700 mb-4">Before filing a claim against Ubik 360, you agree to try to resolve the dispute informally by contacting us. We'll try to resolve the dispute informally by contacting you via email. If a dispute is not resolved within 30 days of submission, you or Ubik 360 may bring a formal proceeding.</p>
+                            
+                            <h3 class="text-xl font-semibold text-gray-800 mb-3">8.3 Arbitration</h3>
+                            <p class="text-gray-700 mb-4">Any dispute, controversy, or claim arising out of or relating to these Terms, including the formation, interpretation, breach, or termination thereof, including whether the claims asserted are arbitrable, will be referred to and finally determined by arbitration in accordance with the JAMS International Arbitration Rules. The tribunal will consist of a sole arbitrator. The place of arbitration will be London, Ontario. The language to be used in the arbitral proceedings will be English.</p>
+                            
+                            <h3 class="text-xl font-semibold text-gray-800 mb-3">8.4 Restrictions</h3>
+                            <p class="text-gray-700 mb-4">You and Ubik 360 agree that any arbitration shall be limited to the dispute between Ubik 360 and you individually. To the full extent permitted by law, (a) no arbitration shall be joined with any other proceeding; (b) there is no right or authority for any dispute to be arbitrated on a class-action basis; and (c) there is no right or authority for any dispute to be brought in a purported representative capacity on behalf of the general public or any other persons.</p>
+                            
+                            <h3 class="text-xl font-semibold text-gray-800 mb-3">8.5 Exceptions</h3>
+                            <p class="text-gray-700">Notwithstanding the foregoing, either party may seek injunctive or other equitable relief in any court of competent jurisdiction to protect its intellectual property rights pending the completion of arbitration.</p>
+                        </div>
+                    </section>
+
+                    <!-- Modifications to Terms -->
+                    <section id="modifications" class="mb-10">
+                        <h2 class="font-compose text-2xl font-bold text-gray-900 mb-4">9. Modifications to Terms</h2>
+                        <div class="pl-4 border-l-4 border-gray-100">
+                            <p class="text-gray-700 mb-4">Ubik 360 reserves the right, at our sole discretion, to modify or replace these Terms at any time. If a revision is material, we will provide at least 30 days' notice prior to any new terms taking effect. What constitutes a material change will be determined at our sole discretion.</p>
+                            <p class="text-gray-700">By continuing to access or use our Services after those revisions become effective, you agree to be bound by the revised Terms. If you do not agree to the new Terms, you must stop using the Services.</p>
+                        </div>
+                    </section>
+
+                    <!-- Contact Us -->
+                    <section id="contact-us" class="mb-10">
+                        <h2 class="font-compose text-2xl font-bold text-gray-900 mb-4">10. Contact Us</h2>
+                        <div class="pl-4 border-l-4 border-gray-100">
+                            <p class="text-gray-700 mb-4">If you have any questions about these Terms, please contact us at:</p>
+                            <div class="bg-gray-50 p-6 rounded-lg">
+                                <p class="text-gray-700 mb-2"><strong>Ubik 360 Enterprises</strong></p>
+                                <p class="text-gray-700 mb-2">London, Ontario, Canada</p>
+                                <p class="text-gray-700 mb-2">Email: jose@ubik360.com</p>
+                                <p class="text-gray-700">Phone: (226) 605-0983</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <div class="mt-12 pt-8 border-t border-gray-200">
+                        <p class="text-gray-600 text-center">By using our Services, you acknowledge that you have read and understood these Terms of Service and agree to be bound by them.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Back to Top Button -->
+    <button id="backToTop" class="back-to-top bg-primary text-secondary w-12 h-12 rounded-full shadow-md flex items-center justify-center hover:bg-opacity-90 transition">
+        <i class="ri-arrow-up-line text-xl"></i>
+    </button>
+</main>
+
+  <!-- Footer -->
+ <!--#include virtual="/footer.html" -->
+
+<script id="navbarScript">
+document.addEventListener('DOMContentLoaded', function() {
+const header = document.querySelector('header');
+const mobileMenuButton = document.getElementById('mobileMenuButton');
+const mobileMenu = document.getElementById('mobileMenu');
+const mobileDropdowns = document.querySelectorAll('.mobile-dropdown');
+window.addEventListener('scroll', function() {
+if (window.scrollY > 50) {
+header.classList.add('shadow-md');
+} else {
+header.classList.remove('shadow-md');
+}
+});
+mobileMenuButton.addEventListener('click', function() {
+mobileMenu.classList.toggle('hidden');
+const menuIcon = mobileMenuButton.querySelector('i');
+if (mobileMenu.classList.contains('hidden')) {
+menuIcon.classList.remove('ri-close-line');
+menuIcon.classList.add('ri-menu-line');
+} else {
+menuIcon.classList.remove('ri-menu-line');
+menuIcon.classList.add('ri-close-line');
+}
+});
+mobileDropdowns.forEach(dropdown => {
+const button = dropdown.querySelector('button');
+const content = dropdown.querySelector('div');
+button.addEventListener('click', () => {
+content.classList.toggle('hidden');
+const arrow = button.querySelector('i');
+arrow.style.transform = content.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
+});
+});
+document.addEventListener('click', function(event) {
+if (!header.contains(event.target)) {
+mobileMenu.classList.add('hidden');
+const menuIcon = mobileMenuButton.querySelector('i');
+menuIcon.classList.remove('ri-close-line');
+menuIcon.classList.add('ri-menu-line');
+}
+});
+});
+</script>
+
+<script id="termsPageScript">
+document.addEventListener('DOMContentLoaded', function() {
+    // Mobile TOC toggle
+    const tocToggle = document.getElementById('tocToggle');
+    const tocMobile = document.getElementById('tocMobile');
+    const tocIcon = tocToggle.querySelector('i');
+    
+    tocToggle.addEventListener('click', function() {
+        tocMobile.classList.toggle('hidden');
+        tocIcon.classList.toggle('ri-arrow-down-s-line');
+        tocIcon.classList.toggle('ri-arrow-up-s-line');
+    });
+    
+    // Smooth scroll for TOC links
+    const tocLinks = document.querySelectorAll('.toc-link');
+    tocLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
+            
+            if (targetElement) {
+                window.scrollTo({
+                    top: targetElement.offsetTop - 160,
+                    behavior: 'smooth'
+                });
+                
+                // Update active link
+                tocLinks.forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Hide mobile TOC after click
+                if (!tocMobile.classList.contains('hidden')) {
+                    tocMobile.classList.add('hidden');
+                    tocIcon.classList.remove('ri-arrow-up-s-line');
+                    tocIcon.classList.add('ri-arrow-down-s-line');
+                }
+            }
+        });
+    });
+    
+    // Back to top button
+    const backToTopButton = document.getElementById('backToTop');
+    
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > 300) {
+            backToTopButton.style.display = 'flex';
+        } else {
+            backToTopButton.style.display = 'none';
+        }
+    });
+    
+    backToTopButton.addEventListener('click', function() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+    
+    // Highlight active section on scroll
+    const sections = document.querySelectorAll('section[id]');
+    
+    window.addEventListener('scroll', function() {
+        let current = '';
+        
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop - 200;
+            const sectionHeight = section.offsetHeight;
+            
+            if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight) {
+                current = '#' + section.getAttribute('id');
+            }
+        });
+        
+        tocLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === current) {
+                link.classList.add('active');
+            }
+        });
+    });
+});
+</script>
+
+<script id="formValidationScript">
+document.addEventListener('DOMContentLoaded', function() {
+const newsletterForm = document.getElementById('newsletterForm');
+function handleFormSubmission(form, successMessage) {
+form.addEventListener('submit', function(e) {
+e.preventDefault();
+let isValid = true;
+const formData = new FormData(form);
+const formElements = form.elements;
+for (let element of formElements) {
+if (element.hasAttribute('required') && !element.value.trim()) {
+isValid = false;
+element.classList.add('border-red-500');
+} else {
+element.classList.remove('border-red-500');
+}
+if (element.type === 'email' && !element.value.includes('@')) {
+isValid = false;
+element.classList.add('border-red-500');
+}
+}
+if (!isValid) {
+return;
+}
+fetch(form.action, {
+method: 'POST',
+body: new URLSearchParams(formData),
+headers: {
+'Content-Type': 'application/x-www-form-urlencoded',
+}
+})
+.then(response => {
+if (!response.ok) {
+throw new Error('Network response was not ok');
+}
+form.reset();
+})
+.catch(error => {
+console.error('Error:', error);
+});
+});
+}
+if (newsletterForm) {
+handleFormSubmission(newsletterForm, 'Thank you for subscribing to our newsletter!');
+}
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hispanic Market Accelerator | Ubik 360</title>
+  <meta name="robots" content="noindex, nofollow">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --red: #931F1D;
+      --black: #050505;
+      --green: #659157;
+      --oak: #CEC5B5;
+      --oak-light: #F0ECE5;
+      --gray: #4b5563;
+      --light: #f9fafb;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--black);
+      background: #fff;
+      -webkit-font-smoothing: antialiased;
+      font-size: 10pt;
+      line-height: 1.6;
+    }
+
+    h1, h2, h3, h4 { font-family: 'DM Serif Display', serif; }
+
+    /* ── PAGE LAYOUT ── */
+    .page {
+      width: 8.5in;
+      min-height: 11in;
+      margin: 0 auto;
+      background: #fff;
+      position: relative;
+    }
+
+    @media screen {
+      body { background: #e5e7eb; padding: 2rem 0; }
+      .page {
+        box-shadow: 0 4px 32px rgba(0,0,0,.18);
+        margin-bottom: 2rem;
+      }
+    }
+
+    @media print {
+      body { background: #fff; padding: 0; }
+      .page { box-shadow: none; margin: 0; page-break-after: always; }
+      .no-print { display: none !important; }
+    }
+
+    /* ── COVER PAGE ── */
+    .cover {
+      background: var(--black);
+      min-height: 11in;
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cover-accent {
+      position: absolute;
+      top: 0; right: 0;
+      width: 40%;
+      height: 100%;
+      background: linear-gradient(135deg, transparent 40%, rgba(147,31,29,.15) 100%);
+      pointer-events: none;
+    }
+
+    .cover-stripe {
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 100%;
+      height: 6px;
+      background: var(--red);
+    }
+
+    .cover-top {
+      padding: 2.5rem 3rem 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .cover-logo img {
+      height: 52px;
+      width: auto;
+      display: block;
+    }
+
+    .cover-tag {
+      font-family: 'Inter', sans-serif;
+      font-size: 8pt;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--red);
+      border: 1px solid rgba(147,31,29,.5);
+      padding: .3rem .8rem;
+      border-radius: 2px;
+    }
+
+    .cover-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 3rem 3rem 2.5rem;
+    }
+
+    .cover-eyebrow {
+      font-family: 'Inter', sans-serif;
+      font-size: 9pt;
+      font-weight: 600;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 1.25rem;
+    }
+
+    .cover-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 44pt;
+      line-height: 1.1;
+      color: #fff;
+      margin-bottom: 1.5rem;
+    }
+
+    .cover-title span { color: var(--red); }
+
+    .cover-subtitle {
+      font-size: 12pt;
+      line-height: 1.65;
+      color: rgba(255,255,255,.72);
+      max-width: 4.8in;
+      margin-bottom: 2.5rem;
+    }
+
+    .cover-divider {
+      width: 3rem;
+      height: 3px;
+      background: var(--red);
+      margin-bottom: 2.5rem;
+    }
+
+    .cover-stats {
+      display: flex;
+      gap: 2.5rem;
+    }
+
+    .cover-stat-num {
+      font-family: 'DM Serif Display', serif;
+      font-size: 26pt;
+      color: #fff;
+      line-height: 1;
+      margin-bottom: .25rem;
+    }
+
+    .cover-stat-label {
+      font-size: 8pt;
+      color: rgba(255,255,255,.55);
+      letter-spacing: .04em;
+      line-height: 1.4;
+      max-width: 1.4in;
+    }
+
+    .cover-footer {
+      padding: 1.5rem 3rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid rgba(255,255,255,.1);
+    }
+
+    .cover-author {
+      display: flex;
+      align-items: center;
+      gap: .85rem;
+    }
+
+    .cover-author-photo {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--red);
+    }
+
+    .cover-author-photo-fallback {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--red);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'DM Serif Display', serif;
+      font-size: 16pt;
+      color: #fff;
+      border: 2px solid var(--red);
+      flex-shrink: 0;
+    }
+
+    .cover-author-name {
+      font-weight: 600;
+      font-size: 9pt;
+      color: #fff;
+      line-height: 1.3;
+    }
+
+    .cover-author-title {
+      font-size: 8pt;
+      color: rgba(255,255,255,.5);
+      line-height: 1.3;
+    }
+
+    .cover-url {
+      font-size: 8pt;
+      color: rgba(255,255,255,.4);
+      letter-spacing: .04em;
+    }
+
+    /* ── INNER PAGES ── */
+    .inner {
+      min-height: 11in;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .inner-header {
+      background: var(--black);
+      padding: .65rem 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .inner-header img {
+      height: 28px;
+      width: auto;
+    }
+
+    .inner-header-logo-text {
+      font-family: 'DM Serif Display', serif;
+      font-size: 13pt;
+      color: #fff;
+      letter-spacing: .02em;
+    }
+
+    .inner-header-title {
+      font-size: 7.5pt;
+      color: rgba(255,255,255,.45);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .inner-body {
+      flex: 1;
+      padding: 1.85in 3rem 1.5rem;
+    }
+
+    /* Wait — standard inner body padding */
+    .inner-body {
+      padding: 0.55in 3rem 0.5in;
+    }
+
+    .inner-footer {
+      padding: .5rem 3rem;
+      border-top: 1px solid #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .inner-footer-left {
+      font-size: 7.5pt;
+      color: #9ca3af;
+    }
+
+    .inner-footer-right {
+      font-size: 7.5pt;
+      color: #9ca3af;
+    }
+
+    /* ── TYPOGRAPHY ── */
+    .section-tag {
+      display: inline-block;
+      font-family: 'Inter', sans-serif;
+      font-size: 7.5pt;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: .6rem;
+    }
+
+    .page-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 26pt;
+      line-height: 1.15;
+      color: var(--black);
+      margin-bottom: .75rem;
+    }
+
+    .page-intro {
+      font-size: 11pt;
+      line-height: 1.7;
+      color: var(--gray);
+      margin-bottom: 1.5rem;
+      max-width: 6in;
+    }
+
+    .rule {
+      width: 2.5rem;
+      height: 3px;
+      background: var(--red);
+      margin-bottom: 1.4rem;
+    }
+
+    h3.section-heading {
+      font-family: 'DM Serif Display', serif;
+      font-size: 17pt;
+      color: var(--black);
+      margin-bottom: .5rem;
+      line-height: 1.2;
+    }
+
+    h4.sub-heading {
+      font-family: 'Inter', sans-serif;
+      font-size: 9.5pt;
+      font-weight: 700;
+      color: var(--black);
+      margin-bottom: .35rem;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    p { margin-bottom: .8rem; font-size: 9.5pt; line-height: 1.65; color: var(--gray); }
+    p:last-child { margin-bottom: 0; }
+
+    /* ── CALLOUT BOXES ── */
+    .callout {
+      background: var(--oak-light);
+      border-left: 4px solid var(--red);
+      padding: .9rem 1.1rem;
+      margin: 1.1rem 0;
+      border-radius: 0 4px 4px 0;
+    }
+
+    .callout p { margin: 0; font-size: 9.5pt; color: var(--black); font-weight: 500; }
+
+    .callout-dark {
+      background: var(--black);
+      border-left: 4px solid var(--red);
+      padding: .9rem 1.1rem;
+      margin: 1.1rem 0;
+      border-radius: 0 4px 4px 0;
+    }
+
+    .callout-dark p { margin: 0; font-size: 9.5pt; color: rgba(255,255,255,.85); }
+    .callout-dark strong { color: #fff; }
+
+    /* ── STAT CARDS ── */
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: .75rem;
+      margin: 1.25rem 0;
+    }
+
+    .stat-card {
+      background: var(--black);
+      padding: .9rem 1rem;
+      border-radius: 6px;
+      text-align: center;
+    }
+
+    .stat-card-num {
+      font-family: 'DM Serif Display', serif;
+      font-size: 22pt;
+      color: #fff;
+      line-height: 1;
+      margin-bottom: .2rem;
+    }
+
+    .stat-card-num span { color: var(--red); }
+
+    .stat-card-label {
+      font-size: 7.5pt;
+      color: rgba(255,255,255,.55);
+      line-height: 1.4;
+    }
+
+    /* ── PILLAR CARDS ── */
+    .pillar-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .85rem;
+      margin: 1.1rem 0;
+    }
+
+    .pillar-card {
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      padding: .9rem 1rem;
+    }
+
+    .pillar-card-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(147,31,29,.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: .5rem;
+    }
+
+    .pillar-card-icon svg { display: block; }
+
+    .pillar-card h4 {
+      font-family: 'Inter', sans-serif;
+      font-size: 9pt;
+      font-weight: 700;
+      color: var(--black);
+      margin-bottom: .3rem;
+    }
+
+    .pillar-card p { font-size: 8.5pt; margin: 0; }
+
+    /* ── STEPS ── */
+    .step-list { margin: 1rem 0; }
+
+    .step {
+      display: flex;
+      gap: .85rem;
+      margin-bottom: .85rem;
+      align-items: flex-start;
+    }
+
+    .step-num {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--red);
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 9pt;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .step-content h4 {
+      font-family: 'Inter', sans-serif;
+      font-size: 9.5pt;
+      font-weight: 700;
+      color: var(--black);
+      margin-bottom: .2rem;
+    }
+
+    .step-content p { font-size: 9pt; margin: 0; }
+
+    /* ── ROI TABLE ── */
+    .roi-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: 9pt;
+    }
+
+    .roi-table th {
+      background: var(--black);
+      color: #fff;
+      padding: .5rem .75rem;
+      text-align: left;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 8pt;
+      letter-spacing: .04em;
+    }
+
+    .roi-table td {
+      padding: .45rem .75rem;
+      border-bottom: 1px solid #e5e7eb;
+      color: var(--gray);
+    }
+
+    .roi-table tr:last-child td { border-bottom: none; }
+    .roi-table tr:nth-child(even) td { background: var(--oak-light); }
+
+    .roi-table .highlight td {
+      background: rgba(101,145,87,.1);
+      font-weight: 600;
+      color: var(--black);
+    }
+
+    .roi-table .red-text { color: var(--red); font-weight: 700; }
+    .roi-table .green-text { color: var(--green); font-weight: 700; }
+
+    /* ── TWO COLUMNS ── */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      margin: 1rem 0;
+    }
+
+    /* ── CHECKLIST ── */
+    .checklist { list-style: none; margin: .6rem 0; }
+
+    .checklist li {
+      display: flex;
+      align-items: flex-start;
+      gap: .5rem;
+      font-size: 9pt;
+      color: var(--gray);
+      margin-bottom: .4rem;
+      line-height: 1.5;
+    }
+
+    .checklist li::before {
+      content: '';
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: rgba(101,145,87,.2);
+      border: 1.5px solid var(--green);
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* ── CTA SECTION ── */
+    .cta-section {
+      background: var(--black);
+      padding: 1.25rem 1.5rem;
+      border-radius: 8px;
+      margin-top: 1.25rem;
+      text-align: center;
+    }
+
+    .cta-section h3 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 18pt;
+      color: #fff;
+      margin-bottom: .5rem;
+      line-height: 1.2;
+    }
+
+    .cta-section p {
+      font-size: 9.5pt;
+      color: rgba(255,255,255,.65);
+      margin-bottom: 1rem;
+    }
+
+    .cta-btn {
+      display: inline-block;
+      background: var(--red);
+      color: #fff;
+      padding: .55rem 1.5rem;
+      border-radius: 4px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 9pt;
+      text-decoration: none;
+      letter-spacing: .03em;
+    }
+
+    /* ── QUOTE ── */
+    .pull-quote {
+      border-left: 4px solid var(--red);
+      padding: .7rem 1rem;
+      margin: 1.1rem 0;
+      background: var(--oak-light);
+    }
+
+    .pull-quote p {
+      font-family: 'DM Serif Display', serif;
+      font-size: 12pt;
+      color: var(--black);
+      font-style: italic;
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    /* ── SPACERS ── */
+    .mt-sm { margin-top: .6rem; }
+    .mt-md { margin-top: 1rem; }
+    .mt-lg { margin-top: 1.5rem; }
+    .mb-sm { margin-bottom: .6rem; }
+    .mb-md { margin-bottom: 1rem; }
+
+    /* ── PRINT BUTTON ── */
+    .print-bar {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      z-index: 999;
+    }
+
+    .print-btn {
+      background: var(--red);
+      color: #fff;
+      border: none;
+      padding: .65rem 1.4rem;
+      border-radius: 4px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 9pt;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(0,0,0,.3);
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+    }
+
+    .print-btn:hover { background: #7a1917; }
+
+    @media print { .print-bar { display: none; } }
+  </style>
+</head>
+<body>
+
+<!-- Print button -->
+<div class="print-bar no-print">
+  <button class="print-btn" onclick="window.print()">
+    <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
+    </svg>
+    Save as PDF
+  </button>
+</div>
+
+<!-- ═══════════════════════════════════════
+     PAGE 1 — COVER
+═══════════════════════════════════════ -->
+<div class="page">
+  <div class="cover">
+    <div class="cover-accent"></div>
+    <div class="cover-stripe"></div>
+
+    <div class="cover-top">
+      <div class="cover-logo">
+        <img src="../images/ubik360logo.png" alt="Ubik 360" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+        <span style="display:none; font-family:'DM Serif Display',serif; font-size:20pt; color:#fff; letter-spacing:.02em;">Ubik<span style="color:var(--red)">360</span></span>
+      </div>
+      <div class="cover-tag">Digital Marketing Guide</div>
+    </div>
+
+    <div class="cover-body">
+      <div class="cover-eyebrow">Ubik 360 · Growth Strategy Series</div>
+
+      <h1 class="cover-title">
+        Hispanic<br>Market<br><span>Accelerator</span>
+      </h1>
+
+      <p class="cover-subtitle">
+        How U.S. and Canadian home service businesses can capture a massive, underserved market—without hiring locally, learning Spanish, or navigating the language barrier alone.
+      </p>
+
+      <div class="cover-divider"></div>
+
+      <div class="cover-stats">
+        <div>
+          <div class="cover-stat-num">62M+</div>
+          <div class="cover-stat-label">Hispanic consumers in the U.S. alone</div>
+        </div>
+        <div>
+          <div class="cover-stat-num">$3.4T</div>
+          <div class="cover-stat-label">Hispanic purchasing power by 2025</div>
+        </div>
+        <div>
+          <div class="cover-stat-num">72%</div>
+          <div class="cover-stat-label">prefer Spanish-speaking service providers</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cover-footer">
+      <div class="cover-author">
+        <img
+          src="https://ubik360.com/assets/images/jose-villegas.png"
+          alt="José Villegas"
+          class="cover-author-photo"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+        >
+        <div class="cover-author-photo-fallback" style="display:none;">J</div>
+        <div>
+          <div class="cover-author-name">José Villegas</div>
+          <div class="cover-author-title">Founder &amp; Marketing Strategist · Ubik 360</div>
+        </div>
+      </div>
+      <div class="cover-url">ubik360.com</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     PAGE 2 — THE OPPORTUNITY
+═══════════════════════════════════════ -->
+<div class="page">
+  <div class="inner">
+    <div class="inner-header">
+      <img src="../images/ubik360logo.png" alt="Ubik 360" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+      <span style="display:none;" class="inner-header-logo-text">Ubik<span style="color:var(--red);">360</span></span>
+      <div class="inner-header-title">Hispanic Market Accelerator</div>
+    </div>
+
+    <div class="inner-body">
+      <span class="section-tag">The Opportunity</span>
+      <h2 class="page-title">The Market Your Competitors<br>Are Ignoring</h2>
+      <div class="rule"></div>
+
+      <p class="page-intro">
+        There are over 62 million Hispanic consumers in the United States. They need the same home services you offer—roofing, HVAC, plumbing, remodeling, landscaping. And most of them are choosing providers based on one factor above all others: <strong>who speaks their language.</strong>
+      </p>
+
+      <div class="stat-row">
+        <div class="stat-card">
+          <div class="stat-card-num">62<span>M+</span></div>
+          <div class="stat-card-label">Hispanic consumers in the U.S.</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-num"><span>$</span>3.4<span>T</span></div>
+          <div class="stat-card-label">Projected purchasing power by 2025</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-num">72<span>%</span></div>
+          <div class="stat-card-label">Prefer Spanish-speaking service providers</div>
+        </div>
+      </div>
+
+      <p>Most home service businesses want a piece of this market. The problem isn't desire—it's execution. They run a Google Translate ad once, get poor results, and conclude "Spanish marketing doesn't work for us." It doesn't work because they're doing it wrong.</p>
+
+      <div class="callout">
+        <p>"The Hispanic market doesn't have a demand problem. It has a <strong>supply problem.</strong> There aren't enough businesses willing to show up for these customers the right way."</p>
+      </div>
+
+      <h3 class="section-heading mt-md">Why Most Businesses Fail at This</h3>
+
+      <div class="two-col mt-sm">
+        <div>
+          <h4 class="sub-heading">What they do wrong</h4>
+          <ul class="checklist">
+            <li>Use Google Translate for ad copy</li>
+            <li>Assume one language = one culture</li>
+            <li>Send Spanish-speaking leads to English-only staff</li>
+            <li>No follow-up in Spanish after the first contact</li>
+            <li>Treat it as a one-time campaign, not a system</li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="sub-heading">What actually works</h4>
+          <ul class="checklist">
+            <li>Native Spanish copy written by fluent speakers</li>
+            <li>Cultural context built into every touchpoint</li>
+            <li>Bilingual appointment setters who close in English</li>
+            <li>Consistent follow-up in the prospect's preferred language</li>
+            <li>A repeatable lead engine, not a one-off test</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pull-quote">
+        <p>"You don't need to hire a Spanish-speaking salesperson. You need the right system—and the right support team behind it."</p>
+      </div>
+    </div>
+
+    <div class="inner-footer">
+      <div class="inner-footer-left">Ubik 360 · ubik360.com · jose@ubik360.com</div>
+      <div class="inner-footer-right">Page 2</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     PAGE 3 — THE STRATEGY
+═══════════════════════════════════════ -->
+<div class="page">
+  <div class="inner">
+    <div class="inner-header">
+      <img src="../images/ubik360logo.png" alt="Ubik 360" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+      <span style="display:none;" class="inner-header-logo-text">Ubik<span style="color:var(--red);">360</span></span>
+      <div class="inner-header-title">Hispanic Market Accelerator</div>
+    </div>
+
+    <div class="inner-body">
+      <span class="section-tag">Core Strategy</span>
+      <h2 class="page-title">The Full-Stack<br>Hispanic Lead Engine</h2>
+      <div class="rule"></div>
+
+      <p class="page-intro">
+        Most agencies will run your Spanish ads and hand you back the leads. That's where the language barrier hits—and where most businesses drop the ball. The Full-Stack Hispanic Lead Engine closes that gap end-to-end.
+      </p>
+
+      <div class="pillar-grid">
+        <div class="pillar-card">
+          <div class="pillar-card-icon">
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#931F1D" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/>
+            </svg>
+          </div>
+          <h4>Pillar 1: Native Spanish Ads</h4>
+          <p>Ad copy written by fluent Spanish speakers—not translated. Meta and Google campaigns that reflect how Hispanic consumers actually think and talk about home services.</p>
+        </div>
+
+        <div class="pillar-card">
+          <div class="pillar-card-icon">
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#931F1D" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 7V6a1 1 0 011-1z"/>
+            </svg>
+          </div>
+          <h4>Pillar 2: Nearshore Appointment Setters</h4>
+          <p>Bilingual professionals based in Colombia who handle inbound Spanish leads, qualify them, and book appointments directly to your English-speaking calendar.</p>
+        </div>
+
+        <div class="pillar-card">
+          <div class="pillar-card-icon">
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#931F1D" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+            </svg>
+          </div>
+          <h4>Pillar 3: Localized Landing Pages</h4>
+          <p>Spanish-language landing pages built for conversion—not just translated from English. Trust signals, social proof, and CTAs that resonate with this specific audience.</p>
+        </div>
+
+        <div class="pillar-card">
+          <div class="pillar-card-icon">
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#931F1D" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+            </svg>
+          </div>
+          <h4>Pillar 4: Follow-Up Sequences</h4>
+          <p>Automated follow-up in Spanish for leads that don't convert immediately—SMS, email, and WhatsApp flows that keep your pipeline warm without manual effort.</p>
+        </div>
+      </div>
+
+      <div class="callout-dark mt-md">
+        <p><strong>The key insight:</strong> You only need to speak English. We build the entire sales bridge that connects a Spanish-speaking prospect to your English-speaking team—seamlessly, professionally, and at a fraction of the cost of hiring locally.</p>
+      </div>
+    </div>
+
+    <div class="inner-footer">
+      <div class="inner-footer-left">Ubik 360 · ubik360.com · jose@ubik360.com</div>
+      <div class="inner-footer-right">Page 3</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     PAGE 4 — IMPLEMENTATION
+═══════════════════════════════════════ -->
+<div class="page">
+  <div class="inner">
+    <div class="inner-header">
+      <img src="../images/ubik360logo.png" alt="Ubik 360" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+      <span style="display:none;" class="inner-header-logo-text">Ubik<span style="color:var(--red);">360</span></span>
+      <div class="inner-header-title">Hispanic Market Accelerator</div>
+    </div>
+
+    <div class="inner-body">
+      <span class="section-tag">Implementation</span>
+      <h2 class="page-title">How to Launch<br>in 30 Days</h2>
+      <div class="rule"></div>
+
+      <p>You don't need a six-month runway to start capturing Hispanic market leads. Here's a practical 30-day roadmap to go from zero to a working lead engine.</p>
+
+      <div class="step-list mt-md">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h4>Week 1 — Audit &amp; Setup</h4>
+            <p>Set up Google Local Services Ads (LSA) if eligible for your service category (roofing, HVAC, remodeling, plumbing). LSA is particularly effective because it shows verified badges that build trust immediately. Simultaneously, create a Meta Business Manager account structured for geographic targeting within your service radius.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h4>Week 2 — Native Content Creation</h4>
+            <p>Write ad copy, landing page copy, and follow-up sequences in native Spanish. This is not a translation step—it's a creation step. The tone, the pain points, the social proof format, and the CTAs need to be written for this audience from scratch. Avoid any copy that reads like it was run through a translation tool.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h4>Week 3 — Geo-Targeted Campaign Launch</h4>
+            <p>Launch Meta Ads with a 5–10 mile geo-radius targeting Spanish-language audiences. Start with a $500–$1,000 test budget. Run parallel creative variants—at least two ad formats—to identify what resonates fastest. Google LSA runs on a pay-per-lead model, so activate it alongside Meta for full-funnel coverage.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <h4>Week 4 — Nearshore Bridge Activation</h4>
+            <p>Bring your Colombian appointment setter team online. These are bilingual professionals who handle incoming leads in Spanish, qualify them against your criteria, and book directly into your calendar. Onboarding typically takes 3–5 days. By end of Week 4, your first Spanish-sourced leads should be showing up as booked appointments in English.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-content">
+            <h4>Ongoing — Optimize &amp; Scale</h4>
+            <p>Review lead quality weekly for the first 60 days. Refine ad targeting based on which zip codes, demographics, and creative perform best. Scale budget on winning combinations. The goal by Day 90: a self-sustaining lead engine that delivers qualified, pre-vetted appointments without you touching the Spanish side of the funnel at all.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="inner-footer">
+      <div class="inner-footer-left">Ubik 360 · ubik360.com · jose@ubik360.com</div>
+      <div class="inner-footer-right">Page 4</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     PAGE 5 — THE ROI CASE
+═══════════════════════════════════════ -->
+<div class="page">
+  <div class="inner">
+    <div class="inner-header">
+      <img src="../images/ubik360logo.png" alt="Ubik 360" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+      <span style="display:none;" class="inner-header-logo-text">Ubik<span style="color:var(--red);">360</span></span>
+      <div class="inner-header-title">Hispanic Market Accelerator</div>
+    </div>
+
+    <div class="inner-body">
+      <span class="section-tag">The ROI Case</span>
+      <h2 class="page-title">What the Numbers<br>Actually Look Like</h2>
+      <div class="rule"></div>
+
+      <p>The cost advantage of nearshore staffing isn't just a talking point—it changes the math of customer acquisition in a meaningful way. Here's a realistic comparison for a mid-size home service business.</p>
+
+      <table class="roi-table mt-md">
+        <thead>
+          <tr>
+            <th>Cost Item</th>
+            <th>Traditional Approach</th>
+            <th>Hispanic Lead Engine</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Spanish-speaking inside sales rep</td>
+            <td>$45,000–$55,000/yr</td>
+            <td class="green-text">$14,000–$18,000/yr</td>
+          </tr>
+          <tr>
+            <td>Ad creative (translation agency)</td>
+            <td>$3,000–$6,000/campaign</td>
+            <td class="green-text">Included in strategy</td>
+          </tr>
+          <tr>
+            <td>Landing page localization</td>
+            <td>$2,500–$5,000</td>
+            <td class="green-text">Included in strategy</td>
+          </tr>
+          <tr>
+            <td>Ad spend (Meta + Google)</td>
+            <td>$2,000–$4,000/mo</td>
+            <td>$1,000–$3,000/mo</td>
+          </tr>
+          <tr class="highlight">
+            <td><strong>Estimated Annual Cost</strong></td>
+            <td class="red-text">$80,000–$120,000+</td>
+            <td class="green-text">$28,000–$54,000</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="callout mt-md">
+        <p>The nearshore model doesn't cut corners—it cuts costs by leveraging Colombian talent that is bilingual, college-educated, and operating in a U.S.-compatible time zone. You get the same output at roughly <strong>one-third the cost.</strong></p>
+      </div>
+
+      <h3 class="section-heading mt-md">What You Can Expect in Year One</h3>
+      <p>Results vary by market, service type, and execution. Based on comparable campaigns in the home services sector:</p>
+
+      <div class="two-col mt-sm">
+        <div>
+          <ul class="checklist">
+            <li>15–40 qualified Spanish-language leads per month by Month 3</li>
+            <li>10–25% conversion rate to booked appointments (higher than English-language due to lower competition)</li>
+            <li>Average job value of $3,500–$12,000 depending on service type</li>
+          </ul>
+        </div>
+        <div>
+          <ul class="checklist">
+            <li>Cost per booked appointment 30–60% lower than English-language campaigns</li>
+            <li>Strong referral velocity — Hispanic consumers refer within tight community networks</li>
+            <li>Compound growth as brand reputation builds in Spanish-speaking neighborhoods</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pull-quote mt-md">
+        <p>"The businesses that move first in their local Hispanic market don't just win market share. They lock it in—because trust transfers through community, and that's very hard to displace once it's built."</p>
+      </div>
+    </div>
+
+    <div class="inner-footer">
+      <div class="inner-footer-left">Ubik 360 · ubik360.com · jose@ubik360.com</div>
+      <div class="inner-footer-right">Page 5</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     PAGE 6 — CTA / CLOSE
+═══════════════════════════════════════ -->
+<div class="page">
+  <div class="inner">
+    <div class="inner-header">
+      <img src="../images/ubik360logo.png" alt="Ubik 360" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+      <span style="display:none;" class="inner-header-logo-text">Ubik<span style="color:var(--red);">360</span></span>
+      <div class="inner-header-title">Hispanic Market Accelerator</div>
+    </div>
+
+    <div class="inner-body">
+      <span class="section-tag">Your Next Step</span>
+      <h2 class="page-title">Is Your Market Ready?<br>The Real Question Is:<br>Are You?</h2>
+      <div class="rule"></div>
+
+      <p class="page-intro">
+        The Hispanic market in your service area isn't going to wait. Every month you delay is market share that goes to whoever moves first. The good news: most of your competitors aren't moving at all.
+      </p>
+
+      <h3 class="section-heading">What a 30-Minute Conversation Covers</h3>
+      <p>If you want to know whether the Hispanic Market Accelerator is right for your business, schedule a free strategy call. In 30 minutes, I'll cover:</p>
+
+      <div class="step-list mt-sm">
+        <div class="step">
+          <div class="step-num" style="background:var(--green);">✓</div>
+          <div class="step-content">
+            <h4>Your local Hispanic market size</h4>
+            <p>I'll pull the actual demographic data for your service area so you know exactly what opportunity you're looking at—before you spend a dollar.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num" style="background:var(--green);">✓</div>
+          <div class="step-content">
+            <h4>Competitor gap analysis</h4>
+            <p>A quick scan of who in your category is running Spanish-language ads and how well they're doing it. Spoiler: most aren't.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num" style="background:var(--green);">✓</div>
+          <div class="step-content">
+            <h4>A realistic 90-day roadmap</h4>
+            <p>What would actually need to happen—in sequence, with real costs and realistic timelines—for your business to have a functioning Hispanic lead engine by the end of the quarter.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="cta-section">
+        <h3>Book Your Free Strategy Call</h3>
+        <p>30 minutes. No sales pitch. Just a real conversation about what's possible in your market.</p>
+        <a href="https://calendly.com/jose-ubik360/30min" class="cta-btn">Schedule at calendly.com/jose-ubik360/30min</a>
+      </div>
+
+      <div style="display:flex; align-items:center; gap:1.5rem; margin-top:1.1rem; padding-top:1.1rem; border-top:1px solid #e5e7eb;">
+        <img
+          src="https://ubik360.com/assets/images/jose-villegas.png"
+          alt="José Villegas"
+          style="width:50px; height:50px; border-radius:50%; object-fit:cover; border:2px solid var(--red); flex-shrink:0;"
+          onerror="this.style.display='none';"
+        >
+        <div>
+          <div style="font-weight:600; font-size:9.5pt; color:var(--black); margin-bottom:.2rem;">José Villegas</div>
+          <div style="font-size:8.5pt; color:var(--gray); line-height:1.5;">Founder, Ubik 360 · Digital Marketing &amp; International Expansion Strategist<br>
+          <span style="color:var(--red);">jose@ubik360.com</span> · ubik360.com</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="inner-footer">
+      <div class="inner-footer-left">© 2025 Ubik 360. All rights reserved. ubik360.com</div>
+      <div class="inner-footer-right">Page 6</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

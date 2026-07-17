@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Captación de Leads por Proximidad | Ubik 360</title>
+  <meta name="robots" content="noindex, nofollow">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --red: #931F1D;
+      --black: #050505;
+      --green: #659157;
+      --oak: #CEC5B5;
+      --oak-light: #F0ECE5;
+      --gray: #4b5563;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--black);
+      background: #fff;
+      -webkit-font-smoothing: antialiased;
+      font-size: 10pt;
+      line-height: 1.6;
+    }
+
+    h1, h2, h3, h4 { font-family: 'DM Serif Display', serif; }
+
+    .page {
+      width: 8.5in;
+      min-height: 11in;
+      margin: 0 auto;
+      background: #fff;
+      position: relative;
+    }
+
+    @media screen {
+      body { background: #e5e7eb; padding: 2rem 0; }
+      .page { box-shadow: 0 4px 32px rgba(0,0,0,.18); margin-bottom: 2rem; }
+    }
+
+    @media print {
+      body { background: #fff; padding: 0; }
+      .page { box-shadow: none; margin: 0; page-break-after: always; }
+      .no-print { display: none !important; }
+    }
+
+    /* ── COVER ── */
+    .cover {
+      background: var(--black);
+      min-height: 11in;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cover-map-texture {
+      position: absolute;
+      top: 0; right: 0;
+      width: 55%; height: 100%;
+      background: radial-gradient(ellipse at 80% 40%, rgba(147,31,29,.18) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    /* Pin-drop decorative elements */
+    .cover-pin {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(147,31,29,.15);
+      border: 1px solid rgba(147,31,29,.2);
+    }
+
+    .cover-pin-1 { width: 80px; height: 80px; top: 15%; right: 18%; }
+    .cover-pin-2 { width: 50px; height: 50px; top: 35%; right: 8%; }
+    .cover-pin-3 { width: 110px; height: 110px; top: 55%; right: 22%; }
+    .cover-pin-4 { width: 35px; height: 35px; top: 72%; right: 12%; }
+
+    .cover-stripe {
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 100%; height: 6px;
+      background: var(--red);
+    }
+
+    .cover-top {
+      padding: 2.5rem 3rem 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .cover-logo img { height: 52px; width: auto; display: block; }
+
+    .cover-tag {
+      font-family: 'Inter', sans-serif;
+      font-size: 8pt; font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--red);
+      border: 1px solid rgba(147,31,29,.5);
+      padding: .3rem .8rem;
+      border-radius: 2px;
+    }
+
+    .cover-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 3rem 3rem 2.5rem;
+    }
+
+    .cover-eyebrow {
+      font-family: 'Inter', sans-serif;
+      font-size: 9pt; font-weight: 600;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 1.25rem;
+    }
+
+    .cover-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 36pt; line-height: 1.1;
+      color: #fff;
+      margin-bottom: 1.5rem;
+      max-width: 5in;
+    }
+
+    .cover-title span { color: var(--red); }
+
+    .cover-subtitle {
+      font-size: 11.5pt; line-height: 1.65;
+      color: rgba(255,255,255,.72);
+      max-width: 4.6in;
+      margin-bottom: 2.5rem;
+    }
+
+    .cover-divider { width: 3rem; height: 3px; background: var(--red); margin-bottom: 2.5rem; }
+
+    .cover-stats { display: flex; gap: 2.5rem; }
+
+    .cover-stat-num {
+      font-family: 'DM Serif Display', serif;
+      font-size: 26pt; color: #fff;
+      line-height: 1; margin-bottom: .25rem;
+    }
+
+    .cover-stat-num span { color: var(--red); }
+    .cover-stat-label { font-size: 8pt; color: rgba(255,255,255,.55); letter-spacing: .04em; line-height: 1.4; max-width: 1.5in; }
+
+    .cover-footer {
+      padding: 1.5rem 3rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid rgba(255,255,255,.1);
+    }
+
+    .cover-author { display: flex; align-items: center; gap: .85rem; }
+
+    .cover-author-photo { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid var(--red); }
+
+    .cover-author-photo-fallback {
+      width: 42px; height: 42px; border-radius: 50%;
+      background: var(--red);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'DM Serif Display', serif;
+      font-size: 16pt; color: #fff;
+      border: 2px solid var(--red); flex-shrink: 0;
+    }
+
+    .cover-author-name { font-weight: 600; font-size: 9pt; color: #fff; line-height: 1.3; }
+    .cover-author-title { font-size: 8pt; color: rgba(255,255,255,.5); line-height: 1.3; }
+    .cover-url { font-size: 8pt; color: rgba(255,255,255,.4); letter-spacing: .04em; }
+
+    /* ── INNER PAGES ── */
+    .inner { min-height: 11in; display: flex; flex-direction: column; }
+
+    .inner-header {
+      background: var(--black);
+      padding: .65rem 3rem;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    .inner-header img { height: 28px; width: auto; }
+    .inner-header-logo-text { font-family: 'DM Serif Display', serif; font-size: 13pt; color: #fff; }
+    .inner-header-title { font-size: 7.5pt; color: rgba(255,255,255,.45); letter-spacing: .08em; text-transform: uppercase; }
+
+    .inner-body { flex: 1; padding: .55in 3rem .5in; }
+
+    .inner-footer {
+      padding: .5rem 3rem;
+      border-top: 1px solid #e5e7eb;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    .inner-footer-left, .inner-footer-right { font-size: 7.5pt; color: #9ca3af; }
+
+    /* ── TYPOGRAPHY ── */
+    .section-tag {
+      display: inline-block;
+      font-family: 'Inter', sans-serif;
+      font-size: 7.5pt; font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: .6rem;
+    }
+
+    .page-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 26pt; line-height: 1.15;
+      color: var(--black);
+      margin-bottom: .75rem;
+    }
+
+    .page-intro {
+      font-size: 11pt; line-height: 1.7;
+      color: var(--gray);
+      margin-bottom: 1.5rem;
+      max-width: 6in;
+    }
+
+    .rule { width: 2.5rem; height: 3px; background: var(--red); margin-bottom: 1.4rem; }
+
+    h3.section-heading {
+      font-family: 'DM Serif Display', serif;
+      font-size: 17pt; color: var(--black);
+      margin-bottom: .5rem; line-height: 1.2;
+    }
+
+    p { margin-bottom: .8rem; font-size: 9.5pt; line-height: 1.65; color: var(--gray); }
+    p:last-child { margin-bottom: 0; }
+
+    /* ── CALLOUTS ── */
+    .callout {
+      background: var(--oak-light);
+      border-left: 4px solid var(--red);
+      padding: .9rem 1.1rem;
+      margin: 1.1rem 0;
+      border-radius: 0 4px 4px 0;
+    }
+
+    .callout p { margin: 0; font-size: 9.5pt; color: var(--black); font-weight: 500; }
+
+    .callout-dark {
+      background: var(--black);
+      border-left: 4px solid var(--red);
+      padding: .9rem 1.1rem;
+      margin: 1.1rem 0;
+      border-radius: 0 4px 4px 0;
+    }
+
+    .callout-dark p { margin: 0; font-size: 9.5pt; color: rgba(255,255,255,.85); }
+    .callout-dark strong { color: #fff; }
+
+    .callout-green {
+      background: rgba(101,145,87,.08);
+      border-left: 4px solid var(--green);
+      padding: .9rem 1.1rem;
+      margin: 1.1rem 0;
+      border-radius: 0 4px 4px 0;
+    }
+
+    .callout-green p { margin: 0; font-size: 9.5pt; color: var(--black); }
+
+    /* ── STAT CARDS ── */
+    .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: .75rem; margin: 1.25rem 0; }
+
+    .stat-card { background: var(--black); padding: .9rem 1rem; border-radius: 6px; text-align: center; }
+    .stat-card-num { font-family: 'DM Serif Display', serif; font-size: 22pt; color: #fff; line-height: 1; margin-bottom: .2rem; }
+    .stat-card-num span { color: var(--red); }
+    .stat-card-label { font-size: 7.5pt; color: rgba(255,255,255,.55); line-height: 1.4; }
+
+    /* ── PILLAR CARDS ── */
+    .pillar-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .85rem; margin: 1.1rem 0; }
+
+    .pillar-card { border: 1px solid #e5e7eb; border-radius: 6px; padding: .9rem 1rem; }
+
+    .pillar-card-badge {
+      display: inline-block;
+      background: rgba(147,31,29,.08);
+      color: var(--red);
+      font-family: 'Inter', sans-serif;
+      font-size: 7pt; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase;
+      padding: .2rem .5rem; border-radius: 2px;
+      margin-bottom: .55rem;
+    }
+
+    .pillar-card h4 { font-family: 'Inter', sans-serif; font-size: 9.5pt; font-weight: 700; color: var(--black); margin-bottom: .3rem; }
+    .pillar-card p { font-size: 8.5pt; margin: 0; }
+
+    /* ── STEPS ── */
+    .step-list { margin: 1rem 0; }
+
+    .step { display: flex; gap: .85rem; margin-bottom: .85rem; align-items: flex-start; }
+
+    .step-num {
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      background: var(--red); color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 9pt; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; margin-top: 1px;
+    }
+
+    .step-content h4 { font-family: 'Inter', sans-serif; font-size: 9.5pt; font-weight: 700; color: var(--black); margin-bottom: .2rem; }
+    .step-content p { font-size: 9pt; margin: 0; }
+
+    /* ── TWO COLUMNS ── */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin: 1rem 0; }
+
+    /* ── CHECKLIST ── */
+    .checklist { list-style: none; margin: .6rem 0; }
+
+    .checklist li {
+      display: flex; align-items: flex-start; gap: .5rem;
+      font-size: 9pt; color: var(--gray);
+      margin-bottom: .4rem; line-height: 1.5;
+    }
+
+    .checklist li::before {
+      content: '';
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: rgba(101,145,87,.2);
+      border: 1.5px solid var(--green);
+      flex-shrink: 0; margin-top: 1px;
+    }
+
+    /* ── PULL QUOTE ── */
+    .pull-quote {
+      border-left: 4px solid var(--red);
+      padding: .7rem 1rem;
+      margin: 1.1rem 0;
+      background: var(--oak-light);
+    }
+
+    .pull-quote p {
+      font-family: 'DM Serif Display', serif;
+      font-size: 12pt; color: var(--black);
+      font-style: italic; line-height: 1.5; margin: 0;
+    }
+
+    /* ── COMPARISON ROW ── */
+    .vs-row {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: .75rem;
+      align-items: center;
+      margin: 1.1rem 0;
+    }
+
+    .vs-card {
+      border-radius: 6px;
+      padding: .9rem 1rem;
+    }
+
+    .vs-card.bad { background: rgba(147,31,29,.06); border: 1px solid rgba(147,31,29,.2); }
+    .vs-card.good { background: rgba(101,145,87,.08); border: 1px solid rgba(101,145,87,.3); }
+
+    .vs-card h4 { font-family: 'Inter', sans-serif; font-size: 8.5pt; font-weight: 700; margin-bottom: .4rem; }
+    .vs-card.bad h4 { color: var(--red); }
+    .vs-card.good h4 { color: var(--green); }
+    .vs-card p { font-size: 8.5pt; margin: 0; }
+
+    .vs-divider {
+      font-family: 'DM Serif Display', serif;
+      font-size: 14pt; color: #9ca3af;
+      text-align: center;
+    }
+
+    /* ── CTA ── */
+    .cta-section {
+      background: var(--black);
+      padding: 1.25rem 1.5rem;
+      border-radius: 8px;
+      margin-top: 1.25rem;
+      text-align: center;
+    }
+
+    .cta-section h3 { font-family: 'DM Serif Display', serif; font-size: 18pt; color: #fff; margin-bottom: .5rem; line-height: 1.2; }
+    .cta-section p { font-size: 9.5pt; color: rgba(255,255,255,.65); margin-bottom: 1rem; }
+
+    .cta-btn {
+      display: inline-block;
+      background: var(--red); color: #fff;
+      padding: .55rem 1.5rem; border-radius: 4px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600; font-size: 9pt;
+      text-decoration: none; letter-spacing: .03em;
+    }
+
+    /* ── PRINT BUTTON ── */
+    .print-bar { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 999; }
+
+    .print-btn {
+      background: var(--red); color: #fff;
+      border: none; padding: .65rem 1.4rem;
+      border-radius: 4px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600; font-size: 9pt; cursor: pointer;
+      box-shadow: 0 4px 16px rgba(0,0,0,.3);
+      display: flex; align-items: center; gap: .4rem;
+    }
+
+    .print-btn:hover { background: #7a1917; }
+
+    @media print { .print-bar { display: none; } }
+
+    .mt-sm { margin-top: .6rem; }
+    .mt-md { margin-top: 1rem; }
+    .mt-lg { margin-top: 1.5rem; }
+  </style>
+</head>
+<body>
+
+<div class="print-bar no-print">
+  <button class="print-btn" onclick="window.print()">
+    <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
+    </svg>
+    Guardar como PDF
+  </button>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     PÁGINA 1 — PORTADA
+═══════════════════════════════════════ -->
+<div class="page">
+  <div class="cover">
+    <div class="cover-map-texture"></div>
+    <div class="cover-pin cover-pin-1"></div>
+    <div class="cover-pin cover-pin-2"></div>
+    <div class="cover-pin cover-pin-3"></div>
+    <div class="cover-pin cover-pin-4"></div>
+    <div class="cover-stripe"></div>
+
+    <div class="cover-top">
+      <div class="cover-logo">
+        <img src="../images/ubik360logo.png" alt="Ubik 360" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+        <span style="display:none; font-family:'DM Serif Display',serif; font-size:20pt; color:#fff;">Ubik<span style="color:var(--red)">360</span></span>
+      </div>
+      <div class="cover-tag">Guía de Marketing Digital</div>
+    </div>
+
+    <div class="cover-body">
+      <div class="cover-eyebrow">Ubik 360 · Serie de Crecimiento para Negocios Hispanos</div>
+
+      <h1 class="cover-title">
+        Sistema de<br>Captación de<br>Leads por<br><span>Proximidad</span>
+      </h1>
+
+      <p class="cover-subtitle">
+        Cómo los negocios hispanos de home services en EE.UU. pueden dominar su mercado local sin competir en presupuesto con las grandes franquicias americanas.
+      </p>
+
+      <div class="cover-divider"></div>
+
+      <div class="cover-stats">
+        <div>
+          <div class="cover-stat-num">62<span>M+</span></div>
+          <div class="cover-stat-label">Hispanos en EE.UU. que prefieren proveedores en español</div>
+        </div>
+        <div>
+          <div class="cover-stat-num">5<span>–10</span></div>
+          <div class="cover-stat-label">Millas de radio: el área donde ganarás clientes más rápido</div>
+        </div>
+        <div>
+          <div class="cover-stat-num">3<span>x</span></div>
+          <div class="cover-stat-label">Más económico que competir contra franquicias en búsquedas generales</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cover-footer">
+      <div class="cover-author">
+        <img
+          src="https://ubik360.com/assets/images/jose-villegas.png"
+          alt="José Villegas"
+          class="cover-author-photo"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+        >
+        <div class="cover-author-photo-fallback" style="display:none;">J</div>
+        <div>
+          <div class="cover-author-name">José Villegas</div>
+          <div class="cover-author-title">Fundador y Estratega de Marketing · Ubik 360</div>
+        </div>
+      </div>
+      <div class="cover-url">ubik360.com</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     PÁGINA 2 — EL PROBLEMA
+═══════════════════════════════════════ -->
+<div class="page">
+  <div class="inner">
+    <div class="inner-header">
+      <img src="../images/ubik360logo.png" alt="Ubik 360" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+      <span style="display:none;" class="inner-header-logo-text">Ubik<span style="color:var(--red);">360</span></span>
+      <div class="inner-header-title">Sistema de Captación de Leads por Proximidad</div>
+    </div>
+
+    <div class="inner-body">
+      <span class="section-tag">El Problema</span>
+      <h2 class="page-title">El Boca a Boca<br>No Es una Estrategia.<br>Es una Apuesta.</h2>
+      <div class="rule"></div>
+
+      <p class="page-intro">
+        El boca a boca te trajo hasta aquí. Pero no te va a llevar a donde quieres llegar. Cada cliente que te recomienda es una cadena que puede romperse en cualquier momento—y cuando se rompe, no hay sistema que la reemplace.
+      </p>
+
+      <div class="stat-row">
+        <div class="stat-card">
+          <div class="stat-card-num">72<span>%</span></div>
+          <div class="stat-card-label">De dueños de casas hispanos prefiere contratar en español</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-num"><span>#</span>1</div>
+          <div class="stat-card-label">Factor de decisión: confianza, no precio</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-num">68<span>%</span></div>
+          <div class="stat-card-label">Busca home services en Google antes de pedir referidos</div>
+        </div>
+      </div>
+
+      <p>El mercado hispano en tu ciudad ya existe. No tienes que convencer a nadie de que necesita un techo nuevo, un HVAC reparado, o una remodelación. La necesidad está ahí. El problema es que cuando ese cliente potencial te busca en Google, no te encuentra—o encuentra a alguien más primero.</p>
+
+      <div class="vs-row">
+        <div class="vs-card bad">
+          <h4>Lo que está pasando ahora</h4>
+          <p>Tu negocio depende de referidos. Cuando hay trabajo, hay trabajo. Cuando no hay referidos, no hay clientes. No hay forma de predecir ni controlar el flujo.</p>
+        </div>
+        <div class="vs-divider">→</div>
+        <div class="vs-card good">
+          <h4>Lo que debería pasar</h4>
+          <p>Tu negocio aparece primero cuando alguien en tu área busca tus servicios en español. Los leads llegan de forma predecible, calificados, y listos para contratar.</p>
+        </div>
+      </div>
+
+      <h3 class="section-heading mt-md">Por Qué las Grandes Franquicias No Pueden Ganarte</h3>
+
+      <p>HomeAdvisor, Angi, y las franquicias nacionales gastan millones en publicidad general. Pero tienen una debilidad que tú puedes explotar: no hablan el idioma de la comunidad, y no pueden fingir que sí.</p>
+
+      <div class="callout">
+        <p>"No compitas con las grandes franquicias en presupuesto publicitario. Gánales en confianza y cercanía hablando el idioma de tu comunidad. Eso no se compra con dinero—se construye con estrategia."</p>
+      </div>
+
+      <p>Un dueño de casa hispano que necesita su techo reparado prefiere llamar a alguien de su comunidad que lo entiende, que habla su idioma, y que no lo va a hacer sentir en desventaja por no hablar inglés con fluidez. Esa preferencia tiene un valor enorme—y tú puedes capitalizarla sistemáticamente.</p>
+    </div>
+
+    <div class="inner-footer">
+      <div class="inner-footer-left">Ubik 360 · ubik360.com · jose@ubik360.com</div>
+      <div class="inner-footer-right">Página 2</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     PÁGINA 3 — EL SISTEMA
+═══════════════════════════════════════ -->
+<div class="page">
+  <div class="inner">
+    <div class="inner-header">
+      <img src="../images/ubik360logo.png" alt="Ubik 360" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+      <span style="display:none;" class="inner-header-logo-text">Ubik<span style="color:var(--red);">360</span></span>
+      <div class="inner-header-title">Sistema de Captación de Leads por Proximidad</div>
+    </div>
+
+    <div class="inner-body">
+      <span class="section-tag">El Sistema</span>
+      <h2 class="page-title">Dominio Local Hispano:<br>Los Tres Pilares</h2>
+      <div class="rule"></div>
+
+      <p class="page-intro">
+        Este no es un paquete de "anuncios en español." Es un sistema completo que posiciona tu negocio como el experto de referencia en tu comunidad hispana local—desde el momento en que alguien te busca hasta que firma el contrato.
+      </p>
+
+      <div class="pillar-grid">
+        <div class="pillar-card">
+          <div class="pillar-card-badge">Pilar 1</div>
+          <h4>Google Local Services Ads (LSA)</h4>
+          <p>Los LSA aparecen arriba de todo en Google—incluso arriba de los anuncios normales—cuando alguien busca tu servicio cerca de su ubicación. Llevan el sello "Google Garantizado", que genera confianza inmediata. Pagas por lead real, no por clic.</p>
+        </div>
+
+        <div class="pillar-card">
+          <div class="pillar-card-badge">Pilar 2</div>
+          <h4>Meta Ads en Español Nativo</h4>
+          <p>Campañas en Facebook e Instagram con segmentación geográfica de 5 a 10 millas. El copy lo escribimos en español de verdad—no con Google Translate. Imágenes y mensajes que reflejan la cultura de tu comunidad específica.</p>
+        </div>
+
+        <div class="pillar-card">
+          <div class="pillar-card-badge">Pilar 3</div>
+          <h4>Landing Pages Culturales</h4>
+          <p>Una página de aterrizaje en español diseñada para convertir. No es una traducción de tu sitio en inglés. Es una página construida desde cero para hablarle directamente al dueño de casa hispano: sus preguntas, sus dudas, su lenguaje.</p>
+        </div>
+
+        <div class="pillar-card">
+          <div class="pillar-card-badge">Pilar 4</div>
+          <h4>Perfil de Google Business en Español</h4>
+          <p>Tu ficha de Google Maps optimizada con reseñas en español, fotos de proyectos reales, respuestas a preguntas frecuentes, y horarios de atención claros. Este es el primer lugar donde muchos clientes te van a juzgar antes de llamar.</p>
+        </div>
+      </div>
+
+      <div class="callout-dark mt-md">
+        <p><strong>La diferencia clave:</strong> Cada uno de estos pilares por separado produce resultados mediocres. Combinados como sistema, se refuerzan mutuamente—tu LSA convierte mejor porque tu landing page inspira confianza, y tu landing page convierte mejor porque tus reseñas en Google Maps confirman tu reputación.</p>
+      </div>
+    </div>
+
+    <div class="inner-footer">
+      <div class="inner-footer-left">Ubik 360 · ubik360.com · jose@ubik360.com</div>
+      <div class="inner-footer-right">Página 3</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     PÁGINA 4 — IMPLEMENTACIÓN
+═══════════════════════════════════════ -->
+<div class="page">
+  <div class="inner">
+    <div class="inner-header">
+      <img src="../images/ubik360logo.png" alt="Ubik 360" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+      <span style="display:none;" class="inner-header-logo-text">Ubik<span style="color:var(--red);">360</span></span>
+      <div class="inner-header-title">Sistema de Captación de Leads por Proximidad</div>
+    </div>
+
+    <div class="inner-body">
+      <span class="section-tag">Implementación</span>
+      <h2 class="page-title">Paso a Paso:<br>De Cero a Tu Primer<br>Lead en 21 Días</h2>
+      <div class="rule"></div>
+
+      <p>No necesitas un equipo de marketing ni un presupuesto enorme para empezar. Aquí está exactamente lo que se hace, en qué orden, y por qué.</p>
+
+      <div class="step-list mt-md">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h4>Verificación de Elegibilidad para LSA (Días 1–3)</h4>
+            <p>Confirma que tu categoría de servicio califica para Google Local Services Ads. Las categorías elegibles incluyen roofing, HVAC, plomería, electricidad, remodelación, y otras. Google requiere verificación de licencia y seguro de responsabilidad civil. Este proceso toma entre 3 y 7 días hábiles.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h4>Configuración del Perfil LSA (Días 4–7)</h4>
+            <p>En ads.google.com/local-services-ads seleccionas tus servicios específicos, los ZIP codes que quieres cubrir, y tu presupuesto semanal. Google calcula un estimado de leads por semana. Al completar la verificación, obtienes el badge "Google Garantizado"—visible en todos tus anuncios.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h4>Landing Page en Español (Días 5–10)</h4>
+            <p>Se construye una página de aterrizaje dedicada con copy en español nativo, fotos de proyectos reales, testimonios de clientes hispanos, y un formulario o botón de llamada optimizado para móvil. Esta página es el destino de todos tus anuncios—es donde el lead decide llamarte o irse.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <h4>Lanzamiento de Meta Ads Geo-Segmentados (Días 11–14)</h4>
+            <p>Se configuran campañas en Facebook e Instagram con radio de 5 a 10 millas alrededor de tu área de servicio principal. El targeting es por idioma español y por comportamiento—personas que han interactuado con contenido de home services recientemente. Presupuesto inicial recomendado: $300–$600 al mes para prueba.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-content">
+            <h4>Optimización del Perfil de Google Maps (Días 15–21)</h4>
+            <p>Se completa y optimiza tu ficha de Google Business Profile con descripción en español, fotos profesionales de tu trabajo, respuestas a preguntas frecuentes en español, y estrategia para solicitar reseñas de clientes actuales. Las reseñas en español son oro para posicionar tu negocio con nuevos clientes hispanos.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout-green mt-md">
+        <p>Con LSA pagas solo por leads directos (llamadas o mensajes verificados), no por clics. Puedes pausar en cualquier momento sin penalización. Es la plataforma más sencilla de controlar para negocios que están empezando con publicidad digital.</p>
+      </div>
+    </div>
+
+    <div class="inner-footer">
+      <div class="inner-footer-left">Ubik 360 · ubik360.com · jose@ubik360.com</div>
+      <div class="inner-footer-right">Página 4</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     PÁGINA 5 — RESULTADOS Y VENTAJAS
+═══════════════════════════════════════ -->
+<div class="page">
+  <div class="inner">
+    <div class="inner-header">
+      <img src="../images/ubik360logo.png" alt="Ubik 360" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+      <span style="display:none;" class="inner-header-logo-text">Ubik<span style="color:var(--red);">360</span></span>
+      <div class="inner-header-title">Sistema de Captación de Leads por Proximidad</div>
+    </div>
+
+    <div class="inner-body">
+      <span class="section-tag">Resultados</span>
+      <h2 class="page-title">Qué Esperar en<br>los Primeros 90 Días</h2>
+      <div class="rule"></div>
+
+      <p>Los resultados varían según el mercado, el servicio, y qué tan competida está tu área. Lo siguiente está basado en negocios de home services hispanos en mercados medianos de EE.UU. que implementaron el sistema completo.</p>
+
+      <div class="stat-row mt-sm">
+        <div class="stat-card">
+          <div class="stat-card-num">8<span>–20</span></div>
+          <div class="stat-card-label">Leads calificados al mes para el Mes 2</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-num">30<span>–50%</span></div>
+          <div class="stat-card-label">Tasa de conversión vs. 10–15% en anuncios generales</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-num"><span>$</span>35<span>–80</span></div>
+          <div class="stat-card-label">Costo por lead en mercados hispanos locales</div>
+        </div>
+      </div>
+
+      <h3 class="section-heading mt-lg">Por Qué los Leads Hispanos Locales Convierten Mejor</h3>
+
+      <div class="two-col mt-sm">
+        <div>
+          <ul class="checklist">
+            <li>El cliente ya buscó el servicio en su idioma—viene con intención de compra, no solo curiosidad</li>
+            <li>La confianza cultural reduce el ciclo de venta: menos preguntas, menos dudas, decisión más rápida</li>
+            <li>El radio de 5–10 millas garantiza que son clientes que puedes atender sin costos de traslado adicionales</li>
+          </ul>
+        </div>
+        <div>
+          <ul class="checklist">
+            <li>Los referidos orgánicos aumentan naturalmente—los clientes hispanos recomiendan dentro de sus redes comunitarias</li>
+            <li>Menor competencia directa: pocas empresas hispanas están haciendo esto bien todavía</li>
+            <li>El badge "Google Garantizado" elimina la barrera de confianza inicial con clientes que no te conocen</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pull-quote mt-md">
+        <p>"El primer negocio hispano en cada ciudad que construya este sistema correctamente no solo gana clientes—gana el mercado. Porque la confianza que se construye en una comunidad es muy difícil de desplazar una vez establecida."</p>
+      </div>
+
+      <h3 class="section-heading mt-md">Ventajas Adicionales del Sistema</h3>
+
+      <div class="two-col mt-sm">
+        <div>
+          <h4 style="font-family:'Inter',sans-serif; font-size:9pt; font-weight:700; color:var(--black); margin-bottom:.4rem; text-transform:uppercase; letter-spacing:.06em;">Control total</h4>
+          <p style="font-size:8.5pt;">Puedes pausar, ajustar presupuesto o cambiar el área de cobertura en cualquier momento desde la plataforma. Sin contratos mínimos con Google LSA.</p>
+        </div>
+        <div>
+          <h4 style="font-family:'Inter',sans-serif; font-size:9pt; font-weight:700; color:var(--black); margin-bottom:.4rem; text-transform:uppercase; letter-spacing:.06em;">Datos reales</h4>
+          <p style="font-size:8.5pt;">Sabes exactamente cuánto te costó cada lead, cuántos llamaron, y cuántos se convirtieron. No más "el boca a boca está lento" sin saber por qué.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="inner-footer">
+      <div class="inner-footer-left">Ubik 360 · ubik360.com · jose@ubik360.com</div>
+      <div class="inner-footer-right">Página 5</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     PÁGINA 6 — CTA
+═══════════════════════════════════════ -->
+<div class="page">
+  <div class="inner">
+    <div class="inner-header">
+      <img src="../images/ubik360logo.png" alt="Ubik 360" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+      <span style="display:none;" class="inner-header-logo-text">Ubik<span style="color:var(--red);">360</span></span>
+      <div class="inner-header-title">Sistema de Captación de Leads por Proximidad</div>
+    </div>
+
+    <div class="inner-body">
+      <span class="section-tag">Tu Próximo Paso</span>
+      <h2 class="page-title">Tu Comunidad<br>Ya Está Buscando.<br>¿Te Va a Encontrar?</h2>
+      <div class="rule"></div>
+
+      <p class="page-intro">
+        Cada semana que pasa sin este sistema es una semana que un cliente hispano en tu área llama a otra empresa—no porque esa empresa sea mejor, sino porque aparece primero. Eso es lo único que hay que cambiar.
+      </p>
+
+      <h3 class="section-heading">Qué Cubrimos en 30 Minutos</h3>
+      <p>Si quieres saber si este sistema funciona para tu negocio y en tu ciudad, agenda una llamada gratuita. Sin rodeos—en 30 minutos:</p>
+
+      <div class="step-list mt-sm">
+        <div class="step">
+          <div class="step-num" style="background:var(--green);">✓</div>
+          <div class="step-content">
+            <h4>Analizo el tamaño de tu mercado hispano local</h4>
+            <p>Te digo cuántos hogares hispanos hay en tu área de servicio, qué servicios de home services buscan más, y si tu categoría califica para LSA. Datos reales, no estimados generales.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num" style="background:var(--green);">✓</div>
+          <div class="step-content">
+            <h4>Reviso qué está haciendo tu competencia local</h4>
+            <p>Quién está corriendo anuncios en español en tu área, qué tan bien lo están haciendo, y dónde están las brechas que puedes aprovechar ahora mismo.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num" style="background:var(--green);">✓</div>
+          <div class="step-content">
+            <h4>Te doy un plan concreto para los primeros 30 días</h4>
+            <p>No una presentación de ventas. Un plan real con pasos específicos, costos estimados, y expectativas honestas de resultados para tu negocio en particular.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="cta-section">
+        <h3>Agenda Tu Llamada Gratuita</h3>
+        <p>30 minutos. Sin compromiso. Solo una conversación honesta sobre lo que es posible para tu negocio.</p>
+        <a href="https://calendly.com/jose-ubik360/30min" class="cta-btn">Agendar en calendly.com/jose-ubik360/30min</a>
+      </div>
+
+      <div style="display:flex; align-items:center; gap:1.5rem; margin-top:1.1rem; padding-top:1.1rem; border-top:1px solid #e5e7eb;">
+        <img
+          src="https://ubik360.com/assets/images/jose-villegas.png"
+          alt="José Villegas"
+          style="width:50px; height:50px; border-radius:50%; object-fit:cover; border:2px solid var(--red); flex-shrink:0;"
+          onerror="this.style.display:'none';"
+        >
+        <div>
+          <div style="font-weight:600; font-size:9.5pt; color:var(--black); margin-bottom:.2rem;">José Villegas</div>
+          <div style="font-size:8.5pt; color:var(--gray); line-height:1.5;">Fundador, Ubik 360 · Estratega de Marketing Digital y Expansión Internacional<br>
+          <span style="color:var(--red);">jose@ubik360.com</span> · ubik360.com</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="inner-footer">
+      <div class="inner-footer-left">© 2025 Ubik 360. Todos los derechos reservados. ubik360.com</div>
+      <div class="inner-footer-right">Página 6</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

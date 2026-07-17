@@ -1,0 +1,130 @@
+/* ============================================================
+   UBIK 360 — Brand stylesheet
+   Edit this file to update colors, fonts, and buttons
+   across the entire website.
+   ============================================================ */
+
+/* ── Brand tokens ────────────────────────────────────────── */
+:root {
+  --red:   #931F1D;   /* Deep Red  — buttons, CTAs          */
+  --black: #050505;   /* Black     — text, dark sections     */
+  --green: #659157;   /* Sage Green — accents, section tags  */
+  --oak:   #CEC5B5;   /* Pale Oak  — light section bg        */
+}
+
+/* ── Reset / Base ────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+html  { scroll-behavior: smooth; }
+body  {
+  font-family: 'Inter', sans-serif;
+  color: var(--black);
+  -webkit-font-smoothing: antialiased;
+  margin: 0;
+}
+h1, h2, h3, h4 { font-family: 'DM Serif Display', serif; }
+img  { display: block; }
+a    { text-decoration: none; }
+
+/* ── Brand color utilities ───────────────────────────────── */
+.u-bg-red   { background-color: var(--red);   }
+.u-bg-black { background-color: var(--black); }
+.u-bg-green { background-color: var(--green); }
+.u-bg-oak   { background-color: var(--oak);   }
+
+.u-text-red   { color: var(--red);   }
+.u-text-green { color: var(--green); }
+.u-text-oak   { color: var(--oak);   }
+
+/* ── Buttons ─────────────────────────────────────────────── */
+.btn-primary {
+  display: inline-block;
+  background-color: var(--red);
+  color: #ffffff;
+  padding: .75rem 1.875rem;
+  border-radius: .375rem;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: .9375rem;
+  text-align: center;
+  transition: background-color .2s;
+  cursor: pointer;
+}
+.btn-primary:hover { background-color: #7a1917; }
+
+.btn-outline {
+  display: inline-block;
+  border: 2px solid var(--black);
+  color: var(--black);
+  padding: calc(.75rem - 2px) calc(1.875rem - 2px);
+  border-radius: .375rem;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: .9375rem;
+  text-align: center;
+  transition: background-color .2s, color .2s;
+  cursor: pointer;
+}
+.btn-outline:hover { background-color: var(--black); color: #ffffff; }
+
+/* ── Section label ───────────────────────────────────────── */
+.section-tag {
+  display: block;
+  font-family: 'Inter', sans-serif;
+  font-size: .6875rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--green);
+}
+
+/* ── Service card ────────────────────────────────────────── */
+.service-card {
+  border: 1px solid #e5e7eb;
+  border-radius: .875rem;
+  padding: 2rem;
+  transition: box-shadow .2s, transform .2s;
+}
+.service-card:hover {
+  box-shadow: 0 8px 28px rgba(0,0,0,.07);
+  transform: translateY(-2px);
+}
+
+/* ── Checkmark list ──────────────────────────────────────── */
+.check-list { list-style: none; padding: 0; margin: 0; }
+.check-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: .625rem;
+  font-size: .875rem;
+  color: #4b5563;
+  padding: .3125rem 0;
+}
+.check-list li::before {
+  content: '';
+  flex-shrink: 0;
+  width: 1rem;
+  height: 1rem;
+  margin-top: .125rem;
+  background-color: var(--green);
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='currentColor'%3E%3Cpath fill-rule='evenodd' d='M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z' clip-rule='evenodd'/%3E%3C/svg%3E");
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='currentColor'%3E%3Cpath fill-rule='evenodd' d='M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z' clip-rule='evenodd'/%3E%3C/svg%3E");
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+}
+
+/* ── Expansion step badge ────────────────────────────────── */
+.step-badge {
+  flex-shrink: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .6875rem;
+  font-weight: 700;
+  color: white;
+  margin-top: .1875rem;
+}

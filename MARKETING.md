@@ -232,6 +232,77 @@ magnet, not a buried section).
 
 ---
 
+## Homepage Copy — Draft (2026-07, not yet executed into pages)
+
+> Written per Jose's prompt: the homepage must clearly separate the two audiences (NA vs.
+> LatAm/bilingual), lead with value prop in the first two lines, speak to business pain/outcomes/
+> growth, avoid buzzwords, stay expert/practical/credible, avoid résumé/bio framing, avoid
+> overusing "I", and show authority through services/process/results. **This is copy strategy for
+> `en/index.html` — the master version this audience is native to.** `es/index.html` needs its own
+> LatAm-first pass (not a translation of this — same rule as everywhere else on this site), lead
+> with the LatAm section first, and is not drafted here yet.
+
+**Hero headline:**
+> Marketing that performs. Expansion that works. On both sides of the border.
+
+**Hero subheadline:**
+> Fractional marketing leadership and Latin America staff augmentation for North American
+> businesses. Go-to-market strategy and market entry for Latin American businesses expanding into
+> Canada and the U.S.
+
+**Intro section:**
+> Growing a business is straightforward until it crosses a border. North American companies need
+> marketing that performs and staff they can rely on — without the cost of building an offshore
+> team from scratch. Latin American companies need a structured way into markets they don't yet
+> operate in — not just paperwork, but a real go-to-market plan. Ubik 360 works both sides of that
+> problem, as one accountable partner.
+
+**North America service section:**
+- Eyebrow label: "For North America"
+- Headline: "Marketing leadership and staff you can rely on."
+- Body: "Fractional CMO leadership and growth marketing built around pipeline, revenue, and
+  retention — not impressions. Staff augmentation in Latin America gives your team skilled,
+  accountable people for customer service, back-office, and sales support, at a fraction of local
+  hiring cost."
+- Services list: Fractional CMO / marketing leadership · Growth marketing (paid media, email,
+  go-to-market strategy) · LatAm staff augmentation (customer service, back-office, appointment
+  setting)
+- CTA: **"Schedule a Growth Call"** → Calendly
+
+**LatAm service section:**
+- Eyebrow label: "For Latin America & Bilingual Markets"
+- Headline: "A structured way into Canada and the U.S."
+- Body: "Expanding north isn't just paperwork. Entity formation and banking get you registered —
+  go-to-market strategy, local operations support, and market-entry marketing get you actually
+  doing business. Ubik 360 manages the full path, not just the legal first step."
+- Services list: Entity formation, registered agent, banking · Go-to-market and market-entry
+  strategy · Local operations efficiency once established
+- CTA: **"Start Your Expansion Plan"** → contact / Calendly
+
+**Why Ubik 360 section** (authority via services/process/results, not personal bio):
+- Headline: "Why businesses work with Ubik 360"
+- One partner, both sides of the border — no handoff between a North American agency and a
+  separate LatAm consultant; one team, one process, one point of accountability.
+- A structured process — discovery, plan, execution, and optimization, with clear milestones at
+  each stage, not an open-ended retainer.
+- Direct access to the people doing the work — not routed through account managers.
+- Outcomes measured in business terms — pipeline generated, cost saved, markets entered — not
+  vanity metrics.
+
+**CTA copy (consolidated):**
+- NA: button **"Schedule a Growth Call"**, microcopy "30 minutes, no obligation."
+- LatAm: button **"Start Your Expansion Plan"**, microcopy "Free initial consultation."
+- (Spanish equivalents pending the ES homepage's own LatAm-first copy pass.)
+
+**Supporting microcopy:**
+- Trust line (hero or footer strip): "Operating across the United States, Canada, and Latin
+  America."
+- Contact/form microcopy: "We respond within 24 hours."
+- Section eyebrows use the existing `.section-tag` pattern already in the codebase (small,
+  uppercase, brand-green) — "For North America" / "For Latin America & Bilingual Markets" above.
+
+---
+
 ## Content quality pass — findings (2026-07, before any rewrite)
 
 Independent of the audience-architecture fix above, the existing EN copy (both service pages)

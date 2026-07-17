@@ -8,24 +8,45 @@
 
 ---
 
-## Positioning
+## Positioning (revised 2026-07 — supersedes the earlier résumé-led framing below)
 
-**One line:** Ubik 360 is José Villegas's personal consulting practice — digital marketing and
-international business expansion, sold on the strength of 15+ years actually *building*
-businesses in Colombia, the U.S., and Canada, not consulting about them from the outside.
+> **This section replaces the brand voice/positioning that shipped with the Astro migration.**
+> The earlier version leaned on José's personal track record (numbers, entity counts, "I don't
+> tell you what you want to hear") as the primary credibility mechanism. Jose has now redirected
+> this toward an **outcomes-first, business-first** voice — see rationale inline below. The
+> Audience/ICP and page-architecture sections further down were written under the *old* framing
+> and have NOT been reconciled with this update yet — see "Open reconciliation" at the end of
+> this section.
 
-**Two service tracks:**
-- **Track A — Digital Marketing.** Growth marketing / fractional CMO for Hispanic-owned
-  businesses operating in the U.S. and Canada. Paid media (Meta/Google), email, go-to-market
-  strategy, embedded senior marketing leadership.
-- **Track B — International Expansion.** Market entry between Colombia, the U.S., and Canada in
-  either direction: entity formation, registered agent, banking, local business development,
-  supplier/distributor relationships.
+**Positioning statement:** Ubik 360 helps growing, founder-led businesses execute their next
+strategic move. In North America, that means digital transformation, cloud migration, AI
+adoption, operational efficiency, and growth marketing that measurably moves the business
+forward. In Latin America and bilingual markets, that means go-to-market strategy, market entry,
+localization, and structured growth support for companies expanding into Canada and the U.S. In
+both cases, Ubik 360 is a strategic partner who understands the business problem first and
+guides execution — not a vendor selling a service, and not a résumé selling a person.
 
-**Competitive advantage:** lived experience, not theory. José has personally built and scaled
-businesses in all three countries — a rare, concrete, hard-to-fake credential (see the resume
-stats: $10M+ revenue under active management, $1M business built from zero, 37 entities
-incorporated internationally).
+**Brand voice summary:** Expert, credible, and practical. Calm and strategic rather than
+hype-driven — confidence comes from clear thinking and sound process, not from volume or
+personal biography. Business-first: every page, email, and post centers the visitor's situation
+and outcome, not José's background. Bilingual-fluent and cross-border aware by default, not as a
+special add-on. The voice a capable advisor uses with another business owner: direct about the
+work, quiet about the ego.
+
+**Competitive advantage:** Ubik 360 operates fluently across North American and Latin
+American/bilingual business contexts — the same partner can take a company from "we need to
+modernize" (NA) through "we need to enter that market" (cross-border) without a handoff between
+specialists. Proof lives in **client outcomes, process, and case examples** (anonymized where
+needed — ask Jose for specifics per engagement, businesses generally cannot be named), not in
+personal credentials.
+
+**Open reconciliation (flag for Jose's next prompt(s), do not resolve automatically):** the
+Audience/ICP section below still frames the EN audience narrowly as "reach the Hispanic market +
+nearshoring/sourcing" and the ES audience as "Colombia → US/CA entity expansion" — the new
+positioning statement above is broader on the NA side (digital transformation/cloud/AI/ops
+efficiency, not Hispanic-market-specific) and roughly consistent on the LatAm side (go-to-market/
+market-entry into Canada/US). The page architecture and content-quality-pass sections further
+down were built on the narrower framing and will need review once this is clarified.
 
 ---
 
@@ -35,36 +56,71 @@ incorporated internationally).
 > ads, site copy. Any AI content generator built for Ubik 360 must be prompted from this
 > section, and this section must be updated first if positioning changes.
 
-**Brand voice:** direct, credible, unapologetically opinionated. Practitioner talking to another
-business owner — not agency-speak, not corporate filler. Backs claims with specific numbers and
-specific stories, never vague superlatives. Comfortable being blunt: "I don't tell you what you
-want to hear." Warm underneath the bluntness — family, discipline, curiosity (~20 books/year) are
-part of the brand, not just credentials.
+**Brand voice:** expert, credible, practical, and business-first. Clear, calm, and strategic —
+never hype-driven. Confident without sounding arrogant: the confidence comes from precision and
+sound process, not from self-promotion. Every piece of copy centers the client's outcome, not
+José's résumé. Written so a founder or decision-maker reading it thinks *"this person understands
+my business problem and can guide me"* — not *"this person has an impressive career."*
 
 **Tone rules:**
-- Prefer concrete numbers and named specifics over adjectives ("$1M in 4 years," "37 entities,"
-  not "significant growth").
-- First person, active voice. José is the brand — never write as an anonymous agency ("we" is
-  fine for the work; the person behind it should stay visible).
-- Short, declarative sentences over long qualified ones.
-- It's fine — encouraged — to state an unpopular or uncomfortable opinion when it's true. That's
-  the differentiator, not a risk to hedge away.
-- Bilingual (EN/ES) — translate voice, not just words. Don't flatten the directness in Spanish
-  copy to sound more "polite generic consultant."
+- Lead with the client's situation or problem, not with José's background or track record.
+- Prove capability through **client outcomes, process, and case examples** — ask Jose for
+  specifics per claim; most examples can be described but businesses generally cannot be named,
+  so write around that constraint (describe the situation/result, omit the identifying name)
+  rather than inventing a placeholder client.
+- "We" is the default voice for the work itself; avoid making José-the-person the subject of
+  hero copy or section openers.
+- Short, declarative sentences. Calm and precise beats energetic or promotional.
+- Bilingual (EN/ES) — translate voice, not just words. The calm/strategic register should hold in
+  both languages; don't let Spanish copy drift warmer/more personal than the English by default,
+  or vice versa, unless the messaging framework below calls for it.
 
-**Brand tokens** (from `assets/css/main.css` — keep any generated visual assets on-palette):
+**Approved tone words:** expert, credible, practical, clear, calm, strategic, precise, grounded,
+structured, considered, trustworthy, capable, methodical, outcome-focused, cross-border,
+bilingual-fluent.
+
+**Banned tone patterns:**
+- ❌ Hype-driven language: "game-changing," "revolutionary," "unlock your potential," "take your
+  business to the next level," "in today's fast-paced world."
+- ❌ Personal-bragging proof points (book counts, workout streaks, personal habits) **unless**
+  there's a direct business reason and it reads naturally in context — default to omitting these.
+- ❌ Résumé/CV-style credential lists as the lead argument for a page or section.
+- ❌ José-as-subject in hero copy or opening lines — open with the client's situation instead.
+- ❌ Vague superlatives without evidence ("the best," "unmatched") — if a claim can't be
+  supported with a real outcome/process/example, cut it or soften it to something demonstrable.
+- ❌ Urgency/pressure tactics, spammy CTAs, or generic agency-speak clichés.
+- ❌ Job-application or personal-biography framing — this is a business-outcomes site, not a CV.
+
+**Brand tokens** (from `src/styles/global.css` — keep any generated visual assets on-palette):
 `--red: #931F1D` (CTAs) · `--black: #050505` (text) · `--green: #659157` (accents) ·
 `--oak: #CEC5B5` (light backgrounds). Headings in DM Serif Display, body in Inter.
 
-**NEVER:**
-- ❌ Generic consultant clichés ("take your business to the next level," "unlock your potential,"
-  "in today's fast-paced world").
-- ❌ Claims or numbers not traceable to something real José did. No invented stats.
-- ❌ Flattening the tri-national story into generic "international experience" — the specificity
-  (Barranquilla, Miami, Las Vegas, London Ontario) IS the credibility.
-- ❌ Corporate-anonymous voice. If copy could have been written by any agency about any founder,
-  it's off-brand.
-- ❌ Over-hedging. The brand's edge is directness; don't soften it into safe consultant-speak.
+---
+
+## Messaging Framework — North America vs. LatAm/Bilingual
+
+**North America (English)**
+- Core need: modernize and grow — digital transformation, cloud migration, AI adoption,
+  operational efficiency, growth marketing.
+- Buyer mindset: pragmatic and ROI-focused; wants a partner who can execute without hand-holding,
+  not another vendor pitch.
+- Message frame: the business is ready to modernize; Ubik 360 gets it there without disruption —
+  systems and strategy that measurably run the business better, not just look impressive.
+- Proof to lead with: process and outcomes (efficiency gained, growth generated, transformation
+  executed) — described concretely, client names omitted where required.
+
+**LatAm / Bilingual markets (Spanish)**
+- Core need: expand into Canada/U.S. — go-to-market strategy, market entry, localization,
+  structured cross-border growth support.
+- Buyer mindset: ambitious but wary of unfamiliar regulatory/market terrain; wants a guide who
+  has actually done this and can translate both language and business context.
+- Message frame: expanding into Canada or the U.S. is a structured process, not a leap of faith —
+  Ubik 360 provides the go-to-market plan, the local presence, and the localization that makes
+  the move work.
+- Proof to lead with: the same standard — process, outcomes, case examples — not personal
+  biography, even though the cross-border credibility is part of what makes the guidance
+  trustworthy; keep that credibility implicit in the quality of the process, not stated as a
+  personal résumé claim.
 
 ---
 

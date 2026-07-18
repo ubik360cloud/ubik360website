@@ -109,9 +109,18 @@ bubble and talks to a separate backend: `https://ubik360-bot-production.up.railw
   (`linkedin.com/in/jose-villegas-marketing-manager`).
 
 ## Hosting / deployment
-Target: **Vercel**, git-push deploys from this repo (decided — see MARKETING.md). Not yet
-connected/deployed as of this writing. The site was previously on Hostinger via manual file
-upload — that workflow is being retired, not run in parallel.
+**Deployed 2026-07** to Vercel: https://ubik360.vercel.app (Vercel project `ubik360`, org
+`ubik360clouds-projects`). Not the real `ubik360.com` domain yet — that DNS cutover from Hostinger
+is a separate, later step once content is fully approved. GitHub repo is connected, so `git push`
+redeploys automatically.
+
+**Check in the Vercel dashboard (Settings → Git):** confirm the *Production Branch* is set to
+`astro-migration`, not `main` — `main` still holds the old legacy static HTML (no Astro build),
+so if Vercel tries to build it as production, that will fail or serve the wrong site. This wasn't
+set via CLI when the project was created; verify/set it once in the dashboard.
+
+The site was previously on Hostinger via manual file upload — that workflow is retired, not run
+in parallel.
 
 ## Known gaps / things to watch
 - `public/assets/images/` has a few files with spaces in filenames (`profile pick black tie.png`,

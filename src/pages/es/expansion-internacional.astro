@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import RouteMotif from '../../components/RouteMotif.astro';
 // Main/only ES service page per MARKETING.md. Keeps only the Colombia->US/CA
 // direction (drops US/CA->Colombia + nearshoring -- those are en/international-
 // expansion.html and en/nearshore-staffing.html's jobs). Absorbs the old
@@ -50,8 +51,9 @@ const faqSchema = {
   structuredData={faqSchema}
 >
   <!-- HERO -->
-  <section style="background:#fff; padding:5rem 0 4rem;">
-    <div class="max-w-3xl mx-auto px-6">
+  <section style="position:relative; overflow:hidden; background:linear-gradient(180deg, #fff 0%, #fdfcfb 100%); padding:5rem 0 4rem;">
+    <RouteMotif align="right" variant="light" class="hidden lg:block" />
+    <div class="max-w-3xl mx-auto px-6" style="position:relative; z-index:1;">
       <span class="section-tag mb-4">Expansión Internacional</span>
       <h1 class="text-4xl lg:text-5xl leading-tight mb-5" style="color:var(--black);">
         Expandirse a EE.UU. o Canadá no es un trámite. Es un proceso.

@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import RouteMotif from '../../components/RouteMotif.astro';
 // New page per MARKETING.md -- pulled out of the old international-expansion.html's
 // buried "Nearshore Staffing" + "Supplier & 3PL Selection" sections. Reuses the
 // existing "Administrative Scale-Up" lead magnet asset (public/assets/downloads/),
@@ -45,8 +46,9 @@ const faqSchema = {
   structuredData={faqSchema}
 >
   <!-- HERO -->
-  <section style="background:#fff; padding:5rem 0 4rem;">
-    <div class="max-w-3xl mx-auto px-6">
+  <section style="position:relative; overflow:hidden; background:linear-gradient(180deg, #fff 0%, #fdfcfb 100%); padding:5rem 0 4rem;">
+    <RouteMotif align="right" variant="light" class="hidden lg:block" />
+    <div class="max-w-3xl mx-auto px-6" style="position:relative; z-index:1;">
       <span class="section-tag mb-4">Nearshore Staffing &amp; Sourcing</span>
       <h1 class="text-4xl lg:text-5xl leading-tight mb-5" style="color:var(--black);">
         Local hiring is slow, expensive, and hard to retain. There's a better way to staff up.

@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import RouteMotif from '../../components/RouteMotif.astro';
 // Homepage copy per MARKETING.md "Homepage Copy -- Draft". EN is the NA-primary
 // version (leads with the North America section); es/index.astro is the
 // LatAm-primary version -- not a translation of this, its own pass.
@@ -28,8 +29,9 @@ const orgSchema = {
   structuredData={orgSchema}
 >
   <!-- HERO -->
-  <section style="background:#fff; padding:6rem 0 4rem;">
-    <div class="max-w-4xl mx-auto px-6 text-center">
+  <section style="position:relative; overflow:hidden; background:linear-gradient(180deg, #fff 0%, #fdfcfb 100%); padding:6rem 0 4rem;">
+    <RouteMotif align="right" variant="light" class="hidden md:block" />
+    <div class="max-w-4xl mx-auto px-6 text-center" style="position:relative; z-index:1;">
       <h1 class="text-4xl lg:text-5xl leading-tight mb-5" style="color:var(--black);">
         Marketing that performs. Expansion that works.<br />
         <em style="color:var(--red); font-style:italic;">On both sides of the border.</em>
@@ -44,6 +46,7 @@ const orgSchema = {
         <a href="#latam" class="btn-outline">For Latin America</a>
       </div>
     </div>
+    <div style="height:2px; background:linear-gradient(to right, transparent, var(--oak), transparent); margin-top:4rem; position:relative; z-index:1;"></div>
   </section>
 
   <!-- INTRO -->

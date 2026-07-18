@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import RouteMotif from '../../components/RouteMotif.astro';
 // Narrowed scope per MARKETING.md -- drops the Colombia->US/CA direction
 // (that's es/expansion-internacional.html's job) and the nearshoring
 // section (moved to its own en/nearshore-staffing.html). Keeps only: NA
@@ -45,8 +46,9 @@ const faqSchema = {
   structuredData={faqSchema}
 >
   <!-- HERO -->
-  <section style="background:#fff; padding:5rem 0 4rem;">
-    <div class="max-w-3xl mx-auto px-6">
+  <section style="position:relative; overflow:hidden; background:linear-gradient(180deg, #fff 0%, #fdfcfb 100%); padding:5rem 0 4rem;">
+    <RouteMotif align="right" variant="light" class="hidden lg:block" />
+    <div class="max-w-3xl mx-auto px-6" style="position:relative; z-index:1;">
       <span class="section-tag mb-4">Expand Into Colombia</span>
       <h1 class="text-4xl lg:text-5xl leading-tight mb-5" style="color:var(--black);">
         Colombia is one of Latin America's fastest-growing markets. Entering without local

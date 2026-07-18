@@ -1,0 +1,45 @@
+---
+// Signature visual motif: three points connected by curved routes, standing
+// in for Colombia/US/Canada without attempting a literal (hard-to-get-right)
+// map illustration. Used as a low-opacity background layer behind hero text.
+// See MARKETING.md/design notes: nobody else is positioned as "same partner,
+// both sides of the border" -- this motif reinforces that visually.
+interface Props {
+  /** Which side of the section to anchor to. */
+  align?: 'left' | 'right' | 'center';
+  /** Lighter variant for dark section backgrounds. */
+  variant?: 'light' | 'dark';
+  class?: string;
+}
+const { align = 'right', variant = 'light', class: className = '' } = Astro.props;
+
+const stroke = variant === 'dark' ? '#CEC5B5' : '#931F1D';
+const dot = variant === 'dark' ? '#CEC5B5' : '#659157';
+const opacity = variant === 'dark' ? 0.35 : 0.16;
+
+const posClass =
+  align === 'left' ? 'left-0' : align === 'center' ? 'left-1/2 -translate-x-1/2' : 'right-0';
+---
+
+<svg
+  class={`pointer-events-none absolute top-0 ${posClass} h-full w-auto ${className}`}
+  style={`opacity:${opacity}`}
+  viewBox="0 0 520 520"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+  aria-hidden="true"
+>
+  <!-- Three anchor points: Colombia (bottom-left), US (top-center), Canada (top-right) -->
+  <path d="M120 400 Q 220 260 260 150" stroke={stroke} stroke-width="1.5" stroke-dasharray="2 8" stroke-linecap="round" />
+  <path d="M260 150 Q 320 90 400 70" stroke={stroke} stroke-width="1.5" stroke-dasharray="2 8" stroke-linecap="round" />
+  <path d="M120 400 Q 260 340 400 70" stroke={stroke} stroke-width="1" stroke-dasharray="1 10" stroke-linecap="round" opacity="0.6" />
+
+  <circle cx="120" cy="400" r="5" fill={dot} />
+  <circle cx="120" cy="400" r="10" stroke={dot} stroke-width="1" opacity="0.5" />
+
+  <circle cx="260" cy="150" r="5" fill={dot} />
+  <circle cx="260" cy="150" r="10" stroke={dot} stroke-width="1" opacity="0.5" />
+
+  <circle cx="400" cy="70" r="5" fill={dot} />
+  <circle cx="400" cy="70" r="10" stroke={dot} stroke-width="1" opacity="0.5" />
+</svg>

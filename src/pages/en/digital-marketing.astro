@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import RouteMotif from '../../components/RouteMotif.astro';
 // Rewritten per MARKETING.md: general growth marketing/fractional CMO for
 // any NA business (not Hispanic-market-specific -- that was the old
 // framing). Auto-dealerships are the flagship proof vertical, not a gate on
@@ -55,8 +56,9 @@ const faqSchema = {
   structuredData={faqSchema}
 >
   <!-- HERO -->
-  <section style="background:#fff; padding:5rem 0 4rem;">
-    <div class="max-w-3xl mx-auto px-6">
+  <section style="position:relative; overflow:hidden; background:linear-gradient(180deg, #fff 0%, #fdfcfb 100%); padding:5rem 0 4rem;">
+    <RouteMotif align="right" variant="light" class="hidden lg:block" />
+    <div class="max-w-3xl mx-auto px-6" style="position:relative; z-index:1;">
       <span class="section-tag mb-4">Growth Marketing &amp; Fractional CMO</span>
       <h1 class="text-4xl lg:text-5xl leading-tight mb-5" style="color:var(--black);">
         Marketing spend that isn't producing pipeline is a cost, not an investment.

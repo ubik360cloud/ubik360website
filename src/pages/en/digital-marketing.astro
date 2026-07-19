@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import RouteMotif from '../../components/RouteMotif.astro';
+import PlaceholderImage from '../../components/PlaceholderImage.astro';
 // Rewritten per MARKETING.md: general growth marketing/fractional CMO for
 // any NA business (not Hispanic-market-specific -- that was the old
 // framing). Auto-dealerships are the flagship proof vertical, not a gate on
@@ -95,7 +96,7 @@ const faqSchema = {
   </section>
 
   <!-- SERVICES -->
-  <section style="background:#fff; padding:5rem 0;">
+  <section style="background:#fff; padding:6rem 0;">
     <div class="max-w-6xl mx-auto px-6">
       <div class="max-w-2xl mb-12">
         <span class="section-tag mb-3">What's Included</span>
@@ -134,25 +135,34 @@ const faqSchema = {
   </section>
 
   <!-- PROOF -->
-  <section style="background:#f9fafb; padding:5rem 0;">
-    <div class="max-w-4xl mx-auto px-6">
-      <span class="section-tag mb-3">Proven Experience</span>
-      <h2 class="text-3xl lg:text-4xl mb-6" style="color:var(--black);">Where the method comes from.</h2>
-      <p style="font-size:1.0625rem; color:#4b5563; line-height:1.85; margin-bottom:1rem;">
-        A large share of Ubik 360's hands-on marketing experience is with auto dealership groups —
-        a competitive, high-volume environment where wasted spend shows up fast. The same
-        discipline applies regardless of industry: audit the funnel, find where potential
-        customers actually drop off, fix that first, then scale what's working.
-      </p>
-      <p style="font-size:1.0625rem; color:#4b5563; line-height:1.85;">
-        That method doesn't change by vertical. If your business has a real pipeline — leads,
-        appointments, transactions — the same process applies.
-      </p>
+  <section style="background:#f9fafb; padding:6rem 0;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
+        <div>
+          <span class="section-tag mb-3">Proven Experience</span>
+          <h2 class="text-3xl lg:text-4xl mb-6" style="color:var(--black);">Where the method comes from.</h2>
+          <p style="font-size:1.0625rem; color:#4b5563; line-height:1.85; margin-bottom:1rem;">
+            A large share of Ubik 360's hands-on marketing experience is with auto dealership
+            groups — a competitive, high-volume environment where wasted spend shows up fast. The
+            same discipline applies regardless of industry: audit the funnel, find where potential
+            customers actually drop off, fix that first, then scale what's working.
+          </p>
+          <p style="font-size:1.0625rem; color:#4b5563; line-height:1.85;">
+            That method doesn't change by vertical. If your business has a real pipeline — leads,
+            appointments, transactions — the same process applies.
+          </p>
+        </div>
+        <PlaceholderImage
+          filename="shot-03-in-conversation.jpg"
+          description="On a call / in conversation — reviewing something with someone just out of frame. Landscape."
+          ratio="landscape"
+        />
+      </div>
     </div>
   </section>
 
   <!-- HOW IT WORKS -->
-  <section id="how-it-works" style="background:var(--black); padding:5rem 0;">
+  <section id="how-it-works" style="background:var(--black); padding:6rem 0;">
     <div class="max-w-6xl mx-auto px-6">
       <div class="max-w-xl mb-12">
         <span class="section-tag mb-3" style="color:var(--oak);">The Process</span>
@@ -192,7 +202,7 @@ const faqSchema = {
   </section>
 
   <!-- FAQ -->
-  <section style="background:#fff; padding:5rem 0;">
+  <section style="background:#fff; padding:6rem 0;">
     <div class="max-w-3xl mx-auto px-6">
       <div class="text-center mb-12">
         <span class="section-tag mb-3">FAQ</span>
@@ -232,7 +242,7 @@ const faqSchema = {
   </section>
 
   <!-- FINAL CTA -->
-  <section style="background:var(--oak); padding:5rem 0;">
+  <section style="background:var(--oak); padding:6rem 0;">
     <div class="max-w-3xl mx-auto px-6 text-center">
       <span class="section-tag mb-4" style="color:var(--red);">Next Step</span>
       <h2 class="text-3xl lg:text-4xl mb-5" style="color:var(--black);">Ready to fix the funnel?</h2>

@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import RouteMotif from '../../components/RouteMotif.astro';
+import PlaceholderImage from '../../components/PlaceholderImage.astro';
 // New page per MARKETING.md -- pulled out of the old international-expansion.html's
 // buried "Nearshore Staffing" + "Supplier & 3PL Selection" sections. Reuses the
 // existing "Administrative Scale-Up" lead magnet asset (public/assets/downloads/),
@@ -86,7 +87,7 @@ const faqSchema = {
   </section>
 
   <!-- ROLES -->
-  <section style="background:#fff; padding:5rem 0;">
+  <section style="background:#fff; padding:6rem 0;">
     <div class="max-w-6xl mx-auto px-6">
       <div class="max-w-2xl mb-12">
         <span class="section-tag mb-3">Roles We Staff</span>
@@ -114,22 +115,29 @@ const faqSchema = {
   </section>
 
   <!-- SOURCING -->
-  <section id="sourcing" style="background:var(--oak); padding:5rem 0;">
+  <section id="sourcing" style="background:var(--oak); padding:6rem 0;">
     <div class="max-w-6xl mx-auto px-6">
-      <div class="max-w-2xl">
-        <span class="section-tag mb-3" style="color:var(--red);">Also Available</span>
-        <h2 class="text-3xl lg:text-4xl mb-4" style="color:var(--black);">LatAm Vendor &amp; Manufacturing Sourcing</h2>
-        <p style="font-size:1.0625rem; color:#3d3d3d; line-height:1.8;">
-          Identifying, vetting, and negotiating with logistics and manufacturing providers in
-          Colombia and the wider region — support expansion of your supply chain without an
-          on-the-ground team of your own.
-        </p>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
+        <div>
+          <span class="section-tag mb-3" style="color:var(--red);">Also Available</span>
+          <h2 class="text-3xl lg:text-4xl mb-4" style="color:var(--black);">LatAm Vendor &amp; Manufacturing Sourcing</h2>
+          <p style="font-size:1.0625rem; color:#3d3d3d; line-height:1.8;">
+            Identifying, vetting, and negotiating with logistics and manufacturing providers in
+            Colombia and the wider region — support expansion of your supply chain without an
+            on-the-ground team of your own.
+          </p>
+        </div>
+        <PlaceholderImage
+          filename="shot-07-hands-detail.jpg"
+          description="Hands / detail — writing, typing, or gesturing mid-conversation. No face needed. Landscape."
+          ratio="landscape"
+        />
       </div>
     </div>
   </section>
 
   <!-- HOW IT WORKS -->
-  <section style="background:#fff; padding:5rem 0;">
+  <section style="background:#fff; padding:6rem 0;">
     <div class="max-w-6xl mx-auto px-6">
       <div class="max-w-xl mb-12">
         <span class="section-tag mb-3">The Process</span>
@@ -169,7 +177,7 @@ const faqSchema = {
   </section>
 
   <!-- LEAD MAGNET + FORM -->
-  <section id="form" style="background:var(--black); padding:5rem 0;">
+  <section id="form" style="background:var(--black); padding:6rem 0;">
     <div class="max-w-6xl mx-auto px-6">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 items-start">
         <div>
@@ -219,7 +227,7 @@ const faqSchema = {
   </section>
 
   <!-- FAQ -->
-  <section style="background:#fff; padding:5rem 0;">
+  <section style="background:#fff; padding:6rem 0;">
     <div class="max-w-3xl mx-auto px-6">
       <div class="text-center mb-12">
         <span class="section-tag mb-3">FAQ</span>
@@ -252,7 +260,7 @@ const faqSchema = {
   </section>
 
   <!-- FINAL CTA -->
-  <section style="background:var(--oak); padding:5rem 0;">
+  <section style="background:var(--oak); padding:6rem 0;">
     <div class="max-w-3xl mx-auto px-6 text-center">
       <span class="section-tag mb-4" style="color:var(--red);">Next Step</span>
       <h2 class="text-3xl lg:text-4xl mb-5" style="color:var(--black);">Ready to lower operating cost?</h2>

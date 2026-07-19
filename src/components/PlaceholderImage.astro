@@ -1,0 +1,52 @@
+---
+// Smart image slot: checks the filesystem at build time. If a real file
+// named `filename` exists in public/assets/images/photos/, renders it.
+// Otherwise renders a labeled placeholder so the gap is obvious and tells
+// Jose exactly what shot + filename belongs there (matches the numbered
+// shot list in the photo brief). Drop in a correctly-named file and
+// rebuild/redeploy -- no code changes needed, the placeholder just
+// disappears and the real photo takes its place.
+import fs from 'node:fs';
+import path from 'node:path';
+
+interface Props {
+  /** Exact filename expected, e.g. "shot-01-desk-work.jpg" -- must match the photo brief. */
+  filename: string;
+  /** What this shot is / where it's used -- shown in the placeholder. */
+  description: string;
+  ratio?: 'landscape' | 'portrait' | 'square';
+  rounded?: 'xl' | 'full';
+  class?: string;
+}
+const { filename, description, ratio = 'landscape', rounded = 'xl', class: className = '' } = Astro.props;
+
+const publicPath = path.resolve('public/assets/images/photos', filename);
+const exists = fs.existsSync(publicPath);
+const src = `/assets/images/photos/${filename}`;
+
+const ratioClass =
+  ratio === 'portrait' ? 'aspect-[3/4]' : ratio === 'square' ? 'aspect-square' : 'aspect-[4/3]';
+const roundedClass = rounded === 'full' ? 'rounded-full' : 'rounded-xl';
+---
+
+{exists ? (
+  <img
+    src={src}
+    alt={description}
+    class={`${ratioClass} ${roundedClass} w-full object-cover ${className}`}
+    loading="lazy"
+  />
+) : (
+  <div
+    class={`${ratioClass} ${roundedClass} w-full flex flex-col items-center justify-center text-center p-6 ${className}`}
+    style="background:repeating-linear-gradient(135deg, rgba(206,197,181,.4) 0 10px, rgba(206,197,181,.22) 10px 20px); border:1.5px dashed rgba(147,31,29,.4);"
+  >
+    <span style="font-size:1.375rem; margin-bottom:.5rem; opacity:.6;">📷</span>
+    <p style="font-family:monospace; font-size:.6875rem; font-weight:700; color:var(--red); margin:0 0 .375rem; letter-spacing:.02em; word-break:break-all;">
+      {filename}
+    </p>
+    <p style="font-size:.75rem; color:#6b6459; margin:0; max-width:15rem; line-height:1.5;">
+      {description}
+    </p>
+  </div>
+)}

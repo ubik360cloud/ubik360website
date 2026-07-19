@@ -1,6 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import RouteMotif from '../../components/RouteMotif.astro';
+import PlaceholderImage from '../../components/PlaceholderImage.astro';
 // Homepage copy per MARKETING.md "Homepage Copy -- Draft". EN is the NA-primary
 // version (leads with the North America section); es/index.astro is the
 // LatAm-primary version -- not a translation of this, its own pass.
@@ -29,24 +29,31 @@ const orgSchema = {
   structuredData={orgSchema}
 >
   <!-- HERO -->
-  <section style="position:relative; overflow:hidden; background:linear-gradient(180deg, #fff 0%, #fdfcfb 100%); padding:6rem 0 4rem;">
-    <RouteMotif align="right" variant="light" class="hidden md:block" />
-    <div class="max-w-4xl mx-auto px-6 text-center" style="position:relative; z-index:1;">
-      <h1 class="text-4xl lg:text-5xl leading-tight mb-5" style="color:var(--black);">
-        Marketing that performs. Expansion that works.<br />
-        <em style="color:var(--red); font-style:italic;">On both sides of the border.</em>
-      </h1>
-      <p class="text-xl leading-relaxed mb-8 mx-auto" style="color:#4b5563; max-width:40rem;">
-        Fractional marketing leadership and Latin America staff augmentation for North American
-        businesses. Go-to-market strategy and market entry for Latin American businesses
-        expanding into Canada and the U.S.
-      </p>
-      <div class="flex flex-col sm:flex-row justify-center gap-3">
-        <a href="#north-america" class="btn-primary">For North America</a>
-        <a href="#latam" class="btn-outline">For Latin America</a>
+  <section style="background:#fff; padding:7rem 0 5rem;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
+        <div>
+          <h1 class="text-4xl lg:text-5xl leading-tight mb-6" style="color:var(--black);">
+            Marketing that performs.<br />
+            <em style="color:var(--red); font-style:italic;">Expansion that works.</em>
+          </h1>
+          <p class="text-lg leading-relaxed mb-9" style="color:#4b5563; max-width:32rem;">
+            Fractional marketing leadership and Latin America staff augmentation for North
+            American businesses. Go-to-market strategy and market entry for Latin American
+            businesses expanding into Canada and the U.S.
+          </p>
+          <div class="flex flex-col sm:flex-row gap-3">
+            <a href="#north-america" class="btn-primary">For North America</a>
+            <a href="#latam" class="btn-outline">For Latin America</a>
+          </div>
+        </div>
+        <PlaceholderImage
+          filename="shot-01-desk-work.jpg"
+          description="At the desk, working — laptop open, looking at the screen, natural side light. Landscape."
+          ratio="landscape"
+        />
       </div>
     </div>
-    <div style="height:2px; background:linear-gradient(to right, transparent, var(--oak), transparent); margin-top:4rem; position:relative; z-index:1;"></div>
   </section>
 
   <!-- INTRO -->
@@ -63,7 +70,7 @@ const orgSchema = {
   </section>
 
   <!-- NORTH AMERICA -->
-  <section id="north-america" style="background:#fff; padding:5rem 0;">
+  <section id="north-america" style="background:#fff; padding:6rem 0;">
     <div class="max-w-6xl mx-auto px-6">
       <div class="max-w-2xl mb-10">
         <span class="section-tag mb-3">For North America</span>
@@ -109,7 +116,7 @@ const orgSchema = {
   </section>
 
   <!-- LATAM -->
-  <section id="latam" style="background:var(--oak); padding:5rem 0;">
+  <section id="latam" style="background:var(--oak); padding:6rem 0;">
     <div class="max-w-6xl mx-auto px-6">
       <div class="max-w-2xl mb-10">
         <span class="section-tag mb-3" style="color:var(--red);">For Latin America &amp; Bilingual Markets</span>
@@ -145,7 +152,7 @@ const orgSchema = {
   </section>
 
   <!-- WHY UBIK 360 -->
-  <section style="background:var(--black); padding:5rem 0;">
+  <section style="background:var(--black); padding:6rem 0;">
     <div class="max-w-6xl mx-auto px-6">
       <div class="max-w-xl mb-12">
         <span class="section-tag mb-3" style="color:var(--oak);">Why Ubik 360</span>
@@ -173,7 +180,7 @@ const orgSchema = {
   </section>
 
   <!-- FINAL CTA -->
-  <section style="background:#fff; padding:5rem 0;">
+  <section style="background:#fff; padding:6rem 0;">
     <div class="max-w-3xl mx-auto px-6 text-center">
       <span class="section-tag mb-4">Take the First Step</span>
       <h2 class="text-3xl lg:text-4xl mb-5" style="color:var(--black);">Ready to move?</h2>

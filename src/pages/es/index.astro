@@ -1,6 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import RouteMotif from '../../components/RouteMotif.astro';
+import PlaceholderImage from '../../components/PlaceholderImage.astro';
 // LatAm-primary homepage per MARKETING.md -- leads with the LatAm section
 // (Colombia/LatAm business expanding to Canada/US), NA section is secondary
 // and points to /en/ for the full English experience. NOT a translation of
@@ -30,23 +30,31 @@ const orgSchema = {
   structuredData={orgSchema}
 >
   <!-- HERO -->
-  <section style="position:relative; overflow:hidden; background:linear-gradient(180deg, #fff 0%, #fdfcfb 100%); padding:6rem 0 4rem;">
-    <RouteMotif align="left" variant="light" class="hidden md:block" />
-    <div class="max-w-4xl mx-auto px-6 text-center" style="position:relative; z-index:1;">
-      <h1 class="text-4xl lg:text-5xl leading-tight mb-5" style="color:var(--black);">
-        Tu expansión a Canadá y EE.UU.,<br />
-        <em style="color:var(--red); font-style:italic;">con un proceso estructurado de principio a fin.</em>
-      </h1>
-      <p class="text-xl leading-relaxed mb-8 mx-auto" style="color:#4b5563; max-width:40rem;">
-        Entrada a mercado, localización y soporte operativo para empresas listas para invertir en
-        su crecimiento internacional — no solo trámites de incorporación.
-      </p>
-      <div class="flex flex-col sm:flex-row justify-center gap-3">
-        <a href="#latam" class="btn-primary">Expansión a Norteamérica</a>
-        <a href="#norteamerica" class="btn-outline">Servicios para Norteamérica</a>
+  <section style="background:#fff; padding:7rem 0 5rem;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
+        <PlaceholderImage
+          filename="shot-05-walking-canada.jpg"
+          description="Walking, Canada — street/plaza in London, Ontario. Look off-camera, golden hour if possible. Landscape."
+          ratio="landscape"
+          class="lg:order-2"
+        />
+        <div class="lg:order-1">
+          <h1 class="text-4xl lg:text-5xl leading-tight mb-6" style="color:var(--black);">
+            Tu expansión a Canadá y EE.UU.,<br />
+            <em style="color:var(--red); font-style:italic;">con un proceso estructurado.</em>
+          </h1>
+          <p class="text-lg leading-relaxed mb-9" style="color:#4b5563; max-width:32rem;">
+            Entrada a mercado, localización y soporte operativo para empresas listas para invertir
+            en su crecimiento internacional — no solo trámites de incorporación.
+          </p>
+          <div class="flex flex-col sm:flex-row gap-3">
+            <a href="#latam" class="btn-primary">Expansión a Norteamérica</a>
+            <a href="#norteamerica" class="btn-outline">Servicios para Norteamérica</a>
+          </div>
+        </div>
       </div>
     </div>
-    <div style="height:2px; background:linear-gradient(to right, transparent, var(--oak), transparent); margin-top:4rem; position:relative; z-index:1;"></div>
   </section>
 
   <!-- INTRO -->
@@ -64,7 +72,7 @@ const orgSchema = {
   </section>
 
   <!-- LATAM (PRIMARY) -->
-  <section id="latam" style="background:#fff; padding:5rem 0;">
+  <section id="latam" style="background:#fff; padding:6rem 0;">
     <div class="max-w-6xl mx-auto px-6">
       <div class="max-w-2xl mb-10">
         <span class="section-tag mb-3">Para LatAm y Mercados Bilingües</span>
@@ -101,7 +109,7 @@ const orgSchema = {
   </section>
 
   <!-- NORTEAMÉRICA (SECONDARY) -->
-  <section id="norteamerica" style="background:var(--oak); padding:5rem 0;">
+  <section id="norteamerica" style="background:var(--oak); padding:6rem 0;">
     <div class="max-w-6xl mx-auto px-6">
       <div class="max-w-2xl mb-10">
         <span class="section-tag mb-3" style="color:var(--red);">Para Norteamérica</span>
@@ -117,7 +125,7 @@ const orgSchema = {
   </section>
 
   <!-- WHY UBIK 360 -->
-  <section style="background:var(--black); padding:5rem 0;">
+  <section style="background:var(--black); padding:6rem 0;">
     <div class="max-w-6xl mx-auto px-6">
       <div class="max-w-xl mb-12">
         <span class="section-tag mb-3" style="color:var(--oak);">Por Qué Ubik 360</span>
@@ -145,7 +153,7 @@ const orgSchema = {
   </section>
 
   <!-- FINAL CTA -->
-  <section style="background:#fff; padding:5rem 0;">
+  <section style="background:#fff; padding:6rem 0;">
     <div class="max-w-3xl mx-auto px-6 text-center">
       <span class="section-tag mb-4">Da el Primer Paso</span>
       <h2 class="text-3xl lg:text-4xl mb-5" style="color:var(--black);">¿Listo para dar el siguiente paso?</h2>

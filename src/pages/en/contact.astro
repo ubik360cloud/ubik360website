@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import PlaceholderImage from '../../components/PlaceholderImage.astro';
 // Fixed a live bug while porting: the legacy page linked a fake placeholder
 // WhatsApp number (wa.me/15551234567 -- a 555 number, never real). The real
 // number (+1-226-503-0456) appears elsewhere on the live site
@@ -16,6 +17,14 @@ import Layout from '../../layouts/Layout.astro';
   <!-- HERO -->
   <section style="background:#fff; padding:6rem 0 4rem;">
     <div class="max-w-3xl mx-auto px-6 text-center">
+      <div class="mx-auto mb-6" style="width:5.5rem;">
+        <PlaceholderImage
+          filename="shot-06-portrait-plain.jpg"
+          description="Clean portrait, plain background — straight-on, even light. Square crop."
+          ratio="square"
+          rounded="full"
+        />
+      </div>
       <span class="section-tag mb-4" style="display:block;">Contact</span>
       <h1 style="font-size:clamp(2.25rem,5vw,3.25rem); line-height:1.15; color:var(--black); margin:0 0 1.25rem;">
         Let's talk about<br />your business
@@ -50,7 +59,7 @@ import Layout from '../../layouts/Layout.astro';
   </section>
 
   <!-- CONTACT FORM -->
-  <section id="form" style="background:#fff; padding:5rem 0;">
+  <section id="form" style="background:#fff; padding:6rem 0;">
     <div class="max-w-2xl mx-auto px-6">
       <div class="text-center" style="margin-bottom:3rem;">
         <span class="section-tag mb-3" style="display:block;">Send a Message</span>

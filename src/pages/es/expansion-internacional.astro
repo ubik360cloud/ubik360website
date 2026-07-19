@@ -1,6 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import RouteMotif from '../../components/RouteMotif.astro';
+import PlaceholderImage from '../../components/PlaceholderImage.astro';
 // Main/only ES service page per MARKETING.md. Keeps only the Colombia->US/CA
 // direction (drops US/CA->Colombia + nearshoring -- those are en/international-
 // expansion.html and en/nearshore-staffing.html's jobs). Absorbs the old
@@ -51,24 +51,33 @@ const faqSchema = {
   structuredData={faqSchema}
 >
   <!-- HERO -->
-  <section style="position:relative; overflow:hidden; background:linear-gradient(180deg, #fff 0%, #fdfcfb 100%); padding:5rem 0 4rem;">
-    <RouteMotif align="right" variant="light" class="hidden lg:block" />
-    <div class="max-w-3xl mx-auto px-6" style="position:relative; z-index:1;">
-      <span class="section-tag mb-4">Expansión Internacional</span>
-      <h1 class="text-4xl lg:text-5xl leading-tight mb-5" style="color:var(--black);">
-        Expandirse a EE.UU. o Canadá no es un trámite. Es un proceso.
-      </h1>
-      <p class="text-xl leading-relaxed mb-8" style="color:#4b5563;">
-        Incorporación, agente registrado y banca son el punto de partida — el trabajo real está en
-        el mercado, la operación y el marketing una vez que estás dentro. Ubik 360 acompaña el
-        camino completo, para empresas listas para invertir en su crecimiento internacional.
-      </p>
-      <a href="https://calendly.com/jose-ubik360/30min" target="_blank" rel="noopener" class="btn-primary">Agenda tu Consulta de Expansión</a>
+  <section style="background:#fff; padding:6rem 0 5rem;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
+        <div>
+          <span class="section-tag mb-4">Expansión Internacional</span>
+          <h1 class="text-4xl lg:text-5xl leading-tight mb-5" style="color:var(--black);">
+            Expandirse a EE.UU. o Canadá no es un trámite. Es un proceso.
+          </h1>
+          <p class="text-lg leading-relaxed mb-8" style="color:#4b5563;">
+            Incorporación, agente registrado y banca son el punto de partida — el trabajo real
+            está en el mercado, la operación y el marketing una vez que estás dentro. Ubik 360
+            acompaña el camino completo, para empresas listas para invertir en su crecimiento
+            internacional.
+          </p>
+          <a href="https://calendly.com/jose-ubik360/30min" target="_blank" rel="noopener" class="btn-primary">Agenda tu Consulta de Expansión</a>
+        </div>
+        <PlaceholderImage
+          filename="shot-05-walking-canada.jpg"
+          description="Walking, Canada — street/plaza in London, Ontario. Look off-camera, golden hour if possible. Landscape."
+          ratio="landscape"
+        />
+      </div>
     </div>
   </section>
 
   <!-- ENTITY FORMATION -->
-  <section style="background:#fff; padding:5rem 0;">
+  <section style="background:#fff; padding:6rem 0;">
     <div class="max-w-6xl mx-auto px-6">
       <div class="max-w-2xl mb-10">
         <span class="section-tag mb-3">Incorporación y Presencia Legal</span>
@@ -96,7 +105,7 @@ const faqSchema = {
   </section>
 
   <!-- MARKETING EN TU NUEVO MERCADO -->
-  <section id="marketing-en-tu-nuevo-mercado" style="background:var(--oak); padding:5rem 0;">
+  <section id="marketing-en-tu-nuevo-mercado" style="background:var(--oak); padding:6rem 0;">
     <div class="max-w-6xl mx-auto px-6">
       <div class="max-w-2xl mb-10">
         <span class="section-tag mb-3" style="color:var(--red);">Una Vez Adentro</span>
@@ -121,7 +130,7 @@ const faqSchema = {
   </section>
 
   <!-- FERIAS Y EVENTOS -->
-  <section style="background:#fff; padding:5rem 0;">
+  <section style="background:#fff; padding:6rem 0;">
     <div class="max-w-4xl mx-auto px-6">
       <span class="section-tag mb-3">También Incluido</span>
       <h2 class="text-3xl lg:text-4xl mb-6" style="color:var(--black);">Ferias Comerciales y Eventos</h2>
@@ -134,7 +143,7 @@ const faqSchema = {
   </section>
 
   <!-- CONCERNS -->
-  <section style="background:var(--oak); padding:5rem 0;">
+  <section style="background:var(--oak); padding:6rem 0;">
     <div class="max-w-4xl mx-auto px-6">
       <span class="section-tag mb-3" style="color:var(--red);">Dudas Comunes</span>
       <h2 class="text-3xl lg:text-4xl mb-8" style="color:var(--black);">Preguntas que vale la pena resolver antes.</h2>
@@ -156,7 +165,7 @@ const faqSchema = {
   </section>
 
   <!-- LEAD MAGNET + FORM -->
-  <section id="consulta" style="background:#fff; padding:5rem 0;">
+  <section id="consulta" style="background:#fff; padding:6rem 0;">
     <div class="max-w-6xl mx-auto px-6">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 items-start">
         <div>
@@ -194,7 +203,7 @@ const faqSchema = {
   </section>
 
   <!-- FAQ -->
-  <section style="background:#f9fafb; padding:5rem 0;">
+  <section style="background:#f9fafb; padding:6rem 0;">
     <div class="max-w-3xl mx-auto px-6">
       <div class="text-center mb-12">
         <span class="section-tag mb-3">Preguntas Frecuentes</span>
@@ -227,7 +236,7 @@ const faqSchema = {
   </section>
 
   <!-- FINAL CTA -->
-  <section style="background:var(--black); padding:5rem 0;">
+  <section style="background:var(--black); padding:6rem 0;">
     <div class="max-w-3xl mx-auto px-6 text-center">
       <span class="section-tag mb-4" style="color:var(--oak);">Da el Primer Paso</span>
       <h2 class="text-3xl lg:text-4xl mb-5" style="color:#fff;">¿Tu empresa está lista para expandirse?</h2>

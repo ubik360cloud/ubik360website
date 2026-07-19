@@ -111,16 +111,10 @@ bubble and talks to a separate backend: `https://ubik360-bot-production.up.railw
 ## Hosting / deployment
 **Deployed 2026-07** to Vercel: https://ubik360.vercel.app (Vercel project `ubik360`, org
 `ubik360clouds-projects`). Not the real `ubik360.com` domain yet — that DNS cutover from Hostinger
-is a separate, later step once content is fully approved. GitHub repo is connected.
-
-**⚠ Known gotcha (confirmed 2026-07, not yet fixed):** `git push` to `astro-migration` deploys
-successfully but lands as a **Preview** (protected/auth-walled URL), not Production — it does
-**not** update the `ubik360.vercel.app` alias. Root cause: the Vercel project's *Production
-Branch* setting (Settings → Git in the dashboard) is presumably still `main` (the repo's git
-default), not `astro-migration`, and this can't be changed via CLI. **Until that's fixed in the
-dashboard, the reliable way to update the live alias is a direct CLI deploy from the working
-directory:** `npx vercel --prod --yes` (run from repo root, on the `astro-migration` branch). A
-plain `git push` alone will NOT update what's visible at ubik360.vercel.app right now.
+is a separate, later step once content is fully approved. GitHub repo is connected, and the
+Production environment branch is set to `astro-migration` (Settings → Environments in the
+dashboard — **not** Settings → Git, which is where this lived in older Vercel versions and has
+no API equivalent). `git push` to this branch now deploys straight to the live alias.
 
 The site was previously on Hostinger via manual file upload — that workflow is retired, not run
 in parallel.

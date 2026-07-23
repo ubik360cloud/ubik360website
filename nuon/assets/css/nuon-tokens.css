@@ -1,0 +1,213 @@
+/* =========================================================================
+   NUON — Design tokens extracted from nuon.energy's own colors-and-type.css
+   Used ONLY on /nuon/ pages (Ubik 360's proposal + sample mockup for Nuon).
+   Do NOT reuse Ubik 360's own brand tokens (assets/css/main.css) in here —
+   this page presents Nuon's brand back to Nuon, not Ubik 360's.
+   ========================================================================= */
+
+:root {
+  /* Brand spectrum — cian (solar/luz) -> azul (infraestructura) -> indigo (IA) -> magenta (mercado) -> rosa (demanda/personas) */
+  --nuon-cian: #76D6FF;
+  --nuon-azul: #0096FF;
+  --nuon-indigo: #7A81FF;
+  --nuon-magenta: #D883FF;
+  --nuon-rosa: #FDBFE8;
+
+  --nuon-gradient: linear-gradient(90deg, #76D6FF 0%, #0096FF 22%, #7A81FF 55%, #D883FF 82%, #FDBFE8 100%);
+
+  /* Ink scale (cool blue-biased neutrals) */
+  --ink-0:   #FFFFFF;
+  --ink-50:  #EEF2F8;
+  --ink-100: #DDE5EF;
+  --ink-200: #B8C4D8;
+  --ink-300: #94A3BD;
+  --ink-400: #6B7A96;
+  --ink-600: #3D4E6B;
+  --ink-800: #1A2340;
+  --ink-900: #0D1428;
+
+  /* Blueprint dark background */
+  --blueprint-dark: #0D1B4B;
+  --blueprint-grid-dark: rgba(26, 46, 107, 0.4);
+  --blueprint-grid-light: rgba(216, 228, 240, 0.6);
+
+  /* Semantic */
+  --success: #12C4BB;
+  --warning: #F7B32B;
+
+  --brand-primary: var(--nuon-azul);
+  --brand-accent: var(--nuon-magenta);
+
+  --fg-1: var(--ink-800);
+  --fg-2: var(--ink-600);
+  --fg-3: var(--ink-400);
+
+  --font-display: "Bebas Neue", "Impact", sans-serif;
+  --font-sans: "Montserrat", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "IBM Plex Mono", "JetBrains Mono", "Menlo", monospace;
+
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-pill: 999px;
+
+  --shadow-card: 0 1px 2px rgba(13, 20, 40, 0.04), 0 8px 24px -12px rgba(13, 20, 40, 0.12);
+  --shadow-elevated: 0 12px 40px -12px rgba(13, 20, 40, 0.18);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-sans);
+  color: var(--fg-1);
+  margin: 0;
+  background: var(--ink-0);
+  -webkit-font-smoothing: antialiased;
+}
+img { display: block; max-width: 100%; }
+a { text-decoration: none; color: inherit; }
+
+h1, h2 {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  line-height: 1.05;
+  margin: 0;
+}
+h3, h4 { font-family: var(--font-sans); font-weight: 700; margin: 0; }
+
+.container { max-width: 60rem; margin: 0 auto; padding: 0 1.5rem; }
+
+.nuon-logo {
+  font-family: "Baloo 2", "Quicksand", var(--font-sans);
+  font-weight: 700;
+  font-size: 1.5rem;
+  background: var(--nuon-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  letter-spacing: -0.02em;
+}
+
+.overline {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 0.6875rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--brand-primary);
+}
+
+.t-mono {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  color: var(--ink-400);
+}
+
+.t-gradient {
+  background: var(--nuon-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Section surfaces — alternating light / dark, Nuon colors only */
+.section-light { background: var(--ink-0); color: var(--fg-1); }
+.section-panel { background: var(--ink-50); color: var(--fg-1); }
+.section-dark {
+  background-color: var(--blueprint-dark);
+  color: #ffffff;
+  background-image:
+    radial-gradient(ellipse 70% 50% at 50% 50%, rgba(122, 177, 255, 0.08), transparent 70%),
+    linear-gradient(var(--blueprint-grid-dark) 1px, transparent 1px),
+    linear-gradient(90deg, var(--blueprint-grid-dark) 1px, transparent 1px);
+  background-size: 100% 100%, 32px 32px, 32px 32px;
+}
+.section-dark h2, .section-dark h3, .section-dark h4 { color: #ffffff; }
+.section-dark .fg2 { color: rgba(255,255,255,0.78); }
+.section-dark .fg3 { color: rgba(184,196,216,0.65); }
+
+section { padding: 3.5rem 0; }
+@media (min-width: 768px) { section { padding: 5.5rem 0; } }
+
+/* Buttons */
+.btn {
+  display: inline-block;
+  padding: 0.875rem 1.75rem;
+  border-radius: var(--radius-pill);
+  font-weight: 700;
+  font-size: 0.9375rem;
+  text-align: center;
+  cursor: pointer;
+  transition: transform .15s, box-shadow .15s, background-color .15s;
+}
+.btn-primary { background: var(--brand-primary); color: #fff; }
+.btn-primary:hover { transform: translateY(-1px); box-shadow: var(--shadow-elevated); }
+.btn-light { background: #fff; color: var(--ink-900); }
+.btn-light:hover { transform: translateY(-1px); box-shadow: var(--shadow-elevated); }
+.btn-outline { border: 1.5px solid var(--ink-200); color: var(--fg-1); background: transparent; }
+.btn-outline:hover { border-color: var(--brand-primary); color: var(--brand-primary); }
+
+.card {
+  background: #fff;
+  border: 1px solid var(--ink-100);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem;
+  box-shadow: var(--shadow-card);
+}
+
+.tag-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  color: var(--brand-primary);
+  background: var(--ink-50);
+  border: 1px solid var(--ink-100);
+  border-radius: var(--radius-pill);
+  padding: 0.375rem 0.875rem;
+}
+
+table { width: 100%; border-collapse: collapse; font-size: 0.9375rem; }
+th, td { text-align: left; padding: 0.75rem 1rem; border-bottom: 1px solid var(--ink-100); }
+th { font-family: var(--font-mono); font-size: 0.6875rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-400); }
+
+.grid-2 { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+@media (min-width: 768px) { .grid-2 { grid-template-columns: 1fr 1fr; } }
+.grid-3 { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+@media (min-width: 768px) { .grid-3 { grid-template-columns: repeat(3, 1fr); } }
+
+.testi-row {
+  display: flex;
+  gap: 1.25rem;
+  overflow-x: auto;
+  padding: 1.5rem 0 .5rem;
+  margin-top: .5rem;
+}
+.testi-row .card { min-width: 16rem; flex-shrink: 0; }
+@media (min-width: 900px) {
+  .testi-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    overflow-x: visible;
+  }
+  .testi-row .card { min-width: 0; }
+}
+
+.disclaimer-banner {
+  background: var(--warning);
+  color: var(--ink-900);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  text-align: center;
+  padding: 0.625rem 1rem;
+}
+
+.co-brand-footer {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--ink-400);
+}

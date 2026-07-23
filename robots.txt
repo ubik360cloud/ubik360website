@@ -10,4 +10,7 @@ Disallow: /es/gracias-checklist.html
 # Block lead magnet files (HTML guides — not indexable content)
 Disallow: /assets/downloads/
 
+# Block confidential client proposal (Nuon) — not for public/search discovery
+Disallow: /nuon/
+
 Sitemap: https://ubik360.com/sitemap.xml

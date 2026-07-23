@@ -187,14 +187,14 @@ th { font-family: var(--font-mono); font-size: 0.6875rem; letter-spacing: 0.08em
   padding: 1.5rem 0 .5rem;
   margin-top: .5rem;
 }
-.testi-row .card { min-width: 16rem; flex-shrink: 0; }
+.testi-row .card { width: 16rem; flex: 0 0 16rem; }
 @media (min-width: 900px) {
   .testi-row {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     overflow-x: visible;
   }
-  .testi-row .card { min-width: 0; }
+  .testi-row .card { width: auto; flex: none; }
 }
 
 .disclaimer-banner {

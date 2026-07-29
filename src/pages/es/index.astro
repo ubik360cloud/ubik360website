@@ -1,24 +1,27 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import PlaceholderImage from '../../components/PlaceholderImage.astro';
-// LatAm-primary homepage per MARKETING.md -- leads with the LatAm section
-// (Colombia/LatAm business expanding to Canada/US), NA section is secondary
-// and points to /en/ for the full English experience. NOT a translation of
-// en/index.astro -- its own pass, LatAm-first ordering.
-// No alternatePath/hreflang: the EN and ES homepages are different offers to
-// different audiences, not translations -- see MARKETING.md.
+import PartnerLogos from '../../components/PartnerLogos.astro';
+// TEMPORARY TEST VARIANT (2026-07, Jose) -- see MARKETING.md "Anonymous/
+// bigger-company positioning test" for full context and revert plan.
 
 const orgSchema = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
-  name: 'Ubik 360',
+  name: 'Ubik 360 Enterprises',
   url: 'https://ubik360.com',
   logo: 'https://ubik360.com/assets/images/ubik360logo.png',
   description:
     'Estrategia de entrada a mercado y expansión estructurada hacia Canadá y Estados Unidos para empresas colombianas y latinoamericanas; liderazgo de marketing fraccional y aumento de personal en LatAm para empresas de Norteamérica.',
   areaServed: ['CO', 'US', 'CA'],
   knowsAbout: ['Expansión Internacional', 'Entrada a Mercado', 'Localización', 'Growth Marketing', 'Staff Augmentation'],
-  sameAs: ['https://www.linkedin.com/in/jose-villegas-marketing-manager/'],
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: '30 N Gould St Ste R',
+    addressLocality: 'Sheridan',
+    addressRegion: 'WY',
+    postalCode: '82801',
+    addressCountry: 'US',
+  },
 };
 ---
 
@@ -33,11 +36,11 @@ const orgSchema = {
   <section style="background:#fff; padding:7rem 0 5rem;">
     <div class="max-w-6xl mx-auto px-6">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
-        <PlaceholderImage
-          filename="shot-05-walking-canada.jpg"
-          description="Walking, Canada — street/plaza in London, Ontario. Look off-camera, golden hour if possible. Landscape."
-          ratio="landscape"
-          class="lg:order-2"
+        <img
+          src="/assets/images/stock/toronto-skyline-night.jpg"
+          alt="Toronto skyline"
+          class="w-full rounded-xl object-cover aspect-[4/3] lg:order-2"
+          loading="eager"
         />
         <div class="lg:order-1">
           <h1 class="text-4xl lg:text-5xl leading-tight mb-6" style="color:var(--black);">
@@ -71,6 +74,24 @@ const orgSchema = {
     </div>
   </section>
 
+  <!-- EQUIPO DE LIDERAZGO -->
+  <section style="background:#fff; padding:5rem 0;">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+      <span class="section-tag mb-3">Liderazgo</span>
+      <h2 class="text-3xl lg:text-4xl mb-6" style="color:var(--black);">Un equipo construido alrededor de cada proyecto.</h2>
+      <p style="font-size:1.0625rem; color:#4b5563; line-height:1.85;">
+        El liderazgo de Ubik 360 está compuesto por profesionales en marketing, ventas y
+        operaciones de negocio internacional. Nuestros colaboradores incluyen diseñadores UX/UI con
+        experiencia de producto en startups y empresas SaaS, un socio de growth marketing
+        especializado en pauta digital, y un economista especializado en investigación de mercado,
+        con dominio de inglés, español y francés y amplia experiencia en contratos gubernamentales
+        en Colombia.
+      </p>
+    </div>
+  </section>
+
+  <PartnerLogos lang="es" />
+
   <!-- LATAM (PRIMARY) -->
   <section id="latam" style="background:#fff; padding:6rem 0;">
     <div class="max-w-6xl mx-auto px-6">
@@ -78,7 +99,9 @@ const orgSchema = {
         <span class="section-tag mb-3">Para LatAm y Mercados Bilingües</span>
         <h2 class="text-3xl lg:text-4xl mb-4" style="color:var(--black);">Un camino estructurado hacia Canadá y EE.UU.</h2>
         <p class="text-lg leading-relaxed" style="color:#4b5563;">
-          Expandirse al norte no es solo papeleo. La incorporación y la banca te registran — la
+          Construido para empresas establecidas — más de US$5 millones en ingresos anuales — con
+          capacidad real de inversión en su expansión internacional. Expandirse al norte no es solo
+          papeleo. La incorporación y la banca te registran — la
           estrategia de entrada a mercado, el soporte operativo local y el marketing de entrada te
           ponen a operar de verdad. Ubik 360 gestiona el camino completo, no solo el primer paso
           legal.

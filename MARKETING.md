@@ -17,6 +17,64 @@ below at execution time, the same way the homepage/about drafts were produced.
 
 ---
 
+## Anonymous/bigger-company positioning test (2026-07, active — TEMPORARY)
+
+**Status: live on the `astro-migration` branch / Vercel preview, not the real domain.** This is a
+deliberate, time-boxed experiment layered on top of everything below — it does not replace the
+strategy, it tests a variant of it. Treat every file tagged
+`// TEMPORARY TEST VARIANT (2026-07, Jose)` as reverting to the José-named version once the test
+concludes.
+
+**What changed and why:** Jose incorporated as **Ubik 360 Enterprises** (Wyoming — 30 N Gould St
+Ste R, Sheridan, WY 82801) and wants to test whether the site reads as a larger, more established
+firm rather than a solo consultant — targeting businesses with **$5M+ in annual revenue** rather
+than the broader small-business range the core positioning above addresses. The hypothesis: at
+that deal size, buyers may trust an organization more readily than a named individual consultant,
+even a well-credentialed one.
+
+**What actually changed:**
+- Homepage (EN/ES), About/Sobre Mí, and Contact/Contacto pages no longer name Jose or show his
+  face. `orgSchema` (Organization, not Person) replaces the personal schema everywhere, carrying
+  the Wyoming entity name and address.
+- New "Leadership" section (homepage + About) describes the team's composition — marketing/sales/
+  international-ops leadership, UX/UI collaborators, a paid-media partner (Digital Jockey), and a
+  bilingual/trilingual market-research economist — without naming anyone. This is accurate: Jose
+  does work with real contractors and collaborators, this isn't a fabricated team.
+- New `PartnerLogos` carousel (`src/components/PartnerLogos.astro`) on both homepages, framed as
+  "Partners We've Grown With" — Gasolutions, Digital Jockey, CEO US University, 360 Print Studio,
+  and Mukura Apparel. Per Jose's clarification, several of these are genuine past/ongoing
+  consulting or freelance engagements, not current retained clients (e.g. Mukura: Jose was
+  founder, exited, still consults on international expansion; CEO US University: completed
+  go-to-market consulting engagement; Gasolutions: ad-hoc marketing/international-ops consulting).
+  Logos were included on the basis that the underlying relationships are real, per Jose's explicit
+  confirmation — not because "partner" is being used loosely.
+- Nav/Footer "About"/"Sobre Mí" relabeled to "Team"/"Nuestro Equipo" to match.
+- Personal LinkedIn profile link removed from Footer and Contact pages (conflicts with the
+  no-name/no-face premise; no company LinkedIn page exists yet to link instead).
+- Footer copyright line now reads "Ubik 360 Enterprises" + the Wyoming mailing address.
+- Personal portrait placeholders removed from About/Contact hero sections; homepage heroes swapped
+  from personal photos to stock skyline images (Miami/Toronto).
+
+**Explicitly NOT changed (deliberately out of scope for this test):**
+- `en/digital-marketing.astro`, `en/nearshore-staffing.astro`, `en/international-expansion.astro`,
+  `es/expansion-internacional.astro` — not yet audited for leftover first-person "I" language.
+- The Calendly booking link (`calendly.com/jose-ubik360/30min`) still contains "jose" in the URL
+  itself — not addressed; low visibility (users don't typically read URLs closely) and changing it
+  would require a new Calendly account/link, judged not worth doing for a temporary test.
+- `jose@ubik360.com` contact email kept as-is — it's the established, working contact address, and
+  changing it would break continuity if the test is reverted.
+
+**Revert plan (when the test concludes):** go back to Jose as the named face of Ubik 360, but
+**as President or CEO, not "Founder"** — the goal is to avoid solopreneur/owner framing even in
+the named version, not to return to the original résumé-led About page. Restore Person schema,
+restore the real photo (`public/assets/images/photos/shot-05-walking-canada.jpg`, kept in place
+and unused rather than deleted specifically for this), restore "About"/"Sobre Mí" nav labels,
+restore the personal LinkedIn link, and remove the anonymous Leadership sections and partner-logo
+carousel (or keep the carousel if it tests well — that's a separate decision from the name/face
+question).
+
+---
+
 ## Positioning (revised 2026-07 — supersedes the earlier résumé-led framing below)
 
 > **This section replaces the brand voice/positioning that shipped with the Astro migration.**

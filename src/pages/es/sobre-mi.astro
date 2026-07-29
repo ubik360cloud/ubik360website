@@ -1,19 +1,24 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-// Spanish adaptation of en/about.astro -- audience-neutral content (bio
-// doesn't change by direction), so this is a close adaptation rather than a
-// from-scratch rewrite like the service pages, per MARKETING.md.
+// TEMPORARY TEST VARIANT (2026-07, Jose) -- ver MARKETING.md "Anonymous/
+// bigger-company positioning test". Reemplaza la página personal "Sobre Mí"
+// con una página de equipo anónima para esta prueba de posicionamiento.
 
-const personSchema = {
+const orgSchema = {
   '@context': 'https://schema.org',
-  '@type': 'Person',
-  name: 'José Manuel Villegas',
-  jobTitle: 'Fundador — Ubik 360',
-  description: 'Consultor de marketing y crecimiento internacional operando en Colombia, EE.UU. y Canadá.',
-  url: 'https://ubik360.com/es/sobre-mi.html',
-  sameAs: ['https://www.linkedin.com/in/jose-villegas-marketing-manager/'],
-  worksFor: { '@type': 'Organization', name: 'Ubik 360', url: 'https://ubik360.com' },
-  knowsLanguage: ['es', 'en'],
+  '@type': 'Organization',
+  name: 'Ubik 360 Enterprises',
+  url: 'https://ubik360.com',
+  description:
+    'Liderazgo en marketing, ventas y operaciones de negocio internacional para empresas creciendo entre Colombia, EE.UU. y Canadá.',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: '30 N Gould St Ste R',
+    addressLocality: 'Sheridan',
+    addressRegion: 'WY',
+    postalCode: '82801',
+    addressCountry: 'US',
+  },
 };
 ---
 
@@ -21,37 +26,37 @@ const personSchema = {
   lang="es"
   path="/es/sobre-mi.html"
   alternatePath="/en/about.html"
-  title="Sobre Mí | Ubik 360"
-  description="Una práctica de marketing y expansión internacional construida sobre experiencia operativa, no teoría. Cómo trabaja Ubik 360, y por qué las empresas confían en ella."
-  structuredData={personSchema}
+  title="Nuestro Equipo | Ubik 360"
+  description="El liderazgo de Ubik 360 reúne profesionales en marketing, ventas y operaciones de negocio internacional trabajando entre Colombia, EE.UU. y Canadá."
+  structuredData={orgSchema}
 >
-  <!-- 1. DECLARACIÓN DE POSICIONAMIENTO -->
+  <!-- 1. POSICIONAMIENTO -->
   <section style="background:#fff; padding:6rem 0 4rem;">
     <div class="max-w-3xl mx-auto px-6 text-center">
-      <span class="section-tag mb-4" style="display:block;">Sobre Mí</span>
+      <span class="section-tag mb-4" style="display:block;">Nuestro Equipo</span>
       <h1 class="text-4xl lg:text-5xl leading-tight mb-6" style="color:var(--black);">
-        Una línea directa con quien hace el trabajo.
+        Construidos para crecer a ambos lados de la frontera.
       </h1>
       <p style="font-size:1.125rem; color:#4b5563; line-height:1.8;">
-        Ubik 360 existe porque la mayoría de los problemas de crecimiento no son solo de marketing
-        ni solo de expansión — son ambos, y casi siempre involucran más de un país. Dirijo esta
-        práctica directamente: sin equipo de gestores de cuenta, sin transición después de la
-        primera llamada. Si trabajas con Ubik 360, trabajas con la persona que piensa el problema.
+        El liderazgo de Ubik 360 está compuesto por profesionales en marketing, ventas y
+        operaciones de negocio internacional. Trabajamos como un solo equipo responsable, no como
+        una red suelta de subcontratistas — cada proyecto se ejecuta con supervisión directa, de
+        principio a fin.
       </p>
     </div>
   </section>
 
-  <!-- 2. ENFOQUE / FILOSOFÍA -->
-  <section style="background:#f9fafb; padding:6rem 0;">
+  <!-- 2. ENFOQUE -->
+  <section style="background:#f9fafb; padding:5rem 0;">
     <div class="max-w-3xl mx-auto px-6">
-      <span class="section-tag mb-3" style="display:block; text-align:center;">Cómo Trabajo</span>
-      <h2 class="text-3xl lg:text-4xl mb-6 text-center" style="color:var(--black);">El trabajo habla antes que yo.</h2>
+      <span class="section-tag mb-3" style="display:block; text-align:center;">Cómo Trabajamos</span>
+      <h2 class="text-3xl lg:text-4xl mb-6 text-center" style="color:var(--black);">El trabajo habla antes que nosotros.</h2>
       <div style="display:flex; flex-direction:column; gap:1.25rem; font-size:1.0625rem; color:#374151; line-height:1.85;">
         <p>
-          Prefiero llegar a una primera conversación preparado para responder preguntas difíciles
-          sobre tu negocio, en lugar de dedicarla a generar cercanía. Es deliberado — los clientes
-          no necesitan un gran relacionista público, necesitan a alguien que ya hizo la tarea y
-          puede decir con claridad qué está funcionando, qué no, y qué sigue.
+          Preferimos llegar a una primera conversación preparados para responder preguntas
+          difíciles sobre tu negocio, en lugar de dedicarla a generar cercanía. Los clientes no
+          necesitan un gran discurso de ventas, necesitan un equipo que ya hizo la tarea y puede
+          decir con claridad qué está funcionando, qué no, y qué sigue.
         </p>
         <p>
           Eso significa sin plazos inflados, sin promesas vagas, y sin maquillar un plan débil para
@@ -62,49 +67,34 @@ const personSchema = {
     </div>
   </section>
 
-  <!-- 3. POR QUÉ CONFÍAN EN UBIK 360 -->
+  <!-- 3. COMPOSICIÓN DEL LIDERAZGO -->
   <section style="background:#fff; padding:6rem 0;">
     <div class="max-w-6xl mx-auto px-6">
       <div class="max-w-2xl mb-10">
-        <span class="section-tag mb-3">Por Qué Confían en Ubik 360</span>
-        <h2 class="text-3xl lg:text-4xl mb-4" style="color:var(--black);">Operar, no observar.</h2>
+        <span class="section-tag mb-3">Liderazgo</span>
+        <h2 class="text-3xl lg:text-4xl mb-4" style="color:var(--black);">Un equipo construido alrededor de cada proyecto.</h2>
         <p style="font-size:1.0625rem; color:#4b5563; line-height:1.8;">
-          La perspectiva detrás de Ubik 360 viene de construir y operar negocios en Colombia,
-          EE.UU. y Canadá — no de asesorar sobre esos mercados desde afuera. Eso ha definido un
-          método específico: entender el negocio y el mercado antes de proponer nada, construir un
-          plan con hitos claros en lugar de un contrato abierto, y mantener responsabilidad sobre
-          la ejecución — no solo sobre la estrategia.
+          El liderazgo de Ubik 360 reúne estrategia de marketing, liderazgo comercial y operaciones
+          de negocio internacional — experiencia práctica construyendo estrategia go-to-market,
+          growth marketing y expansión transfronteriza para empresas en Colombia, EE.UU. y Canadá.
         </p>
       </div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div>
-          <div style="width:3rem; height:3rem; border-radius:9999px; border:2px solid var(--red); display:flex; align-items:center; justify-content:center; margin-bottom:1.25rem;">
-            <span style="font-family:'DM Serif Display',serif; font-size:1.25rem; color:var(--red);">1</span>
-          </div>
-          <h3 style="font-family:'DM Serif Display',serif; font-size:1.0625rem; color:var(--black); margin:0 0 .5rem;">Entender</h3>
-          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Una mirada clara de dónde está el negocio hoy.</p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div class="service-card">
+          <h3 class="text-lg mb-2" style="color:var(--black);">Marketing y Crecimiento</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Liderazgo de CMO fraccional, estrategia go-to-market y ejecución de growth marketing.</p>
         </div>
-        <div>
-          <div style="width:3rem; height:3rem; border-radius:9999px; border:2px solid var(--red); display:flex; align-items:center; justify-content:center; margin-bottom:1.25rem;">
-            <span style="font-family:'DM Serif Display',serif; font-size:1.25rem; color:var(--red);">2</span>
-          </div>
-          <h3 style="font-family:'DM Serif Display',serif; font-size:1.0625rem; color:var(--black); margin:0 0 .5rem;">Planear</h3>
-          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Un plan construido sobre resultados realistas y medibles.</p>
+        <div class="service-card">
+          <h3 class="text-lg mb-2" style="color:var(--black);">Producto y Diseño</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Diseñadores UX/UI con experiencia de producto en startups y empresas SaaS.</p>
         </div>
-        <div>
-          <div style="width:3rem; height:3rem; border-radius:9999px; border:2px solid var(--red); display:flex; align-items:center; justify-content:center; margin-bottom:1.25rem;">
-            <span style="font-family:'DM Serif Display',serif; font-size:1.25rem; color:var(--red);">3</span>
-          </div>
-          <h3 style="font-family:'DM Serif Display',serif; font-size:1.0625rem; color:var(--black); margin:0 0 .5rem;">Ejecutar</h3>
-          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Ejecución práctica — presente en el proceso, no solo entregando un documento de estrategia.</p>
+        <div class="service-card">
+          <h3 class="text-lg mb-2" style="color:var(--black);">Socio en Pauta Digital</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Un socio de growth marketing especializado en pauta digital, junto a nuestra práctica de contenido y SEO.</p>
         </div>
-        <div>
-          <div style="width:3rem; height:3rem; border-radius:9999px; border:2px solid var(--red); display:flex; align-items:center; justify-content:center; margin-bottom:1.25rem;">
-            <span style="font-family:'DM Serif Display',serif; font-size:1.25rem; color:var(--red);">4</span>
-          </div>
-          <h3 style="font-family:'DM Serif Display',serif; font-size:1.0625rem; color:var(--black); margin:0 0 .5rem;">Ajustar</h3>
-          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Ajuste continuo según lo que realmente muestran los datos.</p>
+        <div class="service-card">
+          <h3 class="text-lg mb-2" style="color:var(--black);">Investigación de Mercado</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Un economista con dominio de inglés, español y francés, y amplia experiencia en contratos gubernamentales en Colombia.</p>
         </div>
       </div>
     </div>
@@ -112,37 +102,22 @@ const personSchema = {
 
   <!-- 4. VENTAJA BILINGÜE Y TRANSFRONTERIZA -->
   <section style="background:var(--oak); padding:6rem 0;">
-    <div class="max-w-5xl mx-auto px-6">
-      <div class="flex flex-col lg:flex-row gap-12 items-center">
-        <div class="flex-shrink-0" style="position:relative;">
-          <div style="position:absolute; inset:-.75rem; background:#fff; border-radius:1.25rem; z-index:0; opacity:.5;"></div>
-          <img
-            src="https://ubik360.com/assets/images/jose-villegas.png"
-            alt="José Villegas — Fundador de Ubik 360"
-            loading="lazy"
-            class="w-48 lg:w-56 rounded-xl object-cover"
-            style="position:relative; z-index:1; box-shadow:0 12px 32px rgba(5,5,5,.18);"
-          />
-        </div>
-        <div class="flex-1">
-          <span class="section-tag mb-3" style="color:var(--red);">Bilingüe y Transfronterizo</span>
-          <h2 class="text-3xl lg:text-4xl mb-6" style="color:var(--black);">No es una categoría de servicio. Es vida diaria.</h2>
-          <div style="display:flex; flex-direction:column; gap:1.25rem; font-size:1.0625rem; color:#3d3d3d; line-height:1.85;">
-            <p>
-              Mi familia está dividida entre Colombia y Canadá: mis hijos viven en Canadá, y mi
-              esposa y yo dividimos nuestro tiempo entre ambos países. No es una credencial — es
-              simplemente la realidad que hace que el lado bilingüe y bicultural de este trabajo
-              sea natural, no teórico.
-            </p>
-            <p>
-              En la práctica, eso significa que el posicionamiento, los mensajes y los planes de
-              entrada a mercado se construyen con fluidez cultural y regulatoria real, no
-              traducidos después — ya sea que la dirección sea una empresa colombiana entrando a
-              EE.UU. o Canadá, o una empresa norteamericana construyendo un equipo o llegando a un
-              mercado en Latinoamérica.
-            </p>
-          </div>
-        </div>
+    <div class="max-w-4xl mx-auto px-6">
+      <span class="section-tag mb-3" style="color:var(--red); display:block; text-align:center;">Bilingüe y Transfronterizo</span>
+      <h2 class="text-3xl lg:text-4xl mb-6 text-center" style="color:var(--black);">No es una categoría de servicio. Es práctica diaria.</h2>
+      <div style="display:flex; flex-direction:column; gap:1.25rem; font-size:1.0625rem; color:#3d3d3d; line-height:1.85;">
+        <p>
+          Nuestro equipo vive y trabaja entre Colombia, EE.UU. y Canadá. No es una credencial — es
+          la realidad que hace que el lado bilingüe y bicultural de este trabajo sea natural, no
+          teórico.
+        </p>
+        <p>
+          En la práctica, eso significa que el posicionamiento, los mensajes y los planes de
+          entrada a mercado se construyen con fluidez cultural y regulatoria real, no traducidos
+          después — ya sea que la dirección sea una empresa colombiana entrando a EE.UU. o Canadá,
+          o una empresa norteamericana construyendo un equipo o llegando a un mercado en
+          Latinoamérica.
+        </p>
       </div>
     </div>
   </section>

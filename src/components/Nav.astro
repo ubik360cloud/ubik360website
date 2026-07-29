@@ -1,6 +1,9 @@
 ---
 // EN and ES nav links are NOT mirrors of each other -- see MARKETING.md
 // "Audience / ICP" section. Update this file's two arrays independently.
+// TEMPORARY TEST VARIANT (2026-07, Jose): "About"/"Sobre Mí" relabeled to
+// "Team"/"Nuestro Equipo" to match the anonymous team pages -- see
+// MARKETING.md "Anonymous/bigger-company positioning test".
 interface Props {
   lang: 'en' | 'es';
   currentPath: string;
@@ -15,7 +18,7 @@ const NAV = {
       { href: '/en/digital-marketing.html', label: 'Digital Marketing' },
       { href: '/en/nearshore-staffing.html', label: 'Nearshore Staffing' },
       { href: '/en/international-expansion.html', label: 'Expand to Colombia' },
-      { href: '/en/about.html', label: 'About' },
+      { href: '/en/about.html', label: 'Team' },
       { href: '/en/contact.html', label: 'Contact' },
     ],
     altHref: '/es/index.html',
@@ -27,7 +30,7 @@ const NAV = {
     links: [
       { href: '/es/index.html', label: 'Inicio' },
       { href: '/es/expansion-internacional.html', label: 'Expansión Internacional' },
-      { href: '/es/sobre-mi.html', label: 'Sobre Mí' },
+      { href: '/es/sobre-mi.html', label: 'Nuestro Equipo' },
       { href: '/es/contacto.html', label: 'Contacto' },
     ],
     altHref: '/en/index.html',

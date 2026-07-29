@@ -1,8 +1,9 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import PlaceholderImage from '../../components/PlaceholderImage.astro';
-// Spanish adaptation of en/contact.astro -- includes the same WhatsApp-number
-// fix (real number, not the legacy 555 placeholder).
+// TEMPORARY TEST VARIANT (2026-07, Jose): retrato personal y enlace de
+// LinkedIn personal removidos para la prueba de posicionamiento anónimo --
+// ver MARKETING.md. También incluye el mismo arreglo del número de WhatsApp
+// (número real, no el 555 anterior).
 ---
 
 <Layout
@@ -15,14 +16,6 @@ import PlaceholderImage from '../../components/PlaceholderImage.astro';
   <!-- HERO -->
   <section style="background:#fff; padding:6rem 0 4rem;">
     <div class="max-w-3xl mx-auto px-6 text-center">
-      <div class="mx-auto mb-6" style="width:5.5rem;">
-        <PlaceholderImage
-          filename="shot-06-portrait-plain.jpg"
-          description="Retrato limpio, fondo neutro — de frente, luz pareja. Recorte cuadrado."
-          ratio="square"
-          rounded="full"
-        />
-      </div>
       <span class="section-tag mb-4" style="display:block;">Contacto</span>
       <h1 style="font-size:clamp(2.25rem,5vw,3.25rem); line-height:1.15; color:var(--black); margin:0 0 1.25rem;">
         Hablemos de<br />tu negocio
@@ -138,8 +131,8 @@ import PlaceholderImage from '../../components/PlaceholderImage.astro';
           <a href="https://wa.me/12265030456" target="_blank" rel="noopener" style="color:#fff; font-size:.9375rem; font-weight:500;">Enviar mensaje</a>
         </div>
         <div>
-          <p style="font-size:.75rem; color:#9ca3af; text-transform:uppercase; letter-spacing:.1em; margin:0 0 .375rem;">LinkedIn</p>
-          <a href="https://www.linkedin.com/in/jose-villegas-marketing-manager/" target="_blank" rel="noopener" style="color:#fff; font-size:.9375rem; font-weight:500;">Conectar</a>
+          <p style="font-size:.75rem; color:#9ca3af; text-transform:uppercase; letter-spacing:.1em; margin:0 0 .375rem;">Oficina</p>
+          <p style="color:#fff; font-size:.9375rem; font-weight:500; margin:0;">Sheridan, WY</p>
         </div>
         <div>
           <p style="font-size:.75rem; color:#9ca3af; text-transform:uppercase; letter-spacing:.1em; margin:0 0 .375rem;">Tiempo de respuesta</p>

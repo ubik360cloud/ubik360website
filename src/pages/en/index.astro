@@ -1,23 +1,29 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import PlaceholderImage from '../../components/PlaceholderImage.astro';
-// Homepage copy per MARKETING.md "Homepage Copy -- Draft". EN is the NA-primary
-// version (leads with the North America section); es/index.astro is the
-// LatAm-primary version -- not a translation of this, its own pass.
-// No alternatePath/hreflang: the EN and ES homepages are different offers to
-// different audiences, not translations -- see MARKETING.md.
+import PartnerLogos from '../../components/PartnerLogos.astro';
+// TEMPORARY TEST VARIANT (2026-07, Jose) -- see MARKETING.md "Anonymous/
+// bigger-company positioning test" for full context and revert plan. This
+// homepage deliberately does NOT name Jose or show his face, targets
+// $5M+ revenue businesses, and features a partner-logo carousel.
 
 const orgSchema = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
-  name: 'Ubik 360',
+  name: 'Ubik 360 Enterprises',
   url: 'https://ubik360.com',
   logo: 'https://ubik360.com/assets/images/ubik360logo.png',
   description:
     'Fractional marketing leadership, growth marketing, and Latin America staff augmentation for North American businesses; go-to-market and market-entry strategy for Latin American businesses expanding into Canada and the U.S.',
   areaServed: ['US', 'CA', 'CO'],
   knowsAbout: ['Growth Marketing', 'Fractional CMO', 'Staff Augmentation', 'Market Entry', 'Go-to-Market Strategy'],
-  sameAs: ['https://www.linkedin.com/in/jose-villegas-marketing-manager/'],
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: '30 N Gould St Ste R',
+    addressLocality: 'Sheridan',
+    addressRegion: 'WY',
+    postalCode: '82801',
+    addressCountry: 'US',
+  },
 };
 ---
 
@@ -47,10 +53,11 @@ const orgSchema = {
             <a href="#latam" class="btn-outline">For Latin America</a>
           </div>
         </div>
-        <PlaceholderImage
-          filename="shot-01-desk-work.jpg"
-          description="At the desk, working — laptop open, looking at the screen, natural side light. Landscape."
-          ratio="landscape"
+        <img
+          src="/assets/images/stock/miami-skyline-night.jpg"
+          alt="Miami skyline"
+          class="w-full rounded-xl object-cover aspect-[4/3]"
+          loading="eager"
         />
       </div>
     </div>
@@ -69,6 +76,23 @@ const orgSchema = {
     </div>
   </section>
 
+  <!-- LEADERSHIP TEAM -->
+  <section style="background:#fff; padding:5rem 0;">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+      <span class="section-tag mb-3">Leadership</span>
+      <h2 class="text-3xl lg:text-4xl mb-6" style="color:var(--black);">A team built around each engagement.</h2>
+      <p style="font-size:1.0625rem; color:#4b5563; line-height:1.85;">
+        Ubik 360's leadership is composed of professionals in marketing, sales, and international
+        business operations. Our collaborators include UX/UI designers with product experience
+        across startups and SaaS companies, a growth-marketing partner specializing in paid media,
+        and a market-research economist fluent in English, Spanish, and French with deep experience
+        in Colombian government contracts.
+      </p>
+    </div>
+  </section>
+
+  <PartnerLogos lang="en" />
+
   <!-- NORTH AMERICA -->
   <section id="north-america" style="background:#fff; padding:6rem 0;">
     <div class="max-w-6xl mx-auto px-6">
@@ -76,10 +100,12 @@ const orgSchema = {
         <span class="section-tag mb-3">For North America</span>
         <h2 class="text-3xl lg:text-4xl mb-4" style="color:var(--black);">Marketing leadership and staff you can rely on.</h2>
         <p class="text-lg leading-relaxed" style="color:#4b5563;">
-          Fractional CMO leadership and growth marketing built around pipeline, revenue, and
-          retention — not impressions. Staff augmentation in Latin America gives your team
-          skilled, accountable people for customer service, back-office, and sales support, at a
-          fraction of local hiring cost.
+          Built for established businesses — $5M+ in annual revenue — that need senior marketing
+          leadership and reliable operations support without the overhead of building a full
+          executive team. Fractional CMO leadership and growth marketing built around pipeline,
+          revenue, and retention — not impressions. Staff augmentation in Latin America gives your
+          team skilled, accountable people for customer service, back-office, and sales support, at
+          a fraction of local hiring cost.
         </p>
       </div>
 

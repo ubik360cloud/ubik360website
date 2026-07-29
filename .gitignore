@@ -1,3 +1,8 @@
+# raw/unprocessed source images (HEIC originals, logo sources, rejected stock
+# photo candidates) -- not meant for the repo, see public/assets/images/ for
+# the processed assets actually used on the site
+images_raw/
+
 # build output
 dist/
 # generated types

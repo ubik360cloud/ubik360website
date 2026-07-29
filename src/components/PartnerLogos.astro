@@ -1,0 +1,38 @@
+---
+// Partner/client logo strip. Each logo sits on a white card regardless of
+// section background, since several of the source logos are designed for
+// dark backgrounds (light/transparent text) and would vanish otherwise.
+// Relationship types (per Jose, 2026-07): Gasolutions = ad-hoc marketing +
+// international-ops consulting; Digital Jockey = mutual referral partner
+// (paid media <-> content/SEO); CEO US University = completed Go-to-Market
+// consulting engagement; 360 Print Studio = active consulting client;
+// Mukura Apparel = international expansion consulting client (Jose was
+// founder, exited, now consults on their export brand).
+interface Props {
+  lang: 'en' | 'es';
+}
+const { lang } = Astro.props;
+
+const heading = lang === 'en' ? 'Partners We’ve Grown With' : 'Socios con los que Hemos Crecido';
+
+const logos = [
+  { src: '/assets/images/partners/gasolutions.jpg', alt: 'Gasolutions' },
+  { src: '/assets/images/partners/digital-jockey.png', alt: 'Digital Jockey' },
+  { src: '/assets/images/partners/ceo-us-university.png', alt: 'CEO US University' },
+  { src: '/assets/images/partners/360-print-studio.webp', alt: '360 Print Studio' },
+  { src: '/assets/images/partners/mukura-apparel.webp', alt: 'Mukura Apparel' },
+];
+---
+
+<section style="background:#f9fafb; padding:4rem 0;">
+  <div class="max-w-6xl mx-auto px-6">
+    <p class="section-tag mb-8 text-center">{heading}</p>
+    <div class="flex flex-wrap items-center justify-center gap-6">
+      {logos.map((logo) => (
+        <div style="background:#fff; border:1px solid #e5e7eb; border-radius:.75rem; padding:1.25rem 1.75rem; display:flex; align-items:center; justify-content:center; height:5rem; width:11rem;">
+          <img src={logo.src} alt={logo.alt} style="max-height:2.75rem; max-width:100%; object-fit:contain;" loading="lazy" />
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

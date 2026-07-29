@@ -1,0 +1,119 @@
+---
+// Small, dismissible bottom-corner slide-in -- deliberately NOT a full-screen
+// modal (Google penalizes intrusive mobile interstitials for SEO, and on a
+// small screen a big popup just gets closed or bounces the visitor). Appears
+// once per visit after a scroll/time delay, easy to close, and remembers the
+// dismissal in localStorage for 14 days so it doesn't nag repeat visitors.
+interface Props {
+  lang: 'en' | 'es';
+}
+const { lang } = Astro.props;
+
+const copy = lang === 'en'
+  ? {
+      heading: 'Get the newsletter',
+      body: 'Marketing & cross-border growth insights, occasionally.',
+      placeholder: 'Email address',
+      button: 'Join',
+      success: 'You’re in!',
+      close: 'Close',
+    }
+  : {
+      heading: 'Únete al boletín',
+      body: 'Ideas sobre marketing y expansión internacional, de vez en cuando.',
+      placeholder: 'Correo electrónico',
+      button: 'Unirme',
+      success: '¡Listo!',
+      close: 'Cerrar',
+    };
+---
+
+<div
+  id="newsletter-popup"
+  class="hidden"
+  style="position:fixed; bottom:1.25rem; right:1.25rem; left:auto; z-index:60; width:min(22rem, calc(100vw - 2rem)); background:#fff; border:1px solid #e5e7eb; border-radius:.875rem; box-shadow:0 12px 32px rgba(0,0,0,.18); padding:1.25rem 1.375rem;"
+>
+  <button
+    id="newsletter-popup-close"
+    aria-label={copy.close}
+    style="position:absolute; top:.5rem; right:.5rem; background:transparent; border:none; cursor:pointer; padding:.4rem; color:#9ca3af; line-height:0;"
+  >
+    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+    </svg>
+  </button>
+  <h3 style="font-family:'DM Serif Display',serif; font-size:1.0625rem; color:var(--black); margin:0 0 .375rem; padding-right:1.25rem;">{copy.heading}</h3>
+  <p style="font-size:.8125rem; color:#6b7280; margin:0 0 1rem;">{copy.body}</p>
+  <form id="newsletter-popup-form" action="https://formspree.io/f/mlganpda" method="POST" novalidate style="display:flex; gap:.5rem;">
+    <input type="hidden" name="_subject" value="Newsletter subscription (popup)" />
+    <input type="hidden" name="form_type" value="newsletter" />
+    <input type="hidden" name="pagina_origen" value={lang === 'en' ? 'popup/en' : 'popup/es'} />
+    <input
+      type="email"
+      name="email"
+      required
+      placeholder={copy.placeholder}
+      style="flex:1; min-width:0; padding:.625rem .75rem; border:1px solid #d1d5db; border-radius:.5rem; font-size:.8125rem;"
+    />
+    <button type="submit" class="btn-primary" style="font-size:.8125rem; padding:.625rem 1rem; white-space:nowrap;">{copy.button}</button>
+  </form>
+  <p id="newsletter-popup-msg" style="font-size:.75rem; color:var(--green); margin:.625rem 0 0; display:none;">{copy.success}</p>
+</div>
+
+<script>
+  const STORAGE_KEY = 'ubik360_newsletter_dismissed_until';
+  const popup = document.getElementById('newsletter-popup');
+  const closeBtn = document.getElementById('newsletter-popup-close');
+  const form = document.getElementById('newsletter-popup-form') as HTMLFormElement | null;
+  const msg = document.getElementById('newsletter-popup-msg');
+
+  function isDismissed() {
+    const until = localStorage.getItem(STORAGE_KEY);
+    return until ? Date.now() < Number(until) : false;
+  }
+
+  function dismiss() {
+    popup?.classList.add('hidden');
+    const fourteenDays = 14 * 24 * 60 * 60 * 1000;
+    localStorage.setItem(STORAGE_KEY, String(Date.now() + fourteenDays));
+  }
+
+  closeBtn?.addEventListener('click', dismiss);
+
+  if (!isDismissed()) {
+    let shown = false;
+    const reveal = () => {
+      if (shown || isDismissed()) return;
+      shown = true;
+      popup?.classList.remove('hidden');
+    };
+    const onScroll = () => {
+      const scrolled = window.scrollY / (document.body.scrollHeight - window.innerHeight || 1);
+      if (scrolled > 0.4) {
+        reveal();
+        window.removeEventListener('scroll', onScroll);
+      }
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    setTimeout(reveal, 20000);
+  }
+
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const btn = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+    btn.disabled = true;
+    fetch(form.action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } })
+      .then((res) => {
+        if (res.ok && msg) {
+          form.style.display = 'none';
+          msg.style.display = 'block';
+          setTimeout(dismiss, 2500);
+        } else {
+          btn.disabled = false;
+        }
+      })
+      .catch(() => {
+        btn.disabled = false;
+      });
+  });
+</script>

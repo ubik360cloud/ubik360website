@@ -54,15 +54,33 @@ even a well-credentialed one.
 - Footer copyright line now reads "Ubik 360 Enterprises" + the Wyoming mailing address.
 - Personal portrait placeholders removed from About/Contact hero sections; homepage heroes swapped
   from personal photos to stock skyline images (Miami/Toronto).
+- Contact email changed sitewide from `jose@ubik360.com` to `admin@ubik360.com` (Footer + both
+  contact pages) — the personal name in the address conflicted with the no-name premise once
+  spotted.
+
+**UI pass (2026-07, same test branch):** every page now opens with a full-width hero banner
+(photo + dark gradient scrim, text overlaid — not a boxed square image), alternates section
+backgrounds through black/red/oak/white instead of defaulting to white/centered, and uses
+asymmetric image+text layouts (image one side, copy the other) instead of center-aligned blocks.
+Added `NewsletterInline` (its own section, not sharing the hero with the call-booking CTA) and
+`NewsletterPopup` (small bottom-corner slide-in, scroll/time-delayed, dismissible, remembers
+dismissal 14 days via localStorage — deliberately not a blocking modal, since Google penalizes
+intrusive mobile interstitials and a big popup just gets closed unread on a small screen). Both
+reuse the existing Formspree endpoint with a `form_type: newsletter` hidden field rather than
+standing up a second email tool today. New stock photos (hiring handshake, analytics dashboard,
+export containers, downtown Miami, team meeting, sales-funnel whiteboard) sourced from Unsplash
+(free license, no attribution required) after three original candidates were rejected as unsafe to
+use: one was a literal screenshot of LinkedIn's own marketing page, one had visible joke placeholder
+text ("Some shitty stuff 1/2/3/4") in a fake dashboard demo, and one showed a Maersk-branded ship at
+a Vietnamese port — wrong geography and third-party branding for a Colombia/US/Canada-focused site.
 
 **Explicitly NOT changed (deliberately out of scope for this test):**
-- `en/digital-marketing.astro`, `en/nearshore-staffing.astro`, `en/international-expansion.astro`,
-  `es/expansion-internacional.astro` — not yet audited for leftover first-person "I" language.
 - The Calendly booking link (`calendly.com/jose-ubik360/30min`) still contains "jose" in the URL
   itself — not addressed; low visibility (users don't typically read URLs closely) and changing it
   would require a new Calendly account/link, judged not worth doing for a temporary test.
-- `jose@ubik360.com` contact email kept as-is — it's the established, working contact address, and
-  changing it would break continuity if the test is reverted.
+- No browser/screenshot tool was available in this session to visually verify mobile rendering —
+  responsive behavior relies on existing Tailwind responsive classes and flexible units (the same
+  patterns already used elsewhere on the site) but wasn't visually confirmed in a real viewport.
 
 **Revert plan (when the test concludes):** go back to Jose as the named face of Ubik 360, but
 **as President or CEO, not "Founder"** — the goal is to avoid solopreneur/owner framing even in

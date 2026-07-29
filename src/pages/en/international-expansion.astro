@@ -1,6 +1,5 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import PlaceholderImage from '../../components/PlaceholderImage.astro';
 // Narrowed scope per MARKETING.md -- drops the Colombia->US/CA direction
 // (that's es/expansion-internacional.html's job) and the nearshoring
 // section (moved to its own en/nearshore-staffing.html). Keeps only: NA
@@ -45,27 +44,27 @@ const faqSchema = {
   description="Market entry consulting, on-the-ground operations management, and accounting/tax support for U.S. and Canadian businesses expanding into Colombia."
   structuredData={faqSchema}
 >
-  <!-- HERO -->
-  <section style="background:#fff; padding:6rem 0 5rem;">
-    <div class="max-w-6xl mx-auto px-6">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
-        <div>
-          <span class="section-tag mb-4">Expand Into Colombia</span>
-          <h1 class="text-4xl lg:text-5xl leading-tight mb-5" style="color:var(--black);">
-            Colombia is one of Latin America's fastest-growing markets. Entering without local
-            knowledge is expensive.
-          </h1>
-          <p class="text-lg leading-relaxed mb-8" style="color:#4b5563;">
-            Market entry consulting, on-the-ground operations management, and a local accounting
-            network — a structured way to lower risk on a market you don't operate in yet.
-          </p>
-          <a href="https://calendly.com/jose-ubik360/30min" target="_blank" rel="noopener" class="btn-primary">Schedule a Call</a>
-        </div>
-        <PlaceholderImage
-          filename="shot-04-walking-colombia.jpg"
-          description="Walking, Colombia — real Barranquilla street/plaza. Look off-camera, golden hour if possible. Landscape."
-          ratio="landscape"
-        />
+  <!-- HERO: full-width banner -->
+  <section class="relative" style="overflow:hidden;">
+    <img
+      src="/assets/images/stock/export-containers-port.jpg"
+      alt="Export containers at a shipping port"
+      class="absolute inset-0 w-full h-full object-cover"
+      loading="eager"
+    />
+    <div class="absolute inset-0" style="background:linear-gradient(rgba(5,5,5,.48), rgba(5,5,5,.48)), linear-gradient(100deg, rgba(5,5,5,.92) 0%, rgba(5,5,5,.78) 40%, rgba(5,5,5,.3) 70%, rgba(5,5,5,.1) 100%);"></div>
+    <div class="relative max-w-6xl mx-auto px-6 flex items-center" style="min-height:32rem; padding:6rem 1.5rem;">
+      <div class="max-w-xl">
+        <span class="section-tag mb-4" style="color:var(--oak);">Expand Into Colombia</span>
+        <h1 class="text-4xl lg:text-5xl leading-tight mb-5" style="color:#fff;">
+          Colombia is one of Latin America's fastest-growing markets. Entering without local
+          knowledge is expensive.
+        </h1>
+        <p class="text-lg leading-relaxed mb-8" style="color:#e5e7eb;">
+          Market entry consulting, on-the-ground operations management, and a local accounting
+          network — a structured way to lower risk on a market you don't operate in yet.
+        </p>
+        <a href="https://calendly.com/jose-ubik360/30min" target="_blank" rel="noopener" class="btn-primary">Schedule a Call</a>
       </div>
     </div>
   </section>

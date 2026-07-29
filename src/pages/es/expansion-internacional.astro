@@ -1,6 +1,5 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import PlaceholderImage from '../../components/PlaceholderImage.astro';
 // Main/only ES service page per MARKETING.md. Keeps only the Colombia->US/CA
 // direction (drops US/CA->Colombia + nearshoring -- those are en/international-
 // expansion.html and en/nearshore-staffing.html's jobs). Absorbs the old
@@ -50,28 +49,28 @@ const faqSchema = {
   description="Incorporación, agente registrado, marketing en tu nuevo mercado y ferias comerciales — para empresas colombianas y latinoamericanas listas para expandirse a EE.UU. y Canadá."
   structuredData={faqSchema}
 >
-  <!-- HERO -->
-  <section style="background:#fff; padding:6rem 0 5rem;">
-    <div class="max-w-6xl mx-auto px-6">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
-        <div>
-          <span class="section-tag mb-4">Expansión Internacional</span>
-          <h1 class="text-4xl lg:text-5xl leading-tight mb-5" style="color:var(--black);">
-            Expandirse a EE.UU. o Canadá no es un trámite. Es un proceso.
-          </h1>
-          <p class="text-lg leading-relaxed mb-8" style="color:#4b5563;">
-            Incorporación, agente registrado y banca son el punto de partida — el trabajo real
-            está en el mercado, la operación y el marketing una vez que estás dentro. Ubik 360
-            acompaña el camino completo, para empresas listas para invertir en su crecimiento
-            internacional.
-          </p>
-          <a href="https://calendly.com/jose-ubik360/30min" target="_blank" rel="noopener" class="btn-primary">Agenda tu Consulta de Expansión</a>
-        </div>
-        <PlaceholderImage
-          filename="shot-05-walking-canada.jpg"
-          description="Walking, Canada — street/plaza in London, Ontario. Look off-camera, golden hour if possible. Landscape."
-          ratio="landscape"
-        />
+  <!-- HERO: banner de ancho completo -->
+  <section class="relative" style="overflow:hidden;">
+    <img
+      src="/assets/images/stock/toronto-skyline-night.jpg"
+      alt="Skyline de Toronto"
+      class="absolute inset-0 w-full h-full object-cover"
+      loading="eager"
+    />
+    <div class="absolute inset-0" style="background:linear-gradient(rgba(5,5,5,.48), rgba(5,5,5,.48)), linear-gradient(100deg, rgba(5,5,5,.92) 0%, rgba(5,5,5,.78) 38%, rgba(5,5,5,.35) 68%, rgba(5,5,5,.15) 100%);"></div>
+    <div class="relative max-w-6xl mx-auto px-6 flex items-center" style="min-height:30rem; padding:6rem 1.5rem;">
+      <div class="max-w-xl">
+        <span class="section-tag mb-4" style="color:var(--oak);">Expansión Internacional</span>
+        <h1 class="text-4xl lg:text-5xl leading-tight mb-5" style="color:#fff;">
+          Expandirse a EE.UU. o Canadá no es un trámite. Es un proceso.
+        </h1>
+        <p class="text-lg leading-relaxed mb-8" style="color:#e5e7eb;">
+          Incorporación, agente registrado y banca son el punto de partida — el trabajo real
+          está en el mercado, la operación y el marketing una vez que estás dentro. Ubik 360
+          acompaña el camino completo, para empresas listas para invertir en su crecimiento
+          internacional.
+        </p>
+        <a href="https://calendly.com/jose-ubik360/30min" target="_blank" rel="noopener" class="btn-primary">Agenda tu Consulta de Expansión</a>
       </div>
     </div>
   </section>
@@ -104,17 +103,25 @@ const faqSchema = {
     </div>
   </section>
 
-  <!-- MARKETING EN TU NUEVO MERCADO -->
+  <!-- MARKETING EN TU NUEVO MERCADO (asimétrico: texto izquierda, imagen derecha) -->
   <section id="marketing-en-tu-nuevo-mercado" style="background:var(--oak); padding:6rem 0;">
     <div class="max-w-6xl mx-auto px-6">
-      <div class="max-w-2xl mb-10">
-        <span class="section-tag mb-3" style="color:var(--red);">Una Vez Adentro</span>
-        <h2 class="text-3xl lg:text-4xl mb-4" style="color:var(--black);">Marketing en tu Nuevo Mercado</h2>
-        <p class="text-lg leading-relaxed" style="color:#3d3d3d;">
-          Estar incorporado no es estar operando. La estrategia de marketing para el mercado de
-          destino se construye para ese mercado desde el inicio — no se traduce después de
-          escribirla para Colombia.
-        </p>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center mb-10">
+        <div>
+          <span class="section-tag mb-3" style="color:var(--red);">Una Vez Adentro</span>
+          <h2 class="text-3xl lg:text-4xl mb-4" style="color:var(--black);">Marketing en tu Nuevo Mercado</h2>
+          <p class="text-lg leading-relaxed" style="color:#3d3d3d;">
+            Estar incorporado no es estar operando. La estrategia de marketing para el mercado de
+            destino se construye para ese mercado desde el inicio — no se traduce después de
+            escribirla para Colombia.
+          </p>
+        </div>
+        <img
+          src="/assets/images/stock/miami-downtown-buildings.jpg"
+          alt="Edificios del centro de Miami"
+          class="w-full rounded-xl object-cover aspect-[4/3]"
+          loading="lazy"
+        />
       </div>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div style="background:#fff; border-radius:.875rem; padding:1.75rem;">
@@ -235,12 +242,19 @@ const faqSchema = {
     </div>
   </section>
 
-  <!-- FINAL CTA -->
-  <section style="background:var(--black); padding:6rem 0;">
-    <div class="max-w-3xl mx-auto px-6 text-center">
+  <!-- FINAL CTA: banner de ancho completo -->
+  <section class="relative" style="overflow:hidden;">
+    <img
+      src="/assets/images/stock/export-containers-port.jpg"
+      alt="Puerto de exportación con contenedores"
+      class="absolute inset-0 w-full h-full object-cover"
+      loading="lazy"
+    />
+    <div class="absolute inset-0" style="background:rgba(5,5,5,.78);"></div>
+    <div class="relative max-w-3xl mx-auto px-6 text-center" style="padding:6rem 1.5rem;">
       <span class="section-tag mb-4" style="color:var(--oak);">Da el Primer Paso</span>
       <h2 class="text-3xl lg:text-4xl mb-5" style="color:#fff;">¿Tu empresa está lista para expandirse?</h2>
-      <p style="color:#9ca3af; font-size:1.125rem; line-height:1.7; max-width:30rem; margin:0 auto 2.5rem;">
+      <p style="color:#e5e7eb; font-size:1.125rem; line-height:1.7; max-width:30rem; margin:0 auto 2.5rem;">
         Una llamada de 30 minutos. Sin costo, sin compromiso — una idea clara de qué hacer y qué esperar.
       </p>
       <a href="https://calendly.com/jose-ubik360/30min" target="_blank" rel="noopener" class="btn-primary" style="font-size:1rem; padding:1rem 2.5rem;">

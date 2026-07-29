@@ -1,8 +1,12 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import PartnerLogos from '../../components/PartnerLogos.astro';
+import NewsletterInline from '../../components/NewsletterInline.astro';
 // TEMPORARY TEST VARIANT (2026-07, Jose) -- see MARKETING.md "Anonymous/
 // bigger-company positioning test" for full context and revert plan.
+// UI pass (2026-07): full-width hero/closing banners with image + gradient
+// scrim, alternating black/red/oak/white section rhythm, and asymmetric
+// image+text layouts instead of center-aligned blocks throughout.
 
 const orgSchema = {
   '@context': 'https://schema.org',
@@ -32,29 +36,28 @@ const orgSchema = {
   description="Entrada a mercado, localización y soporte operativo para empresas colombianas y latinoamericanas listas para expandirse a Canadá y Estados Unidos."
   structuredData={orgSchema}
 >
-  <!-- HERO -->
-  <section style="background:#fff; padding:7rem 0 5rem;">
-    <div class="max-w-6xl mx-auto px-6">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
-        <img
-          src="/assets/images/stock/toronto-skyline-night.jpg"
-          alt="Toronto skyline"
-          class="w-full rounded-xl object-cover aspect-[4/3] lg:order-2"
-          loading="eager"
-        />
-        <div class="lg:order-1">
-          <h1 class="text-4xl lg:text-5xl leading-tight mb-6" style="color:var(--black);">
-            Tu expansión a Canadá y EE.UU.,<br />
-            <em style="color:var(--red); font-style:italic;">con un proceso estructurado.</em>
-          </h1>
-          <p class="text-lg leading-relaxed mb-9" style="color:#4b5563; max-width:32rem;">
-            Entrada a mercado, localización y soporte operativo para empresas listas para invertir
-            en su crecimiento internacional — no solo trámites de incorporación.
-          </p>
-          <div class="flex flex-col sm:flex-row gap-3">
-            <a href="#latam" class="btn-primary">Expansión a Norteamérica</a>
-            <a href="#norteamerica" class="btn-outline">Servicios para Norteamérica</a>
-          </div>
+  <!-- HERO: full-width banner -->
+  <section class="relative" style="overflow:hidden;">
+    <img
+      src="/assets/images/stock/toronto-skyline-night.jpg"
+      alt="Toronto skyline de noche"
+      class="absolute inset-0 w-full h-full object-cover"
+      loading="eager"
+    />
+    <div class="absolute inset-0" style="background:linear-gradient(rgba(5,5,5,.48), rgba(5,5,5,.48)), linear-gradient(100deg, rgba(5,5,5,.92) 0%, rgba(5,5,5,.78) 38%, rgba(5,5,5,.35) 68%, rgba(5,5,5,.15) 100%);"></div>
+    <div class="relative max-w-6xl mx-auto px-6 flex items-center" style="min-height:34rem; padding:6rem 1.5rem;">
+      <div class="max-w-xl">
+        <h1 class="text-4xl lg:text-5xl leading-tight mb-6" style="color:#fff;">
+          Tu expansión a Canadá y EE.UU.,<br />
+          <em style="color:var(--oak); font-style:italic;">con un proceso estructurado.</em>
+        </h1>
+        <p class="text-lg leading-relaxed mb-9" style="color:#e5e7eb;">
+          Entrada a mercado, localización y soporte operativo para empresas listas para invertir
+          en su crecimiento internacional — no solo trámites de incorporación.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-3">
+          <a href="#latam" class="btn-primary">Expansión a Norteamérica</a>
+          <a href="#norteamerica" class="btn-outline" style="border-color:#fff; color:#fff;">Servicios para Norteamérica</a>
         </div>
       </div>
     </div>
@@ -74,19 +77,29 @@ const orgSchema = {
     </div>
   </section>
 
-  <!-- EQUIPO DE LIDERAZGO -->
-  <section style="background:#fff; padding:5rem 0;">
-    <div class="max-w-4xl mx-auto px-6 text-center">
-      <span class="section-tag mb-3">Liderazgo</span>
-      <h2 class="text-3xl lg:text-4xl mb-6" style="color:var(--black);">Un equipo construido alrededor de cada proyecto.</h2>
-      <p style="font-size:1.0625rem; color:#4b5563; line-height:1.85;">
-        El liderazgo de Ubik 360 está compuesto por profesionales en marketing, ventas y
-        operaciones de negocio internacional. Nuestros colaboradores incluyen diseñadores UX/UI con
-        experiencia de producto en startups y empresas SaaS, un socio de growth marketing
-        especializado en pauta digital, y un economista especializado en investigación de mercado,
-        con dominio de inglés, español y francés y amplia experiencia en contratos gubernamentales
-        en Colombia.
-      </p>
+  <!-- EQUIPO DE LIDERAZGO (asimétrico: imagen izquierda, texto derecha) -->
+  <section style="background:var(--oak); padding:6rem 0;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
+        <img
+          src="/assets/images/stock/marketing-team-meeting.jpg"
+          alt="Equipo de marketing revisando estrategia"
+          class="w-full rounded-xl object-cover aspect-[4/3]"
+          loading="lazy"
+        />
+        <div>
+          <span class="section-tag mb-3" style="color:var(--red);">Liderazgo</span>
+          <h2 class="text-3xl lg:text-4xl mb-6" style="color:var(--black);">Un equipo construido alrededor de cada proyecto.</h2>
+          <p style="font-size:1.0625rem; color:#3d3d3d; line-height:1.85;">
+            El liderazgo de Ubik 360 está compuesto por profesionales en marketing, ventas y
+            operaciones de negocio internacional. Nuestros colaboradores incluyen diseñadores UX/UI con
+            experiencia de producto en startups y empresas SaaS, un socio de growth marketing
+            especializado en pauta digital, y un economista especializado en investigación de mercado,
+            con dominio de inglés, español y francés y amplia experiencia en contratos gubernamentales
+            en Colombia.
+          </p>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -147,40 +160,49 @@ const orgSchema = {
     </div>
   </section>
 
-  <!-- WHY UBIK 360 -->
-  <section style="background:var(--black); padding:6rem 0;">
+  <!-- POR QUÉ UBIK 360 (sección de acento rojo) -->
+  <section style="background:var(--red); padding:6rem 0;">
     <div class="max-w-6xl mx-auto px-6">
       <div class="max-w-xl mb-12">
-        <span class="section-tag mb-3" style="color:var(--oak);">Por Qué Ubik 360</span>
+        <span class="section-tag mb-3" style="color:#fff; opacity:.85;">Por Qué Ubik 360</span>
         <h2 class="text-3xl lg:text-4xl" style="color:#fff;">Por qué las empresas trabajan con Ubik 360</h2>
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <div>
           <h3 style="font-family:'DM Serif Display',serif; font-size:1.125rem; color:#fff; margin:0 0 .625rem;">Un solo socio, ambos lados</h3>
-          <p style="font-size:.875rem; color:#9ca3af; line-height:1.65;">Sin transición entre una agencia norteamericana y un consultor separado en LatAm — un equipo, un proceso, un punto de responsabilidad.</p>
+          <p style="font-size:.875rem; color:rgba(255,255,255,.8); line-height:1.65;">Sin transición entre una agencia norteamericana y un consultor separado en LatAm — un equipo, un proceso, un punto de responsabilidad.</p>
         </div>
         <div>
           <h3 style="font-family:'DM Serif Display',serif; font-size:1.125rem; color:#fff; margin:0 0 .625rem;">Un proceso estructurado</h3>
-          <p style="font-size:.875rem; color:#9ca3af; line-height:1.65;">Diagnóstico, plan, ejecución y ajuste, con hitos claros en cada etapa — no un contrato abierto sin fin.</p>
+          <p style="font-size:.875rem; color:rgba(255,255,255,.8); line-height:1.65;">Diagnóstico, plan, ejecución y ajuste, con hitos claros en cada etapa — no un contrato abierto sin fin.</p>
         </div>
         <div>
           <h3 style="font-family:'DM Serif Display',serif; font-size:1.125rem; color:#fff; margin:0 0 .625rem;">Acceso directo</h3>
-          <p style="font-size:.875rem; color:#9ca3af; line-height:1.65;">Trabajas con las personas que hacen el trabajo — no te derivan a gestores de cuenta.</p>
+          <p style="font-size:.875rem; color:rgba(255,255,255,.8); line-height:1.65;">Trabajas con las personas que hacen el trabajo — no te derivan a gestores de cuenta.</p>
         </div>
         <div>
           <h3 style="font-family:'DM Serif Display',serif; font-size:1.125rem; color:#fff; margin:0 0 .625rem;">Resultados de negocio</h3>
-          <p style="font-size:.875rem; color:#9ca3af; line-height:1.65;">Pipeline generado, costos reducidos, mercados conquistados — no métricas de vanidad.</p>
+          <p style="font-size:.875rem; color:rgba(255,255,255,.8); line-height:1.65;">Pipeline generado, costos reducidos, mercados conquistados — no métricas de vanidad.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- FINAL CTA -->
-  <section style="background:#fff; padding:6rem 0;">
-    <div class="max-w-3xl mx-auto px-6 text-center">
-      <span class="section-tag mb-4">Da el Primer Paso</span>
-      <h2 class="text-3xl lg:text-4xl mb-5" style="color:var(--black);">¿Listo para dar el siguiente paso?</h2>
-      <p style="color:#4b5563; font-size:1.125rem; line-height:1.7; max-width:30rem; margin:0 auto 2.5rem;">
+  <NewsletterInline lang="es" />
+
+  <!-- FINAL CTA: banner de ancho completo -->
+  <section class="relative" style="overflow:hidden;">
+    <img
+      src="/assets/images/stock/miami-downtown-buildings.jpg"
+      alt="Skyline de Miami"
+      class="absolute inset-0 w-full h-full object-cover"
+      loading="lazy"
+    />
+    <div class="absolute inset-0" style="background:rgba(5,5,5,.72);"></div>
+    <div class="relative max-w-3xl mx-auto px-6 text-center" style="padding:6rem 1.5rem;">
+      <span class="section-tag mb-4" style="color:var(--oak);">Da el Primer Paso</span>
+      <h2 class="text-3xl lg:text-4xl mb-5" style="color:#fff;">¿Listo para dar el siguiente paso?</h2>
+      <p style="color:#e5e7eb; font-size:1.125rem; line-height:1.7; max-width:30rem; margin:0 auto 2.5rem;">
         Una llamada de 30 minutos es suficiente para saber si esto es adecuado para tu negocio —
         sin compromiso, respuestas directas.
       </p>

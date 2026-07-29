@@ -32,14 +32,21 @@ const orgSchema = {
   description="Ubik 360's leadership brings together marketing, sales, and international business operations professionals working across Colombia, the U.S., and Canada."
   structuredData={orgSchema}
 >
-  <!-- 1. POSITIONING -->
-  <section style="background:#fff; padding:6rem 0 4rem;">
-    <div class="max-w-3xl mx-auto px-6 text-center">
-      <span class="section-tag mb-4" style="display:block;">Our Team</span>
-      <h1 class="text-4xl lg:text-5xl leading-tight mb-6" style="color:var(--black);">
+  <!-- 1. POSITIONING: full-width banner -->
+  <section class="relative" style="overflow:hidden;">
+    <img
+      src="/assets/images/stock/marketing-team-meeting.jpg"
+      alt="Marketing team in a meeting"
+      class="absolute inset-0 w-full h-full object-cover"
+      loading="eager"
+    />
+    <div class="absolute inset-0" style="background:linear-gradient(180deg, rgba(5,5,5,.72) 0%, rgba(5,5,5,.85) 100%);"></div>
+    <div class="relative max-w-3xl mx-auto px-6 text-center" style="padding:7rem 1.5rem 5rem;">
+      <span class="section-tag mb-4" style="display:block; color:var(--oak);">Our Team</span>
+      <h1 class="text-4xl lg:text-5xl leading-tight mb-6" style="color:#fff;">
         Built for growth on both sides of the border.
       </h1>
-      <p style="font-size:1.125rem; color:#4b5563; line-height:1.8;">
+      <p style="font-size:1.125rem; color:#e5e7eb; line-height:1.8;">
         Ubik 360's leadership is composed of professionals in marketing, sales, and international
         business operations. We work as one accountable team, not a loose network of
         subcontractors — every engagement is run with direct oversight, start to finish.
@@ -47,23 +54,33 @@ const orgSchema = {
     </div>
   </section>
 
-  <!-- 2. APPROACH -->
-  <section style="background:#f9fafb; padding:5rem 0;">
-    <div class="max-w-3xl mx-auto px-6">
-      <span class="section-tag mb-3" style="display:block; text-align:center;">How We Work</span>
-      <h2 class="text-3xl lg:text-4xl mb-6 text-center" style="color:var(--black);">The work speaks before we do.</h2>
-      <div style="display:flex; flex-direction:column; gap:1.25rem; font-size:1.0625rem; color:#374151; line-height:1.85;">
-        <p>
-          We'd rather walk into a first conversation prepared to answer hard questions about your
-          business than spend it building rapport. Clients don't need a great pitch, they need a
-          team that's done the homework and can say plainly what's working, what isn't, and what
-          to do next.
-        </p>
-        <p>
-          That means no inflated timelines, no vague promises, and no dressing up a weak plan to
-          make a first call go smoothly. If something isn't going to work, you hear that in the
-          first conversation — not three months into a retainer.
-        </p>
+  <!-- 2. APPROACH (asymmetric: text left, image right) -->
+  <section style="background:#f9fafb; padding:6rem 0;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
+        <div>
+          <span class="section-tag mb-3">How We Work</span>
+          <h2 class="text-3xl lg:text-4xl mb-6" style="color:var(--black);">The work speaks before we do.</h2>
+          <div style="display:flex; flex-direction:column; gap:1.25rem; font-size:1.0625rem; color:#374151; line-height:1.85;">
+            <p>
+              We'd rather walk into a first conversation prepared to answer hard questions about your
+              business than spend it building rapport. Clients don't need a great pitch, they need a
+              team that's done the homework and can say plainly what's working, what isn't, and what
+              to do next.
+            </p>
+            <p>
+              That means no inflated timelines, no vague promises, and no dressing up a weak plan to
+              make a first call go smoothly. If something isn't going to work, you hear that in the
+              first conversation — not three months into a retainer.
+            </p>
+          </div>
+        </div>
+        <img
+          src="/assets/images/stock/sales-funnel-whiteboard.jpg"
+          alt="Sales strategy on a whiteboard"
+          class="w-full rounded-xl object-cover aspect-[4/3]"
+          loading="lazy"
+        />
       </div>
     </div>
   </section>

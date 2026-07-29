@@ -1,7 +1,5 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import RouteMotif from '../../components/RouteMotif.astro';
-import PlaceholderImage from '../../components/PlaceholderImage.astro';
 // New page per MARKETING.md -- pulled out of the old international-expansion.html's
 // buried "Nearshore Staffing" + "Supplier & 3PL Selection" sections. Reuses the
 // existing "Administrative Scale-Up" lead magnet asset (public/assets/downloads/),
@@ -46,22 +44,30 @@ const faqSchema = {
   description="Reliable staff in Colombia for customer service, bookkeeping, and back-office roles — plus LatAm vendor and manufacturing sourcing. Managed for you."
   structuredData={faqSchema}
 >
-  <!-- HERO -->
-  <section style="position:relative; overflow:hidden; background:linear-gradient(180deg, #fff 0%, #fdfcfb 100%); padding:5rem 0 4rem;">
-    <RouteMotif align="right" variant="light" class="hidden lg:block" />
-    <div class="max-w-3xl mx-auto px-6" style="position:relative; z-index:1;">
-      <span class="section-tag mb-4">Nearshore Staffing &amp; Sourcing</span>
-      <h1 class="text-4xl lg:text-5xl leading-tight mb-5" style="color:var(--black);">
-        Local hiring is slow, expensive, and hard to retain. There's a better way to staff up.
-      </h1>
-      <p class="text-xl leading-relaxed mb-8" style="color:#4b5563;">
-        Skilled, accountable staff in Colombia for the roles that are hardest to fill locally —
-        plus vendor and manufacturing sourcing across Latin America. Managed for you, start to
-        finish.
-      </p>
-      <div class="flex flex-col sm:flex-row gap-3">
-        <a href="#form" class="btn-primary">Get the Free Guide</a>
-        <a href="https://calendly.com/jose-ubik360/30min" target="_blank" rel="noopener" class="btn-outline">Schedule a Call</a>
+  <!-- HERO: full-width banner -->
+  <section class="relative" style="overflow:hidden;">
+    <img
+      src="/assets/images/stock/hiring-handshake.jpg"
+      alt="Hiring handshake after a successful interview"
+      class="absolute inset-0 w-full h-full object-cover"
+      loading="eager"
+    />
+    <div class="absolute inset-0" style="background:linear-gradient(rgba(5,5,5,.48), rgba(5,5,5,.48)), linear-gradient(100deg, rgba(5,5,5,.92) 0%, rgba(5,5,5,.78) 40%, rgba(5,5,5,.3) 70%, rgba(5,5,5,.1) 100%);"></div>
+    <div class="relative max-w-6xl mx-auto px-6 flex items-center" style="min-height:32rem; padding:6rem 1.5rem;">
+      <div class="max-w-xl">
+        <span class="section-tag mb-4" style="color:var(--oak);">Nearshore Staffing &amp; Sourcing</span>
+        <h1 class="text-4xl lg:text-5xl leading-tight mb-5" style="color:#fff;">
+          Local hiring is slow, expensive, and hard to retain. There's a better way to staff up.
+        </h1>
+        <p class="text-xl leading-relaxed mb-8" style="color:#e5e7eb;">
+          Skilled, accountable staff in Colombia for the roles that are hardest to fill locally —
+          plus vendor and manufacturing sourcing across Latin America. Managed for you, start to
+          finish.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-3">
+          <a href="#form" class="btn-primary">Get the Free Guide</a>
+          <a href="https://calendly.com/jose-ubik360/30min" target="_blank" rel="noopener" class="btn-outline" style="border-color:#fff; color:#fff;">Schedule a Call</a>
+        </div>
       </div>
     </div>
   </section>
@@ -127,10 +133,11 @@ const faqSchema = {
             on-the-ground team of your own.
           </p>
         </div>
-        <PlaceholderImage
-          filename="shot-07-hands-detail.jpg"
-          description="Hands / detail — writing, typing, or gesturing mid-conversation. No face needed. Landscape."
-          ratio="landscape"
+        <img
+          src="/assets/images/stock/export-containers-port.jpg"
+          alt="Export containers at a shipping port"
+          class="w-full rounded-xl object-cover aspect-[4/3]"
+          loading="lazy"
         />
       </div>
     </div>

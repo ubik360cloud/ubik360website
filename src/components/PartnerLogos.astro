@@ -1,13 +1,14 @@
 ---
-// Partner/client logo strip. Each logo sits on a white card regardless of
-// section background, since several of the source logos are designed for
-// dark backgrounds (light/transparent text) and would vanish otherwise.
-// Relationship types (per Jose, 2026-07): Gasolutions = ad-hoc marketing +
-// international-ops consulting; Digital Jockey = mutual referral partner
-// (paid media <-> content/SEO); CEO US University = completed Go-to-Market
-// consulting engagement; 360 Print Studio = active consulting client;
-// Mukura Apparel = international expansion consulting client (Jose was
-// founder, exited, now consults on their export brand).
+// Partner/client logo strip. Card background is per-logo: most source logos
+// read fine on white, but Gasolutions and CEO US University are cream/white
+// text on transparent backgrounds -- effectively invisible on a white card --
+// so those two get a dark (brand-black) card instead. Relationship types
+// (per Jose, 2026-07): Gasolutions = ad-hoc marketing + international-ops
+// consulting; Digital Jockey = mutual referral partner (paid media <->
+// content/SEO); CEO US University = completed Go-to-Market consulting
+// engagement; 360 Print Studio = active consulting client; Mukura Apparel =
+// international expansion consulting client (Jose was founder, exited, now
+// consults on their export brand).
 interface Props {
   lang: 'en' | 'es';
 }
@@ -16,21 +17,26 @@ const { lang } = Astro.props;
 const heading = lang === 'en' ? 'Partners We’ve Grown With' : 'Socios con los que Hemos Crecido';
 
 const logos = [
-  { src: '/assets/images/partners/gasolutions.jpg', alt: 'Gasolutions' },
-  { src: '/assets/images/partners/digital-jockey.png', alt: 'Digital Jockey' },
-  { src: '/assets/images/partners/ceo-us-university.png', alt: 'CEO US University' },
-  { src: '/assets/images/partners/360-print-studio.webp', alt: '360 Print Studio' },
-  { src: '/assets/images/partners/mukura-apparel.webp', alt: 'Mukura Apparel' },
+  { src: '/assets/images/partners/gasolutions.jpg', alt: 'Gasolutions', dark: true },
+  { src: '/assets/images/partners/digital-jockey.png', alt: 'Digital Jockey', dark: false },
+  { src: '/assets/images/partners/ceo-us-university.png', alt: 'CEO US University', dark: true },
+  { src: '/assets/images/partners/360-print-studio.webp', alt: '360 Print Studio', dark: false },
+  { src: '/assets/images/partners/mukura-apparel.webp', alt: 'Mukura Apparel', dark: false },
 ];
 ---
 
-<section style="background:#f9fafb; padding:4rem 0;">
+<section style="background:#f9fafb; padding:5rem 0;">
   <div class="max-w-6xl mx-auto px-6">
-    <p class="section-tag mb-8 text-center">{heading}</p>
-    <div class="flex flex-wrap items-center justify-center gap-6">
+    <p class="section-tag mb-10 text-center">{heading}</p>
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-5">
       {logos.map((logo) => (
-        <div style="background:#fff; border:1px solid #e5e7eb; border-radius:.75rem; padding:1.25rem 1.75rem; display:flex; align-items:center; justify-content:center; height:5rem; width:11rem;">
-          <img src={logo.src} alt={logo.alt} style="max-height:2.75rem; max-width:100%; object-fit:contain;" loading="lazy" />
+        <div
+          class="flex items-center justify-center rounded-xl h-32 px-6"
+          style={logo.dark
+            ? 'background:var(--black); border:1px solid #050505;'
+            : 'background:#fff; border:1px solid #e5e7eb;'}
+        >
+          <img src={logo.src} alt={logo.alt} class="max-h-16 w-full object-contain" loading="lazy" />
         </div>
       ))}
     </div>

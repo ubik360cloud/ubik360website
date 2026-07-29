@@ -30,14 +30,21 @@ const orgSchema = {
   description="El liderazgo de Ubik 360 reúne profesionales en marketing, ventas y operaciones de negocio internacional trabajando entre Colombia, EE.UU. y Canadá."
   structuredData={orgSchema}
 >
-  <!-- 1. POSICIONAMIENTO -->
-  <section style="background:#fff; padding:6rem 0 4rem;">
-    <div class="max-w-3xl mx-auto px-6 text-center">
-      <span class="section-tag mb-4" style="display:block;">Nuestro Equipo</span>
-      <h1 class="text-4xl lg:text-5xl leading-tight mb-6" style="color:var(--black);">
+  <!-- 1. POSICIONAMIENTO: banner de ancho completo -->
+  <section class="relative" style="overflow:hidden;">
+    <img
+      src="/assets/images/stock/marketing-team-meeting.jpg"
+      alt="Equipo de marketing en reunión"
+      class="absolute inset-0 w-full h-full object-cover"
+      loading="eager"
+    />
+    <div class="absolute inset-0" style="background:linear-gradient(180deg, rgba(5,5,5,.72) 0%, rgba(5,5,5,.85) 100%);"></div>
+    <div class="relative max-w-3xl mx-auto px-6 text-center" style="padding:7rem 1.5rem 5rem;">
+      <span class="section-tag mb-4" style="display:block; color:var(--oak);">Nuestro Equipo</span>
+      <h1 class="text-4xl lg:text-5xl leading-tight mb-6" style="color:#fff;">
         Construidos para crecer a ambos lados de la frontera.
       </h1>
-      <p style="font-size:1.125rem; color:#4b5563; line-height:1.8;">
+      <p style="font-size:1.125rem; color:#e5e7eb; line-height:1.8;">
         El liderazgo de Ubik 360 está compuesto por profesionales en marketing, ventas y
         operaciones de negocio internacional. Trabajamos como un solo equipo responsable, no como
         una red suelta de subcontratistas — cada proyecto se ejecuta con supervisión directa, de
@@ -46,23 +53,33 @@ const orgSchema = {
     </div>
   </section>
 
-  <!-- 2. ENFOQUE -->
-  <section style="background:#f9fafb; padding:5rem 0;">
-    <div class="max-w-3xl mx-auto px-6">
-      <span class="section-tag mb-3" style="display:block; text-align:center;">Cómo Trabajamos</span>
-      <h2 class="text-3xl lg:text-4xl mb-6 text-center" style="color:var(--black);">El trabajo habla antes que nosotros.</h2>
-      <div style="display:flex; flex-direction:column; gap:1.25rem; font-size:1.0625rem; color:#374151; line-height:1.85;">
-        <p>
-          Preferimos llegar a una primera conversación preparados para responder preguntas
-          difíciles sobre tu negocio, en lugar de dedicarla a generar cercanía. Los clientes no
-          necesitan un gran discurso de ventas, necesitan un equipo que ya hizo la tarea y puede
-          decir con claridad qué está funcionando, qué no, y qué sigue.
-        </p>
-        <p>
-          Eso significa sin plazos inflados, sin promesas vagas, y sin maquillar un plan débil para
-          que la primera llamada se sienta bien. Si algo no va a funcionar, lo escuchas en la
-          primera conversación — no tres meses después, ya dentro de un contrato.
-        </p>
+  <!-- 2. ENFOQUE (asimétrico: texto izquierda, imagen derecha) -->
+  <section style="background:#f9fafb; padding:6rem 0;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
+        <div>
+          <span class="section-tag mb-3">Cómo Trabajamos</span>
+          <h2 class="text-3xl lg:text-4xl mb-6" style="color:var(--black);">El trabajo habla antes que nosotros.</h2>
+          <div style="display:flex; flex-direction:column; gap:1.25rem; font-size:1.0625rem; color:#374151; line-height:1.85;">
+            <p>
+              Preferimos llegar a una primera conversación preparados para responder preguntas
+              difíciles sobre tu negocio, en lugar de dedicarla a generar cercanía. Los clientes no
+              necesitan un gran discurso de ventas, necesitan un equipo que ya hizo la tarea y puede
+              decir con claridad qué está funcionando, qué no, y qué sigue.
+            </p>
+            <p>
+              Eso significa sin plazos inflados, sin promesas vagas, y sin maquillar un plan débil para
+              que la primera llamada se sienta bien. Si algo no va a funcionar, lo escuchas en la
+              primera conversación — no tres meses después, ya dentro de un contrato.
+            </p>
+          </div>
+        </div>
+        <img
+          src="/assets/images/stock/sales-funnel-whiteboard.jpg"
+          alt="Estrategia de ventas en pizarra"
+          class="w-full rounded-xl object-cover aspect-[4/3]"
+          loading="lazy"
+        />
       </div>
     </div>
   </section>

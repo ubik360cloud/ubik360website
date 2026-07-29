@@ -1,0 +1,92 @@
+---
+// Inline newsletter section -- its own block, deliberately not crammed into
+// the hero next to the call-booking CTA (two competing asks in one banner
+// hurts both). Reuses the existing Formspree endpoint with a hidden "tipo"/
+// "type" field so submissions are distinguishable from contact-form leads
+// without needing a second Formspree account today.
+interface Props {
+  lang: 'en' | 'es';
+}
+const { lang } = Astro.props;
+
+const copy = lang === 'en'
+  ? {
+      tag: 'Newsletter',
+      heading: 'Straight talk on marketing and cross-border growth.',
+      body: 'Practical insights on growth marketing, staffing, and expanding across the U.S./Canada–LatAm border — drawn from real engagements, not theory. No spam, unsubscribe anytime.',
+      placeholder: 'you@yourcompany.com',
+      button: 'Subscribe',
+      success: 'You’re in. Check your inbox to confirm.',
+      error: 'Something went wrong. Please try again.',
+    }
+  : {
+      tag: 'Newsletter',
+      heading: 'Ideas prácticas sobre marketing y expansión internacional.',
+      body: 'Contenido directo sobre growth marketing, expansión y operación entre Colombia, EE.UU. y Canadá — basado en casos reales, no en teoría. Sin spam, cancela cuando quieras.',
+      placeholder: 'tucorreo@empresa.com',
+      button: 'Suscribirme',
+      success: 'Listo. Revisa tu correo para confirmar.',
+      error: 'Algo salió mal. Intenta de nuevo.',
+    };
+---
+
+<section style="background:var(--black); padding:5rem 0;">
+  <div class="max-w-4xl mx-auto px-6 text-center">
+    <span class="section-tag mb-3" style="color:var(--oak);">{copy.tag}</span>
+    <h2 class="text-3xl lg:text-4xl mb-4" style="color:#fff;">{copy.heading}</h2>
+    <p style="color:#9ca3af; font-size:1.0625rem; line-height:1.7; max-width:34rem; margin:0 auto 2.25rem;">
+      {copy.body}
+    </p>
+    <form
+      class="newsletter-inline-form"
+      action="https://formspree.io/f/mlganpda"
+      method="POST"
+      novalidate
+      style="display:flex; flex-direction:column; sm:flex-direction:row; gap:.75rem; max-width:28rem; margin:0 auto;"
+    >
+      <input type="hidden" name="_subject" value="Newsletter subscription" />
+      <input type="hidden" name="form_type" value="newsletter" />
+      <input type="hidden" name="pagina_origen" value={lang === 'en' ? 'en/index.html#newsletter' : 'es/index.html#newsletter'} />
+      <div class="flex flex-col sm:flex-row gap-3">
+        <input
+          type="email"
+          name="email"
+          required
+          placeholder={copy.placeholder}
+          class="flex-1 px-4 py-3 rounded-md text-[.9375rem]"
+          style="border:1px solid #374151; background:#111; color:#fff;"
+        />
+        <button type="submit" class="btn-primary" style="white-space:nowrap; padding:.875rem 1.75rem;">{copy.button}</button>
+      </div>
+      <p class="newsletter-inline-msg" style="font-size:.8125rem; margin:.25rem 0 0; min-height:1.2em;"></p>
+    </form>
+  </div>
+</section>
+
+<script define:vars={{ successMsg: copy.success, errorMsg: copy.error }}>
+  document.querySelectorAll('.newsletter-inline-form').forEach((form) => {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const btn = form.querySelector('button[type="submit"]');
+      const msg = form.querySelector('.newsletter-inline-msg');
+      btn.disabled = true;
+      fetch(form.action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } })
+        .then((res) => {
+          if (res.ok) {
+            form.querySelector('input[type="email"]').value = '';
+            msg.textContent = successMsg;
+            msg.style.color = '#659157';
+          } else {
+            msg.textContent = errorMsg;
+            msg.style.color = '#f87171';
+          }
+          btn.disabled = false;
+        })
+        .catch(() => {
+          msg.textContent = errorMsg;
+          msg.style.color = '#f87171';
+          btn.disabled = false;
+        });
+    });
+  });
+</script>

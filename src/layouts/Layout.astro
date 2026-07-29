@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
+import NewsletterPopup from '../components/NewsletterPopup.astro';
 
 interface Props {
   lang: 'en' | 'es';
@@ -103,6 +104,7 @@ const schemaList = structuredData
     <slot />
 
     <Footer lang={lang} />
+    <NewsletterPopup lang={lang} />
 
     <script src="/assets/js/ubik360-chat-widget.js" is:inline></script>
   </body>

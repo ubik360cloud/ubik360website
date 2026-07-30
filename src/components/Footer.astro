@@ -82,12 +82,13 @@ const colsClass = d.columns.length === 3 ? 'md:grid-cols-3' : 'md:grid-cols-2';
     <div class="grid grid-cols-1 gap-12">
       <div class="max-w-sm">
         <a href={d.home} class="inline-block mb-5">
-          <img
-            src="https://ubik360.com/assets/images/ubik360logo.png"
-            alt="Ubik 360"
-            class="h-9 w-auto"
-            style="filter:brightness(0) invert(1);"
-          />
+          <div class="inline-flex items-center justify-center rounded-lg bg-white" style="width:3.5rem; height:3.5rem; padding:.5rem;">
+            <img
+              src="/assets/images/ubik360logo.png"
+              alt="Ubik 360"
+              style="max-width:100%; max-height:100%; object-fit:contain;"
+            />
+          </div>
         </a>
         <p class="text-gray-400 text-sm leading-relaxed">{d.tagline}</p>
       </div>

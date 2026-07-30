@@ -33,7 +33,7 @@ body {
   @apply font-sans text-brand-black antialiased;
 }
 
-h1, h2, h3, h4 {
+h1, h2, h3 {
   @apply font-serif;
 }
 

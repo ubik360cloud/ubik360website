@@ -5,19 +5,28 @@
   const lang = (navigator.language || 'es').toLowerCase();
   const isEN = lang.startsWith('en');
 
+  // TEMPORARY TEST VARIANT (2026-07): widget copy scrubbed of "Jose"/personal
+  // framing to match the anonymous/bigger-company positioning test -- see
+  // MARKETING.md "Anonymous/bigger-company positioning test". Prompts updated
+  // from the old Hispanic-market-specific framing to the current general
+  // growth-marketing / $5M+ ICP positioning. NOTE: this only covers the
+  // client-side widget copy -- the bot's actual conversation logic and
+  // knowledge base live in a separate Railway-hosted service outside this
+  // repo (ubik360-bot-production.up.railway.app) and were NOT updated here;
+  // that service needs its own review to stay consistent with this test.
   const STRINGS = {
     greeting: isEN
-      ? "Hi! I'm Jose's assistant at Ubik360 👋\n\nHow can I help you today?"
-      : '¡Hola! Soy el asistente de José en Ubik360 👋\n\n¿En qué te puedo ayudar hoy?',
+      ? "Hi! I'm the Ubik 360 assistant 👋\n\nHow can I help you today?"
+      : '¡Hola! Soy el asistente de Ubik 360 👋\n\n¿En qué te puedo ayudar hoy?',
     bubble: isEN ? '👋 Hi! Can I help you?' : '👋 ¡Hola! ¿Te ayudo?',
     placeholder: isEN ? 'Type your message...' : 'Escribe tu mensaje...',
-    subtitle: isEN ? "Jose's Assistant · Online" : 'Asistente de José · En línea',
+    subtitle: isEN ? 'Ubik 360 Assistant · Online' : 'Asistente de Ubik 360 · En línea',
     error: isEN ? 'Connection error. Please try again.' : 'Error de conexión. Intenta de nuevo.'
   };
 
   const PROMPTS = isEN
-    ? ['🏢 Open a US company', '📈 Hispanic marketing', '👥 Hire in Colombia']
-    : ['🏢 Empresa en EE.UU.', '📈 Marketing digital', '👥 Equipo en Colombia'];
+    ? ['🏢 Expand to the U.S./Canada', '📈 Growth marketing', '👥 LatAm staffing']
+    : ['🏢 Expansión a EE.UU./Canadá', '📈 Marketing de crecimiento', '👥 Personal en LatAm'];
 
   const CSS = `
     @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:wght@600&display=swap');

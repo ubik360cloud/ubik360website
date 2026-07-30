@@ -1,14 +1,16 @@
 ---
 // Partner/client logo strip. Card background is per-logo: most source logos
-// read fine on white, but Gasolutions and CEO US University are cream/white
-// text on transparent backgrounds -- effectively invisible on a white card --
-// so those two get a dark (brand-black) card instead. Relationship types
-// (per Jose, 2026-07): Gasolutions = ad-hoc marketing + international-ops
-// consulting; Digital Jockey = mutual referral partner (paid media <->
-// content/SEO); CEO US University = completed Go-to-Market consulting
-// engagement; 360 Print Studio = active consulting client; Mukura Apparel =
-// international expansion consulting client (Jose was founder, exited, now
-// consults on their export brand).
+// read fine on white, but a couple are light/cream text on transparent (or,
+// for Gasolutions, a flat navy rectangle) that would vanish or look wrong on
+// a plain white card -- so those get a bg color sampled/matched to the logo
+// itself. Relationship types (per Jose, 2026-07): Gasolutions = ad-hoc
+// marketing + international-ops consulting; Digital Jockey = mutual referral
+// partner (paid media <-> content/SEO); CEO US University = completed
+// Go-to-Market consulting engagement; 360 Print Studio = active consulting
+// client; Mukura Apparel = international expansion consulting client (Jose
+// was founder, exited, now consults on their export brand).
+// Mobile: horizontal scroll-snap carousel instead of a cramped 2-col grid
+// (tiles were too small to read at that width). Desktop: grid, unchanged.
 interface Props {
   lang: 'en' | 'es';
 }
@@ -17,24 +19,36 @@ const { lang } = Astro.props;
 const heading = lang === 'en' ? 'Partners We’ve Grown With' : 'Socios con los que Hemos Crecido';
 
 const logos = [
-  { src: '/assets/images/partners/gasolutions.jpg', alt: 'Gasolutions', dark: true },
-  { src: '/assets/images/partners/digital-jockey.png', alt: 'Digital Jockey', dark: false },
-  { src: '/assets/images/partners/ceo-us-university.png', alt: 'CEO US University', dark: true },
-  { src: '/assets/images/partners/360-print-studio.webp', alt: '360 Print Studio', dark: false },
-  { src: '/assets/images/partners/mukura-apparel.webp', alt: 'Mukura Apparel', dark: false },
+  { src: '/assets/images/partners/gasolutions.jpg', alt: 'Gasolutions', bg: '#132847' },
+  { src: '/assets/images/partners/digital-jockey.png', alt: 'Digital Jockey', bg: '#fff' },
+  { src: '/assets/images/partners/ceo-us-university.png', alt: 'CEO US University', bg: 'var(--black)' },
+  { src: '/assets/images/partners/360-print-studio.webp', alt: '360 Print Studio', bg: '#fff' },
+  { src: '/assets/images/partners/mukura-apparel.webp', alt: 'Mukura Apparel', bg: '#fff' },
 ];
 ---
 
 <section style="background:#f9fafb; padding:5rem 0;">
   <div class="max-w-6xl mx-auto px-6">
     <p class="section-tag mb-10 text-center">{heading}</p>
-    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-5">
+
+    <!-- Mobile: horizontal scroll-snap carousel -->
+    <div class="sm:hidden flex overflow-x-auto gap-4 pb-2" style="scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch;">
+      {logos.map((logo) => (
+        <div
+          class="flex items-center justify-center rounded-xl h-28 px-6 flex-shrink-0"
+          style={`background:${logo.bg}; border:1px solid #e5e7eb; width:70%; scroll-snap-align:center;`}
+        >
+          <img src={logo.src} alt={logo.alt} class="max-h-14 w-full object-contain" loading="lazy" />
+        </div>
+      ))}
+    </div>
+
+    <!-- Desktop/tablet: grid -->
+    <div class="hidden sm:grid sm:grid-cols-3 lg:grid-cols-5 gap-5">
       {logos.map((logo) => (
         <div
           class="flex items-center justify-center rounded-xl h-32 px-6"
-          style={logo.dark
-            ? 'background:var(--black); border:1px solid #050505;'
-            : 'background:#fff; border:1px solid #e5e7eb;'}
+          style={`background:${logo.bg}; border:1px solid #e5e7eb;`}
         >
           <img src={logo.src} alt={logo.alt} class="max-h-16 w-full object-contain" loading="lazy" />
         </div>

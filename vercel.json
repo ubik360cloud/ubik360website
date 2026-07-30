@@ -7,5 +7,22 @@
     { "source": "/es", "destination": "/es.html" },
     { "source": "/es/", "destination": "/es.html" },
     { "source": "/es/index.html", "destination": "/es.html" }
+  ],
+  "redirects": [
+    {
+      "source": "/es/marketing-digital.html",
+      "destination": "/es/expansion-internacional.html#marketing-en-tu-nuevo-mercado",
+      "permanent": true
+    },
+    {
+      "source": "/en/thank-you-expansion.html",
+      "destination": "/en/thank-you.html",
+      "permanent": true
+    },
+    {
+      "source": "/es/gracias-checklist.html",
+      "destination": "/es/gracias.html",
+      "permanent": true
+    }
   ]
 }

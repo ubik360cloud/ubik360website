@@ -1,0 +1,284 @@
+---
+import Layout from '../../layouts/Layout.astro';
+// NEW (2026-07): Spanish-only service page. Explicitly not offered to
+// US/Canada -- AI-implementation demand is a LatAm/Colombia-specific
+// opportunity per Jose, so this has no EN equivalent and no alternatePath.
+// Positioning: NOT a generic "AI hype" pitch -- differentiator is
+// understanding the client's business/process first, building custom
+// systems (chatbots, automation, integrations, web apps) second, and doing
+// both the advisory AND the build under one roof (the usual consultant ->
+// separate dev shop handoff is where clients lose time/money). Anonymous
+// team framing kept consistent with the rest of the positioning test --
+// capability described at the team level, no personal name/face.
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: '¿Esto es lo mismo que usar ChatGPT en mi empresa?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'No. ChatGPT es una herramienta genérica de propósito general. Una solución a la medida se integra con tus datos, tus sistemas actuales (CRM, facturación, inventario, WhatsApp Business, etc.) y tus procesos reales — automatizando trabajo, no solo respondiendo preguntas sueltas.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: '¿Necesito tener un equipo de tecnología para implementar esto?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'No. Ese es exactamente el problema que resolvemos: asesoramos y construimos la solución nosotros mismos, sin que necesites armar un departamento de TI nuevo para sostenerla.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: '¿Qué tan compleja puede ser la solución?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Desde un chatbot de atención al cliente hasta una aplicación web completa que integra varios sistemas de tu operación. El diagnóstico inicial define qué nivel de complejidad realmente necesitas — no vendemos más tecnología de la que tu negocio puede aprovechar.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: '¿Cuánto tiempo toma implementar una solución?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Depende del alcance: un chatbot o una automatización puntual puede estar listo en semanas; una integración o aplicación más compleja toma más tiempo. El diagnóstico gratuito define un alcance y un tiempo claro antes de comenzar.',
+      },
+    },
+  ],
+};
+---
+
+<Layout
+  lang="es"
+  path="/es/soluciones-ia.html"
+  title="Soluciones de IA a la Medida para tu Negocio | Ubik 360"
+  description="Chatbots, automatizaciones, integraciones y aplicaciones con IA construidas para tu negocio real — no plantillas genéricas. Asesoría e implementación bajo un solo equipo."
+  structuredData={faqSchema}
+>
+  <!-- HERO: banner de ancho completo -->
+  <section class="relative" style="overflow:hidden;">
+    <img
+      src="/assets/images/stock/ai-solutions-hero.jpg"
+      alt="Inteligencia artificial y sistemas conectados"
+      class="absolute inset-0 w-full h-full object-cover"
+      loading="eager"
+    />
+    <div class="absolute inset-0" style="background:linear-gradient(rgba(5,5,5,.48), rgba(5,5,5,.48)), linear-gradient(100deg, rgba(5,5,5,.92) 0%, rgba(5,5,5,.78) 38%, rgba(5,5,5,.35) 68%, rgba(5,5,5,.15) 100%);"></div>
+    <div class="relative max-w-6xl mx-auto px-6 flex items-center" style="min-height:32rem; padding:6rem 1.5rem;">
+      <div class="max-w-xl">
+        <span class="section-tag mb-4" style="color:var(--oak);">Soluciones de IA</span>
+        <h1 class="text-4xl lg:text-5xl leading-tight mb-5" style="color:#fff;">
+          La IA no es solo un chatbot. Es un sistema completo, construido para tu negocio.
+        </h1>
+        <p class="text-lg leading-relaxed mb-8" style="color:#e5e7eb;">
+          Automatizaciones, integraciones y aplicaciones a la medida — diseñadas por un equipo que
+          entiende primero tu negocio, y después la tecnología.
+        </p>
+        <a href="https://calendly.com/jose-ubik360/30min" target="_blank" rel="noopener" class="btn-primary">Agenda un Diagnóstico Gratuito</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- EL PROBLEMA -->
+  <section style="background:#fff; padding:4rem 0;">
+    <div class="max-w-3xl mx-auto px-6 text-center">
+      <p style="font-size:1.0625rem; color:#374151; line-height:1.8;">
+        La mayoría de las empresas en Colombia y Latinoamérica piensan que "implementar IA"
+        significa instalar un chatbot. La realidad es que la inteligencia artificial puede
+        automatizar procesos completos, conectar sistemas que hoy no se hablan entre sí, y construir
+        herramientas a la medida de cómo realmente opera tu negocio — no como opera un software
+        genérico.
+      </p>
+    </div>
+  </section>
+
+  <!-- SERVICIOS -->
+  <section style="background:var(--oak); padding:4rem 0;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="max-w-2xl mb-10">
+        <span class="section-tag mb-3" style="color:var(--red);">Lo Que Construimos</span>
+        <h2 class="text-3xl lg:text-4xl mb-4" style="color:var(--black);">De lo simple a lo complejo, según lo que tu negocio necesite.</h2>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div style="background:#fff; border-radius:.875rem; padding:1.75rem;">
+          <h3 class="text-lg mb-2" style="color:var(--black);">Chatbots Inteligentes</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Atención al cliente, ventas y soporte automatizado — entrenados con el conocimiento real de tu negocio, no respuestas genéricas.</p>
+        </div>
+        <div style="background:#fff; border-radius:.875rem; padding:1.75rem;">
+          <h3 class="text-lg mb-2" style="color:var(--black);">Automatización de Procesos</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Elimina tareas manuales repetitivas conectando tus herramientas actuales en flujos automatizados de principio a fin.</p>
+        </div>
+        <div style="background:#fff; border-radius:.875rem; padding:1.75rem;">
+          <h3 class="text-lg mb-2" style="color:var(--black);">Integraciones a la Medida</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Conecta sistemas que hoy operan aislados — CRM, facturación, inventario, comunicaciones — en un solo flujo de trabajo.</p>
+        </div>
+        <div style="background:#fff; border-radius:.875rem; padding:1.75rem;">
+          <h3 class="text-lg mb-2" style="color:var(--black);">Aplicaciones Web con IA</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Desde herramientas internas simples hasta plataformas más complejas, construidas para cómo trabaja realmente tu equipo.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ENFOQUE (asimétrico: texto izquierda, imagen derecha) -->
+  <section style="background:#fff; padding:4rem 0;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
+        <div>
+          <span class="section-tag mb-3">Nuestro Enfoque</span>
+          <h2 class="text-3xl lg:text-4xl mb-6" style="color:var(--black);">Primero entendemos tu negocio. Después construimos la tecnología.</h2>
+          <div style="display:flex; flex-direction:column; gap:1.25rem; font-size:1.0625rem; color:#374151; line-height:1.85;">
+            <p>
+              Lo que parece un problema de software casi siempre es, en realidad, un problema de
+              proceso. Antes de escribir una sola línea de código, entendemos cómo opera tu negocio,
+              dónde se pierde tiempo, y qué necesita resolverse de verdad — no la versión de moda de
+              "inteligencia artificial".
+            </p>
+            <p>
+              Quien lidera este servicio en Ubik 360 construyó sus propias herramientas desde cero,
+              primero como dueño de negocio. Esa experiencia operativa es la que conecta procesos
+              reales con arquitecturas de IA que funcionan, sin necesitar un nuevo departamento de TI
+              para mantenerlas.
+            </p>
+          </div>
+        </div>
+        <img
+          src="/assets/images/stock/ai-solutions-custom-development.jpg"
+          alt="Desarrollo de software a la medida"
+          class="w-full rounded-xl object-cover aspect-[4/3]"
+          loading="lazy"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- SIN LA DESCONEXIÓN TÍPICA -->
+  <section style="background:var(--red); padding:4rem 0;">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+      <span class="section-tag mb-3" style="color:#fff; opacity:.85;">Una Sola Responsabilidad</span>
+      <h2 class="text-3xl lg:text-4xl mb-6" style="color:#fff;">Un solo equipo, de la estrategia a la implementación.</h2>
+      <p style="font-size:1.0625rem; color:rgba(255,255,255,.88); line-height:1.85;">
+        La mayoría de las empresas primero contratan un consultor para definir qué necesitan, y
+        después una empresa distinta para construirlo. Esa desconexión genera retrasos, sobrecostos,
+        y soluciones que no calzan con lo que realmente se pidió. Ubik 360 asesora y construye — sin
+        intermediarios, sin traducción perdida entre la estrategia y la ejecución.
+      </p>
+    </div>
+  </section>
+
+  <!-- CÓMO TRABAJAMOS -->
+  <section style="background:#fff; padding:4rem 0;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="max-w-xl mb-12">
+        <span class="section-tag mb-3">El Proceso</span>
+        <h2 class="text-3xl lg:text-4xl" style="color:var(--black);">Cómo trabajamos</h2>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div>
+          <div style="width:3rem; height:3rem; border-radius:9999px; border:2px solid var(--red); display:flex; align-items:center; justify-content:center; margin-bottom:1.25rem;">
+            <span style="font-family:'DM Serif Display',serif; font-size:1.25rem; color:var(--red);">1</span>
+          </div>
+          <h3 style="font-family:'DM Serif Display',serif; font-size:1.0625rem; color:var(--black); margin:0 0 .5rem;">Diagnóstico</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Entendemos tu operación real: dónde se pierde tiempo y qué se puede automatizar primero.</p>
+        </div>
+        <div>
+          <div style="width:3rem; height:3rem; border-radius:9999px; border:2px solid var(--red); display:flex; align-items:center; justify-content:center; margin-bottom:1.25rem;">
+            <span style="font-family:'DM Serif Display',serif; font-size:1.25rem; color:var(--red);">2</span>
+          </div>
+          <h3 style="font-family:'DM Serif Display',serif; font-size:1.0625rem; color:var(--black); margin:0 0 .5rem;">Diseño de la Solución</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Definimos exactamente qué se va a construir, con qué alcance, y qué resultado esperar.</p>
+        </div>
+        <div>
+          <div style="width:3rem; height:3rem; border-radius:9999px; border:2px solid var(--red); display:flex; align-items:center; justify-content:center; margin-bottom:1.25rem;">
+            <span style="font-family:'DM Serif Display',serif; font-size:1.25rem; color:var(--red);">3</span>
+          </div>
+          <h3 style="font-family:'DM Serif Display',serif; font-size:1.0625rem; color:var(--black); margin:0 0 .5rem;">Construcción</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Construimos e integramos la solución directamente con tus sistemas y flujos actuales.</p>
+        </div>
+        <div>
+          <div style="width:3rem; height:3rem; border-radius:9999px; border:2px solid var(--red); display:flex; align-items:center; justify-content:center; margin-bottom:1.25rem;">
+            <span style="font-family:'DM Serif Display',serif; font-size:1.25rem; color:var(--red);">4</span>
+          </div>
+          <h3 style="font-family:'DM Serif Display',serif; font-size:1.0625rem; color:var(--black); margin:0 0 .5rem;">Acompañamiento</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Ajustamos la solución con datos reales de uso — no la dejamos sola después de entregarla.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section style="background:#f9fafb; padding:4rem 0;">
+    <div class="max-w-3xl mx-auto px-6">
+      <div class="text-center mb-12">
+        <span class="section-tag mb-3">Preguntas Frecuentes</span>
+        <h2 class="text-3xl lg:text-4xl" style="color:var(--black);">Lo que más preguntan</h2>
+      </div>
+      <div id="faq-list">
+        <div class="faq-item">
+          <button class="faq-question">
+            ¿Esto es lo mismo que usar ChatGPT en mi empresa?
+            <svg class="faq-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer">No. ChatGPT es una herramienta genérica de propósito general. Una solución a la medida se integra con tus datos, tus sistemas actuales (CRM, facturación, inventario, WhatsApp Business, etc.) y tus procesos reales — automatizando trabajo, no solo respondiendo preguntas sueltas.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            ¿Necesito tener un equipo de tecnología para implementar esto?
+            <svg class="faq-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer">No. Ese es exactamente el problema que resolvemos: asesoramos y construimos la solución nosotros mismos, sin que necesites armar un departamento de TI nuevo para sostenerla.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            ¿Qué tan compleja puede ser la solución?
+            <svg class="faq-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer">Desde un chatbot de atención al cliente hasta una aplicación web completa que integra varios sistemas de tu operación. El diagnóstico inicial define qué nivel de complejidad realmente necesitas — no vendemos más tecnología de la que tu negocio puede aprovechar.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            ¿Cuánto tiempo toma implementar una solución?
+            <svg class="faq-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer">Depende del alcance: un chatbot o una automatización puntual puede estar listo en semanas; una integración o aplicación más compleja toma más tiempo. El diagnóstico gratuito define un alcance y un tiempo claro antes de comenzar.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA: banner de ancho completo -->
+  <section class="relative" style="overflow:hidden;">
+    <img
+      src="/assets/images/stock/ai-solutions-hero.jpg"
+      alt="Inteligencia artificial y sistemas conectados"
+      class="absolute inset-0 w-full h-full object-cover"
+      loading="lazy"
+    />
+    <div class="absolute inset-0" style="background:rgba(5,5,5,.8);"></div>
+    <div class="relative max-w-3xl mx-auto px-6 text-center" style="padding:6rem 1.5rem;">
+      <span class="section-tag mb-4" style="color:var(--oak);">Da el Primer Paso</span>
+      <h2 class="text-3xl lg:text-4xl mb-5" style="color:#fff;">¿Listo para automatizar tu negocio de verdad?</h2>
+      <p style="color:#e5e7eb; font-size:1.125rem; line-height:1.7; max-width:30rem; margin:0 auto 2.5rem;">
+        Una llamada de 30 minutos para entender tu operación y mostrarte qué es realmente posible.
+        Sin costo, sin compromiso.
+      </p>
+      <a href="https://calendly.com/jose-ubik360/30min" target="_blank" rel="noopener" class="btn-primary" style="font-size:1rem; padding:1rem 2.5rem;">
+        Agenda tu Diagnóstico Gratuito
+      </a>
+    </div>
+  </section>
+
+  <script>
+    document.querySelectorAll('.faq-question').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const item = btn.closest('.faq-item');
+        const isOpen = item?.classList.contains('open');
+        document.querySelectorAll('.faq-item').forEach((i) => i.classList.remove('open'));
+        if (!isOpen) item?.classList.add('open');
+      });
+    });
+  </script>
+</Layout>

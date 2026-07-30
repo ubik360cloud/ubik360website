@@ -4,6 +4,8 @@
 // TEMPORARY TEST VARIANT (2026-07, Jose): "About"/"Sobre Mí" relabeled to
 // "Team"/"Nuestro Equipo" to match the anonymous team pages -- see
 // MARKETING.md "Anonymous/bigger-company positioning test".
+import { getAlternatePath } from '../utils/langMap';
+
 interface Props {
   lang: 'en' | 'es';
   currentPath: string;
@@ -21,7 +23,6 @@ const NAV = {
       { href: '/en/about.html', label: 'Team' },
       { href: '/en/contact.html', label: 'Contact' },
     ],
-    altHref: '/es/index.html',
     altLabel: 'ES',
     ctaLabel: 'Schedule a Call',
   },
@@ -33,13 +34,15 @@ const NAV = {
       { href: '/es/sobre-mi.html', label: 'Nuestro Equipo' },
       { href: '/es/contacto.html', label: 'Contacto' },
     ],
-    altHref: '/en/index.html',
     altLabel: 'EN',
     ctaLabel: 'Agenda una Llamada',
   },
 };
 
 const d = NAV[lang];
+// Preserves the current page across the language toggle where a genuine
+// same-content counterpart exists, instead of always dropping to home.
+const altHref = getAlternatePath(currentPath, lang);
 const ctaHref = 'https://calendly.com/jose-ubik360/30min';
 ---
 
@@ -70,7 +73,7 @@ const ctaHref = 'https://calendly.com/jose-ubik360/30min';
 
     <div class="hidden lg:flex items-center gap-4">
       <a
-        href={d.altHref}
+        href={altHref}
         class="text-[.8125rem] font-medium text-gray-500 border border-gray-300 rounded-md px-3.5 py-1 transition-colors hover:border-brand-black hover:text-brand-black"
       >
         {d.altLabel}
@@ -97,7 +100,7 @@ const ctaHref = 'https://calendly.com/jose-ubik360/30min';
       </a>
     ))}
     <div class="flex items-center gap-3 pt-4">
-      <a href={d.altHref} class="text-[.8125rem] font-medium text-gray-500 border border-gray-300 rounded-md px-3.5 py-1">
+      <a href={altHref} class="text-[.8125rem] font-medium text-gray-500 border border-gray-300 rounded-md px-3.5 py-1">
         {d.altLabel}
       </a>
       <a href={ctaHref} target="_blank" rel="noopener" class="btn-primary text-sm">

@@ -6,10 +6,13 @@
 // company page exists yet), and copyright line now carries the Ubik 360
 // Enterprises / Wyoming entity info -- see MARKETING.md "Anonymous/
 // bigger-company positioning test" for full context and revert plan.
+import { getAlternatePath } from '../utils/langMap';
+
 interface Props {
   lang: 'en' | 'es';
+  currentPath: string;
 }
-const { lang } = Astro.props;
+const { lang, currentPath } = Astro.props;
 const year = new Date().getFullYear();
 
 const DATA = {
@@ -41,7 +44,6 @@ const DATA = {
         ],
       },
     ],
-    altHref: '/es/index.html',
     altLabel: 'Español',
     copy: `© ${year} Ubik 360 Enterprises. All rights reserved. 30 N Gould St Ste R, Sheridan, WY 82801.`,
   },
@@ -66,23 +68,23 @@ const DATA = {
         ],
       },
     ],
-    altHref: '/en/index.html',
     altLabel: 'English',
     copy: `© ${year} Ubik 360 Enterprises. Todos los derechos reservados. 30 N Gould St Ste R, Sheridan, WY 82801.`,
   },
 };
 
 const d = DATA[lang];
+const altHref = getAlternatePath(currentPath, lang);
 // Tailwind can't see dynamically-interpolated class names, so pick a literal string.
 const colsClass = d.columns.length === 3 ? 'md:grid-cols-3' : 'md:grid-cols-2';
 ---
 
 <footer class="bg-brand-black text-white font-sans">
-  <div class="max-w-6xl mx-auto px-6 py-16">
-    <div class="grid grid-cols-1 gap-12">
-      <div class="max-w-sm">
-        <a href={d.home} class="inline-block mb-5">
-          <div class="inline-flex items-center justify-center rounded-lg bg-white" style="width:3.5rem; height:3.5rem; padding:.5rem;">
+  <div class="max-w-6xl mx-auto px-6 py-10">
+    <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-10">
+      <div class="max-w-xs flex-shrink-0">
+        <a href={d.home} class="inline-block mb-4">
+          <div class="inline-flex items-center justify-center rounded-lg bg-white" style="width:2.75rem; height:2.75rem; padding:.4rem;">
             <img
               src="/assets/images/ubik360logo.png"
               alt="Ubik 360"
@@ -93,11 +95,11 @@ const colsClass = d.columns.length === 3 ? 'md:grid-cols-3' : 'md:grid-cols-2';
         <p class="text-gray-400 text-sm leading-relaxed">{d.tagline}</p>
       </div>
 
-      <div class={`grid grid-cols-1 ${colsClass} gap-10`}>
+      <div class={`grid grid-cols-1 ${colsClass} gap-8 lg:flex lg:gap-14`}>
         {d.columns.map((col) => (
           <div>
-            <h4 class="text-white text-sm font-semibold mb-4">{col.title}</h4>
-            <ul class="list-none p-0 m-0 flex flex-col gap-2.5">
+            <h4 class="text-white text-sm font-semibold mb-3">{col.title}</h4>
+            <ul class="list-none p-0 m-0 flex flex-col gap-2">
               {col.links.map((l) => (
                 <li>
                   <a href={l.href} class="text-gray-400 text-sm no-underline transition-colors hover:text-white">
@@ -111,10 +113,10 @@ const colsClass = d.columns.length === 3 ? 'md:grid-cols-3' : 'md:grid-cols-2';
       </div>
     </div>
 
-    <div class="mt-12 pt-8 border-t border-gray-800 flex flex-col items-center gap-4">
-      <p class="text-gray-500 text-[.8125rem] text-center">{d.copy}</p>
+    <div class="mt-8 pt-6 border-t border-gray-800 flex flex-col items-center gap-3">
+      <p class="text-gray-500 text-[.75rem] text-center">{d.copy}</p>
       <div class="flex items-center gap-6">
-        <a href={d.altHref} class="text-gray-500 text-[.8125rem] no-underline transition-colors hover:text-white">
+        <a href={altHref} id="footer-lang-toggle" class="text-gray-500 text-[.75rem] no-underline transition-colors hover:text-white">
           {d.altLabel}
         </a>
       </div>

@@ -76,7 +76,7 @@ const faqSchema = {
   </section>
 
   <!-- ENTITY FORMATION -->
-  <section style="background:#fff; padding:6rem 0;">
+  <section style="background:#fff; padding:4rem 0;">
     <div class="max-w-6xl mx-auto px-6">
       <div class="max-w-2xl mb-10">
         <span class="section-tag mb-3">Incorporación y Presencia Legal</span>
@@ -104,7 +104,7 @@ const faqSchema = {
   </section>
 
   <!-- MARKETING EN TU NUEVO MERCADO (asimétrico: texto izquierda, imagen derecha) -->
-  <section id="marketing-en-tu-nuevo-mercado" style="background:var(--oak); padding:6rem 0;">
+  <section id="marketing-en-tu-nuevo-mercado" style="background:var(--oak); padding:4rem 0;">
     <div class="max-w-6xl mx-auto px-6">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center mb-10">
         <div>
@@ -137,7 +137,7 @@ const faqSchema = {
   </section>
 
   <!-- FERIAS Y EVENTOS -->
-  <section style="background:#fff; padding:6rem 0;">
+  <section style="background:#fff; padding:4rem 0;">
     <div class="max-w-4xl mx-auto px-6">
       <span class="section-tag mb-3">También Incluido</span>
       <h2 class="text-3xl lg:text-4xl mb-6" style="color:var(--black);">Ferias Comerciales y Eventos</h2>
@@ -150,7 +150,7 @@ const faqSchema = {
   </section>
 
   <!-- CONCERNS -->
-  <section style="background:var(--oak); padding:6rem 0;">
+  <section style="background:var(--oak); padding:4rem 0;">
     <div class="max-w-4xl mx-auto px-6">
       <span class="section-tag mb-3" style="color:var(--red);">Dudas Comunes</span>
       <h2 class="text-3xl lg:text-4xl mb-8" style="color:var(--black);">Preguntas que vale la pena resolver antes.</h2>
@@ -172,7 +172,7 @@ const faqSchema = {
   </section>
 
   <!-- LEAD MAGNET + FORM -->
-  <section id="consulta" style="background:#fff; padding:6rem 0;">
+  <section id="consulta" style="background:#fff; padding:4rem 0;">
     <div class="max-w-6xl mx-auto px-6">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 items-start">
         <div>
@@ -192,7 +192,7 @@ const faqSchema = {
           <form id="expansion-form" action="https://formspree.io/f/mlganpda" method="POST" novalidate>
             <input type="hidden" name="_subject" value="Nuevo lead — Checklist Incorporación EE.UU." />
             <input type="hidden" name="pagina_origen" value="es/expansion-internacional.html" />
-            <input type="hidden" name="_next" value="https://ubik360.com/es/gracias.html" />
+            <input type="hidden" name="_next" value="https://ubik360.com/es/gracias.html?guide=checklist-incorporacion" />
             <div style="margin-bottom:1.125rem;">
               <label for="nombre" class="text-sm font-medium block mb-1.5" style="color:var(--black);">Nombre completo <span style="color:var(--red);">*</span></label>
               <input type="text" id="nombre" name="nombre" class="w-full px-4 py-2.5 border border-gray-300 rounded-md text-[.9375rem]" required autocomplete="name" />
@@ -210,7 +210,7 @@ const faqSchema = {
   </section>
 
   <!-- FAQ -->
-  <section style="background:#f9fafb; padding:6rem 0;">
+  <section style="background:#f9fafb; padding:4rem 0;">
     <div class="max-w-3xl mx-auto px-6">
       <div class="text-center mb-12">
         <span class="section-tag mb-3">Preguntas Frecuentes</span>
@@ -282,7 +282,7 @@ const faqSchema = {
       fetch(form.action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } })
         .then((res) => {
           if (res.ok) {
-            window.location.href = '/es/gracias.html';
+            window.location.href = '/es/gracias.html?guide=checklist-incorporacion';
           } else {
             btn.disabled = false;
             btn.textContent = 'Descargar Checklist Gratis';

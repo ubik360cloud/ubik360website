@@ -1,9 +1,17 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-// TODO(content): legacy version was specific to the "Hispanic Market
-// Accelerator" lead magnet on the old digital-marketing.html. That page's
-// content is being rewritten (see MARKETING.md), so this is a generic
-// placeholder until the new lead magnets/CTAs for each rewritten page are set.
+// Generic thank-you page shared by every form on the site (contact form +
+// both lead-magnet forms). Lead-magnet forms append ?guide=<key> to the
+// redirect URL (see en/nearshore-staffing.astro) so this one page can still
+// deliver the right file -- GUIDES below maps that key to the actual asset
+// in public/assets/downloads/. No query param (plain contact-form case) ->
+// the download block stays hidden.
+const GUIDES: Record<string, { title: string; href: string }> = {
+  'admin-scale-up': {
+    title: 'Administrative Scale-Up: Colombia as Your Operational Hub',
+    href: '/assets/downloads/administrative-scale-up-ubik360.html',
+  },
+};
 ---
 
 <Layout
@@ -12,17 +20,39 @@ import Layout from '../../layouts/Layout.astro';
   title="Thank You | Ubik 360"
   description="Thanks for reaching out."
 >
-  <section style="background:#fff; min-height:calc(100vh - 4rem); display:flex; align-items:center; padding:6rem 0;">
+  <section style="background:#fff; min-height:calc(100vh - 4rem); display:flex; align-items:center; padding:4rem 0;">
     <div class="max-w-3xl mx-auto px-6 text-center">
       <span class="section-tag mb-4" style="display:block;">Confirmed</span>
       <h1 class="text-4xl lg:text-5xl mb-5" style="color:var(--black);">Thanks — got it.</h1>
       <p style="color:#4b5563; font-size:1.125rem; line-height:1.75; max-width:32rem; margin:0 auto 2.5rem;">
-        I'll be in touch within 24 hours. In the meantime, feel free to grab a spot on my calendar.
+        We'll be in touch within 24 hours. In the meantime, feel free to grab a spot on the calendar.
       </p>
-      <a href="https://calendly.com/jose-ubik360/30min" target="_blank" rel="noopener" class="btn-primary">Schedule a Free Call</a>
+
+      <div id="guide-download" class="hidden" style="margin-bottom:2rem;">
+        <div style="background:#f9fafb; border:1px solid #e5e7eb; border-radius:.875rem; padding:1.75rem; max-width:26rem; margin:0 auto;">
+          <p style="font-size:.75rem; color:#9ca3af; text-transform:uppercase; letter-spacing:.1em; margin:0 0 .5rem;">Your Free Guide</p>
+          <p id="guide-title" style="font-family:'DM Serif Display',serif; font-size:1.125rem; color:var(--black); margin:0 0 1.125rem;"></p>
+          <a id="guide-link" href="#" class="btn-primary" style="width:100%; display:block;">Open Your Guide</a>
+        </div>
+      </div>
+
+      <a href="https://calendly.com/jose-ubik360/30min" target="_blank" rel="noopener" class="btn-outline">Schedule a Free Call</a>
       <p style="margin-top:3rem;">
         <a href="/en/index.html" style="font-size:.875rem; color:#9ca3af;">← Back to home</a>
       </p>
     </div>
   </section>
+
+  <script define:vars={{ guides: GUIDES }}>
+    const key = new URLSearchParams(window.location.search).get('guide');
+    const guide = key && guides[key];
+    if (guide) {
+      document.getElementById('guide-download')?.classList.remove('hidden');
+      document.getElementById('guide-title').textContent = guide.title;
+      const link = document.getElementById('guide-link');
+      link.href = guide.href;
+      link.target = '_blank';
+      link.rel = 'noopener';
+    }
+  </script>
 </Layout>

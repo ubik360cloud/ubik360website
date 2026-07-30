@@ -6,14 +6,14 @@
 > nothing here shares infrastructure, code, or data with them. Keep this file and any AI
 > content-generation prompts in sync — drift between them is how brand voice degrades over time.
 
-**Status (2026-07): strategy layer is settled** — positioning, audience/ICP, brand voice, tone
-rules, and NA/LatAm messaging direction are all finalized and internally consistent (see sections
-below). **Copy execution is partial** — full copy decks exist only for the EN homepage and EN
-about page (both drafted below, not yet applied to `.astro` files). Everything else
-(`en/digital-marketing.html`, `en/nearshore-staffing.html`, `en/international-expansion.html`,
-and the entire `es/` side: homepage, about, contact, expansion-internacional) has an agreed
-*direction* but no drafted copy deck yet — those will be written directly against the strategy
-below at execution time, the same way the homepage/about drafts were produced.
+**Status (2026-07): strategy layer settled, copy execution done, site live.** Positioning,
+audience/ICP, brand voice, tone rules, and NA/LatAm messaging direction are all finalized and
+internally consistent (see sections below). Every page listed in the architecture table below has
+been written and shipped — the "Homepage/About Page Copy — Draft" sections further down are the
+*original* copy decks this was executed against; treat them as the historical brief, not
+necessarily verbatim-current copy (the live `.astro` files have since had additional passes: the
+anonymous positioning test, a UI/visual redesign, and CTA-copy standardization — see the sections
+below and CLAUDE.md for what actually shipped). The site itself is live at `ubik360.com`.
 
 ---
 
@@ -78,9 +78,14 @@ a Vietnamese port — wrong geography and third-party branding for a Colombia/US
 - The Calendly booking link (`calendly.com/jose-ubik360/30min`) still contains "jose" in the URL
   itself — not addressed; low visibility (users don't typically read URLs closely) and changing it
   would require a new Calendly account/link, judged not worth doing for a temporary test.
-- No browser/screenshot tool was available in this session to visually verify mobile rendering —
-  responsive behavior relies on existing Tailwind responsive classes and flexible units (the same
-  patterns already used elsewhere on the site) but wasn't visually confirmed in a real viewport.
+- Mobile/responsive rendering relies on existing Tailwind responsive classes and flexible units
+  (the same patterns already used elsewhere on the site); layout issues that *were* visually
+  spotted (via screenshots Jose shared) got fixed as found — footer sizing, section padding,
+  black-on-black seams before the footer — but this wasn't a systematic device-by-device audit.
+
+**Since going live (2026-07):** the site is deployed to the real `ubik360.com` domain (DNS cut
+over from Hostinger to Vercel) — this is no longer a preview-only test, it's the live production
+site, still carrying the same temporary anonymous positioning described above.
 
 **Revert plan (when the test concludes):** go back to Jose as the named face of Ubik 360, but
 **as President or CEO, not "Founder"** — the goal is to avoid solopreneur/owner framing even in
@@ -90,6 +95,45 @@ and unused rather than deleted specifically for this), restore "About"/"Sobre M�
 restore the personal LinkedIn link, and remove the anonymous Leadership sections and partner-logo
 carousel (or keep the carousel if it tests well — that's a separate decision from the name/face
 question).
+
+---
+
+## AI Solutions (Colombia/LatAm only) — new service line, added 2026-07
+
+**`es/soluciones-ia.html` — Spanish only, deliberately no EN counterpart, no `alternatePath`.**
+Jose is explicit that this is not offered to US/Canada clients — AI-implementation demand is
+specifically rising in Colombia right now, and that's the only market this targets. This breaks
+the site's usual "two audiences, EN and ES" framing on purpose: it's a third, ES-only offer that
+doesn't fit either existing track (NA growth-marketing/staffing, or LatAm market-entry-to-NA). Also
+unlike the $5M+ revenue floor set for the anonymous-positioning-test NA/LatAm tracks above, **no
+revenue-floor ICP gate was set for this service** — Jose didn't specify one, so copy stays open to
+any business wanting to move past manual processes, rather than importing the $5M+ threshold from
+the other track by assumption.
+
+**Positioning, in Jose's own words (paraphrased from his brief):** most people in the target market
+think "implementing AI" means installing a chatbot, when it can mean automating entire processes,
+integrating systems that don't talk to each other, or building custom applications — anything from
+simple to complex. The differentiator is explicitly **not** an "AI hype"/trendy-platform pitch:
+- **Understand the business before touching technology.** What looks like a software problem is
+  often actually a process problem — this gets diagnosed first, before any build starts.
+- **Advise and build under one roof.** The usual pattern — hire a consultant to define what's
+  needed, then a separate company to build it — creates a disconnect that causes delays and
+  frustration. Ubik 360 does both, no handoff.
+- **A business-owner's perspective, not an academic one.** Jose frames himself (kept at the team
+  level in copy, per the anonymous positioning test) as someone with real business-operations
+  expertise and enough technical depth to both advise AND build — not a credentialed AI
+  researcher, a self-taught builder who's run his own business. This is the same "authority through
+  clarity, not credentials" pattern as the rest of the brand voice guidelines below, just applied
+  to a technical service instead of a marketing one.
+- Services span **chatbots, process automation, custom integrations, and AI-powered web
+  applications** — sized to what the client's business can actually use, not oversold.
+
+**Content note:** one of the two stock images Jose supplied for this page
+(`ai-solutions-chatbot.jpg`) was a screenshot of OpenAI's ChatGPT mobile app UI ("Get Plus", the
+literal "What can I help with?" home screen) — flagged and swapped for a generic code-editor photo
+instead of risking an implied ChatGPT/OpenAI affiliation. See CLAUDE.md's stock-photo-sourcing
+convention — this is the second time a supplied/sourced "generic" image turned out to be a real
+branded product screenshot.
 
 ---
 
@@ -206,6 +250,13 @@ bilingual-fluent.
 **Brand tokens** (from `src/styles/global.css` — keep any generated visual assets on-palette):
 `--red: #931F1D` (CTAs) · `--black: #050505` (text) · `--green: #659157` (accents) ·
 `--oak: #CEC5B5` (light backgrounds). Headings in DM Serif Display, body in Inter.
+
+**CTA copy is standardized per page family (2026-07), not freely worded per page.** The same
+Calendly-booking action should carry the same label everywhere it appears within one page family:
+"Schedule a Growth Call" (EN growth-marketing pages), "Schedule a Consultation" (EN
+expansion/staffing pages), "Agenda tu Consulta de Expansión" (ES, all pages), a neutral phrase on
+the shared thank-you pages. When writing a new page's CTA, match the existing family rather than
+inventing new phrasing — see CLAUDE.md's "Conventions" section for the technical detail.
 
 ---
 
@@ -609,24 +660,36 @@ per page) — all of which also blocked the goals below. The EN/ES audience-spli
 page architecture above) happens **directly in Astro**, not twice.
 
 **Proposed stack** (mirrors a proven pattern from prior work, adapted — not shared code):
-- **Site:** Astro (static output) on Vercel. File-based routing gives `/en/` and `/es/` as
-  independent route trees — no forced translation pairing, matching the audience model. Real
-  Tailwind build (purged/compiled), real Nav/Footer components (no client-side injection flash),
-  `@astrojs/sitemap` for an always-current sitemap.
-- **Backend (Phase 2+, separate from the site):** Node/Express (or similar lightweight API),
-  deployed on DigitalOcean App Platform or Vercel serverless functions — pick based on where the
-  rest of Ubik 360 infra lands.
-- **Database:** Supabase Postgres — admin-key-gated `/admin/*` routes, public read-only where needed.
-- **Blog:** Astro content collections under `ubik360.com/blog/` (folder route, not a subdomain —
-  Jose's preference), generated by an AI tool (Claude) as Markdown/MDX with frontmatter and
-  committed straight into this repo. Brand-voice-prompted from this file's guidelines section,
-  with cover + in-article images and a **syndication kit**: per-post AI-drafted copy for
-  LinkedIn (post + first comment), Medium.com (subtitle, tags, canonical import link), and social
-  captions — one generation pass, copy-paste distribution. **Bilingual posts follow the audience
-  model above** — a post isn't auto-translated EN↔ES; it's written for whichever audience it's
-  actually for, with an ES/EN counterpart only when the topic genuinely serves both audiences.
-- **Email marketing:** own contact/segment/campaign tool (not a third-party SaaS UI) — AI-assisted
-  drafting from the brand guidelines above, warm-up sending discipline, engagement tracking.
+- **Site: ✅ built and live.** Astro (static output) on Vercel, `ubik360.com`. File-based routing
+  gives `/en/` and `/es/` as independent route trees — no forced translation pairing, matching the
+  audience model. Real Tailwind build (purged/compiled), real Nav/Footer components (no
+  client-side injection flash), `@astrojs/sitemap` for an always-current sitemap.
+- **Backend (Phase 2+, separate from the site):** so far, just `api/subscribe.js` — a single
+  Vercel serverless function proxying to Brevo (see below and CLAUDE.md "Newsletter (Brevo)"). Not
+  a full Node/Express API yet; that's still a later decision if/when something needs more than a
+  single proxy endpoint.
+- **Database:** not yet needed — Brevo holds the contact list data for now, no Supabase/Postgres
+  stood up. Revisit if a future tool needs data Brevo doesn't model well.
+- **Blog:** not started. Astro content collections under `ubik360.com/blog/` (folder route, not a
+  subdomain — Jose's preference), generated by an AI tool (Claude) as Markdown/MDX with
+  frontmatter and committed straight into this repo. Brand-voice-prompted from this file's
+  guidelines section, with cover + in-article images and a **syndication kit**: per-post
+  AI-drafted copy for LinkedIn (post + first comment), Medium.com (subtitle, tags, canonical
+  import link), and social captions — one generation pass, copy-paste distribution. **Bilingual
+  posts follow the audience model above** — a post isn't auto-translated EN↔ES; it's written for
+  whichever audience it's actually for, with an ES/EN counterpart only when the topic genuinely
+  serves both audiences.
+- **Email marketing: ⚠ partially built, decision revised 2026-07.** The original plan below called
+  for an owned contact/segment/campaign tool; what actually got built first (to unblock newsletter
+  signup capture on the live site) is simpler: **Brevo** (a third-party ESP, own account, separate
+  from any tooling built for Jose's other business) holds the contact lists — list 2 = newsletter
+  signups, list 3 = contact-form leads — and `api/subscribe.js` adds contacts to them server-side.
+  **Still open, explicitly deferred 2026-07:** Jose asked for "a backend tool to create newsletters
+  (including template) so we can use it through Brevo" — i.e. a custom composer that sends via
+  Brevo's API, rather than using Brevo's own campaign-composer UI directly. Worth deciding when
+  that's picked back up: does Jose actually need a custom tool here, or does Brevo's own dashboard
+  (which already does templates, scheduling, and list-targeting) cover it without any build at all?
+  Don't assume the custom-tool route without checking that question first.
 - **Lead generation:** Apify-based scrape → verify → promote pipeline. **NA channel** targets
   founders/SMEs/decision-makers/business owners (job-title + company-size filters, per the
   ICP definition in "Market-Specific Copy Directions" above) via a Google Maps/LinkedIn-style
@@ -634,14 +697,19 @@ page architecture above) happens **directly in Astro**, not twice.
   company-size filtering matters here more than for NA, since the ICP explicitly excludes
   smaller/underprepared businesses (see "Audience/ICP" ⚠ note above) — likely needing an
   email-finder step since LinkedIn rarely exposes emails directly. Every scrape run cost-capped.
+  Not started.
 
-**Build order (per priority decision):**
-1. **Phase 1 — AI blog + syndication kit.** Highest leverage for a thought-leadership personal
-   brand; content compounds SEO/authority and feeds every other channel once live.
-2. **Phase 2 — Email marketing tool.** Own contacts/segments/campaigns once there's content worth
-   sending and a place to send people.
-3. **Phase 3 — Apify lead-gen pipeline.** Fill the pipeline for both tracks once there's a nurture
-   path (email) ready to receive new leads.
+**Build order (per priority decision, status updated 2026-07):**
+1. **Site rebuild + go-live: ✅ done**, ahead of the original phase order below (became the
+   practical prerequisite once the domain needed to move off Hostinger regardless).
+2. **Newsletter capture: ✅ done** (Brevo + `api/subscribe.js`, see above) — capture only, not
+   full campaign sending yet.
+3. **Phase 1 — AI blog + syndication kit.** Not started. Highest leverage for a thought-leadership
+   personal brand; content compounds SEO/authority and feeds every other channel once live.
+4. **Phase 2 — Newsletter composer tool (or Brevo's own UI) + campaign sending.** Not started,
+   explicitly deferred — see the "still open" note above.
+5. **Phase 3 — Apify lead-gen pipeline.** Not started. Fill the pipeline for both tracks once
+   there's a nurture path (email) ready to receive new leads.
 
 **Budget target: ~$50–100/mo** for the full stack (hosting + Claude API usage + Apify credits +
 email sending + any lightweight image generation). Revisit if a phase needs more (e.g. paid image
@@ -651,12 +719,23 @@ generation, a higher email sending tier, Apollo.io for Track B corporate lead-ge
 
 ## Open questions / decisions pending
 
-- Exact repo/hosting home for the new backend (own repo vs. folder in `ubik360website`) — lean
-  toward a separate repo once Phase 1 scoping starts, to keep the static site simple.
-- **Decided:** blog lives at `ubik360.com/blog/` (folder in this repo), not a subdomain.
-- Finalize the page architecture table above (slugs, whether nearshoring/sourcing gets its own
-  EN page) before rewriting `digital-marketing.html`/`international-expansion.html`/
-  `marketing-digital.html`/`expansion-internacional.html`.
+- **Decided (2026-07):** hosting is Vercel, real domain, DNS cut over from Hostinger. See
+  CLAUDE.md "Hosting / deployment".
+- **Decided:** blog lives at `ubik360.com/blog/` (folder in this repo), not a subdomain. Still not
+  started/built.
+- **Decided:** page architecture (slugs, nearshoring getting its own EN page, etc.) — resolved,
+  all pages in the table above exist and are live, plus the new ES-only `soluciones-ia.html` not
+  originally in that table.
+- **Decided (2026-07):** don't build more lead magnets right now. Only 2 are actually linked from
+  any page (see CLAUDE.md); Jose considered building ES/EN-specific new ones and chose to defer —
+  better to build a lead magnet purpose-matched to a specific social/ad campaign's audience when
+  one exists, rather than guess at a generic one now.
+- **Open (2026-07):** whether the "newsletter composer tool" Jose wants built should be a custom
+  tool calling Brevo's send API, or just using Brevo's own campaign-composer dashboard directly —
+  see "Marketing Backend — Plan" above. Explicitly deferred to its own session, not decided yet.
+- Exact repo/hosting home for any future backend beyond `api/subscribe.js` (own repo vs. folder in
+  `ubik360website`) — lean toward a separate repo once real backend work starts, to keep the
+  static site simple.
 - Whether paid engagements (e.g. a bookable "Market Entry Checklist" or productized package) ever
   need payment processing — out of scope until asked for.
 
@@ -665,7 +744,12 @@ generation, a higher email sending tier, Apollo.io for Track B corporate lead-ge
 ## Known content assets already on the site (for the blog/email tool to draw context from)
 
 - `assets/downloads/*.html` — existing lead-magnet pages (USA incorporation checklist, Hispanic
-  market accelerator, admin scale-up, lead-generation-by-proximity, a CEO/university report).
-  These are a ready source of topics and existing positioning to stay consistent with.
+  market accelerator, admin scale-up, lead-generation-by-proximity, a CEO/university report). Only
+  the incorporation checklist and admin scale-up are actually linked from any current page (see
+  CLAUDE.md) — the rest are unreferenced but still a source of topics/positioning to stay
+  consistent with.
+- `es/soluciones-ia.astro` — the newest page (2026-07), a good source of AI-implementation-related
+  topics for future blog/email content aimed at the Colombia/LatAm audience specifically (this
+  page has no EN audience at all, unlike everything else on the site).
 - `en/about.html` / `es/sobre-mi.html` — the fullest expression of brand voice on the site today;
   use as the canonical voice reference alongside this file's guidelines section.

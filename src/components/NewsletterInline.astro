@@ -75,7 +75,7 @@ const copy = lang === 'en'
       fetch(form.action, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, lang }),
+        body: JSON.stringify({ email, lang, source: 'newsletter' }),
       })
         .then((res) => {
           if (res.ok) {

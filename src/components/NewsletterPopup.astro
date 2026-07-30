@@ -54,10 +54,8 @@ const copy = lang === 'en'
   </button>
   <h3 id="newsletter-popup-heading" style="font-family:'DM Serif Display',serif; font-size:.95rem; color:var(--black); margin:0 0 .3375rem; padding-right:1.125rem;">{copy.heading}</h3>
   <p id="newsletter-popup-body" style="font-size:.73rem; color:#6b7280; margin:0 0 .9rem; line-height:1.5;">{copy.body}</p>
-  <form id="newsletter-popup-form" action="https://formspree.io/f/mlganpda" method="POST" novalidate style="display:flex; gap:.45rem;">
-    <input type="hidden" name="_subject" value="Newsletter subscription (popup)" />
-    <input type="hidden" name="form_type" value="newsletter" />
-    <input type="hidden" name="pagina_origen" value={lang === 'en' ? 'popup/en' : 'popup/es'} />
+  <form id="newsletter-popup-form" action="/api/subscribe" method="POST" novalidate style="display:flex; gap:.45rem;">
+    <input type="hidden" name="lang" value={lang} />
     <input
       type="email"
       name="email"
@@ -125,7 +123,13 @@ const copy = lang === 'en'
     e.preventDefault();
     const btn = form.querySelector('button[type="submit"]');
     btn.disabled = true;
-    fetch(form.action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } })
+    const email = form.querySelector('input[type="email"]').value;
+    const lang = form.querySelector('input[name="lang"]').value;
+    fetch(form.action, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, lang }),
+    })
       .then((res) => {
         if (res.ok && msg) {
           form.style.display = 'none';

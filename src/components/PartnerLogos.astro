@@ -3,14 +3,18 @@
 // read fine on white, but a couple are light/cream text on transparent (or,
 // for Gasolutions, a flat navy rectangle) that would vanish or look wrong on
 // a plain white card -- so those get a bg color sampled/matched to the logo
-// itself. Relationship types (per Jose, 2026-07): Gasolutions = ad-hoc
-// marketing + international-ops consulting; Digital Jockey = mutual referral
-// partner (paid media <-> content/SEO); CEO US University = completed
-// Go-to-Market consulting engagement; 360 Print Studio = active consulting
-// client; Mukura Apparel = international expansion consulting client (Jose
-// was founder, exited, now consults on their export brand).
-// Mobile: horizontal scroll-snap carousel instead of a cramped 2-col grid
-// (tiles were too small to read at that width). Desktop: grid, unchanged.
+// itself. Each logo links out (new tab) to that partner's real site.
+// Relationship types (per Jose, 2026-07): Gasolutions = ad-hoc marketing +
+// international-ops consulting; Digital Jockey = mutual referral partner
+// (paid media <-> content/SEO); CEO US University = completed Go-to-Market
+// consulting engagement; 360 Print Studio = active consulting client;
+// Mukura Apparel = international expansion consulting client (Jose was
+// founder, exited, now consults on their export brand); Overnight Prints
+// (ONP) = added 2026-07, part of an emerging niche in US/Canada print shops
+// and ecommerce (see also the upcoming digital-marketing industry subpages).
+// Mobile: horizontal scroll-snap carousel instead of a cramped grid (tiles
+// were too small to read at that width). Desktop: grid, 6 logos fits an
+// even lg:grid-cols-6 single row.
 interface Props {
   lang: 'en' | 'es';
 }
@@ -19,11 +23,12 @@ const { lang } = Astro.props;
 const heading = lang === 'en' ? 'Partners We’ve Grown With' : 'Socios con los que Hemos Crecido';
 
 const logos = [
-  { src: '/assets/images/partners/gasolutions.jpg', alt: 'Gasolutions', bg: '#132847' },
-  { src: '/assets/images/partners/digital-jockey.png', alt: 'Digital Jockey', bg: '#fff' },
-  { src: '/assets/images/partners/ceo-us-university.png', alt: 'CEO US University', bg: 'var(--black)' },
-  { src: '/assets/images/partners/360-print-studio.webp', alt: '360 Print Studio', bg: '#fff' },
-  { src: '/assets/images/partners/mukura-apparel.webp', alt: 'Mukura Apparel', bg: '#fff' },
+  { src: '/assets/images/partners/gasolutions.jpg', alt: 'Gasolutions', bg: '#132847', href: 'https://www.gasolutions.com.co/' },
+  { src: '/assets/images/partners/digital-jockey.png', alt: 'Digital Jockey', bg: '#fff', href: null },
+  { src: '/assets/images/partners/ceo-us-university.png', alt: 'CEO US University', bg: 'var(--black)', href: 'https://ceousuniversity.org/' },
+  { src: '/assets/images/partners/360-print-studio.webp', alt: '360 Print Studio', bg: '#fff', href: 'https://www.360printstudio.com/' },
+  { src: '/assets/images/partners/mukura-apparel.webp', alt: 'Mukura Apparel', bg: '#fff', href: 'https://mukuraapparel.com/' },
+  { src: '/assets/images/partners/overnightprints.png', alt: 'Overnight Prints', bg: 'var(--black)', href: 'https://www.overnightprints.com/' },
 ];
 ---
 
@@ -33,26 +38,34 @@ const logos = [
 
     <!-- Mobile: horizontal scroll-snap carousel -->
     <div class="sm:hidden flex overflow-x-auto gap-4 pb-2" style="scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch;">
-      {logos.map((logo) => (
-        <div
-          class="flex items-center justify-center rounded-xl h-28 px-6 flex-shrink-0"
-          style={`background:${logo.bg}; border:1px solid #e5e7eb; width:70%; scroll-snap-align:center;`}
-        >
-          <img src={logo.src} alt={logo.alt} class="max-h-14 w-full object-contain" loading="lazy" />
-        </div>
-      ))}
+      {logos.map((logo) => {
+        const Tag = logo.href ? 'a' : 'div';
+        return (
+          <Tag
+            {...(logo.href ? { href: logo.href, target: '_blank', rel: 'noopener' } : {})}
+            class="flex items-center justify-center rounded-xl h-28 px-6 flex-shrink-0"
+            style={`background:${logo.bg}; border:1px solid #e5e7eb; width:70%; scroll-snap-align:center;`}
+          >
+            <img src={logo.src} alt={logo.alt} class="max-h-14 w-full object-contain" loading="lazy" />
+          </Tag>
+        );
+      })}
     </div>
 
     <!-- Desktop/tablet: grid -->
-    <div class="hidden sm:grid sm:grid-cols-3 lg:grid-cols-5 gap-5">
-      {logos.map((logo) => (
-        <div
-          class="flex items-center justify-center rounded-xl h-32 px-6"
-          style={`background:${logo.bg}; border:1px solid #e5e7eb;`}
-        >
-          <img src={logo.src} alt={logo.alt} class="max-h-16 w-full object-contain" loading="lazy" />
-        </div>
-      ))}
+    <div class="hidden sm:grid sm:grid-cols-3 lg:grid-cols-6 gap-5">
+      {logos.map((logo) => {
+        const Tag = logo.href ? 'a' : 'div';
+        return (
+          <Tag
+            {...(logo.href ? { href: logo.href, target: '_blank', rel: 'noopener' } : {})}
+            class="flex items-center justify-center rounded-xl h-32 px-6 transition-transform hover:scale-[1.03]"
+            style={`background:${logo.bg}; border:1px solid #e5e7eb;`}
+          >
+            <img src={logo.src} alt={logo.alt} class="max-h-16 w-full object-contain" loading="lazy" />
+          </Tag>
+        );
+      })}
     </div>
   </div>
 </section>

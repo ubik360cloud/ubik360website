@@ -1,0 +1,359 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+// NEW (2026-07): first of three planned industry subpages under
+// en/digital-marketing.html (Printing, Auto Dealership, Ecommerce -- per
+// Jose, auto-dealership proof already exists on the parent page; this is
+// the first vertical to get its own dedicated page). Same structure will be
+// reused for the other two once Jose sends their content direction -- copy
+// this file as the template, don't rebuild the pattern from scratch.
+// Pain points 1-4 are Jose's brief verbatim; 5 (reviews/reputation) and 6
+// (quote-and-hope/no follow-up) were researched and confirmed with Jose as
+// real capabilities before writing copy that claims we solve them -- don't
+// add more "pain points" without the same confirmation step.
+// Stats are real, sourced 2026-07 (BrightLocal-style local-search research,
+// IBISWorld US printing industry data, industry automation research) --
+// never invent a number here.
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'My print shop already has a website. Why would I need local SEO?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Having a website and being found are two different things. 46 of every 100 Google searches carry local intent, and nearly all of those searchers pick from the first few results on the map and in local search — a site that exists but doesn\'t rank for "print shop near me" searches is effectively invisible to the customers actively looking for you right now.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What does "connecting our systems" actually involve?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'It starts with a free assessment of what you\'re running today — your website or lack of one, how quotes get built and sent, your production scheduling, and how billing works. From there we connect what can be connected and replace what can\'t, so pricing, production, and billing pull from one place instead of three or four disconnected ones.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'We sometimes can\'t take on large orders. Can you help with that?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes — we connect your shop to a network of print providers who can fulfill overflow volume or items outside your current capacity, under your brand. That means you can say yes to a large order or a rush deadline instead of turning it away or missing it.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Do you replace our sales team or production staff?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'No. We handle the marketing and the systems that support your sales and production process — visibility, quoting, follow-up, and overflow fulfillment — with a dedicated account manager as your single point of contact. Your team keeps doing what they do; we make sure more of the right jobs reach them and nothing falls through the cracks.',
+      },
+    },
+  ],
+};
+---
+
+<Layout
+  lang="en"
+  path="/en/digital-marketing/printing.html"
+  title="Marketing & Systems for Print Shops | Ubik 360"
+  description="Local SEO, connected quoting/production/billing systems, and overflow fulfillment for print shops that want to stop losing jobs to slow visibility and disconnected tools."
+  structuredData={faqSchema}
+>
+  <!-- HERO: full-width banner -->
+  <section class="relative" style="overflow:hidden;">
+    <img
+      src="/assets/images/stock/printing-industry-hero.jpg"
+      alt="Rolls of print material in a production facility"
+      class="absolute inset-0 w-full h-full object-cover"
+      loading="eager"
+    />
+    <div class="absolute inset-0" style="background:linear-gradient(rgba(5,5,5,.55), rgba(5,5,5,.55)), linear-gradient(100deg, rgba(5,5,5,.92) 0%, rgba(5,5,5,.78) 38%, rgba(5,5,5,.35) 68%, rgba(5,5,5,.15) 100%);"></div>
+    <div class="relative max-w-6xl mx-auto px-6 flex items-center" style="min-height:32rem; padding:6rem 1.5rem;">
+      <div class="max-w-xl">
+        <span class="section-tag mb-4" style="color:var(--oak);">For Print Shops</span>
+        <h1 class="text-4xl lg:text-5xl leading-tight mb-5" style="color:#fff;">
+          Print shops don't have to stay local. Your visibility should be everywhere your
+          customers search.
+        </h1>
+        <p class="text-lg leading-relaxed mb-8" style="color:#e5e7eb;">
+          Local SEO, connected quoting/production/billing systems, and an overflow fulfillment
+          network — so you win more of the jobs already searching for you, and never have to turn
+          one down.
+        </p>
+        <a href="https://calendly.com/meet-ubik360/30min" target="_blank" rel="noopener" class="btn-primary">Schedule a Growth Call</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAIN POINTS -->
+  <section style="background:#fff; padding:4.5rem 0;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="max-w-2xl mb-12">
+        <span class="section-tag mb-3">What's Actually Holding Shops Back</span>
+        <h2 class="text-3xl lg:text-4xl mb-4" style="color:var(--black);">The same six problems show up almost everywhere.</h2>
+        <p class="text-lg leading-relaxed" style="color:#4b5563;">
+          None of these are a reflection of the quality of your work. They're visibility and
+          systems problems — and they're fixable.
+        </p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div class="service-card">
+          <h3 class="text-lg mb-2" style="color:var(--black);">Limited Store Traffic</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Customers searching "print shop near me" never see you, because you're not showing up where that search actually happens.</p>
+        </div>
+        <div class="service-card">
+          <h3 class="text-lg mb-2" style="color:var(--black);">Large Orders Miss Deadlines</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">A big order comes in and there's no reliable way to handle the volume without slipping the deadline — or turning the job down.</p>
+        </div>
+        <div class="service-card">
+          <h3 class="text-lg mb-2" style="color:var(--black);">No Real Pricing Online</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">A weak website with no pricing or quoting means a ready-to-buy visitor leaves for the next search result instead.</p>
+        </div>
+        <div class="service-card">
+          <h3 class="text-lg mb-2" style="color:var(--black);">Disconnected Systems</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Pricing lives in spreadsheets, production runs on an old legacy system, and billing is separate from both — nothing talks to anything else.</p>
+        </div>
+        <div class="service-card">
+          <h3 class="text-lg mb-2" style="color:var(--black);">Thin, Unmanaged Reviews</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Few recent Google reviews and none of them answered — and most people decide between you and a competitor based on exactly that.</p>
+        </div>
+        <div class="service-card">
+          <h3 class="text-lg mb-2" style="color:var(--black);">Quote, Then Silence</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">A quote goes out by phone or email with no follow-up system — the faster-responding competitor wins the job by default.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS STRIP -->
+  <section style="background:var(--black); padding:3.5rem 0;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 text-center md:text-left">
+        <div>
+          <p style="color:var(--red); font-family:'DM Serif Display',serif; font-size:1.75rem; margin:0 0 .25rem;">98%</p>
+          <p style="color:#9ca3af; font-size:.875rem; line-height:1.6;">of consumers search online for a nearby business before they buy.</p>
+        </div>
+        <div>
+          <p style="color:var(--red); font-family:'DM Serif Display',serif; font-size:1.75rem; margin:0 0 .25rem;">200M+</p>
+          <p style="color:#9ca3af; font-size:.875rem; line-height:1.6;">"near me" searches happen every month — 76% lead to a visit within 24 hours.</p>
+        </div>
+        <div>
+          <p style="color:var(--red); font-family:'DM Serif Display',serif; font-size:1.75rem; margin:0 0 .25rem;">97%</p>
+          <p style="color:#9ca3af; font-size:.875rem; line-height:1.6;">of people check a company's online presence and reviews before visiting or buying.</p>
+        </div>
+        <div>
+          <p style="color:var(--red); font-family:'DM Serif Display',serif; font-size:1.75rem; margin:0 0 .25rem;">2%</p>
+          <p style="color:#9ca3af; font-size:.875rem; line-height:1.6;">of print shops are fully automated — most are still running partly on manual systems.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOLUTIONS (asymmetric: text left, image right) -->
+  <section style="background:#fff; padding:4.5rem 0;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center mb-14">
+        <div>
+          <span class="section-tag mb-3">Local Visibility</span>
+          <h2 class="text-3xl lg:text-4xl mb-6" style="color:var(--black);">Show up where the job is already being searched for.</h2>
+          <p style="font-size:1.0625rem; color:#4b5563; line-height:1.85;">
+            Local SEO gets your shop found by the customers already searching "print shop near
+            me" — Google Business Profile optimization, local search rankings, and review
+            generation so your reputation shows up before a competitor's does.
+          </p>
+        </div>
+        <img
+          src="/assets/images/stock/marketing-analytics-dashboard.jpg"
+          alt="Marketing performance dashboard"
+          class="w-full rounded-xl object-cover aspect-[4/3]"
+          loading="lazy"
+        />
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
+        <img
+          src="/assets/images/stock/sales-funnel-whiteboard.jpg"
+          alt="Systems and process planning on a whiteboard"
+          class="w-full rounded-xl object-cover aspect-[4/3] lg:order-2"
+          loading="lazy"
+        />
+        <div class="lg:order-1">
+          <span class="section-tag mb-3" style="color:var(--red);">Connected Systems*</span>
+          <h2 class="text-3xl lg:text-4xl mb-6" style="color:var(--black);">One system for pricing, production, and billing — not three.</h2>
+          <p style="font-size:1.0625rem; color:#4b5563; line-height:1.85;">
+            We connect your legacy tools where we can and replace what can't be connected, so
+            quoting, production coordination, and billing pull from the same place — no more
+            re-entering the same order three times, no more missed deadlines because production
+            didn't see what sales promised.
+          </p>
+          <p style="font-size:.8125rem; color:#9ca3af; margin-top:1rem;">*Starts with a free initial assessment of your current systems.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOCIAL / ADS -->
+  <section style="background:var(--oak); padding:4.5rem 0;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="max-w-2xl mb-10">
+        <span class="section-tag mb-3" style="color:var(--red);">Reach &amp; Demand</span>
+        <h2 class="text-3xl lg:text-4xl mb-4" style="color:var(--black);">Put your catalog in front of people ready to order.</h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div style="background:#fff; border-radius:.875rem; padding:1.75rem;">
+          <h3 class="text-lg mb-2" style="color:var(--black);">Facebook Shop &amp; Content</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Your catalog connected to your Facebook page and marketplace, reaching current followers and new local customers.</p>
+        </div>
+        <div style="background:#fff; border-radius:.875rem; padding:1.75rem;">
+          <h3 class="text-lg mb-2" style="color:var(--black);">Meta &amp; Facebook Ads</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Paid campaigns built to bring in local demand, not just impressions — targeted at the customers most likely to order.</p>
+        </div>
+        <div style="background:#fff; border-radius:.875rem; padding:1.75rem;">
+          <h3 class="text-lg mb-2" style="color:var(--black);">Reputation Management</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Structured review generation and responses, so your reputation actively works in your favor at the moment of decision.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OVERFLOW FULFILLMENT (red accent) -->
+  <section style="background:var(--red); padding:4.5rem 0;">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+      <span class="section-tag mb-3" style="color:#fff; opacity:.85;">Never Turn Down a Job</span>
+      <h2 class="text-3xl lg:text-4xl mb-6" style="color:#fff;">Can't produce it in-house? We can still get it done.</h2>
+      <p style="font-size:1.0625rem; color:rgba(255,255,255,.88); line-height:1.85;">
+        We connect your shop to a network of print providers who can fulfill overflow volume or
+        items outside your current capacity — under your brand. A bottleneck stops meaning a lost
+        order or a missed deadline; it means the job still gets done, on time.
+      </p>
+    </div>
+  </section>
+
+  <!-- ACCOUNT MANAGER -->
+  <section style="background:#fff; padding:4.5rem 0;">
+    <div class="max-w-3xl mx-auto px-6 text-center">
+      <span class="section-tag mb-3">One Point of Contact</span>
+      <h2 class="text-3xl lg:text-4xl mb-6" style="color:var(--black);">A dedicated account manager for everything we run for you.</h2>
+      <p style="font-size:1.0625rem; color:#4b5563; line-height:1.85;">
+        Marketing and the systems behind it shouldn't mean juggling five different vendors. One
+        account manager, one line of communication, for both the marketing and the IT/systems
+        work we do for your shop.
+      </p>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section style="background:#f9fafb; padding:4.5rem 0;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="max-w-xl mb-12">
+        <span class="section-tag mb-3">How We Start</span>
+        <h2 class="text-3xl lg:text-4xl" style="color:var(--black);">How it works</h2>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div>
+          <div style="width:3rem; height:3rem; border-radius:9999px; border:2px solid var(--red); display:flex; align-items:center; justify-content:center; margin-bottom:1.25rem;">
+            <span style="font-family:'DM Serif Display',serif; font-size:1.25rem; color:var(--red);">1</span>
+          </div>
+          <h3 style="font-family:'DM Serif Display',serif; font-size:1.0625rem; color:var(--black); margin:0 0 .5rem;">Free Assessment</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">We review your current website, systems, and local visibility — no cost, no obligation.</p>
+        </div>
+        <div>
+          <div style="width:3rem; height:3rem; border-radius:9999px; border:2px solid var(--red); display:flex; align-items:center; justify-content:center; margin-bottom:1.25rem;">
+            <span style="font-family:'DM Serif Display',serif; font-size:1.25rem; color:var(--red);">2</span>
+          </div>
+          <h3 style="font-family:'DM Serif Display',serif; font-size:1.0625rem; color:var(--black); margin:0 0 .5rem;">Plan</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">A prioritized plan for local SEO, systems, and demand generation, built around your shop specifically.</p>
+        </div>
+        <div>
+          <div style="width:3rem; height:3rem; border-radius:9999px; border:2px solid var(--red); display:flex; align-items:center; justify-content:center; margin-bottom:1.25rem;">
+            <span style="font-family:'DM Serif Display',serif; font-size:1.25rem; color:var(--red);">3</span>
+          </div>
+          <h3 style="font-family:'DM Serif Display',serif; font-size:1.0625rem; color:var(--black); margin:0 0 .5rem;">Implementation</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Local SEO, systems connections, catalog/ads setup, and overflow-network onboarding, handled end to end.</p>
+        </div>
+        <div>
+          <div style="width:3rem; height:3rem; border-radius:9999px; border:2px solid var(--red); display:flex; align-items:center; justify-content:center; margin-bottom:1.25rem;">
+            <span style="font-family:'DM Serif Display',serif; font-size:1.25rem; color:var(--red);">4</span>
+          </div>
+          <h3 style="font-family:'DM Serif Display',serif; font-size:1.0625rem; color:var(--black); margin:0 0 .5rem;">Ongoing Management</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Your account manager keeps visibility, systems, and fulfillment running — and adjusts as your shop grows.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section style="background:#fff; padding:4.5rem 0;">
+    <div class="max-w-3xl mx-auto px-6">
+      <div class="text-center mb-12">
+        <span class="section-tag mb-3">FAQ</span>
+        <h2 class="text-3xl lg:text-4xl" style="color:var(--black);">Common questions</h2>
+      </div>
+      <div id="faq-list">
+        <div class="faq-item">
+          <button class="faq-question">
+            My print shop already has a website. Why would I need local SEO?
+            <svg class="faq-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer">Having a website and being found are two different things. 46 of every 100 Google searches carry local intent, and nearly all of those searchers pick from the first few results on the map and in local search — a site that exists but doesn't rank for "print shop near me" searches is effectively invisible to the customers actively looking for you right now.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            What does "connecting our systems" actually involve?
+            <svg class="faq-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer">It starts with a free assessment of what you're running today — your website or lack of one, how quotes get built and sent, your production scheduling, and how billing works. From there we connect what can be connected and replace what can't, so pricing, production, and billing pull from one place instead of three or four disconnected ones.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            We sometimes can't take on large orders. Can you help with that?
+            <svg class="faq-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer">Yes — we connect your shop to a network of print providers who can fulfill overflow volume or items outside your current capacity, under your brand. That means you can say yes to a large order or a rush deadline instead of turning it away or missing it.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            Do you replace our sales team or production staff?
+            <svg class="faq-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer">No. We handle the marketing and the systems that support your sales and production process — visibility, quoting, follow-up, and overflow fulfillment — with a dedicated account manager as your single point of contact. Your team keeps doing what they do; we make sure more of the right jobs reach them and nothing falls through the cracks.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA: full-width banner -->
+  <section class="relative" style="overflow:hidden;">
+    <img
+      src="/assets/images/stock/printing-industry-hero.jpg"
+      alt="Rolls of print material in a production facility"
+      class="absolute inset-0 w-full h-full object-cover"
+      loading="lazy"
+    />
+    <div class="absolute inset-0" style="background:rgba(5,5,5,.8);"></div>
+    <div class="relative max-w-3xl mx-auto px-6 text-center" style="padding:6rem 1.5rem;">
+      <span class="section-tag mb-4" style="color:var(--oak);">Take the First Step</span>
+      <h2 class="text-3xl lg:text-4xl mb-5" style="color:#fff;">Ready to stop losing jobs to visibility and systems problems?</h2>
+      <p style="color:#e5e7eb; font-size:1.125rem; line-height:1.7; max-width:30rem; margin:0 auto 2.5rem;">
+        A 30-minute call and a free assessment — enough to know exactly what's costing you jobs
+        today.
+      </p>
+      <a href="https://calendly.com/meet-ubik360/30min" target="_blank" rel="noopener" class="btn-primary" style="font-size:1rem; padding:1rem 2.5rem;">
+        Schedule a Growth Call
+      </a>
+    </div>
+  </section>
+
+  <script>
+    document.querySelectorAll('.faq-question').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const item = btn.closest('.faq-item');
+        const isOpen = item?.classList.contains('open');
+        document.querySelectorAll('.faq-item').forEach((i) => i.classList.remove('open'));
+        if (!isOpen) item?.classList.add('open');
+      });
+    });
+  </script>
+</Layout>

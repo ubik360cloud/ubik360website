@@ -4,6 +4,12 @@
 // TEMPORARY TEST VARIANT (2026-07, Jose): "About"/"Sobre Mí" relabeled to
 // "Team"/"Nuestro Equipo" to match the anonymous team pages -- see
 // MARKETING.md "Anonymous/bigger-company positioning test".
+// Nav links can optionally carry a `dropdown` -- an array of groups, each
+// with an optional (non-clickable) `group` label and a list of items. Used
+// for "Digital Marketing" -> "Industries" -> Printing (2026-07); add more
+// industries to that same group as their pages ship. Desktop renders a
+// hover/click flyout; mobile renders an inline accordion so the menu grows
+// in place instead of overlapping/covering content.
 import { getAlternatePath } from '../utils/langMap';
 
 interface Props {
@@ -17,7 +23,17 @@ const NAV = {
     home: '/en/index.html',
     links: [
       { href: '/en/index.html', label: 'Home' },
-      { href: '/en/digital-marketing.html', label: 'Digital Marketing' },
+      {
+        href: '/en/digital-marketing.html',
+        label: 'Digital Marketing',
+        dropdown: [
+          { group: null, items: [{ href: '/en/digital-marketing.html', label: 'Overview' }] },
+          {
+            group: 'Industries',
+            items: [{ href: '/en/digital-marketing/printing.html', label: 'Printing' }],
+          },
+        ],
+      },
       { href: '/en/nearshore-staffing.html', label: 'Nearshore Staffing' },
       { href: '/en/international-expansion.html', label: 'Expand to Colombia' },
       { href: '/en/about.html', label: 'Team' },
@@ -58,16 +74,56 @@ const ctaHref = 'https://calendly.com/meet-ubik360/30min';
 
     <div class="hidden lg:flex items-center gap-8">
       {d.links.map((l) => {
-        const active = currentPath === l.href;
+        const active = currentPath === l.href || (l.dropdown && currentPath.startsWith('/en/digital-marketing'));
+        if (!l.dropdown) {
+          return (
+            <a
+              href={l.href}
+              class={`text-sm font-medium transition-colors whitespace-nowrap ${
+                active ? 'text-brand-red' : 'text-gray-700 hover:text-brand-black'
+              }`}
+            >
+              {l.label}
+            </a>
+          );
+        }
         return (
-          <a
-            href={l.href}
-            class={`text-sm font-medium transition-colors whitespace-nowrap ${
-              active ? 'text-brand-red' : 'text-gray-700 hover:text-brand-black'
-            }`}
-          >
-            {l.label}
-          </a>
+          <div class="nav-dropdown-wrap relative">
+            <button
+              type="button"
+              class={`nav-dropdown-trigger flex items-center gap-1 text-sm font-medium transition-colors whitespace-nowrap bg-transparent border-none cursor-pointer p-0 ${
+                active ? 'text-brand-red' : 'text-gray-700 hover:text-brand-black'
+              }`}
+              aria-expanded="false"
+            >
+              {l.label}
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="nav-dropdown-chevron transition-transform">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div
+              class="nav-dropdown-panel hidden absolute left-0 top-full mt-2 bg-white rounded-lg border border-gray-100 py-2"
+              style="min-width:13rem; box-shadow:0 12px 32px rgba(0,0,0,.12);"
+            >
+              {l.dropdown.map((section) => (
+                <div class="py-1">
+                  {section.group && (
+                    <p class="px-4 pt-1.5 pb-1 text-[.6875rem] font-bold uppercase tracking-wider text-gray-400 m-0">
+                      {section.group}
+                    </p>
+                  )}
+                  {section.items.map((item) => (
+                    <a
+                      href={item.href}
+                      class="block px-4 py-2 text-sm text-gray-700 no-underline hover:bg-gray-50 hover:text-brand-black"
+                    >
+                      {item.label}
+                    </a>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
         );
       })}
     </div>
@@ -94,12 +150,48 @@ const ctaHref = 'https://calendly.com/meet-ubik360/30min';
     </button>
   </div>
 
-  <div id="nav-mobile-menu" class="hidden lg:hidden bg-white px-6 pb-6 border-t border-gray-100">
-    {d.links.map((l) => (
-      <a href={l.href} class="block py-3 text-[.9375rem] font-medium text-brand-black border-b border-gray-100">
-        {l.label}
-      </a>
-    ))}
+  <div id="nav-mobile-menu" class="hidden lg:hidden bg-white px-6 pb-6 border-t border-gray-100 overflow-y-auto" style="max-height:calc(100vh - 4rem);">
+    {d.links.map((l) =>
+      l.dropdown ? (
+        <div class="border-b border-gray-100">
+          <div class="flex items-center justify-between">
+            <a href={l.href} class="block py-3 text-[.9375rem] font-medium text-brand-black flex-1">
+              {l.label}
+            </a>
+            <button
+              type="button"
+              class="mobile-dropdown-toggle bg-transparent border-none cursor-pointer p-2 text-gray-500"
+              aria-expanded="false"
+              aria-label={`Toggle ${l.label} submenu`}
+            >
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="mobile-dropdown-chevron transition-transform">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+          </div>
+          <div class="mobile-dropdown-panel hidden pb-3 pl-4">
+            {l.dropdown.map((section) => (
+              <div class="mb-2">
+                {section.group && (
+                  <p class="text-[.6875rem] font-bold uppercase tracking-wider text-gray-400 m-0 mb-1.5">
+                    {section.group}
+                  </p>
+                )}
+                {section.items.map((item) => (
+                  <a href={item.href} class="block py-2 text-[.875rem] text-gray-600">
+                    {item.label}
+                  </a>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <a href={l.href} class="block py-3 text-[.9375rem] font-medium text-brand-black border-b border-gray-100">
+          {l.label}
+        </a>
+      )
+    )}
     <div class="flex items-center gap-3 pt-4">
       <a href={altHref} class="text-[.8125rem] font-medium text-gray-500 border border-gray-300 rounded-md px-3.5 py-1">
         {d.altLabel}
@@ -129,5 +221,60 @@ const ctaHref = 'https://calendly.com/meet-ubik360/30min';
   window.addEventListener('scroll', () => {
     if (!nav) return;
     nav.style.boxShadow = window.scrollY > 8 ? '0 1px 12px rgba(0,0,0,.08)' : 'none';
+  });
+
+  // Desktop dropdown: hover (with a short close delay to avoid flicker when
+  // moving from trigger to panel) + click for keyboard/touch users, closes
+  // on outside click or Escape.
+  document.querySelectorAll('.nav-dropdown-wrap').forEach((wrap) => {
+    const trigger = wrap.querySelector('.nav-dropdown-trigger');
+    const panel = wrap.querySelector('.nav-dropdown-panel');
+    const chevron = wrap.querySelector('.nav-dropdown-chevron');
+    let closeTimer: ReturnType<typeof setTimeout> | null = null;
+
+    const open = () => {
+      if (closeTimer) clearTimeout(closeTimer);
+      panel?.classList.remove('hidden');
+      trigger?.setAttribute('aria-expanded', 'true');
+      chevron?.classList.add('rotate-180');
+    };
+    const scheduleClose = () => {
+      closeTimer = setTimeout(() => {
+        panel?.classList.add('hidden');
+        trigger?.setAttribute('aria-expanded', 'false');
+        chevron?.classList.remove('rotate-180');
+      }, 150);
+    };
+
+    wrap.addEventListener('mouseenter', open);
+    wrap.addEventListener('mouseleave', scheduleClose);
+    trigger?.addEventListener('click', (e) => {
+      e.preventDefault();
+      const isOpen = trigger.getAttribute('aria-expanded') === 'true';
+      isOpen ? scheduleClose() : open();
+    });
+  });
+
+  document.addEventListener('click', (e) => {
+    document.querySelectorAll('.nav-dropdown-wrap').forEach((wrap) => {
+      if (!wrap.contains(e.target as Node)) {
+        wrap.querySelector('.nav-dropdown-panel')?.classList.add('hidden');
+        wrap.querySelector('.nav-dropdown-trigger')?.setAttribute('aria-expanded', 'false');
+        wrap.querySelector('.nav-dropdown-chevron')?.classList.remove('rotate-180');
+      }
+    });
+  });
+
+  // Mobile accordion: expands in place, pushes the rest of the menu down
+  // (no overlap/absolute positioning) so it can't distort the layout.
+  document.querySelectorAll('.mobile-dropdown-toggle').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const panel = btn.closest('div')?.parentElement?.querySelector('.mobile-dropdown-panel');
+      const chevron = btn.querySelector('.mobile-dropdown-chevron');
+      const isOpen = btn.getAttribute('aria-expanded') === 'true';
+      panel?.classList.toggle('hidden', isOpen);
+      btn.setAttribute('aria-expanded', String(!isOpen));
+      chevron?.classList.toggle('rotate-180', !isOpen);
+    });
   });
 </script>

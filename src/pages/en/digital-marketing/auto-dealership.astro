@@ -1,0 +1,428 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+// NEW (2026-07): second industry subpage under digital-marketing (after
+// Printing) -- same structure, copy this + printing.astro as the template
+// for Ecommerce next. Auto-dealership proof was already the flagship
+// vertical on the parent digital-marketing page; this gives it its own
+// dedicated, lead-gen-focused page.
+//
+// Business model: Ubik 360 is the front-of-house relationship (sales,
+// onboarding, account management); execution runs through an established
+// automotive marketing technology partner (per Jose, kept unnamed on this
+// page by his choice) PLUS Ubik 360's own proprietary campaign-monitoring/
+// optimization platform, built from real prior agency experience -- that
+// tool is genuinely Ubik 360's own, no attribution issue there.
+//
+// Proof handling (confirmed with Jose, 2026-07): the partner's marketing
+// deck included a specific named case study (a Volkswagen dealer's #1
+// ranking, a specific Audi one-day-sale campaign) that Ubik 360 did not
+// personally deliver -- deliberately NOT used here, since presenting a
+// named third party's specific result as Ubik 360's own would misattribute
+// a real, identifiable outcome. Only the deck's AGGREGATE, non-identifying
+// stats are used (stat strip below), framed as results the technology has
+// delivered, not a personal Ubik 360 case study. Everything else (pain
+// points, "lead response time" stats) is independently researched and
+// sourced 2026-07 -- see stat strip + FAQ for specifics, never invented.
+//
+// Lead magnet: a real downloadable asset (public/assets/downloads/
+// dealership-marketing-scorecard-ubik360.html), not just a "book a call"
+// ask -- per Jose's brief that this page's job is lead capture.
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'Do you replace our existing sales team or CRM?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'No. We handle the marketing and the systems behind it — inventory-synced advertising, lead response infrastructure, and reporting — with a dedicated account manager as your single point of contact. Your sales team keeps selling; we make sure more of the right leads reach them, faster.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: "We're already running Google and Meta ads. What's actually different here?",
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Most dealerships run ads that are manually updated and reviewed on a fixed schedule. Ours sync directly to your live inventory (sold units drop out automatically), reallocate budget across channels in real time instead of monthly, and report through a live dashboard instead of a static PDF.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How quickly can you improve our lead response time?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: "It depends on what's currently in place, but response-time infrastructure is usually one of the fastest wins available — often improved within the first few weeks, since it's a process and tooling fix more than a strategy overhaul.",
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Do you work with multi-location dealer groups?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes. Broadcast messaging lets you push a promotion or business-critical update across every rooftop in minutes instead of updating each location individually, with reporting that rolls up across the group or breaks out by location.',
+      },
+    },
+  ],
+};
+---
+
+<Layout
+  lang="en"
+  path="/en/digital-marketing/auto-dealership.html"
+  title="Automotive Marketing for Dealerships | Ubik 360"
+  description="Real-time inventory-synced advertising, faster lead response, and transparent reporting for auto dealerships. Get your free Dealership Digital Marketing Scorecard."
+  structuredData={faqSchema}
+>
+  <!-- HERO: full-width banner -->
+  <section class="relative" style="overflow:hidden;">
+    <img
+      src="/assets/images/stock/auto-dealership-hero.jpg"
+      alt="Light trails on a highway at night"
+      class="absolute inset-0 w-full h-full object-cover"
+      loading="eager"
+    />
+    <div class="absolute inset-0" style="background:linear-gradient(rgba(5,5,5,.5), rgba(5,5,5,.5)), linear-gradient(100deg, rgba(5,5,5,.92) 0%, rgba(5,5,5,.78) 38%, rgba(5,5,5,.35) 68%, rgba(5,5,5,.15) 100%);"></div>
+    <div class="relative max-w-6xl mx-auto px-6 flex items-center" style="min-height:32rem; padding:6rem 1.5rem;">
+      <div class="max-w-xl">
+        <span class="section-tag mb-4" style="color:var(--oak);">For Auto Dealerships</span>
+        <h1 class="text-4xl lg:text-5xl leading-tight mb-5" style="color:#fff;">
+          Automotive marketing built to sell more vehicles, parts &amp; service.
+        </h1>
+        <p class="text-lg leading-relaxed mb-8" style="color:#e5e7eb;">
+          Real-time inventory-synced advertising, faster lead response, and transparent
+          reporting — managed by one accountable team.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-3">
+          <a href="#scorecard" class="btn-primary">Get Your Free Marketing Scorecard</a>
+          <a href="https://calendly.com/meet-ubik360/30min" target="_blank" rel="noopener" class="btn-outline" style="border-color:#fff; color:#fff;">Schedule a Call</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INTRO -->
+  <section style="background:#fff; padding:4rem 0;">
+    <div class="max-w-3xl mx-auto px-6 text-center">
+      <p style="font-size:1.0625rem; color:#374151; line-height:1.8;">
+        92% of car buyers research extensively online before ever visiting a dealership — and the
+        average dealer takes over 90 minutes to respond to an internet lead, with 43% never
+        getting a real phone call at all. The gap between how shoppers actually buy and how most
+        dealership marketing operates is exactly where deals are being lost.
+      </p>
+    </div>
+  </section>
+
+  <!-- PAIN POINTS -->
+  <section style="background:var(--oak); padding:4.5rem 0;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="max-w-2xl mb-12">
+        <span class="section-tag mb-3" style="color:var(--red);">What's Actually Costing You Deals</span>
+        <h2 class="text-3xl lg:text-4xl mb-4" style="color:var(--black);">The same problems show up at almost every store.</h2>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div style="background:#fff; border-radius:.875rem; padding:1.75rem;">
+          <h3 class="text-lg mb-2" style="color:var(--black);">Ads Out of Sync With Inventory</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Sold units keep running in ads for days, and new arrivals take just as long to show up.</p>
+        </div>
+        <div style="background:#fff; border-radius:.875rem; padding:1.75rem;">
+          <h3 class="text-lg mb-2" style="color:var(--black);">Leads Going Cold</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">A lead that waits 30 minutes for a response converts at roughly a third the rate of one contacted in 5.</p>
+        </div>
+        <div style="background:#fff; border-radius:.875rem; padding:1.75rem;">
+          <h3 class="text-lg mb-2" style="color:var(--black);">Wasted Ad Spend</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Budget sits on underperforming campaigns for weeks because reallocation happens on a monthly review, not in real time.</p>
+        </div>
+        <div style="background:#fff; border-radius:.875rem; padding:1.75rem;">
+          <h3 class="text-lg mb-2" style="color:var(--black);">Disconnected Systems</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Your DMS, CRM, and ad accounts don't share data, so no one has a full picture of what's actually working.</p>
+        </div>
+        <div style="background:#fff; border-radius:.875rem; padding:1.75rem;">
+          <h3 class="text-lg mb-2" style="color:var(--black);">No Real Attribution</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">You can see spend and clicks, but not which specific campaign actually sold which vehicle.</p>
+        </div>
+        <div style="background:#fff; border-radius:.875rem; padding:1.75rem;">
+          <h3 class="text-lg mb-2" style="color:var(--black);">Generic Campaigns</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Creative and offers that don't reflect your actual current inventory or local market underperform against shoppers ready to buy.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS STRIP -->
+  <section style="background:var(--black); padding:3.5rem 0;">
+    <div class="max-w-6xl mx-auto px-6">
+      <p style="color:#9ca3af; font-size:.8125rem; text-align:center; margin:0 0 2rem; text-transform:uppercase; letter-spacing:.08em;">Results our marketing technology has delivered for dealerships we work with</p>
+      <div class="grid grid-cols-2 md:grid-cols-5 gap-8 text-center">
+        <div>
+          <p style="color:var(--red); font-family:'DM Serif Display',serif; font-size:1.75rem; margin:0 0 .25rem;">+135%</p>
+          <p style="color:#9ca3af; font-size:.8125rem; line-height:1.5;">Total ad clicks</p>
+        </div>
+        <div>
+          <p style="color:var(--red); font-family:'DM Serif Display',serif; font-size:1.75rem; margin:0 0 .25rem;">+198%</p>
+          <p style="color:#9ca3af; font-size:.8125rem; line-height:1.5;">Phone calls from ads</p>
+        </div>
+        <div>
+          <p style="color:var(--red); font-family:'DM Serif Display',serif; font-size:1.75rem; margin:0 0 .25rem;">+150%</p>
+          <p style="color:#9ca3af; font-size:.8125rem; line-height:1.5;">Conversion rate</p>
+        </div>
+        <div>
+          <p style="color:var(--red); font-family:'DM Serif Display',serif; font-size:1.75rem; margin:0 0 .25rem;">-88%</p>
+          <p style="color:#9ca3af; font-size:.8125rem; line-height:1.5;">Avg. cost per click</p>
+        </div>
+        <div>
+          <p style="color:var(--red); font-family:'DM Serif Display',serif; font-size:1.75rem; margin:0 0 .25rem;">675</p>
+          <p style="color:#9ca3af; font-size:.8125rem; line-height:1.5;">Avg. monthly store visits from ads</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOLUTIONS (asymmetric x2) -->
+  <section style="background:#fff; padding:4.5rem 0;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center mb-14">
+        <div>
+          <span class="section-tag mb-3">Inventory-Driven Advertising</span>
+          <h2 class="text-3xl lg:text-4xl mb-6" style="color:var(--black);">Your ads should always match your lot.</h2>
+          <p style="font-size:1.0625rem; color:#4b5563; line-height:1.85;">
+            Live inventory feeds turn your actual stock into Google and Meta ads automatically —
+            sold units drop out, new arrivals go live, with no manual updates. Budget shifts
+            across Google, Meta, and YouTube in real time toward what's converting, instead of
+            sitting still until the next monthly review.
+          </p>
+        </div>
+        <img
+          src="/assets/images/stock/marketing-analytics-dashboard.jpg"
+          alt="Marketing performance dashboard"
+          class="w-full rounded-xl object-cover aspect-[4/3]"
+          loading="lazy"
+        />
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
+        <img
+          src="/assets/images/stock/sales-funnel-whiteboard.jpg"
+          alt="Sales process planning on a whiteboard"
+          class="w-full rounded-xl object-cover aspect-[4/3] lg:order-2"
+          loading="lazy"
+        />
+        <div class="lg:order-1">
+          <span class="section-tag mb-3" style="color:var(--red);">Speed &amp; Visibility</span>
+          <h2 class="text-3xl lg:text-4xl mb-6" style="color:var(--black);">Faster response, and a dashboard you can actually check.</h2>
+          <p style="font-size:1.0625rem; color:#4b5563; line-height:1.85;">
+            Lead response infrastructure built to close the gap between a shopper's inquiry and
+            your first contact — the single biggest lever in whether that lead becomes a sale.
+            Every account gets a live reporting dashboard with real attribution back to the
+            campaign, not a static report you see once a month.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ONE PARTNER + PROPRIETARY TECH (red accent) -->
+  <section style="background:var(--red); padding:4.5rem 0;">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+      <span class="section-tag mb-3" style="color:#fff; opacity:.85;">One Accountable Team</span>
+      <h2 class="text-3xl lg:text-4xl mb-6" style="color:#fff;">You work with one team, backed by real automotive marketing experience.</h2>
+      <p style="font-size:1.0625rem; color:rgba(255,255,255,.88); line-height:1.85;">
+        We handle strategy, onboarding, and account management directly — one point of contact,
+        not a rotating cast of reps. Execution runs on our own proprietary campaign-monitoring and
+        optimization platform, built from real experience managing accounts inside large,
+        specialized automotive marketing agencies — not licensed off the shelf.
+      </p>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section style="background:#f9fafb; padding:4.5rem 0;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="max-w-xl mb-12">
+        <span class="section-tag mb-3">How We Start</span>
+        <h2 class="text-3xl lg:text-4xl" style="color:var(--black);">How it works</h2>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div>
+          <div style="width:3rem; height:3rem; border-radius:9999px; border:2px solid var(--red); display:flex; align-items:center; justify-content:center; margin-bottom:1.25rem;">
+            <span style="font-family:'DM Serif Display',serif; font-size:1.25rem; color:var(--red);">1</span>
+          </div>
+          <h3 style="font-family:'DM Serif Display',serif; font-size:1.0625rem; color:var(--black); margin:0 0 .5rem;">Assessment</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">We review your current inventory feed, ad accounts, and lead process — no cost, no obligation.</p>
+        </div>
+        <div>
+          <div style="width:3rem; height:3rem; border-radius:9999px; border:2px solid var(--red); display:flex; align-items:center; justify-content:center; margin-bottom:1.25rem;">
+            <span style="font-family:'DM Serif Display',serif; font-size:1.25rem; color:var(--red);">2</span>
+          </div>
+          <h3 style="font-family:'DM Serif Display',serif; font-size:1.0625rem; color:var(--black); margin:0 0 .5rem;">Setup</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Inventory feeds, tracking, and reporting connected — the foundation everything else runs on.</p>
+        </div>
+        <div>
+          <div style="width:3rem; height:3rem; border-radius:9999px; border:2px solid var(--red); display:flex; align-items:center; justify-content:center; margin-bottom:1.25rem;">
+            <span style="font-family:'DM Serif Display',serif; font-size:1.25rem; color:var(--red);">3</span>
+          </div>
+          <h3 style="font-family:'DM Serif Display',serif; font-size:1.0625rem; color:var(--black); margin:0 0 .5rem;">Launch</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Campaigns go live across Google, Meta, and YouTube, built around your actual inventory.</p>
+        </div>
+        <div>
+          <div style="width:3rem; height:3rem; border-radius:9999px; border:2px solid var(--red); display:flex; align-items:center; justify-content:center; margin-bottom:1.25rem;">
+            <span style="font-family:'DM Serif Display',serif; font-size:1.25rem; color:var(--red);">4</span>
+          </div>
+          <h3 style="font-family:'DM Serif Display',serif; font-size:1.0625rem; color:var(--black); margin:0 0 .5rem;">Optimize</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Real-time budget reallocation and reporting, with your account manager keeping you in the loop.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LEAD MAGNET + FORM -->
+  <section id="scorecard" style="background:var(--black); padding:4.5rem 0;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 items-start">
+        <div>
+          <span class="section-tag mb-3" style="color:var(--oak);">Free Resource</span>
+          <h2 class="text-3xl lg:text-4xl mb-4" style="color:#fff;">The Dealership Digital Marketing Scorecard</h2>
+          <p style="color:#9ca3af; font-size:1rem; line-height:1.75; margin-bottom:1.5rem;">
+            10 questions that reveal exactly where your dealership is losing traffic, leads, and
+            sold units to slower systems and disconnected marketing — and what to fix first.
+          </p>
+          <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:.75rem;">
+            <li style="display:flex; align-items:flex-start; gap:.75rem; font-size:.9375rem; color:#d1d5db;">
+              <span style="flex-shrink:0; width:1.375rem; height:1.375rem; border-radius:9999px; background:var(--red); color:#fff; display:flex; align-items:center; justify-content:center; font-size:.6875rem; font-weight:700; margin-top:.125rem;">✓</span>
+              Score your inventory sync, lead response, and ad attribution
+            </li>
+            <li style="display:flex; align-items:flex-start; gap:.75rem; font-size:.9375rem; color:#d1d5db;">
+              <span style="flex-shrink:0; width:1.375rem; height:1.375rem; border-radius:9999px; background:var(--red); color:#fff; display:flex; align-items:center; justify-content:center; font-size:.6875rem; font-weight:700; margin-top:.125rem;">✓</span>
+              See exactly where the biggest recoverable revenue is
+            </li>
+            <li style="display:flex; align-items:flex-start; gap:.75rem; font-size:.9375rem; color:#d1d5db;">
+              <span style="flex-shrink:0; width:1.375rem; height:1.375rem; border-radius:9999px; background:var(--red); color:#fff; display:flex; align-items:center; justify-content:center; font-size:.6875rem; font-weight:700; margin-top:.125rem;">✓</span>
+              10 minutes to complete, no marketing background required
+            </li>
+          </ul>
+        </div>
+
+        <div style="background:#fff; border-radius:1rem; padding:2.25rem;">
+          <h3 style="font-family:'DM Serif Display',serif; font-size:1.5rem; color:var(--black); margin:0 0 .5rem;">Get the free scorecard</h3>
+          <p style="font-size:.875rem; color:#6b7280; margin:0 0 1.75rem;">We'll follow up about applying it to your specific dealership.</p>
+          <form id="lead-form" action="https://formspree.io/f/mlganpda" method="POST" novalidate>
+            <input type="hidden" name="_subject" value="New lead — Dealership Marketing Scorecard" />
+            <input type="hidden" name="pagina_origen" value="en/digital-marketing/auto-dealership.html" />
+            <input type="hidden" name="_next" value="https://ubik360.com/en/thank-you.html" />
+            <div style="margin-bottom:1.125rem;">
+              <label for="name" class="text-sm font-medium block mb-1.5" style="color:var(--black);">Full name <span style="color:var(--red);">*</span></label>
+              <input type="text" id="name" name="name" class="w-full px-4 py-2.5 border border-gray-300 rounded-md text-[.9375rem]" required autocomplete="name" />
+            </div>
+            <div style="margin-bottom:1.125rem;">
+              <label for="dealership" class="text-sm font-medium block mb-1.5" style="color:var(--black);">Dealership name <span style="color:var(--red);">*</span></label>
+              <input type="text" id="dealership" name="dealership" class="w-full px-4 py-2.5 border border-gray-300 rounded-md text-[.9375rem]" required />
+            </div>
+            <div style="margin-bottom:1.125rem;">
+              <label for="email" class="text-sm font-medium block mb-1.5" style="color:var(--black);">Email address <span style="color:var(--red);">*</span></label>
+              <input type="email" id="email" name="email" class="w-full px-4 py-2.5 border border-gray-300 rounded-md text-[.9375rem]" required autocomplete="email" />
+            </div>
+            <button type="submit" class="btn-primary" style="width:100%; padding:.875rem; font-size:1rem;">Get the Free Scorecard</button>
+            <p style="font-size:.75rem; color:#9ca3af; margin:.875rem 0 0; text-align:center;">No spam. Your information stays private.</p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section style="background:#fff; padding:4.5rem 0;">
+    <div class="max-w-3xl mx-auto px-6">
+      <div class="text-center mb-12">
+        <span class="section-tag mb-3">FAQ</span>
+        <h2 class="text-3xl lg:text-4xl" style="color:var(--black);">Common questions</h2>
+      </div>
+      <div id="faq-list">
+        <div class="faq-item">
+          <button class="faq-question">
+            Do you replace our existing sales team or CRM?
+            <svg class="faq-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer">No. We handle the marketing and the systems behind it — inventory-synced advertising, lead response infrastructure, and reporting — with a dedicated account manager as your single point of contact. Your sales team keeps selling; we make sure more of the right leads reach them, faster.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            We're already running Google and Meta ads. What's actually different here?
+            <svg class="faq-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer">Most dealerships run ads that are manually updated and reviewed on a fixed schedule. Ours sync directly to your live inventory (sold units drop out automatically), reallocate budget across channels in real time instead of monthly, and report through a live dashboard instead of a static PDF.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            How quickly can you improve our lead response time?
+            <svg class="faq-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer">It depends on what's currently in place, but response-time infrastructure is usually one of the fastest wins available — often improved within the first few weeks, since it's a process and tooling fix more than a strategy overhaul.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            Do you work with multi-location dealer groups?
+            <svg class="faq-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer">Yes. Broadcast messaging lets you push a promotion or business-critical update across every rooftop in minutes instead of updating each location individually, with reporting that rolls up across the group or breaks out by location.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA: full-width banner -->
+  <section class="relative" style="overflow:hidden;">
+    <img
+      src="/assets/images/stock/auto-dealership-hero.jpg"
+      alt="Light trails on a highway at night"
+      class="absolute inset-0 w-full h-full object-cover"
+      loading="lazy"
+    />
+    <div class="absolute inset-0" style="background:rgba(5,5,5,.8);"></div>
+    <div class="relative max-w-3xl mx-auto px-6 text-center" style="padding:6rem 1.5rem;">
+      <span class="section-tag mb-4" style="color:var(--oak);">Take the First Step</span>
+      <h2 class="text-3xl lg:text-4xl mb-5" style="color:#fff;">Ready to turn more shoppers into sold units?</h2>
+      <p style="color:#e5e7eb; font-size:1.125rem; line-height:1.7; max-width:30rem; margin:0 auto 2.5rem;">
+        A 30-minute call and a free assessment — enough to know exactly what's costing you deals
+        today.
+      </p>
+      <a href="https://calendly.com/meet-ubik360/30min" target="_blank" rel="noopener" class="btn-primary" style="font-size:1rem; padding:1rem 2.5rem;">
+        Schedule a Call
+      </a>
+    </div>
+  </section>
+
+  <script>
+    document.querySelectorAll('.faq-question').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const item = btn.closest('.faq-item');
+        const isOpen = item?.classList.contains('open');
+        document.querySelectorAll('.faq-item').forEach((i) => i.classList.remove('open'));
+        if (!isOpen) item?.classList.add('open');
+      });
+    });
+
+    const form = document.getElementById('lead-form') as HTMLFormElement | null;
+    form?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const btn = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+      fetch(form.action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } })
+        .then((res) => {
+          if (res.ok) {
+            window.location.href = '/en/thank-you.html?guide=auto-dealership-scorecard';
+          } else {
+            btn.disabled = false;
+            btn.textContent = 'Get the Free Scorecard';
+            alert('Something went wrong. Please try again.');
+          }
+        })
+        .catch(() => {
+          btn.disabled = false;
+          btn.textContent = 'Get the Free Scorecard';
+          alert('Connection error. Check your internet and try again.');
+        });
+    });
+  </script>
+</Layout>

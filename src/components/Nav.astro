@@ -50,7 +50,17 @@ const NAV = {
     links: [
       { href: '/es/index.html', label: 'Inicio' },
       { href: '/es/expansion-internacional.html', label: 'Expansión Internacional' },
-      { href: '/es/soluciones-ia.html', label: 'Soluciones de IA' },
+      {
+        href: '/es/soluciones-ia.html',
+        label: 'Soluciones de IA',
+        dropdown: [
+          { group: null, items: [{ href: '/es/soluciones-ia.html', label: 'Resumen' }] },
+          {
+            group: 'Industrias',
+            items: [{ href: '/es/soluciones-ia/automotriz.html', label: 'Automotriz' }],
+          },
+        ],
+      },
       { href: '/es/sobre-mi.html', label: 'Nuestro Equipo' },
       { href: '/es/contacto.html', label: 'Contacto' },
     ],
@@ -77,7 +87,8 @@ const ctaHref = 'https://calendly.com/meet-ubik360/30min';
 
     <div class="hidden lg:flex items-center gap-8">
       {d.links.map((l) => {
-        const active = currentPath === l.href || (l.dropdown && currentPath.startsWith('/en/digital-marketing'));
+        const basePath = l.href.replace(/\.html$/, '');
+        const active = currentPath === l.href || (l.dropdown && currentPath.startsWith(basePath + '/'));
         if (!l.dropdown) {
           return (
             <a

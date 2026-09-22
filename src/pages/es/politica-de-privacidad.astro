@@ -1,0 +1,333 @@
+---
+import Layout from '../../layouts/Layout.astro';
+// Spanish counterpart of en/privacy-policy.astro -- see that file's comment
+// for what changed during the port (named-officer line removed, address/
+// email brought in line with the rest of the site, and 2026-09: entity name
+// and the PIPEDA section updated to Wyoming/Ubik 360 Enterprises LLC). This
+// is a genuine 1:1 translation (unlike most EN/ES page pairs on this site --
+// legal terms don't get an audience-specific rewrite the way marketing copy
+// does).
+
+const TOC = [
+  { id: 'introduccion', label: 'Introducción y Alcance' },
+  { id: 'informacion-recopilada', label: 'Información que Recopilamos' },
+  { id: 'uso-informacion', label: 'Cómo Usamos su Información' },
+  { id: 'cookies', label: 'Política de Cookies' },
+  { id: 'almacenamiento-datos', label: 'Almacenamiento y Seguridad de Datos' },
+  { id: 'terceros', label: 'Compartir con Terceros' },
+  { id: 'derechos-usuario', label: 'Derechos y Opciones del Usuario' },
+  { id: 'principios-privacidad', label: 'Nuestros Principios de Privacidad' },
+  { id: 'contacto', label: 'Información de Contacto' },
+];
+---
+
+<Layout
+  lang="es"
+  path="/es/politica-de-privacidad.html"
+  alternatePath="/en/privacy-policy.html"
+  title="Política de Privacidad | Ubik 360"
+  description="Cómo Ubik 360 recopila, usa y protege su información personal, y nuestros principios de protección de datos."
+>
+  <section style="background:var(--black); padding:6rem 0 3rem;">
+    <div class="max-w-4xl mx-auto px-6">
+      <span class="section-tag mb-3" style="color:var(--oak);">Legal</span>
+      <h1 class="text-3xl lg:text-4xl" style="color:#fff;">Política de Privacidad</h1>
+      <p class="text-gray-400 mt-3">Última actualización: 30 de junio de 2025</p>
+    </div>
+  </section>
+
+  <section style="background:#fff; padding:3.5rem 0 5rem;">
+    <div class="max-w-4xl mx-auto px-6">
+      <div class="grid grid-cols-1 lg:grid-cols-[220px_1fr] gap-10">
+        <nav aria-label="Tabla de contenido" class="hidden lg:block">
+          <div style="position:sticky; top:2rem;">
+            <p class="text-[.75rem] font-semibold uppercase tracking-wide text-gray-400 mb-3">En esta página</p>
+            <ul class="list-none p-0 m-0 flex flex-col gap-2">
+              {TOC.map((item) => (
+                <li>
+                  <a href={`#${item.id}`} class="text-sm text-gray-600 hover:text-brand-red transition-colors">
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </nav>
+
+        <article class="prose-legal">
+          <section id="introduccion" class="mb-10">
+            <h2 class="text-2xl mb-4">1. Introducción y Alcance</h2>
+            <p class="text-gray-700 mb-4">
+              Bienvenido a Ubik 360 Enterprises LLC ("Ubik 360", "nosotros" o "nuestro"). Estamos
+              comprometidos con proteger su privacidad y garantizar la seguridad de su información
+              personal. Esta Política de Privacidad explica cómo recopilamos, usamos, divulgamos y
+              protegemos su información cuando visita nuestro sitio web (ubik360.com), usa nuestros
+              servicios o interactúa con nosotros de cualquier forma.
+            </p>
+            <p class="text-gray-700 mb-4">
+              Esta política aplica a toda la información recopilada a través de nuestro sitio web,
+              servicios y cualquier comunicación relacionada, incluyendo correo electrónico, mensajes
+              de texto y otras comunicaciones electrónicas entre usted y Ubik 360.
+            </p>
+            <div class="border-l-4 p-4" style="background:#eff6ff; border-color:#3b82f6;">
+              <p style="color:#1d4ed8;">
+                Al acceder o usar nuestro sitio web y servicios, usted acepta esta Política de
+                Privacidad. Si no está de acuerdo con nuestras políticas y prácticas, por favor no use
+                nuestro sitio web ni nuestros servicios.
+              </p>
+            </div>
+          </section>
+
+          <section id="informacion-recopilada" class="mb-10">
+            <h2 class="text-2xl mb-4">2. Información que Recopilamos</h2>
+            <p class="text-gray-700 mb-4">Recopilamos varios tipos de información de y sobre los usuarios de nuestro sitio web y servicios, incluyendo:</p>
+            <h3 class="text-lg font-semibold text-gray-800 mb-3">2.1 Información Personal</h3>
+            <ul class="check-list mb-4">
+              <li>Información de contacto (nombre, correo electrónico, teléfono y dirección postal)</li>
+              <li>Información comercial (nombre de la empresa, cargo e industria)</li>
+              <li>Credenciales de cuenta (nombres de usuario y contraseñas)</li>
+              <li>Información de pago (datos de tarjeta de crédito y direcciones de facturación)</li>
+              <li>Comunicaciones y correspondencia con nosotros</li>
+            </ul>
+            <h3 class="text-lg font-semibold text-gray-800 mb-3">2.2 Información No Personal</h3>
+            <ul class="check-list mb-4">
+              <li>Datos de uso (páginas visitadas, tiempo en el sitio y rutas de navegación)</li>
+              <li>Información del dispositivo (dirección IP, tipo de navegador, sistema operativo e identificadores del dispositivo)</li>
+              <li>Datos de ubicación (ubicación geográfica general basada en la dirección IP)</li>
+              <li>Información de referencia (el sitio web que lo refirió a nosotros)</li>
+            </ul>
+            <h3 class="text-lg font-semibold text-gray-800 mb-3">2.3 Métodos de Recopilación</h3>
+            <p class="text-gray-700 mb-4">Recopilamos esta información:</p>
+            <ul class="check-list mb-4">
+              <li>Directamente de usted cuando nos la proporciona (al llenar formularios, crear una cuenta o contactarnos)</li>
+              <li>Automáticamente mientras navega por nuestro sitio web (mediante cookies y tecnologías de seguimiento similares)</li>
+              <li>De terceros (socios comerciales, proveedores de servicios y proveedores de analítica)</li>
+            </ul>
+          </section>
+
+          <section id="uso-informacion" class="mb-10">
+            <h2 class="text-2xl mb-4">3. Cómo Usamos su Información</h2>
+            <p class="text-gray-700 mb-4">Usamos la información que recopilamos sobre usted para diversos fines, incluyendo:</p>
+            <h3 class="text-lg font-semibold text-gray-800 mb-3">3.1 Fines Comerciales</h3>
+            <ul class="check-list mb-4">
+              <li>Proveer, mantener y mejorar nuestro sitio web y servicios</li>
+              <li>Procesar transacciones y cumplir pedidos</li>
+              <li>Gestionar su cuenta y brindar soporte al cliente</li>
+              <li>Comunicarnos con usted sobre nuestros servicios, actualizaciones y promociones</li>
+              <li>Personalizar su experiencia y ofrecer contenido relevante</li>
+            </ul>
+            <h3 class="text-lg font-semibold text-gray-800 mb-3">3.2 Analítica y Mejora</h3>
+            <ul class="check-list mb-4">
+              <li>Analizar patrones y tendencias de uso para mejorar nuestro sitio web y servicios</li>
+              <li>Desarrollar nuevos productos, servicios y funcionalidades</li>
+              <li>Medir la efectividad de nuestras campañas de marketing</li>
+              <li>Realizar investigación y análisis para entender mejor a nuestros usuarios</li>
+            </ul>
+            <h3 class="text-lg font-semibold text-gray-800 mb-3">3.3 Legal y Seguridad</h3>
+            <ul class="check-list mb-4">
+              <li>Proteger nuestros derechos, propiedad y seguridad</li>
+              <li>Detectar, prevenir y abordar fraudes, brechas de seguridad y otras actividades dañinas</li>
+              <li>Cumplir con obligaciones legales y responder a solicitudes legales</li>
+              <li>Hacer cumplir nuestros términos de servicio y otros acuerdos</li>
+            </ul>
+          </section>
+
+          <section id="cookies" class="mb-10">
+            <h2 class="text-2xl mb-4">4. Política de Cookies</h2>
+            <p class="text-gray-700 mb-4">
+              Nuestro sitio web usa cookies y tecnologías de seguimiento similares para mejorar su
+              experiencia de navegación, analizar el tráfico del sitio y personalizar el contenido.
+            </p>
+            <h3 class="text-lg font-semibold text-gray-800 mb-3">4.1 Tipos de Cookies que Usamos</h3>
+            <ul class="check-list mb-4">
+              <li><strong>Cookies esenciales:</strong> necesarias para que el sitio funcione correctamente</li>
+              <li><strong>Cookies de preferencia:</strong> recuerdan sus preferencias y configuración</li>
+              <li><strong>Cookies analíticas:</strong> recopilan información sobre cómo usa nuestro sitio</li>
+              <li><strong>Cookies de marketing:</strong> rastrean sus hábitos de navegación para publicidad dirigida</li>
+            </ul>
+            <h3 class="text-lg font-semibold text-gray-800 mb-3">4.2 Cookies de Terceros</h3>
+            <p class="text-gray-700 mb-4">Algunas cookies son colocadas por terceros en nuestro nombre. Estos terceros pueden incluir:</p>
+            <ul class="check-list mb-4">
+              <li>Google Analytics (para analítica del sitio)</li>
+              <li>Google Tag Manager (para gestionar etiquetas del sitio)</li>
+              <li>Plataformas de redes sociales (para compartir contenido y funciones sociales)</li>
+              <li>Socios publicitarios (para publicidad dirigida)</li>
+            </ul>
+            <h3 class="text-lg font-semibold text-gray-800 mb-3">4.3 Gestión de Cookies</h3>
+            <p class="text-gray-700 mb-4">Puede controlar y gestionar las cookies de varias formas:</p>
+            <ul class="check-list mb-4">
+              <li>Configuración del navegador: la mayoría de navegadores permiten bloquear o eliminar cookies</li>
+              <li>Herramienta de consentimiento: use nuestro aviso de cookies para gestionar sus preferencias</li>
+              <li>Enlaces de exclusión: algunos terceros ofrecen mecanismos de exclusión</li>
+            </ul>
+            <p class="text-gray-700">Tenga en cuenta que bloquear ciertas cookies puede afectar la funcionalidad de nuestro sitio.</p>
+          </section>
+
+          <section id="almacenamiento-datos" class="mb-10">
+            <h2 class="text-2xl mb-4">5. Almacenamiento y Seguridad de Datos</h2>
+            <p class="text-gray-700 mb-4">
+              Estamos comprometidos con proteger la seguridad de su información personal y hemos
+              implementado medidas técnicas y organizativas apropiadas para salvaguardarla.
+            </p>
+            <h3 class="text-lg font-semibold text-gray-800 mb-3">5.1 Almacenamiento de Datos</h3>
+            <p class="text-gray-700 mb-4">
+              Su información se almacena en servidores seguros ubicados en Estados Unidos. También
+              podemos usar proveedores de servicios en la nube de terceros para almacenar y procesar
+              su información.
+            </p>
+            <h3 class="text-lg font-semibold text-gray-800 mb-3">5.2 Medidas de Seguridad</h3>
+            <ul class="check-list mb-4">
+              <li>Cifrado de datos sensibles en tránsito y en reposo</li>
+              <li>Evaluaciones de seguridad y pruebas de vulnerabilidad periódicas</li>
+              <li>Controles de acceso y mecanismos de autenticación</li>
+              <li>Capacitación del equipo en protección de datos y prácticas de seguridad</li>
+              <li>Procedimientos de respuesta a incidentes</li>
+            </ul>
+            <h3 class="text-lg font-semibold text-gray-800 mb-3">5.3 Retención de Datos</h3>
+            <p class="text-gray-700 mb-4">Conservamos su información personal durante el tiempo necesario para cumplir los fines para los cuales fue recopilada, incluyendo:</p>
+            <ul class="check-list mb-4">
+              <li>Proveerle nuestros servicios</li>
+              <li>Cumplir con obligaciones legales</li>
+              <li>Resolver disputas</li>
+              <li>Hacer cumplir nuestros acuerdos</li>
+            </ul>
+            <p class="text-gray-700 mb-4">Cuando su información personal ya no sea necesaria, la eliminaremos o anonimizaremos de forma segura.</p>
+            <div class="border-l-4 p-4" style="background:#fefce8; border-color:#eab308;">
+              <p style="color:#a16207;">
+                Aunque implementamos salvaguardas diseñadas para proteger su información, ningún
+                sistema de seguridad es infalible. No podemos garantizar la seguridad absoluta de la
+                información personal transmitida a nuestro sitio web.
+              </p>
+            </div>
+          </section>
+
+          <section id="terceros" class="mb-10">
+            <h2 class="text-2xl mb-4">6. Compartir con Terceros</h2>
+            <p class="text-gray-700 mb-4">Podemos compartir su información personal con ciertos terceros en las siguientes circunstancias:</p>
+            <h3 class="text-lg font-semibold text-gray-800 mb-3">6.1 Proveedores de Servicios</h3>
+            <p class="text-gray-700 mb-4">Podemos compartir su información con proveedores de servicios externos que realizan servicios en nuestro nombre, tales como:</p>
+            <ul class="check-list mb-4">
+              <li>Proveedores de infraestructura y alojamiento en la nube</li>
+              <li>Procesadores de pago</li>
+              <li>Sistemas de gestión de relaciones con clientes</li>
+              <li>Plataformas de correo y comunicación</li>
+              <li>Servicios de analítica y marketing</li>
+            </ul>
+            <p class="text-gray-700 mb-4">
+              Estos proveedores de servicios están contractualmente obligados a usar su información
+              únicamente para los fines de prestarnos servicios y a mantener medidas de seguridad
+              apropiadas.
+            </p>
+            <h3 class="text-lg font-semibold text-gray-800 mb-3">6.2 Transferencias Comerciales</h3>
+            <p class="text-gray-700 mb-4">
+              Si participamos en una fusión, adquisición o venta de la totalidad o parte de nuestros
+              activos, su información puede transferirse como parte de esa transacción. Le
+              notificaremos cualquier cambio en la propiedad o los usos de su información personal.
+            </p>
+            <h3 class="text-lg font-semibold text-gray-800 mb-3">6.3 Requisitos Legales</h3>
+            <p class="text-gray-700 mb-4">
+              Podemos divulgar su información si así lo exige la ley o en respuesta a solicitudes
+              válidas de autoridades públicas (por ejemplo, un tribunal o agencia gubernamental).
+            </p>
+            <h3 class="text-lg font-semibold text-gray-800 mb-3">6.4 Protección de Derechos</h3>
+            <p class="text-gray-700">
+              Podemos divulgar su información para proteger nuestros derechos, propiedad o seguridad,
+              o los de nuestros usuarios u otras personas.
+            </p>
+          </section>
+
+          <section id="derechos-usuario" class="mb-10">
+            <h2 class="text-2xl mb-4">7. Derechos y Opciones del Usuario</h2>
+            <p class="text-gray-700 mb-4">Usted tiene ciertos derechos respecto a su información personal. Dependiendo de su ubicación, estos derechos pueden incluir:</p>
+            <h3 class="text-lg font-semibold text-gray-800 mb-3">7.1 Acceso y Corrección</h3>
+            <p class="text-gray-700 mb-4">
+              Tiene derecho a acceder, revisar y actualizar su información personal. Puede solicitar
+              una copia de su información personal o corregir información inexacta contactándonos con
+              los datos de la sección "Información de Contacto".
+            </p>
+            <h3 class="text-lg font-semibold text-gray-800 mb-3">7.2 Eliminación y Restricción</h3>
+            <p class="text-gray-700 mb-4">
+              Puede solicitar la eliminación de su información personal o restringir su procesamiento
+              en ciertas circunstancias. Cumpliremos con su solicitud a menos que tengamos una
+              obligación legal o interés legítimo para conservar su información.
+            </p>
+            <h3 class="text-lg font-semibold text-gray-800 mb-3">7.3 Portabilidad de Datos</h3>
+            <p class="text-gray-700 mb-4">
+              Puede solicitar una copia de su información personal en un formato estructurado,
+              comúnmente usado y legible por máquina, y transferirla a otro proveedor de servicios
+              cuando sea técnicamente viable.
+            </p>
+            <h3 class="text-lg font-semibold text-gray-800 mb-3">7.4 Comunicaciones de Marketing</h3>
+            <p class="text-gray-700 mb-4">Puede optar por no recibir comunicaciones de marketing de nuestra parte:</p>
+            <ul class="check-list mb-4">
+              <li>Haciendo clic en el enlace "cancelar suscripción" en nuestros correos</li>
+              <li>Contactándonos con los datos de la sección "Información de Contacto"</li>
+              <li>Actualizando sus preferencias de comunicación en la configuración de su cuenta (si aplica)</li>
+            </ul>
+            <p class="text-gray-700">
+              Tenga en cuenta que aunque opte por no recibir comunicaciones de marketing, aún podemos
+              enviarle mensajes administrativos importantes relacionados con su cuenta o nuestros
+              servicios.
+            </p>
+          </section>
+
+          <section id="principios-privacidad" class="mb-10">
+            <h2 class="text-2xl mb-4">8. Nuestros Principios de Privacidad</h2>
+            <p class="text-gray-700 mb-4">
+              Ubik 360 Enterprises LLC sigue un conjunto de principios de protección de datos
+              consistentes con marcos de privacidad ampliamente reconocidos. Cumplimos con lo
+              siguiente:
+            </p>
+            <h3 class="text-lg font-semibold text-gray-800 mb-3">8.1 Responsabilidad</h3>
+            <p class="text-gray-700 mb-4">Somos responsables de la información personal bajo nuestro control y hemos designado personas responsables de nuestro cumplimiento con estos principios.</p>
+            <h3 class="text-lg font-semibold text-gray-800 mb-3">8.2 Identificación de Fines</h3>
+            <p class="text-gray-700 mb-4">Identificamos los fines para los cuales se recopila información personal al momento o antes de la recopilación.</p>
+            <h3 class="text-lg font-semibold text-gray-800 mb-3">8.3 Consentimiento</h3>
+            <p class="text-gray-700 mb-4">Obtenemos consentimiento informado para la recopilación, uso y divulgación de información personal, excepto cuando sea inapropiado.</p>
+            <h3 class="text-lg font-semibold text-gray-800 mb-3">8.4 Limitación de la Recopilación</h3>
+            <p class="text-gray-700 mb-4">Limitamos la recopilación de información personal a lo necesario para los fines identificados.</p>
+            <h3 class="text-lg font-semibold text-gray-800 mb-3">8.5 Limitación de Uso, Divulgación y Retención</h3>
+            <p class="text-gray-700 mb-4">No usamos ni divulgamos información personal para fines distintos a aquellos para los cuales fue recopilada, salvo con consentimiento o cuando lo exija la ley. Conservamos la información personal solo el tiempo necesario para cumplir dichos fines.</p>
+            <h3 class="text-lg font-semibold text-gray-800 mb-3">8.6 Exactitud</h3>
+            <p class="text-gray-700 mb-4">Mantenemos la información personal tan exacta, completa y actualizada como sea necesario para los fines para los cuales se utiliza.</p>
+            <h3 class="text-lg font-semibold text-gray-800 mb-3">8.7 Salvaguardas</h3>
+            <p class="text-gray-700 mb-4">Protegemos la información personal con salvaguardas de seguridad apropiadas a la sensibilidad de la información.</p>
+            <h3 class="text-lg font-semibold text-gray-800 mb-3">8.8 Apertura</h3>
+            <p class="text-gray-700 mb-4">Ponemos a disposición información sobre nuestras políticas y prácticas relacionadas con la gestión de información personal.</p>
+            <h3 class="text-lg font-semibold text-gray-800 mb-3">8.9 Acceso Individual</h3>
+            <p class="text-gray-700 mb-4">
+              A solicitud, informamos a las personas sobre la existencia, uso y divulgación de su
+              información personal y les damos acceso a ella. Las personas tienen derecho a cuestionar
+              la exactitud e integridad de su información y a que sea corregida según corresponda.
+            </p>
+            <h3 class="text-lg font-semibold text-gray-800 mb-3">8.10 Cuestionamiento del Cumplimiento</h3>
+            <p class="text-gray-700">Las personas pueden cuestionar nuestro cumplimiento de estos principios contactándonos con los datos a continuación.</p>
+          </section>
+
+          <section id="contacto" class="mb-4">
+            <h2 class="text-2xl mb-4">9. Información de Contacto</h2>
+            <p class="text-gray-700 mb-4">
+              Si tiene preguntas, inquietudes o solicitudes sobre esta Política de Privacidad o
+              nuestras prácticas de privacidad, contáctenos:
+            </p>
+            <div class="p-6 rounded-lg mb-6" style="background:#f9fafb;">
+              <p class="text-gray-700 mb-2"><strong>Ubik 360 Enterprises LLC</strong></p>
+              <p class="text-gray-700 mb-2"><strong>Correo:</strong> admin@ubik360.com</p>
+              <p class="text-gray-700 mb-2"><strong>Teléfono:</strong> (226) 605-0983</p>
+              <p class="text-gray-700"><strong>Dirección:</strong> 30 N Gould St Ste R, Sheridan, WY 82801</p>
+            </div>
+            <p class="text-gray-700 mb-4">Responderemos a su consulta lo antes posible, típicamente dentro de 30 días.</p>
+            <h3 class="text-lg font-semibold text-gray-800 mb-3">9.1 Cambios a esta Política de Privacidad</h3>
+            <p class="text-gray-700 mb-4">
+              Podemos actualizar esta Política de Privacidad periódicamente para reflejar cambios en
+              nuestras prácticas o por otras razones operativas, legales o regulatorias. Le
+              notificaremos cambios materiales publicando la nueva Política de Privacidad en esta
+              página y actualizando la fecha de "Última actualización" en la parte superior.
+            </p>
+            <p class="text-gray-700">Le recomendamos revisar esta Política de Privacidad periódicamente para mantenerse informado sobre cómo protegemos su información.</p>
+          </section>
+        </article>
+      </div>
+    </div>
+  </section>
+</Layout>

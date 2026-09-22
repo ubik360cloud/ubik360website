@@ -15,6 +15,17 @@ interface Props {
 const { lang, currentPath } = Astro.props;
 const year = new Date().getFullYear();
 
+const LEGAL = {
+  en: [
+    { href: '/en/privacy-policy.html', label: 'Privacy Policy' },
+    { href: '/en/terms-of-service.html', label: 'Terms of Service' },
+  ],
+  es: [
+    { href: '/es/politica-de-privacidad.html', label: 'Política de Privacidad' },
+    { href: '/es/terminos-de-servicio.html', label: 'Términos de Servicio' },
+  ],
+};
+
 const DATA = {
   en: {
     home: '/en/index.html',
@@ -126,7 +137,12 @@ const colsClass = d.columns.length === 3 ? 'md:grid-cols-3' : 'md:grid-cols-2';
 
     <div class="mt-8 pt-6 border-t border-gray-800 flex flex-col items-center gap-3">
       <p class="text-gray-500 text-[.75rem] text-center">{d.copy}</p>
-      <div class="flex items-center gap-6">
+      <div class="flex items-center gap-6 flex-wrap justify-center">
+        {LEGAL[lang].map((l) => (
+          <a href={l.href} class="text-gray-500 text-[.75rem] no-underline transition-colors hover:text-white">
+            {l.label}
+          </a>
+        ))}
         <a href={altHref} id="footer-lang-toggle" class="text-gray-500 text-[.75rem] no-underline transition-colors hover:text-white">
           {d.altLabel}
         </a>

@@ -1,0 +1,382 @@
+---
+import Layout from '../../layouts/Layout.astro';
+// Converted from the legacy public/Terms-of-Service.html (unconverted static
+// page, never linked from the live site) to a real Astro page, linked from
+// Footer. 2026-09 (Jose): governing law / arbitration venue / entity name
+// updated from Ontario/Canada to Wyoming to match Ubik 360 Enterprises LLC
+// (the Wyoming-registered entity ubik360.com operates under -- Jose also
+// separately holds an Ontario LLP, but that's not this site's entity). Still
+// not a substitute for actual legal review of a US LLC's terms -- just
+// brought in line with the entity ubik360.com is actually operated under.
+// Also fixed: Section 10 contact email was jose@ubik360.com, already fixed
+// sitewide everywhere else (see CLAUDE.md "Known fixes made during the port").
+
+const TOC = [
+  { id: 'introduction', label: 'Introduction' },
+  { id: 'service-usage', label: '1. Service Usage' },
+  { id: 'user-responsibilities', label: '2. User Responsibilities' },
+  { id: 'payment-terms', label: '3. Payment Terms' },
+  { id: 'intellectual-property', label: '4. Intellectual Property' },
+  { id: 'limitation-liability', label: '5. Limitation of Liability' },
+  { id: 'privacy-practices', label: '6. Privacy Practices' },
+  { id: 'termination', label: '7. Termination' },
+  { id: 'dispute-resolution', label: '8. Dispute Resolution' },
+  { id: 'modifications', label: '9. Modifications' },
+  { id: 'contact-us', label: '10. Contact Us' },
+];
+---
+
+<Layout
+  lang="en"
+  path="/en/terms-of-service.html"
+  alternatePath="/es/terminos-de-servicio.html"
+  title="Terms of Service | Ubik 360"
+  description="The terms governing your access to and use of Ubik 360's website and services."
+>
+  <section style="background:var(--black); padding:6rem 0 3rem;">
+    <div class="max-w-4xl mx-auto px-6">
+      <span class="section-tag mb-3" style="color:var(--oak);">Legal</span>
+      <h1 class="text-3xl lg:text-4xl" style="color:#fff;">Terms of Service</h1>
+      <p class="text-gray-400 mt-3">Last Updated: July 2, 2025</p>
+    </div>
+  </section>
+
+  <section style="background:#fff; padding:3.5rem 0 5rem;">
+    <div class="max-w-4xl mx-auto px-6">
+      <div class="grid grid-cols-1 lg:grid-cols-[220px_1fr] gap-10">
+        <nav aria-label="Table of contents" class="hidden lg:block">
+          <div style="position:sticky; top:2rem;">
+            <p class="text-[.75rem] font-semibold uppercase tracking-wide text-gray-400 mb-3">On this page</p>
+            <ul class="list-none p-0 m-0 flex flex-col gap-2">
+              {TOC.map((item) => (
+                <li>
+                  <a href={`#${item.id}`} class="text-sm text-gray-600 hover:text-brand-red transition-colors">
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </nav>
+
+        <article class="prose-legal">
+          <section id="introduction" class="mb-10">
+            <p class="text-lg text-gray-700 mb-6">
+              Welcome to Ubik 360 Enterprises LLC ("Ubik 360," "we," "our," or "us"). These Terms of
+              Service ("Terms") govern your access to
+              and use of Ubik 360's services, including our website, digital marketing, nearshore
+              staffing, international expansion, and AI solutions offerings (collectively, the
+              "Services"). By accessing or using our Services, you agree to be bound by these Terms
+              and our Privacy Policy.
+            </p>
+            <p class="text-lg text-gray-700">
+              Please read these Terms carefully. If you do not agree with these Terms, you must not
+              access or use our Services. If you are accessing or using the Services on behalf of a
+              company or other legal entity, you represent that you have the authority to bind such
+              entity to these Terms.
+            </p>
+          </section>
+
+          <section id="service-usage" class="mb-10">
+            <h2 class="text-2xl mb-4">1. Service Usage</h2>
+            <div class="pl-4" style="border-left:4px solid #f3f4f6;">
+              <h3 class="text-lg font-semibold text-gray-800 mb-3">1.1 Service Description</h3>
+              <p class="text-gray-700 mb-4">
+                Ubik 360 provides digital marketing, nearshore staffing, international market-entry,
+                and AI solutions services. The specific features and scope of each engagement will be
+                described in the applicable service agreement or order form.
+              </p>
+              <h3 class="text-lg font-semibold text-gray-800 mb-3">1.2 Service Availability</h3>
+              <p class="text-gray-700 mb-4">
+                We strive to ensure that our Services are available at all reasonable times. However,
+                we do not guarantee that the Services will be available at all times. We may
+                experience interruptions, delays, or errors, or need to perform maintenance. We
+                reserve the right to change, revise, update, suspend, discontinue, or otherwise modify
+                the Services at any time without notice.
+              </p>
+              <h3 class="text-lg font-semibold text-gray-800 mb-3">1.3 Account Registration</h3>
+              <p class="text-gray-700 mb-4">
+                Some of our Services require you to register for an account. When you register, you
+                agree to provide accurate, current, and complete information about yourself and to
+                update such information as necessary. You are solely responsible for safeguarding your
+                account credentials and for all activity that occurs under your account.
+              </p>
+              <h3 class="text-lg font-semibold text-gray-800 mb-3">1.4 Service Level Agreements</h3>
+              <p class="text-gray-700">
+                For certain Services, we may offer specific service level agreements (SLAs) that
+                define expected performance metrics, availability commitments, and remedies for
+                failure to meet these standards. These SLAs will be provided separately and form part
+                of these Terms when applicable to your Services.
+              </p>
+            </div>
+          </section>
+
+          <section id="user-responsibilities" class="mb-10">
+            <h2 class="text-2xl mb-4">2. User Responsibilities</h2>
+            <div class="pl-4" style="border-left:4px solid #f3f4f6;">
+              <h3 class="text-lg font-semibold text-gray-800 mb-3">2.1 Acceptable Use</h3>
+              <p class="text-gray-700 mb-4">You agree to use the Services only for lawful purposes and in accordance with these Terms. You agree not to use the Services:</p>
+              <ul class="check-list mb-4">
+                <li>In any way that violates any applicable federal, provincial, local, or international law or regulation.</li>
+                <li>To transmit, or procure the sending of, any advertising or promotional material, including any "junk mail," "chain letter," "spam," or any other similar solicitation.</li>
+                <li>To impersonate or attempt to impersonate Ubik 360, a Ubik 360 team member, another user, or any other person or entity.</li>
+                <li>To engage in any other conduct that restricts or inhibits anyone's use or enjoyment of the Services, or which may harm Ubik 360 or users of the Services.</li>
+              </ul>
+              <h3 class="text-lg font-semibold text-gray-800 mb-3">2.2 Content Responsibility</h3>
+              <p class="text-gray-700 mb-4">You are solely responsible for all data, information, software, text, images, and other content that you upload, post, publish, display, transmit, or otherwise use while using the Services ("Content"). You represent and warrant that:</p>
+              <ul class="check-list mb-4">
+                <li>You own or have the necessary licenses, rights, consents, and permissions to use and authorize Ubik 360 to use all Content as described in these Terms.</li>
+                <li>Your Content does not and will not infringe, violate, or misappropriate any third-party right, including any copyright, trademark, patent, trade secret, moral right, privacy right, right of publicity, or any other intellectual property or proprietary right.</li>
+              </ul>
+              <h3 class="text-lg font-semibold text-gray-800 mb-3">2.3 Security</h3>
+              <p class="text-gray-700">
+                You are responsible for implementing reasonable security measures for your use of the
+                Services, including securing your account credentials, implementing appropriate access
+                controls, and promptly notifying Ubik 360 of any unauthorized access to or use of your
+                account.
+              </p>
+            </div>
+          </section>
+
+          <section id="payment-terms" class="mb-10">
+            <h2 class="text-2xl mb-4">3. Payment Terms</h2>
+            <div class="pl-4" style="border-left:4px solid #f3f4f6;">
+              <h3 class="text-lg font-semibold text-gray-800 mb-3">3.1 Fees and Billing</h3>
+              <p class="text-gray-700 mb-4">
+                The fees for the Services will be specified in the applicable service agreement or
+                order form. Unless otherwise specified, all fees are exclusive of applicable taxes. You
+                agree to pay all fees and charges incurred through your account in accordance with the
+                billing terms in effect at the time a fee or charge becomes payable.
+              </p>
+              <h3 class="text-lg font-semibold text-gray-800 mb-3">3.2 Payment Methods</h3>
+              <p class="text-gray-700 mb-4">
+                We accept various payment methods, which will be specified during onboarding or
+                checkout. By providing a payment method, you represent that you are authorized to use
+                the payment method and authorize us to charge your payment method for all fees
+                associated with your use of the Services.
+              </p>
+              <h3 class="text-lg font-semibold text-gray-800 mb-3">3.3 Subscription Services</h3>
+              <p class="text-gray-700 mb-4">
+                For subscription-based Services, you will be billed in advance on a recurring basis
+                according to the billing cycle specified in your service agreement. Unless otherwise
+                stated, subscriptions automatically renew for additional periods equal to the initial
+                subscription term unless canceled before the renewal date.
+              </p>
+              <h3 class="text-lg font-semibold text-gray-800 mb-3">3.4 Late Payments</h3>
+              <p class="text-gray-700 mb-4">
+                If your payment is not received by the due date, we may (a) assess late charges at the
+                rate of 1.5% of the outstanding balance per month, or the maximum rate permitted by
+                law, whichever is lower, (b) suspend your access to the Services until payment is
+                received, and/or (c) terminate your access to the Services.
+              </p>
+              <h3 class="text-lg font-semibold text-gray-800 mb-3">3.5 Refunds</h3>
+              <p class="text-gray-700">
+                Unless otherwise specified in the applicable service agreement or required by law, all
+                fees are non-refundable. In certain circumstances, we may, at our sole discretion,
+                issue refunds or credits.
+              </p>
+            </div>
+          </section>
+
+          <section id="intellectual-property" class="mb-10">
+            <h2 class="text-2xl mb-4">4. Intellectual Property Rights</h2>
+            <div class="pl-4" style="border-left:4px solid #f3f4f6;">
+              <h3 class="text-lg font-semibold text-gray-800 mb-3">4.1 Ubik 360 Intellectual Property</h3>
+              <p class="text-gray-700 mb-4">
+                The Services and all content, features, and functionality thereof, including but not
+                limited to all information, software, text, displays, images, video, and audio, and
+                the design, selection, and arrangement thereof, are owned by Ubik 360, its licensors,
+                or other providers of such material and are protected by applicable copyright,
+                trademark, patent, trade secret, and other intellectual property or proprietary rights
+                laws.
+              </p>
+              <h3 class="text-lg font-semibold text-gray-800 mb-3">4.2 License to Use Services</h3>
+              <p class="text-gray-700 mb-4">
+                Subject to these Terms, Ubik 360 grants you a limited, non-exclusive, non-transferable,
+                revocable license to access and use the Services for your internal business purposes.
+                This license does not include any resale or commercial use of the Services or its
+                contents; any collection and use of any product listings, descriptions, or prices; any
+                derivative use of the Services or their contents; or any use of data mining, robots, or
+                similar data gathering and extraction tools.
+              </p>
+              <h3 class="text-lg font-semibold text-gray-800 mb-3">4.3 Your Content</h3>
+              <p class="text-gray-700 mb-4">
+                You retain all rights in and to your Content. By uploading, posting, publishing,
+                displaying, transmitting, or otherwise using Content with the Services, you grant Ubik
+                360 a worldwide, non-exclusive, royalty-free license to use, reproduce, modify, adapt,
+                publish, translate, distribute, and display such Content solely for the purpose of
+                providing the Services to you.
+              </p>
+              <h3 class="text-lg font-semibold text-gray-800 mb-3">4.4 Feedback</h3>
+              <p class="text-gray-700">
+                If you provide Ubik 360 with any feedback, suggestions, or recommendations regarding
+                the Services ("Feedback"), you hereby grant Ubik 360 an unlimited, irrevocable,
+                perpetual, sublicensable, transferable, royalty-free license to use such Feedback for
+                any purpose, including but not limited to incorporating it into the Services or other
+                products or services.
+              </p>
+            </div>
+          </section>
+
+          <section id="limitation-liability" class="mb-10">
+            <h2 class="text-2xl mb-4">5. Limitation of Liability</h2>
+            <div class="pl-4" style="border-left:4px solid #f3f4f6;">
+              <h3 class="text-lg font-semibold text-gray-800 mb-3">5.1 Disclaimer of Warranties</h3>
+              <p class="text-gray-700 mb-4">THE SERVICES ARE PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT, OR COURSE OF PERFORMANCE.</p>
+              <p class="text-gray-700 mb-4">UBIK 360 DOES NOT WARRANT THAT: (A) THE SERVICES WILL FUNCTION UNINTERRUPTED, SECURE, OR AVAILABLE AT ANY PARTICULAR TIME OR LOCATION; (B) ANY ERRORS OR DEFECTS WILL BE CORRECTED; (C) THE SERVICES ARE FREE OF VIRUSES OR OTHER HARMFUL COMPONENTS; OR (D) THE RESULTS OF USING THE SERVICES WILL MEET YOUR REQUIREMENTS.</p>
+              <h3 class="text-lg font-semibold text-gray-800 mb-3">5.2 Limitation of Liability</h3>
+              <p class="text-gray-700 mb-4">TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL UBIK 360, ITS AFFILIATES, DIRECTORS, EMPLOYEES, AGENTS, OR LICENSORS BE LIABLE FOR ANY INDIRECT, PUNITIVE, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR EXEMPLARY DAMAGES, INCLUDING WITHOUT LIMITATION DAMAGES FOR LOSS OF PROFITS, GOODWILL, USE, DATA, OR OTHER INTANGIBLE LOSSES, THAT RESULT FROM THE USE OF, OR INABILITY TO USE, THE SERVICES.</p>
+              <p class="text-gray-700 mb-4">IN NO EVENT WILL UBIK 360'S TOTAL LIABILITY TO YOU FOR ALL DAMAGES, LOSSES, OR CAUSES OF ACTION EXCEED THE AMOUNT YOU HAVE PAID UBIK 360 IN THE LAST SIX (6) MONTHS, OR, IF GREATER, ONE HUNDRED DOLLARS ($100).</p>
+              <h3 class="text-lg font-semibold text-gray-800 mb-3">5.3 Exclusions</h3>
+              <p class="text-gray-700">Some jurisdictions do not allow the exclusion of certain warranties or the limitation or exclusion of liability for certain types of damages. Accordingly, some of the above limitations may not apply to you.</p>
+            </div>
+          </section>
+
+          <section id="privacy-practices" class="mb-10">
+            <h2 class="text-2xl mb-4">6. Privacy Practices</h2>
+            <div class="pl-4" style="border-left:4px solid #f3f4f6;">
+              <h3 class="text-lg font-semibold text-gray-800 mb-3">6.1 Privacy Policy</h3>
+              <p class="text-gray-700 mb-4">
+                Your use of the Services is subject to Ubik 360's
+                <a href="/en/privacy-policy.html" style="color:var(--red); text-decoration:underline;">Privacy Policy</a>,
+                which is incorporated into these Terms by reference.
+              </p>
+              <h3 class="text-lg font-semibold text-gray-800 mb-3">6.2 Data Processing</h3>
+              <p class="text-gray-700 mb-4">
+                When you use our Services, we may process personal data on your behalf. In such cases,
+                you remain the data controller, and Ubik 360 acts as a data processor. Our obligations
+                as a data processor are set out in our Data Processing Agreement, which will be
+                provided separately when applicable.
+              </p>
+              <h3 class="text-lg font-semibold text-gray-800 mb-3">6.3 Data Security</h3>
+              <p class="text-gray-700 mb-4">
+                We implement appropriate technical and organizational measures to protect your data.
+                However, no method of transmission over the Internet or electronic storage is 100%
+                secure. Therefore, while we strive to use commercially acceptable means to protect your
+                personal information, we cannot guarantee its absolute security.
+              </p>
+              <h3 class="text-lg font-semibold text-gray-800 mb-3">6.4 Data Retention</h3>
+              <p class="text-gray-700">
+                We retain your personal information for as long as necessary to provide the Services
+                and fulfill the purposes outlined in our Privacy Policy, unless a longer retention
+                period is required or permitted by law.
+              </p>
+            </div>
+          </section>
+
+          <section id="termination" class="mb-10">
+            <h2 class="text-2xl mb-4">7. Termination</h2>
+            <div class="pl-4" style="border-left:4px solid #f3f4f6;">
+              <h3 class="text-lg font-semibold text-gray-800 mb-3">7.1 Termination by You</h3>
+              <p class="text-gray-700 mb-4">
+                You may terminate your use of the Services at any time by following the cancellation
+                procedures specified in your service agreement or by contacting us. If you terminate a
+                subscription before the end of your current paid term, your subscription will continue
+                until the end of your current term unless otherwise specified in your service
+                agreement.
+              </p>
+              <h3 class="text-lg font-semibold text-gray-800 mb-3">7.2 Termination by Ubik 360</h3>
+              <p class="text-gray-700 mb-4">
+                Ubik 360 may terminate or suspend your access to the Services immediately, without
+                prior notice or liability, for any reason, including, without limitation, if you breach
+                these Terms. Upon termination, your right to use the Services will immediately cease.
+              </p>
+              <h3 class="text-lg font-semibold text-gray-800 mb-3">7.3 Effects of Termination</h3>
+              <p class="text-gray-700 mb-4">Upon termination of your access to the Services:</p>
+              <ul class="check-list mb-4">
+                <li>All licenses and rights to use the Services will terminate.</li>
+                <li>You may lose access to your Content stored within the Services.</li>
+                <li>Ubik 360 may delete your Content after a reasonable period following termination.</li>
+                <li>Any outstanding payment obligations will become immediately due.</li>
+              </ul>
+              <h3 class="text-lg font-semibold text-gray-800 mb-3">7.4 Survival</h3>
+              <p class="text-gray-700">
+                The provisions of these Terms which by their nature should survive termination shall
+                survive termination, including, without limitation, ownership provisions, warranty
+                disclaimers, indemnity, and limitations of liability.
+              </p>
+            </div>
+          </section>
+
+          <section id="dispute-resolution" class="mb-10">
+            <h2 class="text-2xl mb-4">8. Dispute Resolution</h2>
+            <div class="pl-4" style="border-left:4px solid #f3f4f6;">
+              <h3 class="text-lg font-semibold text-gray-800 mb-3">8.1 Governing Law</h3>
+              <p class="text-gray-700 mb-4">
+                These Terms and your use of the Services shall be governed by and construed in
+                accordance with the laws of the State of Wyoming and the applicable federal laws of
+                the United States, without giving effect to any choice or conflict of law provision or
+                rule.
+              </p>
+              <h3 class="text-lg font-semibold text-gray-800 mb-3">8.2 Informal Dispute Resolution</h3>
+              <p class="text-gray-700 mb-4">
+                Before filing a claim against Ubik 360, you agree to try to resolve the dispute
+                informally by contacting us. We'll try to resolve the dispute informally by contacting
+                you via email. If a dispute is not resolved within 30 days of submission, you or Ubik
+                360 may bring a formal proceeding.
+              </p>
+              <h3 class="text-lg font-semibold text-gray-800 mb-3">8.3 Arbitration</h3>
+              <p class="text-gray-700 mb-4">
+                Any dispute, controversy, or claim arising out of or relating to these Terms, including
+                the formation, interpretation, breach, or termination thereof, including whether the
+                claims asserted are arbitrable, will be referred to and finally determined by
+                arbitration in accordance with the JAMS Comprehensive Arbitration Rules and Procedures.
+                The tribunal will consist of a sole arbitrator. The place of arbitration will be
+                Sheridan, Wyoming. The language to be used in the arbitral proceedings will be English.
+              </p>
+              <h3 class="text-lg font-semibold text-gray-800 mb-3">8.4 Restrictions</h3>
+              <p class="text-gray-700 mb-4">
+                You and Ubik 360 agree that any arbitration shall be limited to the dispute between
+                Ubik 360 and you individually. To the full extent permitted by law, (a) no arbitration
+                shall be joined with any other proceeding; (b) there is no right or authority for any
+                dispute to be arbitrated on a class-action basis; and (c) there is no right or authority
+                for any dispute to be brought in a purported representative capacity on behalf of the
+                general public or any other persons.
+              </p>
+              <h3 class="text-lg font-semibold text-gray-800 mb-3">8.5 Exceptions</h3>
+              <p class="text-gray-700">
+                Notwithstanding the foregoing, either party may seek injunctive or other equitable
+                relief in any court of competent jurisdiction to protect its intellectual property
+                rights pending the completion of arbitration.
+              </p>
+            </div>
+          </section>
+
+          <section id="modifications" class="mb-10">
+            <h2 class="text-2xl mb-4">9. Modifications to Terms</h2>
+            <div class="pl-4" style="border-left:4px solid #f3f4f6;">
+              <p class="text-gray-700 mb-4">
+                Ubik 360 reserves the right, at our sole discretion, to modify or replace these Terms
+                at any time. If a revision is material, we will provide at least 30 days' notice prior
+                to any new terms taking effect. What constitutes a material change will be determined
+                at our sole discretion.
+              </p>
+              <p class="text-gray-700">
+                By continuing to access or use our Services after those revisions become effective, you
+                agree to be bound by the revised Terms. If you do not agree to the new Terms, you must
+                stop using the Services.
+              </p>
+            </div>
+          </section>
+
+          <section id="contact-us" class="mb-4">
+            <h2 class="text-2xl mb-4">10. Contact Us</h2>
+            <div class="pl-4" style="border-left:4px solid #f3f4f6;">
+              <p class="text-gray-700 mb-4">If you have any questions about these Terms, please contact us at:</p>
+              <div class="p-6 rounded-lg" style="background:#f9fafb;">
+                <p class="text-gray-700 mb-2"><strong>Ubik 360 Enterprises LLC</strong></p>
+                <p class="text-gray-700 mb-2">30 N Gould St Ste R, Sheridan, WY 82801</p>
+                <p class="text-gray-700 mb-2">Email: admin@ubik360.com</p>
+                <p class="text-gray-700">Phone: (226) 605-0983</p>
+              </div>
+            </div>
+          </section>
+
+          <div class="mt-12 pt-8" style="border-top:1px solid #e5e7eb;">
+            <p class="text-gray-600 text-center">By using our Services, you acknowledge that you have read and understood these Terms of Service and agree to be bound by them.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+</Layout>

@@ -11,6 +11,8 @@ const EN_TO_ES: Record<string, string> = {
   '/en/about.html': '/es/sobre-mi.html',
   '/en/contact.html': '/es/contacto.html',
   '/en/thank-you.html': '/es/gracias.html',
+  '/en/privacy-policy.html': '/es/politica-de-privacidad.html',
+  '/en/terms-of-service.html': '/es/terminos-de-servicio.html',
 };
 
 const ES_TO_EN: Record<string, string> = {
@@ -18,6 +20,8 @@ const ES_TO_EN: Record<string, string> = {
   '/es/sobre-mi.html': '/en/about.html',
   '/es/contacto.html': '/en/contact.html',
   '/es/gracias.html': '/en/thank-you.html',
+  '/es/politica-de-privacidad.html': '/en/privacy-policy.html',
+  '/es/terminos-de-servicio.html': '/en/terms-of-service.html',
 };
 
 export function getAlternatePath(currentPath: string, currentLang: 'en' | 'es'): string {

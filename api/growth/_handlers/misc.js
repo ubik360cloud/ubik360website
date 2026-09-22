@@ -1,8 +1,8 @@
-import { withOwner } from './_lib/auth.js';
-import { supabase } from './_lib/supabase.js';
-import { sendsRemainingToday } from './_lib/sendCap.js';
+import { withOwner } from '../_lib/auth.js';
+import { supabase } from '../_lib/supabase.js';
+import { sendsRemainingToday } from '../_lib/sendCap.js';
 
-export default withOwner(async (req, res) => {
+export const deliverability = withOwner(async (req, res) => {
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
   const db = supabase();
   const since = new Date(Date.now() - 30 * 864e5).toISOString();
@@ -31,4 +31,8 @@ export default withOwner(async (req, res) => {
     contacts: { total: contacts?.length || 0, byStatus: contactsByStatus },
     sendsRemainingToday: remaining,
   });
+});
+
+export const me = withOwner(async (req, res, ownerEmail) => {
+  return res.status(200).json({ email: ownerEmail });
 });

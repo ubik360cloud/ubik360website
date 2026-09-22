@@ -1,7 +1,6 @@
 // Brevo webhook -- bounces/complaints/opens/clicks on transactional sends.
-// Auto-suppresses on hard bounce or spam complaint (protects the shared
-// domain reputation on the small chance a bad address slips through).
-// Configure in Brevo: Settings -> Webhooks -> Transactional -> point at
+// Auto-suppresses on hard bounce or spam complaint. Configure in Brevo:
+// Settings -> Webhooks -> Transactional -> point at
 // https://ubik360.com/api/growth/webhooks/brevo?secret=<GROWTH_WEBHOOK_SECRET>.
 //
 // Known gap (not built yet): reply detection needs an IMAP poll of
@@ -19,7 +18,7 @@ const EVENT_MAP = {
   unsubscribed: 'unsubscribed',
 };
 
-export default async function handler(req, res) {
+export async function brevo(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
   if (req.query.secret !== process.env.GROWTH_WEBHOOK_SECRET) return res.status(401).json({ error: 'Unauthorized' });
 

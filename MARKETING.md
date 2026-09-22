@@ -75,9 +75,6 @@ text ("Some shitty stuff 1/2/3/4") in a fake dashboard demo, and one showed a Ma
 a Vietnamese port — wrong geography and third-party branding for a Colombia/US/Canada-focused site.
 
 **Explicitly NOT changed (deliberately out of scope for this test):**
-- The Calendly booking link (`calendly.com/jose-ubik360/30min`) still contains "jose" in the URL
-  itself — not addressed; low visibility (users don't typically read URLs closely) and changing it
-  would require a new Calendly account/link, judged not worth doing for a temporary test.
 - Mobile/responsive rendering relies on existing Tailwind responsive classes and flexible units
   (the same patterns already used elsewhere on the site); layout issues that *were* visually
   spotted (via screenshots Jose shared) got fixed as found — footer sizing, section padding,

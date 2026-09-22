@@ -22,17 +22,20 @@ one at all.
 Repo: https://github.com/ubik360cloud/ubik360website (branch `astro-migration` — this is also the
 live Production branch, see "Hosting / deployment" below).
 
-## Migration status (as of 2026-07)
+## Migration status (as of 2026-07, page list last updated 2026-09)
 The site was previously plain static HTML with no build step (Tailwind CDN, JS-injected
 nav/footer, hand-maintained sitemap — see MARKETING.md for why that was replaced). The Astro
 rebuild is **live in production** on `ubik360.com` (see "Hosting / deployment" below) — fully
 deployed, DNS cut over from Hostinger, not just a preview.
 
-**14 pages, all with real content:** `en/index.astro`, `en/about.astro`,
-`en/digital-marketing.astro`, `en/nearshore-staffing.astro`, `en/international-expansion.astro`,
-`en/contact.astro`, `en/thank-you.astro`, `es/index.astro`, `es/sobre-mi.astro`,
-`es/expansion-internacional.astro`, `es/soluciones-ia.astro` (new, **ES-only, no EN
-counterpart** — see MARKETING.md "AI Solutions" section), `es/contacto.astro`, `es/gracias.astro`,
+**17 pages, all with real content:** `en/index.astro`, `en/about.astro`,
+`en/digital-marketing.astro`, `en/digital-marketing/printing.astro`,
+`en/digital-marketing/auto-dealership.astro` (both Industries subpages under Digital Marketing's
+nav dropdown, more planned — see "Known gaps" below), `en/nearshore-staffing.astro`,
+`en/international-expansion.astro`, `en/contact.astro`, `en/thank-you.astro`, `es/index.astro`,
+`es/sobre-mi.astro`, `es/expansion-internacional.astro`, `es/soluciones-ia.astro` (**ES-only, no
+EN counterpart** — see MARKETING.md "AI Solutions" section), `es/soluciones-ia/automotriz.astro`
+(Industries subpage under Soluciones de IA, also ES-only), `es/contacto.astro`, `es/gracias.astro`,
 plus the root language-redirector. Build verified clean (`npx astro build`).
 
 **Also currently active — see MARKETING.md "Anonymous/bigger-company positioning test":** the
@@ -41,14 +44,9 @@ temporary experiment. Don't "fix" this back to a named-person site without check
 first — it's intentional, not an oversight, and has an explicit revert plan documented there.
 
 **Explicitly NOT done yet (real gaps, not oversights):**
-- Legal pages (`public/Privacy-Policy.html`, `Terms-of-Service.html`) are still unconverted
-  legacy HTML, copied as-is — not yet Astro components.
-- `public/assets/downloads/*.html` has 4 legacy lead-magnet files; only 2 are actually linked from
-  any page (`administrative-scale-up-ubik360.html` via `en/nearshore-staffing.astro`,
-  `checklist-incorporacion-usa-ubik360.html` via `es/expansion-internacional.astro`) — the other
-  two (`captacion-leads-proximidad-ubik360.html`, `hispanic-market-accelerator-ubik360.html`) are
-  orphaned, kept but unreferenced. Deliberately not adding more lead magnets right now — see
-  MARKETING.md's lead-magnet note.
+- Lead magnets: see "Known gaps / things to watch" below for the current live/orphaned breakdown
+  (this list has grown since this section was first written — new industry subpages keep adding
+  their own lead magnets, e.g. auto-dealership's).
 - A "create newsletter (with template) and send via Brevo" backend tool was requested 2026-07 but
   explicitly deferred to its own session — see MARKETING.md "Marketing Backend — Plan".
 
@@ -85,19 +83,29 @@ src/styles/global.css   → Tailwind v4 CSS-first theme (@theme block = brand to
                           `h1,h2,h3` get the serif display font — NOT h4 (Footer's column titles
                           are the only h4 on the site and must stay sans-serif; a stray h4 in this
                           selector fake-bolded and looked blurry at small size, see git history)
-src/pages/en/            → English pages: index, about (Team), digital-marketing,
+src/pages/en/            → English pages: index, about (Team), digital-marketing (+ Industries
+                          subpages: digital-marketing/printing, digital-marketing/auto-dealership),
                           nearshore-staffing, international-expansion, contact, thank-you
 src/pages/es/            → Spanish pages: index (LatAm-first, not a translation of en/index),
                           sobre-mi (Nuestro Equipo), expansion-internacional, soluciones-ia
-                          (NEW, ES-only, no EN counterpart — LatAm AI-implementation service),
-                          contacto, gracias
+                          (ES-only, no EN counterpart — LatAm AI-implementation service; + its own
+                          Industries subpage: soluciones-ia/automotriz), contacto, gracias
 src/pages/index.astro    → JS language-redirector (noindex,nofollow) — NOT a homepage, just picks
                           /en/ or /es/ by browser language
 public/assets/           → images (stock/, partners/, photos/), downloads (legacy lead-magnet
                           HTML, unconverted), chat widget JS
-public/Privacy-Policy.html, Terms-of-Service.html → legacy pages, copied as-is (unconverted —
-                          still plain HTML, not yet Astro components)
 ```
+
+Legal pages (Privacy Policy, Terms of Service) are real Astro pages, not legacy static HTML —
+`en/privacy-policy.astro`, `en/terms-of-service.astro`, `es/politica-de-privacidad.astro`,
+`es/terminos-de-servicio.astro`, linked from both language Footers and in `langMap.ts` (genuine
+1:1 translations, unlike most EN/ES page pairs on this site). Converted 2026-09 from the legacy
+`public/Privacy-Policy.html`/`Terms-of-Service.html` (now deleted) — see each file's own comment
+for what was and wasn't changed during the port. One open item: the legal *substance* still
+reflects a Canadian business (PIPEDA, Ontario governing law, JAMS arbitration in London Ontario,
+CAD billing) even though Ubik 360 is now incorporated as Ubik 360 Enterprises in Wyoming — this
+was deliberately left untouched during the port (a jurisdiction question for Jose + counsel, not
+a copy-editing decision) and should get a legal review.
 
 **Homepage URL quirk:** Astro's `build.format:'file'` promotes a directory's `index.astro` up a
 level (`src/pages/en/index.astro` → physical file `en.html`, not `en/index.html`) — a known Astro
@@ -106,9 +114,10 @@ behavior, not a bug in this project. Legacy canonical tags already point at `/en
 `en.html` output so neither URL breaks and `/en.html` itself is never linked anywhere.
 
 **hreflang:** only set `alternatePath` on `<Layout>` where a page genuinely has a same-content
-counterpart in the other language (currently just home↔home, about↔sobre-mi, contact↔contacto,
-thank-you↔gracias — see `src/utils/langMap.ts`, which the language-toggle links use so this stays
-consistent). Never set it between pages with different content (e.g. the two homepages' actual
+counterpart in the other language (currently home↔home, about↔sobre-mi, contact↔contacto,
+thank-you↔gracias, plus the two legal-page pairs (privacy-policy↔politica-de-privacidad,
+terms-of-service↔terminos-de-servicio) — see `src/utils/langMap.ts`, which the language-toggle
+links use so this stays consistent). Never set it between pages with different content (e.g. the two homepages' actual
 content, or `es/soluciones-ia.astro` which has no EN equivalent at all) — that would assert a
 translation relationship that isn't true, which actively hurts SEO. See MARKETING.md.
 
@@ -173,6 +182,18 @@ directly instead of guessing.
 started. See MARKETING.md "Marketing Backend — Plan" for the open question of whether that should
 be a custom tool or just Brevo's own campaign composer.
 
+## Growth Hub (Apollo outreach) — added 2026-09, not yet live
+A small Apollo-driven cold-outreach system, `api/growth/**` in this repo + a separate admin app
+(`hub/`, deployed to `marketing.ubik360.com`) + its own Supabase project (same account as
+360PrintStudio's, isolated project). Two tracks sharing one system, capped at **10 sends/day
+combined**: `ic` (Jose's independent-contractor pitch, `jose@ubik360.com`) and `b2b` (Ubik 360's
+own outreach, `grow@ubik360.com`). Built using 360PrintStudio's marketing-hub as an architectural
+reference (weekly Apollo propose→approve→stage→import loop, AI-researched 1:1 draft queue,
+approval-gated sends) — see `docs/growth-hub-status.md` for full build status, what's blocked
+(Supabase project creation hit a harness permission gate), and what's still needed before this
+can actually send anything. **Nothing here is live** — no project provisioned, no sender verified,
+no credit spent yet.
+
 ## Known fixes made during the port (don't reintroduce these bugs)
 - **WhatsApp number:** the legacy `en/contact.html`/`es/contacto.html` linked a fake placeholder
   number (`wa.me/15551234567` — a 555 number, never real). Fixed to the real number
@@ -208,11 +229,14 @@ directly without re-linking.
 - `public/assets/images/` has a few files with spaces in filenames (`profile pick black tie.png`,
   `profile pick short sleeve.png`) — avoid referencing new images with spaces; URL-encode existing
   ones if you link them.
-- `.github/copilot-instructions.md`, `README.md`, and `WEBSITE-STRUCTURE-GUIDE.md` are leftover
-  from an earlier (pre-Astro, pre-audience-model) version of the site — stale, ignore for current
-  structure; update or remove them if they get more out of sync.
-- Legal pages (`public/Privacy-Policy.html`, `Terms-of-Service.html`) and 2 of the 4
-  `public/assets/downloads/*.html` lead-magnet pages are unlinked/unconverted legacy HTML.
+- Lead magnets: `public/assets/downloads/*.html` currently has 3 files, all linked from a live
+  page — `administrative-scale-up-ubik360.html` (EN nearshore-staffing), `dealership-marketing-
+  scorecard-ubik360.html` (EN auto-dealership), `checklist-incorporacion-usa-ubik360.html` (ES
+  expansion-internacional). Two older orphaned files (`captacion-leads-proximidad-ubik360.html`,
+  `hispanic-market-accelerator-ubik360.html` — stale Hispanic-market-specific framing,
+  `jose@ubik360.com` footer email) were deleted 2026-09 as unreferenced and superseded. EN
+  `digital-marketing/printing.astro` and `international-expansion.astro` have no lead magnet of
+  their own yet — see MARKETING.md for candidate ideas.
 - Contact form still submits to Formspree (`action="https://formspree.io/f/mlganpda"`) as its
   primary mechanism, now *also* best-effort adding the contact to Brevo (see "Newsletter (Brevo)"
   above) — Formspree isn't being replaced, just supplemented.
@@ -221,8 +245,6 @@ directly without re-linking.
   don't be surprised to find no references.
 - A handful of test/debug emails (`test-verify-brevo*@example.com`) were added to Brevo lists 2/3
   while debugging the integration — safe to delete from Brevo's contact lists, not real leads.
-- The Calendly link (`calendly.com/jose-ubik360/30min`) still has "jose" in the URL itself —
-  known, deliberately not addressed (see MARKETING.md positioning-test section).
 
 ## Conventions
 - When creating a new page, copy the closest already-ported page (`en/about.astro` or

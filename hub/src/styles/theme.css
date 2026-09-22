@@ -1,0 +1,66 @@
+/* Same brand tokens as ubik360.com's global.css, kept in sync manually --
+   this is a separate app/deploy, not worth a shared package for four values. */
+:root {
+  --red: #931F1D;
+  --red-hover: #7a1917;
+  --black: #050505;
+  --green: #659157;
+  --oak: #CEC5B5;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, sans-serif;
+  background: #f9fafb;
+  color: var(--black);
+}
+
+a { color: inherit; }
+
+.btn {
+  display: inline-block;
+  border: none;
+  border-radius: 6px;
+  padding: .55rem 1.1rem;
+  font-size: .875rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+}
+.btn-primary { background: var(--red); color: #fff; }
+.btn-primary:hover { background: var(--red-hover); }
+.btn-outline { background: transparent; border: 1px solid #d1d5db; color: var(--black); }
+.btn-outline:hover { background: #f3f4f6; }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+
+.card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 1.25rem;
+}
+
+.badge {
+  display: inline-block;
+  font-size: .6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  padding: .15rem .5rem;
+  border-radius: 999px;
+  background: #f3f4f6;
+  color: #4b5563;
+}
+.badge-ic { background: #fef3c7; color: #92400e; }
+.badge-b2b { background: #dbeafe; color: #1e40af; }
+
+textarea, input {
+  font-family: inherit;
+  font-size: .875rem;
+  padding: .5rem .625rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  width: 100%;
+}

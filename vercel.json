@@ -8,6 +8,11 @@
     { "source": "/es/", "destination": "/es.html" },
     { "source": "/es/index.html", "destination": "/es.html" }
   ],
+  "crons": [
+    { "path": "/api/growth/weekly-plan/propose", "schedule": "0 13 * * 5" },
+    { "path": "/api/growth/oneoffs/pull", "schedule": "0 15 * * *" },
+    { "path": "/api/growth/flows/run", "schedule": "0 16 * * *" }
+  ],
   "redirects": [
     {
       "source": "/es/marketing-digital.html",

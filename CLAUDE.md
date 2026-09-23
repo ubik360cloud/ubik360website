@@ -182,17 +182,29 @@ directly instead of guessing.
 started. See MARKETING.md "Marketing Backend — Plan" for the open question of whether that should
 be a custom tool or just Brevo's own campaign composer.
 
-## Growth Hub (Apollo outreach) — added 2026-09, not yet live
-A small Apollo-driven cold-outreach system, `api/growth/**` in this repo + a separate admin app
-(`hub/`, deployed to `marketing.ubik360.com`) + its own Supabase project (same account as
-360PrintStudio's, isolated project). Two tracks sharing one system, capped at **10 sends/day
-combined**: `ic` (Jose's independent-contractor pitch, `jose@ubik360.com`) and `b2b` (Ubik 360's
-own outreach, `grow@ubik360.com`). Built using 360PrintStudio's marketing-hub as an architectural
-reference (weekly Apollo propose→approve→stage→import loop, AI-researched 1:1 draft queue,
-approval-gated sends) — see `docs/growth-hub-status.md` for full build status, what's blocked
-(Supabase project creation hit a harness permission gate), and what's still needed before this
-can actually send anything. **Nothing here is live** — no project provisioned, no sender verified,
-no credit spent yet.
+## Growth Hub (Apollo outreach) — added 2026-09, deployed
+A small Apollo-driven cold-outreach system: `api/growth/**` in this repo (a single catch-all
+serverless function, `api/growth/[...path].js` — the original one-file-per-route layout blew past
+Vercel Hobby's 12-functions-per-deployment cap) + a separate admin app (`hub/`, deployed to
+`marketing.ubik360.com`) + its own Supabase project `ubik360-growth` (same account as
+360PrintStudio's, isolated project, id `cwlffqbxgsyvduipuopl`). Two tracks sharing one system,
+capped at **10 sends/day combined**: `ic` (Jose's independent-contractor pitch, `jose@ubik360.com`)
+and `b2b` (Ubik 360's own outreach, `grow@ubik360.com`). Built using 360PrintStudio's marketing-hub
+as an architectural reference (weekly Apollo propose→approve→stage→import loop, AI-researched 1:1
+draft queue, approval-gated sends) — see `docs/growth-hub-status.md` for full build status.
+
+**1:1 research/draft model: DeepInfra, not Anthropic** (switched 2026-09, Jose — Anthropic API
+cost). `api/growth/_lib/prospectResearch.js` fetches the prospect's URL itself (plain HTTP, no AI)
+and hands the page text to a DeepInfra-hosted model (`PROSPECT_MODEL` env var, defaults to
+`deepseek-ai/DeepSeek-V3` — DeepInfra never auto-picks a model, every request names one). Trade-off
+vs. the original Anthropic-native `web_search`/`web_fetch` tool approach: the model can no longer
+autonomously discover pages it wasn't given a URL for. Key is `DEEPINFRA_UBIK30_KEY`, not a generic
+`DEEPINFRA_API_KEY` name.
+
+Deployed live at both `ubik360-growth-hub.vercel.app` (temporary, until `marketing.ubik360.com`'s
+DNS is added) and the main site's `/api/growth/*`. **Still not fully functional** — see
+`docs/growth-hub-status.md` for exactly which env vars are set vs. still missing before real sends
+can happen.
 
 ## Known fixes made during the port (don't reintroduce these bugs)
 - **WhatsApp number:** the legacy `en/contact.html`/`es/contacto.html` linked a fake placeholder

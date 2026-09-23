@@ -74,13 +74,14 @@ export default async function handler(req, res) {
     return res.status(204).end();
   }
 
-  const segments = Array.isArray(req.query.path) ? req.query.path : [req.query.path].filter(Boolean);
+  // Vercel's zero-config functions (unlike Next.js) key the catch-all param
+  // by the literal bracket content, dots included -- '...path', not 'path'.
+  // Confirmed live 2026-09-22: a request to /api/growth/me arrived as
+  // req.query === { '...path': 'me' }.
+  const raw = req.query['...path'];
+  const segments = Array.isArray(raw) ? raw : [raw].filter(Boolean);
   const match = matchRoute(req.method, segments);
-  if (!match) {
-    // TEMP DEBUG (2026-09-22): route matching is failing in prod; echo what
-    // Vercel actually handed us so we can see why instead of guessing.
-    return res.status(404).json({ error: 'Not found', debug: { method: req.method, query: req.query, url: req.url, segments } });
-  }
+  if (!match) return res.status(404).json({ error: 'Not found' });
 
   req.params = match.params;
   return match.handler(req, res);

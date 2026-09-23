@@ -28,15 +28,19 @@ nav/footer, hand-maintained sitemap — see MARKETING.md for why that was replac
 rebuild is **live in production** on `ubik360.com` (see "Hosting / deployment" below) — fully
 deployed, DNS cut over from Hostinger, not just a preview.
 
-**17 pages, all with real content:** `en/index.astro`, `en/about.astro`,
-`en/digital-marketing.astro`, `en/digital-marketing/printing.astro`,
-`en/digital-marketing/auto-dealership.astro` (both Industries subpages under Digital Marketing's
-nav dropdown, more planned — see "Known gaps" below), `en/nearshore-staffing.astro`,
-`en/international-expansion.astro`, `en/contact.astro`, `en/thank-you.astro`, `es/index.astro`,
+**23 pages, all with real content** (page list last updated 2026-09 — this count/list drifts as
+Industries subpages get added; treat it as a snapshot, not gospel): `en/index.astro`,
+`en/about.astro`, `en/digital-marketing.astro`, `en/digital-marketing/printing.astro`,
+`en/digital-marketing/auto-dealership.astro`, `en/digital-marketing/ecommerce.astro` (Industries
+subpages under Digital Marketing's nav dropdown, three now, more possible — see "Known gaps"
+below), `en/nearshore-staffing.astro`, `en/international-expansion.astro`, `en/contact.astro`,
+`en/thank-you.astro`, `en/privacy-policy.astro`, `en/terms-of-service.astro`, `es/index.astro`,
 `es/sobre-mi.astro`, `es/expansion-internacional.astro`, `es/soluciones-ia.astro` (**ES-only, no
-EN counterpart** — see MARKETING.md "AI Solutions" section), `es/soluciones-ia/automotriz.astro`
-(Industries subpage under Soluciones de IA, also ES-only), `es/contacto.astro`, `es/gracias.astro`,
-plus the root language-redirector. Build verified clean (`npx astro build`).
+EN counterpart** — see MARKETING.md "AI Solutions" section), `es/soluciones-ia/automotriz.astro`,
+`es/soluciones-ia/ecommerce.astro` (Industries subpages under Soluciones de IA, also ES-only,
+two now), `es/contacto.astro`, `es/gracias.astro`, `es/politica-de-privacidad.astro`,
+`es/terminos-de-servicio.astro`, plus the root language-redirector. Build verified clean
+(`npx astro build`).
 
 **Also currently active — see MARKETING.md "Anonymous/bigger-company positioning test":** the
 site presents anonymously (no personal name/face, Organization schema not Person) as a deliberate,
@@ -297,3 +301,13 @@ directly without re-linking.
   LinkedIn marketing page, and separately OpenAI's ChatGPT app) — using either would have implied
   affiliation with that company. Actually view the image (not just trust a search-result
   description) before wiring it into a page, especially anything showing a phone/screen/app UI.
+- **New hero/page images: generate via DeepInfra, don't source stock photos** (changed 2026-09,
+  Jose). `black-forest-labs/FLUX-2-klein-4b` via `https://api.deepinfra.com/v1/inference/<model>`,
+  auth key `DEEPINFRA_UBIK30_KEY` in the local (gitignored) `.env.local` — read it from disk, don't
+  try to pull it from Vercel via API (that specific action is hard-blocked in this environment,
+  unlike most other provisioning actions which just need a retry). Request web-appropriate
+  dimensions (e.g. 1536×864 for a 16:9 hero), not maximum resolution — first real use came back an
+  already-lightweight ~110KB JPEG at that size. The verify-before-use rule above still applies in
+  full: actually view every generated image before wiring it in — AI generation can hallucinate
+  quasi-readable text/logos on props (shipping labels, screens, signage), not just replicate real
+  branding the way a sourced photo can.

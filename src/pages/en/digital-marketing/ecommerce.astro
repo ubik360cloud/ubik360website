@@ -1,0 +1,342 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+// NEW (2026-09): third Industries subpage under en/digital-marketing.html
+// (Printing, Auto Dealership, Ecommerce -- printing.astro's own original
+// comment named this as the third planned vertical). Delivery model is
+// deliberately NOT specified as in-house vs. partner-executed, per Jose:
+// "regardless of the scope... Ubik 360 will be handling customer relation
+// ... not necessary to be too specific on how the account/project will be
+// executed and managed" -- follows the same "lead broad" posture as the
+// general growth-marketing page rather than the partner-named framing
+// auto-dealership.astro uses.
+//
+// Proof section draws on real, personally-delivered ecommerce work (per
+// Jose, 2026-09) but is deliberately NOT presented as a named client case
+// study -- framed as team/organizational track record instead (same
+// pattern MARKETING.md's "Anonymous/bigger-company positioning test"
+// already uses for PartnerLogos and the Leadership section: real
+// experience, honestly described, without a formal dated client
+// attribution that predates Ubik 360 as an entity). Two real, unnamed
+// results referenced: a marketplace brand-launch (Amazon Brand Registry +
+// USPTO trademark registration + A+ content + Ads strategy) and a
+// multichannel scale-up ($0 to $1M revenue across 4 sales channels over 4
+// years). Don't add a company name to this section without checking with
+// Jose first -- the timeline predates Ubik 360's founding for at least one
+// of these, so naming it as an "Ubik 360 client" would misrepresent it.
+//
+// Stats are real, sourced 2026-09 (Baymard cart-abandonment research,
+// multichannel ecommerce market sizing, Amazon A+ Content conversion data)
+// -- never invent a number here. See FAQ/stats for exact figures + sourcing
+// note below.
+// Hero image: generated 2026-09 via DeepInfra (black-forest-labs/FLUX-2-klein-4b,
+// $0.018/image), per Jose's standing instruction to generate hero images
+// instead of sourcing stock photos going forward. Actually viewed before use
+// -- no logos/brand marks/readable text (checked closely given AI generation
+// can hallucinate quasi-readable label text on props like shipping boxes).
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: "Do I need to already be selling on Amazon, or on multiple channels, to work with you?",
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: "No. Some brands we work with start on a single channel and need help expanding; others are already on Amazon but the listing, ads, or backend systems aren't performing. The starting point differs — the free assessment tells us exactly where yours is and what the highest-impact next step actually is.",
+      },
+    },
+    {
+      '@type': 'Question',
+      name: "We don't have Amazon Brand Registry yet. Is that a problem?",
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: "It's usually the first thing we help with, not a blocker. Brand Registry (which requires a registered trademark) unlocks A+ Content, brand protection tools, and better ad formats — we've taken brands through trademark registration and Brand Registry enrollment as part of a launch, start to finish.",
+      },
+    },
+    {
+      '@type': 'Question',
+      name: "Will this replace our in-house team?",
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: "No. We work alongside whatever team or tools you already have, with a dedicated point of contact on our side so you're never chasing multiple vendors for one answer. Your team keeps doing what it does; we bring the marketplace strategy, media, and systems work.",
+      },
+    },
+    {
+      '@type': 'Question',
+      name: "How is this different from a general digital marketing agency?",
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: "Ecommerce has its own mechanics — marketplace algorithms, Brand Registry requirements, multichannel inventory sync, cart abandonment — that a generalist campaign-only agency often doesn't touch. We work across marketplace strategy, paid media, and the backend systems that keep orders, inventory, and customer service connected, not just ad spend.",
+      },
+    },
+  ],
+};
+---
+
+<Layout
+  lang="en"
+  path="/en/digital-marketing/ecommerce.html"
+  title="Ecommerce Growth: Marketplaces, Ads & Systems | Ubik 360"
+  description="Marketplace launch and expansion, Amazon Brand Registry and A+ content, paid media, and connected backend systems for ecommerce brands ready to grow beyond one channel."
+  structuredData={faqSchema}
+>
+  <!-- HERO: full-width banner -->
+  <section class="relative" style="overflow:hidden;">
+    <img
+      src="/assets/images/stock/ecommerce-industry-hero.jpg"
+      alt="Stacked shipping boxes ready for fulfillment"
+      class="absolute inset-0 w-full h-full object-cover"
+      loading="eager"
+    />
+    <div class="absolute inset-0" style="background:linear-gradient(rgba(5,5,5,.55), rgba(5,5,5,.55)), linear-gradient(100deg, rgba(5,5,5,.92) 0%, rgba(5,5,5,.78) 38%, rgba(5,5,5,.35) 68%, rgba(5,5,5,.15) 100%);"></div>
+    <div class="relative max-w-6xl mx-auto px-6 flex items-center" style="min-height:32rem; padding:6rem 1.5rem;">
+      <div class="max-w-xl">
+        <span class="section-tag mb-4" style="color:var(--oak);">For Ecommerce Brands</span>
+        <h1 class="text-4xl lg:text-5xl leading-tight mb-5" style="color:#fff;">
+          One channel is a ceiling. Growth means marketplaces, ads, and systems working together.
+        </h1>
+        <p class="text-lg leading-relaxed mb-8" style="color:#e5e7eb;">
+          Marketplace launch and expansion, Amazon Brand Registry and A+ content, paid media, and
+          the backend systems to support all of it — so growth doesn't stall at whatever channel
+          you started on.
+        </p>
+        <a href="https://calendly.com/meet-ubik360/30min" target="_blank" rel="noopener" class="btn-primary">Schedule a Growth Call</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAIN POINTS -->
+  <section style="background:#fff; padding:4.5rem 0;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="max-w-2xl mb-12">
+        <span class="section-tag mb-3">What's Actually Capping Growth</span>
+        <h2 class="text-3xl lg:text-4xl mb-4" style="color:var(--black);">The same problems show up at almost every stage.</h2>
+        <p class="text-lg leading-relaxed" style="color:#4b5563;">
+          None of these are a product problem. They're channel, listing, and systems problems —
+          and they're fixable.
+        </p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div class="service-card">
+          <h3 class="text-lg mb-2" style="color:var(--black);">Single-Channel Dependency</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">All the revenue rides on one marketplace or one store — a policy change, algorithm shift, or ad-cost spike on that one channel can swing the whole business.</p>
+        </div>
+        <div class="service-card">
+          <h3 class="text-lg mb-2" style="color:var(--black);">No Brand Registry, No A+ Content</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">A generic-looking listing next to competitors with registered brands and premium content — and buyers notice the difference before they read a word of copy.</p>
+        </div>
+        <div class="service-card">
+          <h3 class="text-lg mb-2" style="color:var(--black);">Ad Spend Without Clear ROAS</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Campaigns are running, budget is going out — but there's no clear picture of which spend is actually driving profitable orders.</p>
+        </div>
+        <div class="service-card">
+          <h3 class="text-lg mb-2" style="color:var(--black);">Cart Abandonment Draining Revenue</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Traffic is showing up and adding to cart, then leaving — unexpected shipping costs and a forced-account checkout are two of the most common, most fixable reasons.</p>
+        </div>
+        <div class="service-card">
+          <h3 class="text-lg mb-2" style="color:var(--black);">Disconnected Systems</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Inventory, orders, and customer service run on tools that don't talk to each other — so a sellout on one channel doesn't show up on another until it's already a problem.</p>
+        </div>
+        <div class="service-card">
+          <h3 class="text-lg mb-2" style="color:var(--black);">No Structured Retention</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Every sale is a new-customer acquisition cost, because there's no system bringing past buyers back for the next order.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS STRIP -->
+  <section style="background:var(--black); padding:3.5rem 0;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 text-center md:text-left">
+        <div>
+          <p style="color:var(--red); font-family:'DM Serif Display',serif; font-size:1.75rem; margin:0 0 .25rem;">$892B</p>
+          <p style="color:#9ca3af; font-size:.875rem; line-height:1.6;">in projected 2026 multichannel ecommerce sales — up 15% year over year.</p>
+        </div>
+        <div>
+          <p style="color:var(--red); font-family:'DM Serif Display',serif; font-size:1.75rem; margin:0 0 .25rem;">51%</p>
+          <p style="color:#9ca3af; font-size:.875rem; line-height:1.6;">of US online retail runs through Amazon and Walmart combined — a concentration risk for single-channel sellers.</p>
+        </div>
+        <div>
+          <p style="color:var(--red); font-family:'DM Serif Display',serif; font-size:1.75rem; margin:0 0 .25rem;">~70%</p>
+          <p style="color:#9ca3af; font-size:.875rem; line-height:1.6;">average cart abandonment rate across ecommerce — mobile runs even higher.</p>
+        </div>
+        <div>
+          <p style="color:var(--red); font-family:'DM Serif Display',serif; font-size:1.75rem; margin:0 0 .25rem;">Up to 20%</p>
+          <p style="color:#9ca3af; font-size:.875rem; line-height:1.6;">conversion lift reported from premium Amazon A+ Content on hero listings.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOLUTIONS (asymmetric: text left, image right) -->
+  <section style="background:#fff; padding:4.5rem 0;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center mb-14">
+        <div>
+          <span class="section-tag mb-3">Marketplace Launch &amp; Brand Building</span>
+          <h2 class="text-3xl lg:text-4xl mb-6" style="color:var(--black);">From no marketplace presence to a fully registered, optimized brand.</h2>
+          <p style="font-size:1.0625rem; color:#4b5563; line-height:1.85;">
+            Trademark registration, Amazon Brand Registry enrollment, premium A+ content, and an
+            ads strategy built around what's actually converting — not a generic listing template
+            that looks the same as every competitor's.
+          </p>
+        </div>
+        <img
+          src="/assets/images/stock/marketing-analytics-dashboard.jpg"
+          alt="Marketing performance dashboard"
+          class="w-full rounded-xl object-cover aspect-[4/3]"
+          loading="lazy"
+        />
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
+        <img
+          src="/assets/images/stock/sales-funnel-whiteboard.jpg"
+          alt="Systems and process planning on a whiteboard"
+          class="w-full rounded-xl object-cover aspect-[4/3] lg:order-2"
+          loading="lazy"
+        />
+        <div class="lg:order-1">
+          <span class="section-tag mb-3" style="color:var(--red);">Multichannel Scaling</span>
+          <h2 class="text-3xl lg:text-4xl mb-6" style="color:var(--black);">One channel is a starting point, not a ceiling.</h2>
+          <p style="font-size:1.0625rem; color:#4b5563; line-height:1.85;">
+            We plan and execute expansion into the marketplaces and channels that make sense for
+            your product — Amazon, Wayfair, Overstock, your own site — with inventory and
+            reporting connected across all of them instead of managed separately in each one.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROOF (oak accent) -->
+  <section style="background:var(--oak); padding:4.5rem 0;">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+      <span class="section-tag mb-3" style="color:var(--red);">Real Results, Not Theory</span>
+      <h2 class="text-3xl lg:text-4xl mb-6" style="color:var(--black);">This is work our team has actually done.</h2>
+      <p style="font-size:1.0625rem; color:#3d3d3d; line-height:1.85;">
+        We've taken a brand from zero Amazon presence to a fully registered trademark, Brand
+        Registry enrollment, premium A+ content, and a live ads program. Separately, we've taken a
+        brand from a single channel to four — Amazon, Wayfair, Overstock, and its own site —
+        scaling from zero to $1M in revenue over four years. Different starting points, same
+        underlying approach: understand what's actually holding growth back, then build the
+        marketplace, media, and systems work to fix it.
+      </p>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section style="background:#f9fafb; padding:4.5rem 0;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="max-w-xl mb-12">
+        <span class="section-tag mb-3">How We Start</span>
+        <h2 class="text-3xl lg:text-4xl" style="color:var(--black);">How it works</h2>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div>
+          <div style="width:3rem; height:3rem; border-radius:9999px; border:2px solid var(--red); display:flex; align-items:center; justify-content:center; margin-bottom:1.25rem;">
+            <span style="font-family:'DM Serif Display',serif; font-size:1.25rem; color:var(--red);">1</span>
+          </div>
+          <h3 style="font-family:'DM Serif Display',serif; font-size:1.0625rem; color:var(--black); margin:0 0 .5rem;">Free Assessment</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">We review your current channels, listings, ad performance, and systems — no cost, no obligation.</p>
+        </div>
+        <div>
+          <div style="width:3rem; height:3rem; border-radius:9999px; border:2px solid var(--red); display:flex; align-items:center; justify-content:center; margin-bottom:1.25rem;">
+            <span style="font-family:'DM Serif Display',serif; font-size:1.25rem; color:var(--red);">2</span>
+          </div>
+          <h3 style="font-family:'DM Serif Display',serif; font-size:1.0625rem; color:var(--black); margin:0 0 .5rem;">Plan</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">A prioritized plan for marketplace strategy, ads, and systems, built around where growth is actually stalling.</p>
+        </div>
+        <div>
+          <div style="width:3rem; height:3rem; border-radius:9999px; border:2px solid var(--red); display:flex; align-items:center; justify-content:center; margin-bottom:1.25rem;">
+            <span style="font-family:'DM Serif Display',serif; font-size:1.25rem; color:var(--red);">3</span>
+          </div>
+          <h3 style="font-family:'DM Serif Display',serif; font-size:1.0625rem; color:var(--black); margin:0 0 .5rem;">Implementation</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Brand Registry, listing content, ads, and systems connections, handled end to end.</p>
+        </div>
+        <div>
+          <div style="width:3rem; height:3rem; border-radius:9999px; border:2px solid var(--red); display:flex; align-items:center; justify-content:center; margin-bottom:1.25rem;">
+            <span style="font-family:'DM Serif Display',serif; font-size:1.25rem; color:var(--red);">4</span>
+          </div>
+          <h3 style="font-family:'DM Serif Display',serif; font-size:1.0625rem; color:var(--black); margin:0 0 .5rem;">Ongoing Management</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Your point of contact keeps channels, ads, and systems running — and adjusts as you scale into new ones.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section style="background:#fff; padding:4.5rem 0;">
+    <div class="max-w-3xl mx-auto px-6">
+      <div class="text-center mb-12">
+        <span class="section-tag mb-3">FAQ</span>
+        <h2 class="text-3xl lg:text-4xl" style="color:var(--black);">Common questions</h2>
+      </div>
+      <div id="faq-list">
+        <div class="faq-item">
+          <button class="faq-question">
+            Do I need to already be selling on Amazon, or on multiple channels, to work with you?
+            <svg class="faq-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer">No. Some brands we work with start on a single channel and need help expanding; others are already on Amazon but the listing, ads, or backend systems aren't performing. The starting point differs — the free assessment tells us exactly where yours is and what the highest-impact next step actually is.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            We don't have Amazon Brand Registry yet. Is that a problem?
+            <svg class="faq-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer">It's usually the first thing we help with, not a blocker. Brand Registry (which requires a registered trademark) unlocks A+ Content, brand protection tools, and better ad formats — we've taken brands through trademark registration and Brand Registry enrollment as part of a launch, start to finish.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            Will this replace our in-house team?
+            <svg class="faq-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer">No. We work alongside whatever team or tools you already have, with a dedicated point of contact on our side so you're never chasing multiple vendors for one answer. Your team keeps doing what it does; we bring the marketplace strategy, media, and systems work.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            How is this different from a general digital marketing agency?
+            <svg class="faq-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer">Ecommerce has its own mechanics — marketplace algorithms, Brand Registry requirements, multichannel inventory sync, cart abandonment — that a generalist campaign-only agency often doesn't touch. We work across marketplace strategy, paid media, and the backend systems that keep orders, inventory, and customer service connected, not just ad spend.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA: full-width banner -->
+  <section class="relative" style="overflow:hidden;">
+    <img
+      src="/assets/images/stock/ecommerce-industry-hero.jpg"
+      alt="Stacked shipping boxes ready for fulfillment"
+      class="absolute inset-0 w-full h-full object-cover"
+      loading="lazy"
+    />
+    <div class="absolute inset-0" style="background:rgba(5,5,5,.8);"></div>
+    <div class="relative max-w-3xl mx-auto px-6 text-center" style="padding:6rem 1.5rem;">
+      <span class="section-tag mb-4" style="color:var(--oak);">Take the First Step</span>
+      <h2 class="text-3xl lg:text-4xl mb-5" style="color:#fff;">Ready to grow past whatever channel you started on?</h2>
+      <p style="color:#e5e7eb; font-size:1.125rem; line-height:1.7; max-width:30rem; margin:0 auto 2.5rem;">
+        A 30-minute call and a free assessment — enough to know exactly what's next for your
+        marketplace, ads, and systems.
+      </p>
+      <a href="https://calendly.com/meet-ubik360/30min" target="_blank" rel="noopener" class="btn-primary" style="font-size:1rem; padding:1rem 2.5rem;">
+        Schedule a Growth Call
+      </a>
+    </div>
+  </section>
+
+  <script>
+    document.querySelectorAll('.faq-question').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const item = btn.closest('.faq-item');
+        const isOpen = item?.classList.contains('open');
+        document.querySelectorAll('.faq-item').forEach((i) => i.classList.remove('open'));
+        if (!isOpen) item?.classList.add('open');
+      });
+    });
+  </script>
+</Layout>

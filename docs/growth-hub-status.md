@@ -73,11 +73,44 @@ handler splits `req.query.path` (a slash-joined string) back into segments itsel
 change needs another catch-all API route in this project, use this rewrite pattern, not a bracket
 filename.
 
+## Custom-labeled test plans (added 2026-09-23)
+
+`apollo_weekly_plans` now allows multiple plans per `(track, week)` as long as they have distinct
+`label`s (migration `004_custom_named_plans.sql`) — the standard automated weekly plan keeps
+`label=''`; a manually-targeted test campaign gets a real label plus a free-text `brief` recording
+the human reasoning behind its filter. `proposeCustomPlan()` in `_lib/weeklyPlan.js` creates one;
+the existing `approve`/`staged`/`stage-approve` routes work on any plan id unchanged. The Apollo
+search body is now built from the full documented `mixed_people/api_search` parameter set
+(`APOLLO_SEARCH_KEYS` allowlist in `_lib/weeklyPlan.js`), not just the three fields the original
+weekly-only version hardcoded — confirmed via `docs.apollo.io` that this endpoint has **no**
+buying-intent/topic parameter; `q_organization_job_titles` + `organization_num_jobs_range` +
+`organization_job_posted_at_range` ("actively hiring for X") is the closest real proxy (Jose
+agreed this is fine, 2026-09-23). `hub/src/pages/Apollo.jsx` now lists every plan for a track
+(`GET /weekly-plan/list`), not just the single latest one, so custom test campaigns show up as
+their own cards alongside the standard weekly plan.
+
+New route: `POST /weekly-plan/custom` (`{track, label, brief, filter, target}`) — owner-authed
+like the rest of this file, but `_lib/auth.js`'s `requireOwner` now also accepts a static
+`GROWTH_ADMIN_SECRET` bearer token at the same trust level as an owner session, so a one-off
+admin-triggered plan (e.g. Claude Code setting up a specific geography/industry test) can be
+created without a browser login. **`GROWTH_ADMIN_SECRET` is not yet set on Vercel** — writing a
+new secret hit a hard "Secret-Store Writes" permission gate (same category as the earlier
+"Credential Materialization" block, did not retry-succeed) — Jose needs to add it himself via the
+Vercel dashboard before this route (or a Claude-Code-triggered test pull) works. See chat for the
+generated value to paste in.
+
+Two real test campaigns are queued behind that one manual step, both `b2b` track, target 10:
+- **`canada-outsourcing-staffing-test`** — Canada, decision-maker titles, ecommerce brands +
+  marketing/ad agencies (subcontractor angle), hiring-activity proxy filters.
+- **`colombia-ai-automation-test`** — Colombia, decision-maker titles (EN+ES), manufacturing
+  companies, hiring-activity proxy filters.
+
 ## What's left before this can actually send anything
 
-1. **Brevo sender verification** for `jose@ubik360.com` and `grow@ubik360.com` — check Brevo's
+1. Add `GROWTH_ADMIN_SECRET` on Vercel (see above) so the two queued test pulls can actually run.
+2. **Brevo sender verification** for `jose@ubik360.com` and `grow@ubik360.com` — check Brevo's
    dashboard; may already be covered by ubik360.com's existing domain-level auth.
-2. First real end-to-end test: sign in to the hub, manually trigger a weekly Apollo plan (small
+3. First real end-to-end test: sign in to the hub, manually trigger a weekly Apollo plan (small
    target, ~20 contacts/track) and review what comes back before letting cron automate it.
 
 **Nothing sends a real cold email or spends unreviewed Apollo credits without Jose explicitly

@@ -14,10 +14,14 @@ Two outreach tracks sharing one system, capped at **10 sends/day combined** (Jos
   Positioning: `api/growth/_lib/positioning/b2b.md`.
 
 Admin/approval app: `hub/` in this repo, deployed as its own Vercel project
-(`ubik360-growth-hub`), live at `ubik360-growth-hub.vercel.app` today — `marketing.ubik360.com`
-once its DNS record is added. Backend: a single catch-all Vercel serverless function,
-`api/growth/[...path].js`, in *this* repo's main deployment (not a separate server — volume is
-far too low to justify an always-on process the way 360PrintStudio's DigitalOcean backend is).
+(`ubik360-growth-hub`), live at both `ubik360-growth-hub.vercel.app` and `marketing.ubik360.com`
+(DNS added at Hostinger 2026-09-22 — a CNAME to `cname.vercel-dns.com`, replacing a conflicting
+default Hostinger ALIAS record; cert issued via Vercel's API). Backend: a single Vercel serverless
+function, `api/growth/handler.js`, routed via an explicit `vercel.json` rewrite
+(`/api/growth/:path*` → `/api/growth/handler?path=:path*`) rather than the `[...path].js`
+bracket-filename convention — see "Routing gotcha" below for why. Lives in *this* repo's main
+deployment (not a separate server — volume is far too low to justify an always-on process the way
+360PrintStudio's DigitalOcean backend is).
 
 ## Build status (updated 2026-09-22, night)
 
@@ -25,7 +29,7 @@ far too low to justify an always-on process the way 360PrintStudio's DigitalOcea
 |---|---|
 | Supabase project | **live** — `ubik360-growth` (id `cwlffqbxgsyvduipuopl`, region ca-central-1), created by Jose directly after Claude Code's own `create_project` MCP call hit a harness "Modify Shared Resources" permission gate. |
 | Database schema | **applied** — `001_init.sql`, `002_enable_rls.sql`, `003_fix_function_search_path.sql`. RLS enabled on all 12 tables with zero anon/authenticated policies (intentional, see below); `search_path` pinned on both plpgsql functions. `get_advisors` clean except the expected informational RLS-no-policy note. |
-| Backend API (`api/growth/**`) | **deployed and live** on the main `ubik360` Vercel project. Originally 19 separate route files — blew past Vercel Hobby's 12-functions-per-deployment cap on first real deploy (`errorCode: exceeded_serverless_functions_per_deployment`); consolidated into one catch-all function (`api/growth/[...path].js` + `_handlers/*.js` named exports + `_lib/*.js`) — same URL surface, no client-side change needed. |
+| Backend API (`api/growth/**`) | **deployed and live**, all routes verified reachable. Two real deploy bugs, both fixed: (1) originally 19 separate route files blew past Vercel Hobby's 12-functions-per-deployment cap — consolidated into `_handlers/*.js` named exports + `_lib/*.js`; (2) the consolidated function was first named `api/growth/[...path].js` (Next.js-style catch-all) — Vercel's zero-config bracket detection for a non-Next.js app only matched a single path segment in practice (`/api/growth/me` worked, `/api/growth/weekly-plan/current` 404'd at the platform level, never reaching the function). Fixed by renaming to a plain `handler.js` and adding an explicit `vercel.json` rewrite instead of relying on bracket-filename magic. Same URL surface throughout — no client-side (`hub/`) change needed either time. |
 | `prospectResearch.js` | **switched from Anthropic to DeepInfra 2026-09** (Jose, cost). Fetches the prospect's URL itself (plain HTTP, no AI, no extra paid search API) and hands the page text to a DeepInfra-hosted model (`PROSPECT_MODEL` env var, defaults to `deepseek-ai/DeepSeek-V3` — DeepInfra never auto-picks a model). Trade-off vs. the original Anthropic-native `web_search`/`web_fetch` tools: no more autonomous discovery of pages not explicitly given a URL. Key: `DEEPINFRA_UBIK30_KEY` (Jose's own naming, not a generic `DEEPINFRA_API_KEY`). |
 | Hub app (`hub/`) | **deployed and live** at `ubik360-growth-hub.vercel.app`. Hit its own build failure first: `npm audit fix --force` had bumped `vite` to 8.3.0 locally, which `@vitejs/plugin-react@4.7.0` doesn't support -- local npm let it through with a warning, Vercel's strict `npm install` didn't. Pinned back to `vite@^7.1.12`. Sign-in (Supabase magic link) works end-to-end. |
 | `vercel.json` crons | added to the main `ubik360` project: weekly Apollo propose (Fri 08:00 ET), daily oneoff pull (10:00 ET), daily flow runner (11:00 ET) |
@@ -53,20 +57,27 @@ All of these are **set** as of 2026-09-22 night: `GROWTH_SUPABASE_URL`, `GROWTH_
 **Production only** (not Preview/Development) — fine for this project since it only ever deploys
 to production from `astro-migration`, but worth knowing if a preview deploy ever needs them.
 
-**A fresh production deploy is still needed to pick up the three most-recently-added keys**
-(env vars only apply to deployments created after they're added — same gotcha already documented
-under "Newsletter (Brevo)" in CLAUDE.md).
+All required env vars are deployed and live as of the routing-fix redeploy (2026-09-22 night).
+
+## Routing gotcha (fixed 2026-09-22 — don't reintroduce)
+
+Vercel's `[...path].js` bracket-filename catch-all convention (the Next.js-style rest-parameter
+pattern) does **not** reliably work for a plain, non-Next.js zero-config Node function. Confirmed
+live: a single-segment request (`/api/growth/me`) reached the function but with the query keyed
+literally `'...path'` (dots included) instead of the Next.js-normalized `'path'`; any
+multi-segment request (`/api/growth/weekly-plan/current`) never reached the function at all —
+Vercel's platform itself returned 404 before invoking anything. Fixed by renaming the file to a
+plain `api/growth/handler.js` and adding an explicit rewrite in `vercel.json`:
+`{ "source": "/api/growth/:path*", "destination": "/api/growth/handler?path=:path*" }`. The
+handler splits `req.query.path` (a slash-joined string) back into segments itself. If a future
+change needs another catch-all API route in this project, use this rewrite pattern, not a bracket
+filename.
 
 ## What's left before this can actually send anything
 
-1. **Redeploy** the main `ubik360` project once more so it picks up
-   `GROWTH_SUPABASE_SERVICE_ROLE_KEY` / `APOLLO_API_KEY` / `DEEPINFRA_UBIK30_KEY`.
-2. **Brevo sender verification** for `jose@ubik360.com` and `grow@ubik360.com` — check Brevo's
+1. **Brevo sender verification** for `jose@ubik360.com` and `grow@ubik360.com` — check Brevo's
    dashboard; may already be covered by ubik360.com's existing domain-level auth.
-3. **`marketing.ubik360.com` DNS** — add the CNAME Vercel's domain-settings screen specifies for
-   the `ubik360-growth-hub` project, at wherever ubik360.com's DNS is actually managed (Hostinger
-   per CLAUDE.md's "Hosting / deployment" section).
-4. First real end-to-end test: sign in to the hub, manually trigger a weekly Apollo plan (small
+2. First real end-to-end test: sign in to the hub, manually trigger a weekly Apollo plan (small
    target, ~20 contacts/track) and review what comes back before letting cron automate it.
 
 **Nothing sends a real cold email or spends unreviewed Apollo credits without Jose explicitly

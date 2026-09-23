@@ -6,7 +6,8 @@
     { "source": "/en/index.html", "destination": "/en.html" },
     { "source": "/es", "destination": "/es.html" },
     { "source": "/es/", "destination": "/es.html" },
-    { "source": "/es/index.html", "destination": "/es.html" }
+    { "source": "/es/index.html", "destination": "/es.html" },
+    { "source": "/api/growth/:path*", "destination": "/api/growth/handler?path=:path*" }
   ],
   "crons": [
     { "path": "/api/growth/weekly-plan/propose", "schedule": "0 13 * * 5" },

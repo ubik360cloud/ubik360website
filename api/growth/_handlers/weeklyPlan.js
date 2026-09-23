@@ -1,7 +1,7 @@
 // Weekly Apollo plan endpoints -- see ../_lib/weeklyPlan.js for the actual
 // propose/pull/approve/stageApprove logic. Consolidated into named exports
 // (rather than one file per route) because Vercel Hobby caps a deployment
-// at 12 serverless functions -- see ../[...path].js.
+// at 12 serverless functions -- see ../handler.js.
 import { withOwner } from '../_lib/auth.js';
 import { withCron } from '../_lib/cron.js';
 import { supabase } from '../_lib/supabase.js';

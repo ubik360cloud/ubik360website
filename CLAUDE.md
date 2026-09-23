@@ -184,7 +184,10 @@ be a custom tool or just Brevo's own campaign composer.
 
 ## Growth Hub (Apollo outreach) — added 2026-09, deployed
 A small Apollo-driven cold-outreach system: `api/growth/**` in this repo (a single catch-all
-serverless function, `api/growth/[...path].js` — the original one-file-per-route layout blew past
+serverless function, `api/growth/handler.js`, routed via an explicit `vercel.json` rewrite
+(`/api/growth/:path*` → `/api/growth/handler?path=:path*` — Vercel's zero-config bracket-catch-all
+convention only reliably matched a single path segment for a non-Next.js app, so a plain filename
++ explicit rewrite replaced it) — the original one-file-per-route layout blew past
 Vercel Hobby's 12-functions-per-deployment cap) + a separate admin app (`hub/`, deployed to
 `marketing.ubik360.com`) + its own Supabase project `ubik360-growth` (same account as
 360PrintStudio's, isolated project, id `cwlffqbxgsyvduipuopl`). Two tracks sharing one system,

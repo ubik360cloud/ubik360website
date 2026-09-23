@@ -5,6 +5,15 @@
 // Consolidated here -- all real logic lives in ./_handlers/*.js (named
 // exports, not routed since only files directly under /api become
 // functions) and ./_lib/*.js; this file is just the dispatch table.
+//
+// Routing note (2026-09-22): this is a plain filename, not a
+// `[...path].js` bracket file. Vercel's bracket-catch-all convention for
+// zero-config Node functions only reliably matched a single path segment in
+// practice here (confirmed live: multi-segment requests never even reached
+// the function, single-segment ones did but with the query keyed
+// '...path' literally, not the Next.js-normalized 'path'). An explicit
+// rewrite in vercel.json (`/api/growth/:path* -> /api/growth/handler?path=:path*`)
+// is what actually routes every depth here reliably -- see that file.
 import * as weeklyPlan from './_handlers/weeklyPlan.js';
 import * as oneoffs from './_handlers/oneoffs.js';
 import * as leads from './_handlers/leads.js';
@@ -74,12 +83,12 @@ export default async function handler(req, res) {
     return res.status(204).end();
   }
 
-  // Vercel's zero-config functions (unlike Next.js) key the catch-all param
-  // by the literal bracket content, dots included -- '...path', not 'path'.
-  // Confirmed live 2026-09-22: a request to /api/growth/me arrived as
-  // req.query === { '...path': 'me' }.
-  const raw = req.query['...path'];
-  const segments = Array.isArray(raw) ? raw : [raw].filter(Boolean);
+  // vercel.json's rewrite passes the full matched path as a single
+  // slash-joined query string, e.g. path=weekly-plan/current -- split it
+  // back into segments here.
+  const raw = req.query.path;
+  const joined = Array.isArray(raw) ? raw.join('/') : raw;
+  const segments = (joined || '').split('/').filter(Boolean);
   const match = matchRoute(req.method, segments);
   if (!match) return res.status(404).json({ error: 'Not found' });
 

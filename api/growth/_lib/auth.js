@@ -5,11 +5,19 @@ import { createClient } from '@supabase/supabase-js';
 import { applyCors } from './cors.js';
 
 /** Returns the authenticated owner's email, or throws a { status, message }
- *  error the caller should turn into an HTTP response. */
+ *  error the caller should turn into an HTTP response. Accepts either a
+ *  Supabase owner session JWT (the hub UI's normal path) or, as a scriptable
+ *  alternative for direct/CLI-triggered admin actions (e.g. one-off Apollo
+ *  test pulls) that don't go through the browser, a static
+ *  GROWTH_ADMIN_SECRET bearer token -- same trust level as the owner, kept
+ *  out of git the same way CRON_SECRET is. */
 export async function requireOwner(req) {
   const authHeader = req.headers.authorization || '';
   const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
   if (!token) throw { status: 401, message: 'Missing bearer token' };
+
+  const adminSecret = process.env.GROWTH_ADMIN_SECRET;
+  if (adminSecret && token === adminSecret) return process.env.GROWTH_OWNER_EMAIL || 'admin';
 
   const url = process.env.GROWTH_SUPABASE_URL;
   const anonKey = process.env.GROWTH_SUPABASE_ANON_KEY;

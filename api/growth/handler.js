@@ -27,6 +27,8 @@ import { brevo } from './_handlers/webhooks.js';
 // every pattern has a unique literal/dynamic shape).
 const ROUTES = [
   { method: 'GET', pattern: ['weekly-plan', 'current'], handler: weeklyPlan.current },
+  { method: 'GET', pattern: ['weekly-plan', 'list'], handler: weeklyPlan.list },
+  { method: 'POST', pattern: ['weekly-plan', 'custom'], handler: weeklyPlan.custom },
   { method: 'POST', pattern: ['weekly-plan', 'propose'], handler: weeklyPlan.propose },
   { method: 'POST', pattern: ['weekly-plan', ':id', 'approve'], handler: weeklyPlan.approve },
   { method: 'GET', pattern: ['weekly-plan', ':id', 'staged'], handler: weeklyPlan.staged },

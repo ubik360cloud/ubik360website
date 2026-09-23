@@ -21,6 +21,7 @@ async function request(path, options = {}) {
 export const api = {
   me: () => request('/me'),
   weeklyPlan: (track) => request(`/weekly-plan/current?track=${track}`),
+  weeklyPlans: (track) => request(`/weekly-plan/list?track=${track}`),
   weeklyPlanStaged: (id) => request(`/weekly-plan/${id}/staged`),
   approveWeeklyPlan: (id) => request(`/weekly-plan/${id}/approve`, { method: 'POST' }),
   stageApprove: (id, excludeIds = []) =>

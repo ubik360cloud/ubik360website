@@ -12,6 +12,33 @@ import { apolloFetch } from './apollo.js';
 const WEEKLY_TARGET = Number(process.env.GROWTH_APOLLO_WEEKLY_TARGET || 20);
 const MAX_PAGES = 5;
 
+// Apollo's real, documented mixed_people/api_search parameters (verified
+// 2026-09 against docs.apollo.io -- note there is NO buying-intent/topic
+// parameter on this endpoint, despite Apollo's product having an "Intent"
+// feature elsewhere; don't invent one). "Actively hiring for X" via
+// q_organization_job_titles/organization_num_jobs_range is the closest real
+// proxy signal available here, per Jose 2026-09. Whitelisted (not just
+// spread) so a plan's filter object can carry bookkeeping fields (target,
+// persona_key, persona_label) without them leaking into the Apollo request.
+const APOLLO_SEARCH_KEYS = [
+  'person_titles', 'include_similar_titles', 'person_seniorities', 'person_locations',
+  'q_organization_domains_list', 'organization_locations', 'organization_ids',
+  'organization_num_employees_ranges', 'revenue_range', 'organization_num_jobs_range',
+  'organization_job_posted_at_range', 'organization_headcount_growth_past_n_months',
+  'organization_headcount_growth_range', 'not_organization_websites_list',
+  'currently_using_any_of_technology_uids', 'currently_using_all_of_technology_uids',
+  'currently_not_using_any_of_technology_uids', 'q_organization_job_titles',
+  'organization_job_locations', 'q_keywords', 'q_organization_keyword_tags',
+];
+
+function buildSearchBody(filter) {
+  const body = {};
+  for (const key of APOLLO_SEARCH_KEYS) {
+    if (filter?.[key] !== undefined) body[key] = filter[key];
+  }
+  return body;
+}
+
 // One filter set per track -- see positioning/{track}.md for the pitch each
 // of these feeds. Kept here (not in the DB) so a filter change is a code
 // review, same reasoning 360PrintStudio's PERSONAS array uses.
@@ -49,6 +76,7 @@ export async function proposeWeeklyPlan(track) {
     .select('*')
     .eq('track', track)
     .eq('week_of', week_of)
+    .eq('label', '')
     .maybeSingle();
   if (existing) return existing;
 
@@ -78,6 +106,46 @@ export async function proposeWeeklyPlan(track) {
   return plan;
 }
 
+/** Creates a one-off, manually-targeted campaign alongside the standard
+ *  automated weekly plan -- multiple can coexist per track per week, each
+ *  with its own label (shows up as its own card in the hub's Apollo tab)
+ *  and a free-text brief recording the human context/reasoning behind the
+ *  filter (geography, industry, positioning angle) for future reference and
+ *  per-campaign performance comparison. `filter` should use real Apollo
+ *  mixed_people/api_search parameter names -- see APOLLO_SEARCH_KEYS. */
+export async function proposeCustomPlan({ track, label, brief, filter, target }) {
+  if (!TRACK_FILTERS[track] && track !== 'ic' && track !== 'b2b') throw new Error(`Invalid track '${track}'`);
+  if (!label) throw new Error('label is required for a custom plan');
+  const db = supabase();
+  const week_of = currentWeekOf();
+
+  const { data: existing } = await db
+    .from('apollo_weekly_plans')
+    .select('*')
+    .eq('track', track)
+    .eq('week_of', week_of)
+    .eq('label', label)
+    .maybeSingle();
+  if (existing) return existing;
+
+  const { data: plan, error } = await db
+    .from('apollo_weekly_plans')
+    .insert({
+      track,
+      week_of,
+      label,
+      brief: brief || null,
+      status: 'proposed',
+      filter: { ...filter, target },
+      rationale: brief || `Custom pull: ${label}`,
+      counts: { target },
+    })
+    .select()
+    .single();
+  if (error) throw error;
+  return plan;
+}
+
 /** Search + bulk_match + stage. Small enough (target ~20) to run inline
  *  within a single serverless invocation -- no fire-and-forget needed at
  *  this volume, unlike 360PrintStudio's ~600/week pull. */
@@ -89,12 +157,7 @@ export async function pullApolloForPlan(planId) {
   await db.from('apollo_weekly_plans').update({ status: 'pulling' }).eq('id', planId);
 
   const target = plan.filter?.target || WEEKLY_TARGET;
-  const searchBody = {
-    person_titles: plan.filter?.person_titles,
-    q_organization_keyword_tags: plan.filter?.q_organization_keyword_tags,
-    person_locations: plan.filter?.person_locations,
-    per_page: 50,
-  };
+  const searchBody = buildSearchBody(plan.filter);
 
   const [{ data: existingContacts }, { data: existingStaging }] = await Promise.all([
     db.from('contacts').select('email'),

@@ -6,9 +6,11 @@ this is the condensed version for the research/drafting prompt.
 
 ## Who we're emailing
 
-**U.S./Canada business owner, reaching inward.** Specifically: founders, SMEs, and
-decision-makers at growth-stage North American businesses — not limited to one industry or
-company size beyond "growth-stage and actually deciding on marketing/staffing spend."
+**U.S./Canada business owner, reaching inward — plus, as of 2026-09, Colombia-based
+manufacturers reached directly (not just via the ES site's expansion-outward angle).**
+Specifically: founders, SMEs, and decision-makers at growth-stage businesses — not limited to one
+industry or company size beyond "growth-stage and actually deciding on marketing/staffing/ops
+spend."
 
 ## What we sell (pick the ONE that fits this prospect, don't pitch all three)
 
@@ -23,6 +25,21 @@ company size beyond "growth-stage and actually deciding on marketing/staffing sp
    operating presence in Colombia: market entry, an on-the-ground ops manager, local accounting.
    Narrower audience than the other two — only pitch this if there's a real signal (Spanish-market
    customers, LatAm hiring, expansion language on their site).
+4. **Ecommerce growth + white-label subcontracting (Canada test, 2026-09)** — two angles under one
+   pitch, pick whichever fits: (a) direct to a Canadian ecommerce/DTC brand, the same growth
+   marketing service as #1 but leading with ecommerce-specific proof (multichannel scaling,
+   Amazon/Walmart marketplace presence, conversion optimization); (b) to another marketing/ad
+   agency as a **subcontractor/white-label partner** — Ubik 360 handles the technical/ecommerce
+   execution work (the kind of build a generalist marketer at that agency can't do in-house) behind
+   their client relationship, they keep the client. Only pitch (b) to an agency, never a direct
+   brand — check whether the prospect's own business IS a marketing/ad agency before choosing this
+   angle.
+5. **Manufacturing production & logistics tooling (Colombia test, 2026-09)** — for a Colombia-based
+   manufacturer: custom software/automation tooling for production planning and logistics
+   coordination (not a generic "digital marketing" pitch — this is an ops/tooling pitch). Only use
+   this angle for an actual manufacturing/production business, and only when the research surfaced
+   a real, specific production or logistics pain point to reference — otherwise skip rather than
+   force it.
 
 ## Disqualifiers — skip, don't force a pitch
 
@@ -43,4 +60,5 @@ generic copy.
 
 Follow the same JSON verdict shape the research function expects (see `prospectResearch.js`).
 `business_unit` here should be one of `"growth_marketing" | "nearshore_staffing" |
-"international_expansion" | "skip"`.
+"international_expansion" | "ecommerce_growth" | "agency_subcontracting" |
+"manufacturing_ops_tooling" | "skip"`.

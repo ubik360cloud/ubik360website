@@ -76,7 +76,11 @@ export default async function handler(req, res) {
 
   const segments = Array.isArray(req.query.path) ? req.query.path : [req.query.path].filter(Boolean);
   const match = matchRoute(req.method, segments);
-  if (!match) return res.status(404).json({ error: 'Not found' });
+  if (!match) {
+    // TEMP DEBUG (2026-09-22): route matching is failing in prod; echo what
+    // Vercel actually handed us so we can see why instead of guessing.
+    return res.status(404).json({ error: 'Not found', debug: { method: req.method, query: req.query, url: req.url, segments } });
+  }
 
   req.params = match.params;
   return match.handler(req, res);

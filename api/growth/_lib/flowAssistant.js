@@ -14,6 +14,27 @@ const DEEPINFRA_URL = 'https://api.deepinfra.com/v1/openai/chat/completions';
 const MODEL = process.env.PROSPECT_MODEL || 'deepseek-ai/DeepSeek-V3';
 const SENDER_NAME = { ic: 'Jose Villegas', b2b: 'Ubik 360' };
 
+// Language follows the segment's geography, not the track -- b2b covers
+// both Colombia and the US/Canada, and Jose wants Colombian recipients
+// emailed in (Latin American) Spanish, US/Canada recipients in English.
+// Only the actual email content (subject/body) switches; name/description
+// are Jose's own admin-facing metadata and stay in English regardless, so
+// the Flows list is consistently scannable.
+const SPANISH_LATAM_COUNTRIES = [
+  'colombia', 'mexico', 'méxico', 'argentina', 'chile', 'peru', 'perú', 'ecuador', 'venezuela',
+  'bolivia', 'paraguay', 'uruguay', 'panama', 'panamá', 'costa rica', 'guatemala', 'honduras',
+  'el salvador', 'nicaragua', 'dominican republic', 'república dominicana',
+];
+
+function detectLanguage(plan) {
+  const locs = [
+    ...(plan?.filter?.organization_locations || []),
+    ...(plan?.filter?.person_locations || []),
+  ].map((s) => String(s).toLowerCase());
+  const isLatam = locs.some((l) => SPANISH_LATAM_COUNTRIES.some((c) => l.includes(c)));
+  return isLatam ? 'es' : 'en';
+}
+
 function loadPositioning(track) {
   try {
     return fs.readFileSync(path.join(__dirname, 'positioning', `${track}.md`), 'utf8');
@@ -24,6 +45,11 @@ function loadPositioning(track) {
 
 function buildPrompt({ track, plan }) {
   const sender = SENDER_NAME[track] || 'Ubik 360';
+  const language = detectLanguage(plan);
+  const languageInstruction = language === 'es'
+    ? 'Write every "subject" and "body" in Latin American Spanish (use "tú", not "vosotros" or Spain-specific slang) -- this segment\'s contacts are in a Spanish-speaking country. Keep "name" and "description" in English (Jose\'s own internal admin labels, not sent to anyone).'
+    : 'Write every "subject" and "body" in English -- this segment\'s contacts are in the US/Canada.';
+
   return `You are drafting a cold-outreach EMAIL SEQUENCE (a "flow") for ${sender} to send to a
 specific segment of contacts. You do NOT decide anything final -- a human always reviews and
 edits every subject/body before this flow can activate, so prefer clear and reasonably short over
@@ -39,6 +65,9 @@ ${loadPositioning(track)}
 - Why this segment was built: ${plan.brief || plan.rationale || '(no brief given)'}
 - Apollo filter used (for context on titles/geography/industry targeted): ${JSON.stringify(plan.filter)}
 
+## Language
+${languageInstruction}
+
 ## Output -- return ONLY this JSON, no prose around it, no markdown code fence
 {
   "name": "short flow name, e.g. 'Colombia marketing directors - manufacturing'",
@@ -50,10 +79,10 @@ ${loadPositioning(track)}
 }
 2-3 steps is usually right (an opener, a follow-up, maybe a short breakup message) -- don't pad to
 a fixed number. Bodies are plain text, first person, no hype, no "I hope this finds you well" /
-"I'm excited to reach out." Every step should reference the segment's actual industry/geography/
-role generically (this is a template for the whole segment, not a 1:1 personalized email -- don't
-invent a specific company name or person's name). delay_hours is hours after the PREVIOUS step
-(0 for step 1).`;
+"I'm excited to reach out" (or the equivalent stock opener in Spanish). Every step should reference
+the segment's actual industry/geography/role generically (this is a template for the whole
+segment, not a 1:1 personalized email -- don't invent a specific company name or person's name).
+delay_hours is hours after the PREVIOUS step (0 for step 1).`;
 }
 
 export async function proposeFlow({ track, plan }) {

@@ -21,7 +21,13 @@ async function request(path, options = {}) {
 export const api = {
   me: () => request('/me'),
   weeklyPlan: (track) => request(`/weekly-plan/current?track=${track}`),
-  weeklyPlans: (track) => request(`/weekly-plan/list?track=${track}`),
+  weeklyPlans: (track, { status, page, pageSize } = {}) => {
+    const params = new URLSearchParams({ track });
+    if (status) params.set('status', status);
+    if (page) params.set('page', page);
+    if (pageSize) params.set('page_size', pageSize);
+    return request(`/weekly-plan/list?${params}`);
+  },
   suggestFilter: (track, brief, priorFilter) =>
     request('/weekly-plan/suggest-filter', { method: 'POST', body: JSON.stringify({ track, brief, prior_filter: priorFilter }) }),
   previewFilter: (filter, limit) => request('/weekly-plan/preview', { method: 'POST', body: JSON.stringify({ filter, limit }) }),

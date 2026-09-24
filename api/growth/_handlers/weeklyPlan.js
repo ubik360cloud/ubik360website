@@ -26,23 +26,30 @@ export const current = withOwner(async (req, res) => {
   return res.status(200).json({ plan: data || null });
 });
 
-// Lists every plan for a track (standard weekly ones + custom-labeled ones),
+// Lists plans for a track (standard weekly ones + custom-labeled ones),
 // newest first -- unlike `current`, which only ever returns the single
 // latest row and can't show custom test campaigns running alongside it.
+// Supports `status` (comma-separated, e.g. "proposed,staged" or
+// "completed") and `page`/`page_size` -- the hub shows plans still needing
+// a decision (not completed) in full, and completed ones (already
+// reviewed/imported, growing every campaign) as a paginated compact list, so
+// each needs its own filtered, counted query rather than one flat dump.
 export const list = withOwner(async (req, res) => {
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
   const track = req.query.track;
   if (track !== 'ic' && track !== 'b2b') return res.status(400).json({ error: "track must be 'ic' or 'b2b'" });
 
+  const page = Math.max(1, Number(req.query.page) || 1);
+  const pageSize = Math.min(50, Math.max(1, Number(req.query.page_size) || 25));
+  const from = (page - 1) * pageSize;
+  const to = from + pageSize - 1;
+
   const db = supabase();
-  const { data, error } = await db
-    .from('apollo_weekly_plans')
-    .select('*')
-    .eq('track', track)
-    .order('created_at', { ascending: false })
-    .limit(25);
+  let query = db.from('apollo_weekly_plans').select('*', { count: 'exact' }).eq('track', track);
+  if (req.query.status) query = query.in('status', String(req.query.status).split(','));
+  const { data, error, count } = await query.order('created_at', { ascending: false }).range(from, to);
   if (error) return res.status(500).json({ error: error.message });
-  return res.status(200).json({ plans: data || [] });
+  return res.status(200).json({ plans: data || [], total: count || 0, page, pageSize });
 });
 
 // Creates a one-off, manually-targeted plan (a specific geography/industry/

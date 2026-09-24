@@ -3,12 +3,24 @@ import { useNavigate } from 'react-router-dom';
 import { api } from '../lib/api.js';
 
 const TRACKS = ['ic', 'b2b'];
+const ACTIVE_STATUSES = 'proposed,approved,pulling,staged,enrolling';
 
-// Renders one plan card -- the standard weekly plan (no label) or a
-// custom-labeled test campaign, both use the same propose -> approve (pulls
-// from Apollo, spends credits) -> review staged -> stage-approve (imports)
-// pipeline, just scoped per-plan instead of per-track so several can run
-// side by side (see CLAUDE.md Growth Hub section).
+async function draftFlowFor(plan, navigate) {
+  const suggestion = await api.suggestFlowForPlan(plan.id);
+  const { flow } = await api.createFlow({
+    track: plan.track,
+    name: suggestion.name || `${plan.label || plan.track} flow`,
+    description: suggestion.description,
+    source_plan_id: plan.id,
+  });
+  if (suggestion.steps?.length) await api.setFlowSteps(flow.id, suggestion.steps);
+  navigate(`/flows?open=${flow.id}`);
+}
+
+// A plan still needing a decision (approve the pull, or review/import the
+// staged candidates) -- the small number of these at any time get the full
+// card. Once a plan reaches 'completed' it's already been decided and moves
+// to the compact CompletedPlansTable below instead.
 function PlanCard({ plan, onChange }) {
   const [staged, setStaged] = useState([]);
   // Tracks who's INCLUDED for import (checked = will be imported), not who's
@@ -22,41 +34,9 @@ function PlanCard({ plan, onChange }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
   const [expanded, setExpanded] = useState(false);
-  // A completed plan's full contact table is collapsed by default -- with
-  // several completed plans stacked on the page, showing every one's table
-  // open by default (as a prior version did) buried the one plan that
-  // actually needs attention (status 'staged') under a wall of old rows.
-  const [showStagedReadOnly, setShowStagedReadOnly] = useState(false);
-  const [draftingFlow, setDraftingFlow] = useState(false);
-  const navigate = useNavigate();
-
-  // Drafts a flow for this segment: asks the AI for a name + steps grounded
-  // in this plan's filter/brief, creates the flow linked to this plan
-  // (source_plan_id, so "Enroll segment" on the Flows page knows who to
-  // pull in), saves the suggested steps, then hands off to the Flows page
-  // to review/edit -- nothing here activates or sends anything.
-  async function draftFlow() {
-    setDraftingFlow(true);
-    setError(null);
-    try {
-      const suggestion = await api.suggestFlowForPlan(plan.id);
-      const { flow } = await api.createFlow({
-        track: plan.track,
-        name: suggestion.name || `${plan.label || plan.track} flow`,
-        description: suggestion.description,
-        source_plan_id: plan.id,
-      });
-      if (suggestion.steps?.length) await api.setFlowSteps(flow.id, suggestion.steps);
-      navigate(`/flows?open=${flow.id}`);
-    } catch (e) {
-      setError(e.message);
-    } finally {
-      setDraftingFlow(false);
-    }
-  }
 
   async function loadStaged() {
-    if (!['staged', 'enrolling', 'completed'].includes(plan.status)) return;
+    if (plan.status !== 'staged') return;
     try {
       const { staged: s } = await api.weeklyPlanStaged(plan.id);
       setStaged(s);
@@ -107,19 +87,7 @@ function PlanCard({ plan, onChange }) {
           <p style={{ fontSize: '.8125rem', color: '#6b7280' }}>
             Week of {plan.week_of} · target {plan.filter?.target}
             {plan.counts?.staged != null && ` · ${plan.counts.staged} staged`}
-            {plan.counts?.imported != null && ` · ${plan.counts.imported} imported`}
-            {plan.counts?.rejected != null && ` · ${plan.counts.rejected} rejected`}
           </p>
-          {plan.status !== 'staged' && staged.length > 0 && !showStagedReadOnly && (
-            <button className="btn btn-outline" style={{ fontSize: '.75rem', padding: '.15rem .5rem', marginTop: '.25rem', marginLeft: '.5rem' }} onClick={() => setShowStagedReadOnly(true)}>
-              review contacts
-            </button>
-          )}
-          {plan.counts?.imported > 0 && (
-            <button className="btn btn-outline" style={{ fontSize: '.75rem', padding: '.15rem .5rem', marginTop: '.25rem', marginLeft: '.5rem' }} disabled={draftingFlow} onClick={draftFlow}>
-              {draftingFlow ? 'Drafting...' : plan.flow_id ? 'Draft another flow for this segment' : 'Draft flow for this segment'}
-            </button>
-          )}
           <button className="btn btn-outline" style={{ fontSize: '.75rem', padding: '.15rem .5rem', marginTop: '.25rem' }} onClick={() => setExpanded((v) => !v)}>
             {expanded ? 'hide filter' : 'show filter'}
           </button>
@@ -138,46 +106,33 @@ function PlanCard({ plan, onChange }) {
 
       {error && <p style={{ color: '#b91c1c' }}>{error}</p>}
 
-      {staged.length > 0 && (plan.status === 'staged' || showStagedReadOnly) && (
+      {plan.status === 'staged' && staged.length > 0 && (
         <div style={{ marginTop: '1rem', borderTop: '1px solid #f3f4f6', paddingTop: '.75rem' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '.75rem' }}>
             <h2 style={{ fontSize: '1rem', margin: 0 }}>Staged candidates ({staged.length})</h2>
-            {plan.status !== 'staged' && (
-              <button className="btn btn-outline" style={{ fontSize: '.75rem', padding: '.15rem .5rem' }} onClick={() => setShowStagedReadOnly(false)}>
-                hide
+            <div style={{ display: 'flex', alignItems: 'center', gap: '.75rem' }}>
+              <button className="btn btn-outline" style={{ fontSize: '.75rem', padding: '.15rem .5rem' }} onClick={() => setIncluded(new Set(staged.map((s) => s.id)))}>
+                select all
               </button>
-            )}
-            {plan.status === 'staged' && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '.75rem' }}>
-                <button className="btn btn-outline" style={{ fontSize: '.75rem', padding: '.15rem .5rem' }} onClick={() => setIncluded(new Set(staged.map((s) => s.id)))}>
-                  select all
-                </button>
-                <button className="btn btn-outline" style={{ fontSize: '.75rem', padding: '.15rem .5rem' }} onClick={() => setIncluded(new Set())}>
-                  select none
-                </button>
-                <button className="btn btn-primary" disabled={busy} onClick={stageApprove}>
-                  Import {included.size} contact{included.size === 1 ? '' : 's'}
-                  {included.size < staged.length && ` (reject ${staged.length - included.size})`}
-                </button>
-              </div>
-            )}
+              <button className="btn btn-outline" style={{ fontSize: '.75rem', padding: '.15rem .5rem' }} onClick={() => setIncluded(new Set())}>
+                select none
+              </button>
+              <button className="btn btn-primary" disabled={busy} onClick={stageApprove}>
+                Import {included.size} contact{included.size === 1 ? '' : 's'}
+                {included.size < staged.length && ` (reject ${staged.length - included.size})`}
+              </button>
+            </div>
           </div>
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '.8125rem' }}>
             <thead>
               <tr style={{ textAlign: 'left', color: '#6b7280' }}>
-                <th>{plan.status === 'staged' ? 'Import?' : 'Status'}</th><th>Name</th><th>Title</th><th>Company</th><th>Email</th>
+                <th>Import?</th><th>Name</th><th>Title</th><th>Company</th><th>Email</th>
               </tr>
             </thead>
             <tbody>
               {staged.map((s) => (
-                <tr key={s.id} style={{ borderTop: '1px solid #f3f4f6', opacity: plan.status === 'staged' && !included.has(s.id) ? 0.4 : 1 }}>
-                  <td>
-                    {plan.status === 'staged' ? (
-                      <input type="checkbox" checked={included.has(s.id)} onChange={() => toggleInclude(s.id)} title="Import this contact" />
-                    ) : (
-                      <span className="badge">{s.status}</span>
-                    )}
-                  </td>
+                <tr key={s.id} style={{ borderTop: '1px solid #f3f4f6', opacity: included.has(s.id) ? 1 : 0.4 }}>
+                  <td><input type="checkbox" checked={included.has(s.id)} onChange={() => toggleInclude(s.id)} title="Import this contact" /></td>
                   <td>{[s.first_name, s.last_name].filter(Boolean).join(' ')}</td>
                   <td>{s.title}</td>
                   <td>{s.company}</td>
@@ -186,6 +141,79 @@ function PlanCard({ plan, onChange }) {
               ))}
             </tbody>
           </table>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Already-decided plans (imported/rejected done) -- this list only ever
+// grows as more campaigns run, so it's a compact table with pagination
+// instead of the full card every other status gets. One line per segment:
+// label, how many contacts it actually produced, when, and the one action
+// still worth taking from here (draft a flow for it).
+function CompletedPlansTable({ track }) {
+  const [plans, setPlans] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [page, setPage] = useState(1);
+  const [error, setError] = useState(null);
+  const [draftingId, setDraftingId] = useState(null);
+  const navigate = useNavigate();
+  const pageSize = 10;
+
+  async function load() {
+    setError(null);
+    try {
+      const { plans: p, total: t } = await api.weeklyPlans(track, { status: 'completed', page, pageSize });
+      setPlans(p);
+      setTotal(t);
+    } catch (e) {
+      setError(e.message);
+    }
+  }
+  useEffect(() => { load(); }, [track, page]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  async function draftFlow(plan) {
+    setDraftingId(plan.id);
+    setError(null);
+    try { await draftFlowFor(plan, navigate); }
+    catch (e) { setError(e.message); }
+    finally { setDraftingId(null); }
+  }
+
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
+  if (total === 0) return null;
+
+  return (
+    <div className="card">
+      <h2 style={{ fontSize: '1rem', marginTop: 0 }}>Completed segments ({total})</h2>
+      {error && <p style={{ color: '#b91c1c' }}>{error}</p>}
+      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '.8125rem' }}>
+        <thead>
+          <tr style={{ textAlign: 'left', color: '#6b7280' }}>
+            <th style={{ padding: '.3rem 0' }}>Segment</th><th># contacts</th><th>Created on</th><th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {plans.map((plan) => (
+            <tr key={plan.id} style={{ borderTop: '1px solid #f3f4f6' }}>
+              <td style={{ padding: '.4rem 0' }}>{plan.label || `${plan.track} weekly plan`}</td>
+              <td>{plan.counts?.imported ?? 0}</td>
+              <td>{new Date(plan.created_at).toLocaleDateString()}</td>
+              <td style={{ textAlign: 'right' }}>
+                <button className="btn btn-outline" style={{ fontSize: '.75rem', padding: '.15rem .5rem' }} disabled={draftingId === plan.id} onClick={() => draftFlow(plan)}>
+                  {draftingId === plan.id ? 'Drafting...' : plan.flow_id ? 'Draft another flow' : 'Draft flow'}
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      {totalPages > 1 && (
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '.75rem', marginTop: '.75rem' }}>
+          <button className="btn btn-outline" style={{ fontSize: '.75rem', padding: '.15rem .5rem' }} disabled={page <= 1} onClick={() => setPage((p) => p - 1)}>&larr; Prev</button>
+          <span style={{ fontSize: '.8125rem', color: '#6b7280' }}>Page {page} of {totalPages}</span>
+          <button className="btn btn-outline" style={{ fontSize: '.75rem', padding: '.15rem .5rem' }} disabled={page >= totalPages} onClick={() => setPage((p) => p + 1)}>Next &rarr;</button>
         </div>
       )}
     </div>
@@ -337,22 +365,25 @@ export default function Apollo() {
   async function load() {
     setError(null);
     try {
-      const { plans: p } = await api.weeklyPlans(track);
+      const { plans: p } = await api.weeklyPlans(track, { status: ACTIVE_STATUSES });
       setPlans(p);
     } catch (e) {
       setError(e.message);
     }
   }
 
-  // On first load, jump to whichever track actually has plans instead of
-  // silently sitting on 'ic' with an empty state -- confusing when all the
-  // real activity is on 'b2b' (or vice versa) and looks like the whole
-  // pipeline is broken rather than just showing the wrong tab.
+  // On first load, jump to whichever track actually has active (not yet
+  // decided) plans instead of silently sitting on 'ic' with an empty state
+  // -- confusing when all the real activity is on 'b2b' (or vice versa) and
+  // looks like the whole pipeline is broken rather than just the wrong tab.
   useEffect(() => {
     if (autoSelected) return;
     (async () => {
       try {
-        const [{ plans: icPlans }, { plans: b2bPlans }] = await Promise.all([api.weeklyPlans('ic'), api.weeklyPlans('b2b')]);
+        const [{ plans: icPlans }, { plans: b2bPlans }] = await Promise.all([
+          api.weeklyPlans('ic', { status: ACTIVE_STATUSES }),
+          api.weeklyPlans('b2b', { status: ACTIVE_STATUSES }),
+        ]);
         setAutoSelected(true);
         if (track === 'ic' && icPlans.length === 0 && b2bPlans.length > 0) {
           setTrack('b2b');
@@ -381,11 +412,13 @@ export default function Apollo() {
       <NewPlanForm track={track} onCreated={load} />
 
       {error && <p style={{ color: '#b91c1c' }}>{error}</p>}
-      {plans.length === 0 && <p>No plans proposed yet for this track. The standard weekly plan proposes itself every Friday, or start a custom one above.</p>}
+      {plans.length === 0 && <p>No plans currently need review for this track. The standard weekly plan proposes itself every Friday, or start a custom one above.</p>}
 
       {plans.map((plan) => (
         <PlanCard key={plan.id} plan={plan} onChange={load} />
       ))}
+
+      <CompletedPlansTable key={track} track={track} />
     </div>
   );
 }

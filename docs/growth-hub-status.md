@@ -187,6 +187,21 @@ before this existed) and `flows.source_plan_id` (set when a flow is created from
   `colombia-ai-automation-test-v3` segment (coherent 2-step draft), confirmed the flow detail
   response includes segment info, confirmed enroll-segment correctly rejects before activation.
 
+## Flow language + compact Apollo view (added 2026-09-24, later same day)
+
+- **Flow email content follows the segment's geography, not the track.** `flowAssistant.js`
+  detects Spanish-speaking LatAm countries (Colombia, Mexico, Argentina, etc.) from the plan's
+  `organization_locations`/`person_locations` and drafts `subject`/`body` in Latin American Spanish
+  for those, English otherwise -- `b2b` covers both Colombia and US/Canada, so this can't be a
+  per-track constant. The flow's `name`/`description` (Jose's own admin-facing labels, never sent)
+  stay in English regardless, so the Flows list stays consistently scannable.
+- **Apollo tab no longer shows every completed plan as a full card.** A plan that's already been
+  decided (imported/rejected) doesn't need its full rationale/brief/filter-toggle/staged-table
+  repeated -- it's now one row (segment, contact count, created date, draft-flow button) in a
+  paginated table (`GET /weekly-plan/list` gained `status` filtering + real `page`/`page_size`
+  pagination with an exact count). Only plans still needing a decision (`proposed`/`approved`/
+  `pulling`/`staged`) get the full card now.
+
 ## What's left before this can actually send anything
 
 1. Add `GROWTH_ADMIN_SECRET` on Vercel (see above) so the two queued test pulls can actually run.

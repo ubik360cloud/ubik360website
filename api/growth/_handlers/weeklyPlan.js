@@ -6,6 +6,7 @@ import { withOwner } from '../_lib/auth.js';
 import { withCron } from '../_lib/cron.js';
 import { supabase } from '../_lib/supabase.js';
 import { proposeWeeklyPlan, proposeCustomPlan, approvePlan, stageApprove, previewSearch } from '../_lib/weeklyPlan.js';
+import { proposeFilter } from '../_lib/filterAssistant.js';
 
 export const current = withOwner(async (req, res) => {
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
@@ -48,6 +49,23 @@ export const list = withOwner(async (req, res) => {
 // Owner-authed like the rest of this file -- see ../_lib/auth.js for the
 // GROWTH_ADMIN_SECRET escape hatch this also accepts, for triggering a test
 // pull directly without going through the (not-yet-built) hub UI form.
+// Turns free-text context into a suggested {label, rationale, target,
+// filter} -- see filterAssistant.js's own comment. Pure suggestion: doesn't
+// touch Apollo or the database, so it's free to call and re-call while
+// refining. Pass the currently-edited filter back as `prior_filter` to ask
+// for an adjustment instead of a from-scratch proposal.
+export const suggestFilter = withOwner(async (req, res) => {
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+  const { track, brief, prior_filter } = req.body || {};
+  if (track !== 'ic' && track !== 'b2b') return res.status(400).json({ error: "track must be 'ic' or 'b2b'" });
+  try {
+    const suggestion = await proposeFilter({ track, brief, priorFilter: prior_filter });
+    return res.status(200).json(suggestion);
+  } catch (e) {
+    return res.status(400).json({ error: e.message });
+  }
+});
+
 // Free preview -- see previewSearch's own comment. Doesn't touch the
 // database at all (no plan needed): pass a raw filter, get back how many
 // contacts match and a masked sample, spend zero Apollo credits.

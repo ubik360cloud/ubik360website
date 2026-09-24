@@ -116,6 +116,142 @@ function PlanCard({ plan, onChange }) {
   );
 }
 
+// Free-text context in, an editable filter proposal out -- what Jose asked
+// for after several rounds of describing a target in chat and Claude Code
+// hand-writing the Apollo filter each time. Nothing here costs Apollo
+// credits: "Suggest" calls DeepInfra only, "Preview" calls only Apollo's
+// free search. Only "Create plan" writes anything, and even that doesn't
+// spend credits -- credits are spent on the resulting plan's own "Approve"
+// button, same as any other plan card.
+function NewPlanForm({ track, onCreated }) {
+  const [brief, setBrief] = useState('');
+  const [label, setLabel] = useState('');
+  const [target, setTarget] = useState(10);
+  const [filterText, setFilterText] = useState('');
+  const [rationale, setRationale] = useState('');
+  const [preview, setPreview] = useState(null);
+  const [busy, setBusy] = useState(null); // 'suggest' | 'preview' | 'create' | null
+  const [error, setError] = useState(null);
+  const [open, setOpen] = useState(false);
+
+  function parsedFilter() {
+    try { return JSON.parse(filterText || '{}'); }
+    catch { throw new Error('The filter box has invalid JSON -- fix the syntax before continuing.'); }
+  }
+
+  async function suggest() {
+    setBusy('suggest'); setError(null); setPreview(null);
+    try {
+      let prior;
+      try { prior = filterText ? parsedFilter() : undefined; } catch { prior = undefined; }
+      const s = await api.suggestFilter(track, brief, prior);
+      setLabel(s.label || label);
+      setTarget(s.target || 10);
+      setFilterText(JSON.stringify(s.filter || {}, null, 2));
+      setRationale(s.rationale || '');
+    } catch (e) { setError(e.message); }
+    finally { setBusy(null); }
+  }
+
+  async function runPreview() {
+    setBusy('preview'); setError(null);
+    try {
+      const filter = parsedFilter();
+      const p = await api.previewFilter(filter, 100);
+      setPreview(p);
+    } catch (e) { setError(e.message); }
+    finally { setBusy(null); }
+  }
+
+  async function create() {
+    setBusy('create'); setError(null);
+    try {
+      const filter = parsedFilter();
+      if (!label.trim()) throw new Error('Give this plan a label first.');
+      await api.createCustomPlan({ track, label: label.trim(), brief: rationale || brief, filter, target: Number(target) || 10 });
+      setBrief(''); setLabel(''); setFilterText(''); setRationale(''); setPreview(null); setOpen(false);
+      onCreated();
+    } catch (e) { setError(e.message); }
+    finally { setBusy(null); }
+  }
+
+  if (!open) {
+    return (
+      <button className="btn btn-outline" style={{ marginBottom: '1.5rem' }} onClick={() => setOpen(true)}>
+        + New custom plan for {track}
+      </button>
+    );
+  }
+
+  return (
+    <div className="card" style={{ marginBottom: '1.5rem' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <h2 style={{ fontSize: '1rem', margin: 0 }}>New custom plan — {track}</h2>
+        <button className="btn btn-outline" style={{ fontSize: '.75rem', padding: '.15rem .5rem' }} onClick={() => setOpen(false)}>close</button>
+      </div>
+
+      <label style={{ display: 'block', fontSize: '.8125rem', color: '#374151', margin: '.75rem 0 .25rem' }}>
+        Context — geography, industry, who to include/exclude, anything you know that a filter alone can't capture
+      </label>
+      <textarea
+        rows={3}
+        style={{ width: '100%', fontSize: '.8125rem', padding: '.5rem', boxSizing: 'border-box' }}
+        value={brief}
+        onChange={(e) => setBrief(e.target.value)}
+        placeholder="e.g. Colombia, small manufacturers 25-100 employees, marketing/sales directors and general managers only -- not IT or production directors."
+      />
+      <button className="btn btn-primary" style={{ marginTop: '.5rem' }} disabled={busy || !brief.trim()} onClick={suggest}>
+        {busy === 'suggest' ? 'Asking...' : filterText ? 'Suggest again (uses the filter below as a starting point)' : 'Suggest filters'}
+      </button>
+
+      {rationale && <p style={{ fontSize: '.8125rem', color: '#374151', marginTop: '.75rem' }}>{rationale}</p>}
+
+      {filterText && (
+        <>
+          <div style={{ display: 'flex', gap: '.75rem', marginTop: '.75rem' }}>
+            <div style={{ flex: 1 }}>
+              <label style={{ display: 'block', fontSize: '.8125rem', color: '#374151', marginBottom: '.25rem' }}>Label</label>
+              <input style={{ width: '100%', fontSize: '.8125rem', padding: '.4rem', boxSizing: 'border-box' }} value={label} onChange={(e) => setLabel(e.target.value)} />
+            </div>
+            <div style={{ width: '6rem' }}>
+              <label style={{ display: 'block', fontSize: '.8125rem', color: '#374151', marginBottom: '.25rem' }}>Target</label>
+              <input type="number" style={{ width: '100%', fontSize: '.8125rem', padding: '.4rem', boxSizing: 'border-box' }} value={target} onChange={(e) => setTarget(e.target.value)} />
+            </div>
+          </div>
+
+          <label style={{ display: 'block', fontSize: '.8125rem', color: '#374151', margin: '.75rem 0 .25rem' }}>
+            Filter (edit directly, or tweak the context above and click Suggest again)
+          </label>
+          <textarea
+            rows={10}
+            style={{ width: '100%', fontSize: '.75rem', fontFamily: 'monospace', padding: '.5rem', boxSizing: 'border-box' }}
+            value={filterText}
+            onChange={(e) => setFilterText(e.target.value)}
+          />
+
+          <div style={{ display: 'flex', gap: '.5rem', marginTop: '.75rem' }}>
+            <button className="btn btn-outline" disabled={busy} onClick={runPreview}>
+              {busy === 'preview' ? 'Checking...' : 'Preview volume (free, no credits)'}
+            </button>
+            <button className="btn btn-primary" disabled={busy} onClick={create}>
+              {busy === 'create' ? 'Creating...' : 'Create plan (still requires Approve to spend credits)'}
+            </button>
+          </div>
+
+          {preview && (
+            <p style={{ fontSize: '.8125rem', color: '#374151', marginTop: '.5rem' }}>
+              {preview.total_entries} total match{preview.total_entries === 1 ? '' : 'es'} in Apollo for this filter.
+              {preview.sample?.length > 0 && ` First few: ${preview.sample.slice(0, 5).map((s) => `${s.name || '?'} (${s.company || '?'})`).join(', ')}.`}
+            </p>
+          )}
+        </>
+      )}
+
+      {error && <p style={{ color: '#b91c1c', marginTop: '.5rem' }}>{error}</p>}
+    </div>
+  );
+}
+
 export default function Apollo() {
   const [track, setTrack] = useState('ic');
   const [autoSelected, setAutoSelected] = useState(false);
@@ -166,8 +302,10 @@ export default function Apollo() {
         ))}
       </div>
 
+      <NewPlanForm track={track} onCreated={load} />
+
       {error && <p style={{ color: '#b91c1c' }}>{error}</p>}
-      {plans.length === 0 && <p>No plans proposed yet for this track. The standard weekly plan proposes itself every Friday; a custom test campaign (like a specific geography or industry angle) is created directly for now -- ask Claude Code to set one up with a label and brief.</p>}
+      {plans.length === 0 && <p>No plans proposed yet for this track. The standard weekly plan proposes itself every Friday, or start a custom one above.</p>}
 
       {plans.map((plan) => (
         <PlanCard key={plan.id} plan={plan} onChange={load} />

@@ -152,6 +152,52 @@ export async function proposeCustomPlan({ track, label, brief, filter, target })
   return plan;
 }
 
+/** Free-preview: runs ONLY the free `mixed_people/api_search` step (no
+ *  `people/bulk_match`, no `apollo_staging` insert) -- lets Jose gauge how
+ *  many contacts a filter actually matches, and skim who they are, before
+ *  spending any Apollo credits deciding to bulk_match/import them. Apollo's
+ *  people-search endpoint costs nothing regardless of page size; only
+ *  bulk_match (which reveals a real email) is metered per record requested.
+ *  `per_page` is explicit here (100, Apollo's documented per-page unit) --
+ *  pullApolloForPlan doesn't set it and falls back to Apollo's smaller
+ *  implicit default, which is fine for a small weekly pull but not for
+ *  previewing a bigger pool in one shot. */
+export async function previewSearch(filter, { limit = 100 } = {}) {
+  const searchBody = buildSearchBody(filter);
+  let page = 1;
+  let totalEntries = 0;
+  const sample = [];
+  while (sample.length < limit && page <= MAX_PAGES) {
+    let res;
+    try {
+      res = await apolloFetch('/mixed_people/api_search', { ...searchBody, page, per_page: 100 });
+    } catch (e) {
+      console.error('[weeklyPlan] preview search page failed:', e.message);
+      break;
+    }
+    totalEntries = res.total_entries ?? totalEntries;
+    const people = res.people || [];
+    if (!people.length) break;
+    for (const p of people) {
+      if (sample.length >= limit) break;
+      sample.push({
+        apollo_id: p.id,
+        name: [p.first_name, p.last_name].filter(Boolean).join(' ') || null,
+        title: p.title || null,
+        company: p.organization?.name || null,
+        company_size: p.organization?.estimated_num_employees ?? null,
+        city: p.city || null,
+        state: p.state || null,
+        country: p.country || null,
+        has_email: p.email_status === 'verified' || Boolean(p.email && p.email !== 'email_not_unlocked@domain.com'),
+      });
+    }
+    if (page * 100 >= totalEntries) break;
+    page += 1;
+  }
+  return { total_entries: totalEntries, returned: sample.length, sample };
+}
+
 /** Search + bulk_match + stage. Small enough (target ~20) to run inline
  *  within a single serverless invocation -- no fire-and-forget needed at
  *  this volume, unlike 360PrintStudio's ~600/week pull. */

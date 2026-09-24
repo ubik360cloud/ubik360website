@@ -118,6 +118,7 @@ function PlanCard({ plan, onChange }) {
 
 export default function Apollo() {
   const [track, setTrack] = useState('ic');
+  const [autoSelected, setAutoSelected] = useState(false);
   const [plans, setPlans] = useState([]);
   const [error, setError] = useState(null);
 
@@ -131,7 +132,30 @@ export default function Apollo() {
     }
   }
 
-  useEffect(() => { load(); }, [track]); // eslint-disable-line react-hooks/exhaustive-deps
+  // On first load, jump to whichever track actually has plans instead of
+  // silently sitting on 'ic' with an empty state -- confusing when all the
+  // real activity is on 'b2b' (or vice versa) and looks like the whole
+  // pipeline is broken rather than just showing the wrong tab.
+  useEffect(() => {
+    if (autoSelected) return;
+    (async () => {
+      try {
+        const [{ plans: icPlans }, { plans: b2bPlans }] = await Promise.all([api.weeklyPlans('ic'), api.weeklyPlans('b2b')]);
+        setAutoSelected(true);
+        if (track === 'ic' && icPlans.length === 0 && b2bPlans.length > 0) {
+          setTrack('b2b');
+          setPlans(b2bPlans);
+        } else {
+          setPlans(track === 'ic' ? icPlans : b2bPlans);
+        }
+      } catch (e) {
+        setAutoSelected(true);
+        setError(e.message);
+      }
+    })();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => { if (autoSelected) load(); }, [track]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div>

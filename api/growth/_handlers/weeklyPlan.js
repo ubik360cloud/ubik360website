@@ -5,7 +5,7 @@
 import { withOwner } from '../_lib/auth.js';
 import { withCron } from '../_lib/cron.js';
 import { supabase } from '../_lib/supabase.js';
-import { proposeWeeklyPlan, proposeCustomPlan, approvePlan, stageApprove } from '../_lib/weeklyPlan.js';
+import { proposeWeeklyPlan, proposeCustomPlan, approvePlan, stageApprove, previewSearch } from '../_lib/weeklyPlan.js';
 
 export const current = withOwner(async (req, res) => {
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
@@ -48,6 +48,21 @@ export const list = withOwner(async (req, res) => {
 // Owner-authed like the rest of this file -- see ../_lib/auth.js for the
 // GROWTH_ADMIN_SECRET escape hatch this also accepts, for triggering a test
 // pull directly without going through the (not-yet-built) hub UI form.
+// Free preview -- see previewSearch's own comment. Doesn't touch the
+// database at all (no plan needed): pass a raw filter, get back how many
+// contacts match and a masked sample, spend zero Apollo credits.
+export const preview = withOwner(async (req, res) => {
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+  const { filter, limit } = req.body || {};
+  if (!filter || typeof filter !== 'object') return res.status(400).json({ error: 'filter object is required' });
+  try {
+    const result = await previewSearch(filter, { limit: limit || 100 });
+    return res.status(200).json(result);
+  } catch (e) {
+    return res.status(400).json({ error: e.message });
+  }
+});
+
 export const custom = withOwner(async (req, res) => {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
   const { track, label, brief, filter, target } = req.body || {};

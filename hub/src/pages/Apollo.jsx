@@ -10,7 +10,14 @@ const TRACKS = ['ic', 'b2b'];
 // side by side (see CLAUDE.md Growth Hub section).
 function PlanCard({ plan, onChange }) {
   const [staged, setStaged] = useState([]);
-  const [excluded, setExcluded] = useState(new Set());
+  // Tracks who's INCLUDED for import (checked = will be imported), not who's
+  // excluded -- a prior version inverted this (checkbox meant "exclude") and
+  // it read as "click each contact to select it," so checking every row
+  // actually rejected everyone. Defaults to everyone included, matching "I
+  // reviewed this list and it looks right" being the common case.
+  const [included, setIncluded] = useState(new Set());
+
+  useEffect(() => { setIncluded(new Set(staged.map((s) => s.id))); }, [staged]);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
   const [expanded, setExpanded] = useState(false);
@@ -36,15 +43,20 @@ function PlanCard({ plan, onChange }) {
   }
 
   async function stageApprove() {
+    const excludeIds = staged.filter((s) => !included.has(s.id)).map((s) => s.id);
+    if (included.size === 0) {
+      const ok = window.confirm(`This will REJECT all ${staged.length} candidates and import none. Continue?`);
+      if (!ok) return;
+    }
     setBusy(true);
     setError(null);
-    try { await api.stageApprove(plan.id, [...excluded]); setExcluded(new Set()); onChange(); }
+    try { await api.stageApprove(plan.id, excludeIds); onChange(); }
     catch (e) { setError(e.message); }
     finally { setBusy(false); }
   }
 
-  function toggleExclude(id) {
-    setExcluded((prev) => {
+  function toggleInclude(id) {
+    setIncluded((prev) => {
       const next = new Set(prev);
       next.has(id) ? next.delete(id) : next.add(id);
       return next;
@@ -87,21 +99,30 @@ function PlanCard({ plan, onChange }) {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '.75rem' }}>
             <h2 style={{ fontSize: '1rem', margin: 0 }}>Staged candidates ({staged.length})</h2>
             {plan.status === 'staged' && (
-              <button className="btn btn-primary" disabled={busy} onClick={stageApprove}>
-                Import {staged.length - excluded.size} · reject {excluded.size}
-              </button>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '.75rem' }}>
+                <button className="btn btn-outline" style={{ fontSize: '.75rem', padding: '.15rem .5rem' }} onClick={() => setIncluded(new Set(staged.map((s) => s.id)))}>
+                  select all
+                </button>
+                <button className="btn btn-outline" style={{ fontSize: '.75rem', padding: '.15rem .5rem' }} onClick={() => setIncluded(new Set())}>
+                  select none
+                </button>
+                <button className="btn btn-primary" disabled={busy} onClick={stageApprove}>
+                  Import {included.size} contact{included.size === 1 ? '' : 's'}
+                  {included.size < staged.length && ` (reject ${staged.length - included.size})`}
+                </button>
+              </div>
             )}
           </div>
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '.8125rem' }}>
             <thead>
               <tr style={{ textAlign: 'left', color: '#6b7280' }}>
-                <th></th><th>Name</th><th>Title</th><th>Company</th><th>Email</th>
+                <th>Import?</th><th>Name</th><th>Title</th><th>Company</th><th>Email</th>
               </tr>
             </thead>
             <tbody>
               {staged.map((s) => (
-                <tr key={s.id} style={{ borderTop: '1px solid #f3f4f6', opacity: excluded.has(s.id) ? 0.4 : 1 }}>
-                  <td><input type="checkbox" checked={excluded.has(s.id)} onChange={() => toggleExclude(s.id)} title="Exclude" /></td>
+                <tr key={s.id} style={{ borderTop: '1px solid #f3f4f6', opacity: included.has(s.id) ? 1 : 0.4 }}>
+                  <td><input type="checkbox" checked={included.has(s.id)} onChange={() => toggleInclude(s.id)} title="Import this contact" /></td>
                   <td>{[s.first_name, s.last_name].filter(Boolean).join(' ')}</td>
                   <td>{s.title}</td>
                   <td>{s.company}</td>

@@ -49,9 +49,15 @@ const TRACK_FILTERS = {
     person_locations: ['United States'],
   },
   b2b: {
-    person_titles: ['founder', 'ceo', 'owner', 'president', 'general manager'],
+    person_titles: ['founder', 'ceo', 'owner', 'president', 'director', 'general manager'],
     q_organization_keyword_tags: ['small business', 'growth stage company'],
     person_locations: ['United States', 'Canada'],
+    // 25-100 employees, so we're reaching an actual decision-maker directly
+    // rather than a company big enough to have a gatekeeper/internal team --
+    // Jose 2026-09-24, after the Colombia test pull's top matches (Alquería,
+    // Audifarma) turned out to be large companies the titles filter alone
+    // didn't catch. Apply to every b2b geography, not just Colombia.
+    organization_num_employees_ranges: ['25,100'],
   },
 };
 

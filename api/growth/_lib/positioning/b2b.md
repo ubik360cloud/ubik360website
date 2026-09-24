@@ -41,10 +41,20 @@ spend."
    a real, specific production or logistics pain point to reference — otherwise skip rather than
    force it.
 
+## Target company size
+
+**25–100 employees, across every geography (US, Canada, Colombia).** Small enough that Jose/Ubik
+360 reaches an actual owner/decision-maker directly instead of a gatekeeper, big enough to
+actually have marketing/ops spend to redirect. Added 2026-09-24 after the Colombia test pull's
+Apollo results (Alquería, Audifarma) turned out to be large companies the job-title filter alone
+didn't screen out — filtered at the Apollo search level (`organization_num_employees_ranges`) in
+`_lib/weeklyPlan.js`, not just judged during research/drafting.
+
 ## Disqualifiers — skip, don't force a pitch
 
 - Enterprise companies with existing full internal marketing/HR departments and no visible
-  friction (skip growth-marketing and staffing pitches both).
+  friction (skip growth-marketing and staffing pitches both) — should already be filtered out by
+  company size above, but skip on sight if one slips through.
 - Any business with no online presence to assess (can't verify fit — skip rather than guess).
 - Businesses already publicly working with a competing agency/fractional CMO (say so in the
   verdict, still draft if there's a genuine differentiated angle, otherwise skip).

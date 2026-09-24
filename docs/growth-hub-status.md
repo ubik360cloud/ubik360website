@@ -158,6 +158,35 @@ plan. Nothing here spends Apollo credits until that plan's own Approve button is
 any other plan. Built so Jose doesn't have to describe a target in chat each time and wait for a
 hand-written filter -- see CLAUDE.md Growth Hub section.
 
+## Segments -> AI-drafted flows -> bulk enroll (added 2026-09-24)
+
+Closes the gap between the Apollo pipeline and the Flows sequencer that existed until now: an
+imported contact only carried its track (`ic`/`b2b`), with no link back to which Apollo plan
+actually sourced it, so a flow had no way to target "just this campaign." A plan (with its
+label/brief/filter) already IS a natural segment definition -- migration `005_segments.sql` adds
+`contacts.source_plan_id` (set at import time in `stageApprove`, backfilled for contacts imported
+before this existed) and `flows.source_plan_id` (set when a flow is created from a segment).
+
+- `_lib/flowAssistant.js` (`POST /weekly-plan/:id/suggest-flow`, owner-authed) drafts a flow's name
+  + multi-step subject/body grounded in the segment's filter/brief/positioning, via DeepInfra (same
+  pattern as `filterAssistant.js`). Pure suggestion, no DB write.
+- Apollo tab: "Draft flow for this segment" button (shows once a plan has `counts.imported > 0`)
+  calls the suggestion, creates the flow linked via `source_plan_id`, saves the steps, and hands
+  off to the Flows page (`/flows?open=<id>`) to review/edit -- same approve-and-activate gate as
+  any hand-written flow, nothing here sends anything.
+- Flows page: shows the linked segment (label, brief, imported count) and a one-click "Enroll
+  segment into this flow" button (`POST /flows/:id/enroll-segment`) instead of enrolling contacts
+  one at a time. **Guarded (both in the UI and in `enrollSegment()`) to require the flow already be
+  `active`** -- enrolling into a still-`draft` flow would hit `runDueSteps()`'s existing
+  `flow.status !== 'active'` check on the enrollment's very first due date and mark it `completed`
+  without ever sending, even after the flow activates later. Correct order: draft → edit → approve
+  & activate → THEN enroll.
+- `stageApprove` also auto-enrolls into `plan.flow_id`'s flow if one is already linked at import
+  time (the reverse ordering -- a recurring segment whose flow already exists).
+- Verified end-to-end against production: suggested a real flow for the
+  `colombia-ai-automation-test-v3` segment (coherent 2-step draft), confirmed the flow detail
+  response includes segment info, confirmed enroll-segment correctly rejects before activation.
+
 ## What's left before this can actually send anything
 
 1. Add `GROWTH_ADMIN_SECRET` on Vercel (see above) so the two queued test pulls can actually run.

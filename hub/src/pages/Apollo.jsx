@@ -21,6 +21,11 @@ function PlanCard({ plan, onChange }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
   const [expanded, setExpanded] = useState(false);
+  // A completed plan's full contact table is collapsed by default -- with
+  // several completed plans stacked on the page, showing every one's table
+  // open by default (as a prior version did) buried the one plan that
+  // actually needs attention (status 'staged') under a wall of old rows.
+  const [showStagedReadOnly, setShowStagedReadOnly] = useState(false);
 
   async function loadStaged() {
     if (!['staged', 'enrolling', 'completed'].includes(plan.status)) return;
@@ -75,7 +80,13 @@ function PlanCard({ plan, onChange }) {
             Week of {plan.week_of} · target {plan.filter?.target}
             {plan.counts?.staged != null && ` · ${plan.counts.staged} staged`}
             {plan.counts?.imported != null && ` · ${plan.counts.imported} imported`}
+            {plan.counts?.rejected != null && ` · ${plan.counts.rejected} rejected`}
           </p>
+          {plan.status !== 'staged' && staged.length > 0 && !showStagedReadOnly && (
+            <button className="btn btn-outline" style={{ fontSize: '.75rem', padding: '.15rem .5rem', marginTop: '.25rem', marginLeft: '.5rem' }} onClick={() => setShowStagedReadOnly(true)}>
+              review contacts
+            </button>
+          )}
           <button className="btn btn-outline" style={{ fontSize: '.75rem', padding: '.15rem .5rem', marginTop: '.25rem' }} onClick={() => setExpanded((v) => !v)}>
             {expanded ? 'hide filter' : 'show filter'}
           </button>
@@ -94,10 +105,15 @@ function PlanCard({ plan, onChange }) {
 
       {error && <p style={{ color: '#b91c1c' }}>{error}</p>}
 
-      {staged.length > 0 && (
+      {staged.length > 0 && (plan.status === 'staged' || showStagedReadOnly) && (
         <div style={{ marginTop: '1rem', borderTop: '1px solid #f3f4f6', paddingTop: '.75rem' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '.75rem' }}>
             <h2 style={{ fontSize: '1rem', margin: 0 }}>Staged candidates ({staged.length})</h2>
+            {plan.status !== 'staged' && (
+              <button className="btn btn-outline" style={{ fontSize: '.75rem', padding: '.15rem .5rem' }} onClick={() => setShowStagedReadOnly(false)}>
+                hide
+              </button>
+            )}
             {plan.status === 'staged' && (
               <div style={{ display: 'flex', alignItems: 'center', gap: '.75rem' }}>
                 <button className="btn btn-outline" style={{ fontSize: '.75rem', padding: '.15rem .5rem' }} onClick={() => setIncluded(new Set(staged.map((s) => s.id)))}>
@@ -116,13 +132,19 @@ function PlanCard({ plan, onChange }) {
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '.8125rem' }}>
             <thead>
               <tr style={{ textAlign: 'left', color: '#6b7280' }}>
-                <th>Import?</th><th>Name</th><th>Title</th><th>Company</th><th>Email</th>
+                <th>{plan.status === 'staged' ? 'Import?' : 'Status'}</th><th>Name</th><th>Title</th><th>Company</th><th>Email</th>
               </tr>
             </thead>
             <tbody>
               {staged.map((s) => (
-                <tr key={s.id} style={{ borderTop: '1px solid #f3f4f6', opacity: included.has(s.id) ? 1 : 0.4 }}>
-                  <td><input type="checkbox" checked={included.has(s.id)} onChange={() => toggleInclude(s.id)} title="Import this contact" /></td>
+                <tr key={s.id} style={{ borderTop: '1px solid #f3f4f6', opacity: plan.status === 'staged' && !included.has(s.id) ? 0.4 : 1 }}>
+                  <td>
+                    {plan.status === 'staged' ? (
+                      <input type="checkbox" checked={included.has(s.id)} onChange={() => toggleInclude(s.id)} title="Import this contact" />
+                    ) : (
+                      <span className="badge">{s.status}</span>
+                    )}
+                  </td>
                   <td>{[s.first_name, s.last_name].filter(Boolean).join(' ')}</td>
                   <td>{s.title}</td>
                   <td>{s.company}</td>

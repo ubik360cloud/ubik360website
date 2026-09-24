@@ -105,6 +105,59 @@ Two real test campaigns are queued behind that one manual step, both `b2b` track
 - **`colombia-ai-automation-test`** — Colombia, decision-maker titles (EN+ES), manufacturing
   companies, hiring-activity proxy filters.
 
+## Two real bugs found and fixed 2026-09-24 (don't reintroduce)
+
+1. **`hub/` had no `vercel.json`** -- a Vite/React SPA using `BrowserRouter` needs a rewrite
+   (`{"rewrites":[{"source":"/(.*)","destination":"/index.html"}]}`) so a direct hit or hard
+   refresh on a client-side route (`/apollo`, `/leads`, ...) doesn't 404. It only ever worked when
+   reached by clicking a nav link inside an already-loaded session -- looked like intermittent
+   breakage until reproduced directly.
+2. **`ubik360-growth-hub` doesn't auto-promote git deployments to Production** -- every push
+   builds fine but lands as an un-aliased preview (`target: null`); the main `ubik360` project
+   auto-promotes correctly, this one doesn't (a project-level Vercel Git setting, not something
+   fixed in code). **After every push that touches `hub/`, manually promote the new deployment**
+   (`create_deployment` with that `deploymentId` and `target: "production"` -- `request_promote`
+   returned a 422 here, the redeploy-with-target approach is what actually works) or
+   `marketing.ubik360.com` keeps serving stale code. This bit a real session: a rollback to a
+   two-day-old commit sat live for a while and looked like "nothing works in the hub" when the
+   backend was actually fine.
+
+## Apollo filter lessons (2026-09-24 test campaigns)
+
+- **Cost model**: `mixed_people/api_search` (search/filter) is always free, any page size, any
+  volume. Only `people/bulk_match` (revealing a real email) costs 1 credit per record requested.
+  The original pipeline coupled both into one "Approve" action; `previewSearch()` in
+  `_lib/weeklyPlan.js` (`POST /weekly-plan/preview`) now does the free half alone, so real
+  candidate volume can be checked before spending anything.
+- **`organization_num_employees_ranges` accepts arbitrary custom ranges** as `"min,max"` strings
+  (e.g. `"25,100"`), not just fixed presets -- confirmed against Apollo's docs.
+- **A bare `person_titles: ["director"]` is too broad** -- Apollo matches it as a keyword/substring
+  against the full title, so it pulls in every department's director (IT, production, PR, finance
+  -- anything with "Director" in the string). Use compound titles ("marketing director", "director
+  de ventas") when the intent is department-specific; bare titles are fine for department-agnostic
+  ones (ceo, owner, president, founder).
+- **The "actively hiring" proxy (`organization_num_jobs_range` + `organization_job_posted_at_range`
+  + `q_organization_job_titles`) can cut volume by 90%+**, and how much depends heavily on
+  Apollo's job-posting data density for that geography/industry. Colombia manufacturing at
+  25-100 employees: 2 matches with the hiring filter on, 6,300 with it off. Canada
+  ecommerce/agencies at the same size: 34 vs 2,674. Always check both with `previewSearch` before
+  deciding whether "high-intent-only" is worth the volume cost for a given campaign -- don't assume
+  the tradeoff is the same across geographies.
+- **There is no separate "LinkedIn currently hiring" field** in Apollo's API -- the job-posting
+  parameters above ARE the actual mechanism behind that signal, confirmed against docs.
+
+## AI-assisted filter proposal (added 2026-09-24)
+
+`_lib/filterAssistant.js` (`POST /weekly-plan/suggest-filter`, owner-authed) takes a free-text
+brief (geography, industry, titles to include/exclude, anything Jose knows that a raw filter can't
+capture) and returns a suggested `{label, rationale, target, filter}` via DeepInfra, grounded in
+the track's positioning brief and a literal list of real Apollo filter field names (so it can't
+invent a parameter). Wired into a new form on the hub's Apollo tab: Suggest → edit the JSON
+directly or re-suggest with the edited filter as a starting point → Preview volume (free) → Create
+plan. Nothing here spends Apollo credits until that plan's own Approve button is clicked, same as
+any other plan. Built so Jose doesn't have to describe a target in chat each time and wait for a
+hand-written filter -- see CLAUDE.md Growth Hub section.
+
 ## What's left before this can actually send anything
 
 1. Add `GROWTH_ADMIN_SECRET` on Vercel (see above) so the two queued test pulls can actually run.

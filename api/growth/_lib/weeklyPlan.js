@@ -8,6 +8,7 @@
 // just sit unsent for weeks.
 import { supabase } from './supabase.js';
 import { apolloFetch } from './apollo.js';
+import { enrollContact } from './flowEngine.js';
 
 const WEEKLY_TARGET = Number(process.env.GROWTH_APOLLO_WEEKLY_TARGET || 20);
 const MAX_PAGES = 5;
@@ -306,11 +307,13 @@ export async function approvePlan(planId, { by = 'owner' } = {}) {
   return updated;
 }
 
-/** Imports approved staged contacts -> contacts + leads. Does NOT
- *  auto-enroll into a flow (unlike 360PrintStudio) -- this system's primary
- *  send path today is the 1:1 draft queue (dailyOneoffPull draws from
- *  `leads` where source='apollo'), so importing is enough; flow enrollment
- *  stays an explicit separate action once a flow exists and is approved. */
+/** Imports approved staged contacts -> contacts + leads, tagged with
+ *  `source_plan_id` so they can be targeted as a segment later (see
+ *  005_segments.sql). Auto-enrolls into `plan.flow_id`'s flow IF one is
+ *  already linked at import time (e.g. a recurring plan whose segment
+ *  already has an active flow) -- for a plan imported before any flow
+ *  exists, enrolling the segment is a separate explicit action from the
+ *  Flows page once the flow's content is drafted and approved. */
 export async function stageApprove(planId, { excludeIds = [], by = 'owner' } = {}) {
   const db = supabase();
   const { data: plan, error } = await db.from('apollo_weekly_plans').select('*').eq('id', planId).single();
@@ -342,6 +345,7 @@ export async function stageApprove(planId, { excludeIds = [], by = 'owner' } = {
           city: s.city, state: s.state, country: s.country || 'US',
           linkedin_url: s.linkedin_url, apollo_id: s.apollo_id,
           track: plan.track, source: 'apollo', status: 'active',
+          source_plan_id: planId,
         },
         { onConflict: 'email' },
       )
@@ -356,9 +360,39 @@ export async function stageApprove(planId, { excludeIds = [], by = 'owner' } = {
 
     await db.from('apollo_staging').update({ status: 'imported', reviewed_by: by, reviewed_at: new Date().toISOString(), imported_contact_id: contact.id }).eq('id', s.id);
     imported += 1;
+
+    if (plan.flow_id) {
+      await enrollContact({ flowId: plan.flow_id, contactId: contact.id, enrolledBy: by });
+    }
   }
 
   const counts = { ...(plan.counts || {}), imported, rejected: toReject.length };
   await db.from('apollo_weekly_plans').update({ status: 'completed', counts }).eq('id', planId);
   return { imported, rejected: toReject.length };
+}
+
+/** Enrolls every already-imported contact from a plan (segment) into a
+ *  flow, in one action -- the common case for a plan that finished
+ *  importing before its flow existed (stageApprove's own auto-enroll only
+ *  covers a plan whose flow_id was already linked at import time). Skips
+ *  contacts enrollContact itself would skip (unsubscribed, suppressed,
+ *  already enrolled -- upsert is a no-op there). */
+export async function enrollSegment({ planId, flowId, enrolledBy = 'owner' }) {
+  const db = supabase();
+  const { data: flow } = await db.from('flows').select('status').eq('id', flowId).single();
+  if (flow?.status !== 'active') {
+    throw new Error("Flow must be approved & activated before enrolling -- enrolling into a flow that's still 'draft' would mark the enrollment complete without ever sending once it later activates.");
+  }
+
+  const { data: contacts, error } = await db.from('contacts').select('id').eq('source_plan_id', planId);
+  if (error) throw error;
+
+  let enrolled = 0;
+  const skipped = [];
+  for (const c of contacts || []) {
+    const result = await enrollContact({ flowId, contactId: c.id, enrolledBy });
+    if (result.ok) enrolled += 1;
+    else skipped.push(result.skipped);
+  }
+  return { total: (contacts || []).length, enrolled, skipped };
 }

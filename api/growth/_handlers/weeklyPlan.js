@@ -7,6 +7,7 @@ import { withCron } from '../_lib/cron.js';
 import { supabase } from '../_lib/supabase.js';
 import { proposeWeeklyPlan, proposeCustomPlan, approvePlan, stageApprove, previewSearch } from '../_lib/weeklyPlan.js';
 import { proposeFilter } from '../_lib/filterAssistant.js';
+import { proposeFlow } from '../_lib/flowAssistant.js';
 
 export const current = withOwner(async (req, res) => {
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
@@ -128,6 +129,23 @@ export const staged = withOwner(async (req, res) => {
   if (planErr) return res.status(404).json({ error: 'plan not found' });
   if (stErr) return res.status(500).json({ error: stErr.message });
   return res.status(200).json({ plan, staged: stagedRows || [] });
+});
+
+// Suggests a flow (name + steps) drafted for this plan's segment -- see
+// flowAssistant.js's own comment. Pure suggestion, no DB write; the hub
+// creates the flow (POST /flows with source_plan_id) and saves the steps
+// (PUT /flows/:id/steps) itself once Jose has seen and can edit them.
+export const suggestFlow = withOwner(async (req, res) => {
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+  const db = supabase();
+  const { data: plan, error } = await db.from('apollo_weekly_plans').select('*').eq('id', req.params.id).single();
+  if (error || !plan) return res.status(404).json({ error: 'plan not found' });
+  try {
+    const suggestion = await proposeFlow({ track: plan.track, plan });
+    return res.status(200).json(suggestion);
+  } catch (e) {
+    return res.status(400).json({ error: e.message });
+  }
 });
 
 export const stageApproveRoute = withOwner(async (req, res, ownerEmail) => {

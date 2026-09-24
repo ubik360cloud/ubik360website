@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { api } from '../lib/api.js';
 
 const TRACKS = ['ic', 'b2b'];
@@ -26,6 +27,33 @@ function PlanCard({ plan, onChange }) {
   // open by default (as a prior version did) buried the one plan that
   // actually needs attention (status 'staged') under a wall of old rows.
   const [showStagedReadOnly, setShowStagedReadOnly] = useState(false);
+  const [draftingFlow, setDraftingFlow] = useState(false);
+  const navigate = useNavigate();
+
+  // Drafts a flow for this segment: asks the AI for a name + steps grounded
+  // in this plan's filter/brief, creates the flow linked to this plan
+  // (source_plan_id, so "Enroll segment" on the Flows page knows who to
+  // pull in), saves the suggested steps, then hands off to the Flows page
+  // to review/edit -- nothing here activates or sends anything.
+  async function draftFlow() {
+    setDraftingFlow(true);
+    setError(null);
+    try {
+      const suggestion = await api.suggestFlowForPlan(plan.id);
+      const { flow } = await api.createFlow({
+        track: plan.track,
+        name: suggestion.name || `${plan.label || plan.track} flow`,
+        description: suggestion.description,
+        source_plan_id: plan.id,
+      });
+      if (suggestion.steps?.length) await api.setFlowSteps(flow.id, suggestion.steps);
+      navigate(`/flows?open=${flow.id}`);
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setDraftingFlow(false);
+    }
+  }
 
   async function loadStaged() {
     if (!['staged', 'enrolling', 'completed'].includes(plan.status)) return;
@@ -85,6 +113,11 @@ function PlanCard({ plan, onChange }) {
           {plan.status !== 'staged' && staged.length > 0 && !showStagedReadOnly && (
             <button className="btn btn-outline" style={{ fontSize: '.75rem', padding: '.15rem .5rem', marginTop: '.25rem', marginLeft: '.5rem' }} onClick={() => setShowStagedReadOnly(true)}>
               review contacts
+            </button>
+          )}
+          {plan.counts?.imported > 0 && (
+            <button className="btn btn-outline" style={{ fontSize: '.75rem', padding: '.15rem .5rem', marginTop: '.25rem', marginLeft: '.5rem' }} disabled={draftingFlow} onClick={draftFlow}>
+              {draftingFlow ? 'Drafting...' : plan.flow_id ? 'Draft another flow for this segment' : 'Draft flow for this segment'}
             </button>
           )}
           <button className="btn btn-outline" style={{ fontSize: '.75rem', padding: '.15rem .5rem', marginTop: '.25rem' }} onClick={() => setExpanded((v) => !v)}>

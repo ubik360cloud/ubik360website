@@ -26,6 +26,7 @@ export const api = {
     request('/weekly-plan/suggest-filter', { method: 'POST', body: JSON.stringify({ track, brief, prior_filter: priorFilter }) }),
   previewFilter: (filter, limit) => request('/weekly-plan/preview', { method: 'POST', body: JSON.stringify({ filter, limit }) }),
   createCustomPlan: (payload) => request('/weekly-plan/custom', { method: 'POST', body: JSON.stringify(payload) }),
+  suggestFlowForPlan: (planId) => request(`/weekly-plan/${planId}/suggest-flow`, { method: 'POST' }),
   weeklyPlanStaged: (id) => request(`/weekly-plan/${id}/staged`),
   approveWeeklyPlan: (id) => request(`/weekly-plan/${id}/approve`, { method: 'POST' }),
   stageApprove: (id, excludeIds = []) =>
@@ -41,6 +42,7 @@ export const api = {
 
   flows: (params = {}) => request(`/flows?${new URLSearchParams(params)}`),
   createFlow: (payload) => request('/flows', { method: 'POST', body: JSON.stringify(payload) }),
+  enrollSegment: (flowId, planId) => request(`/flows/${flowId}/enroll-segment`, { method: 'POST', body: JSON.stringify({ plan_id: planId }) }),
   flow: (id) => request(`/flows/${id}`),
   updateFlow: (id, patch) => request(`/flows/${id}`, { method: 'PATCH', body: JSON.stringify(patch) }),
   setFlowSteps: (id, steps) => request(`/flows/${id}/steps`, { method: 'PUT', body: JSON.stringify({ steps }) }),

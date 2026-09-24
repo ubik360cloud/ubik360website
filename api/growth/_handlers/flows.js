@@ -2,6 +2,7 @@ import { withOwner } from '../_lib/auth.js';
 import { withCron } from '../_lib/cron.js';
 import { supabase } from '../_lib/supabase.js';
 import { enrollContact, runDueSteps } from '../_lib/flowEngine.js';
+import { enrollSegment } from '../_lib/weeklyPlan.js';
 
 export const listCreate = withOwner(async (req, res) => {
   const db = supabase();
@@ -14,15 +15,18 @@ export const listCreate = withOwner(async (req, res) => {
   }
 
   if (req.method === 'POST') {
-    const { track, name, description, send_window, per_contact_min_gap_hours } = req.body || {};
+    const { track, name, description, send_window, per_contact_min_gap_hours, source_plan_id } = req.body || {};
     if (track !== 'ic' && track !== 'b2b') return res.status(400).json({ error: "track must be 'ic' or 'b2b'" });
     if (!name) return res.status(400).json({ error: 'name is required' });
     const { data, error } = await db
       .from('flows')
-      .insert({ track, name, description, send_window, per_contact_min_gap_hours })
+      .insert({ track, name, description, send_window, per_contact_min_gap_hours, source_plan_id: source_plan_id || null })
       .select()
       .single();
     if (error) return res.status(500).json({ error: error.message });
+    // Two-way link: apollo_weekly_plans.flow_id lets stageApprove auto-enroll
+    // future imports into this same segment's flow without extra clicks.
+    if (source_plan_id) await db.from('apollo_weekly_plans').update({ flow_id: data.id }).eq('id', source_plan_id);
     return res.status(201).json({ flow: data });
   }
 
@@ -40,7 +44,13 @@ export const detail = withOwner(async (req, res, ownerEmail) => {
     if (error) return res.status(404).json({ error: 'flow not found' });
     const enrollmentCounts = {};
     for (const e of enrollments || []) enrollmentCounts[e.status] = (enrollmentCounts[e.status] || 0) + 1;
-    return res.status(200).json({ flow, steps: steps || [], enrollmentCounts });
+
+    let segment = null;
+    if (flow.source_plan_id) {
+      const { data: plan } = await db.from('apollo_weekly_plans').select('id, label, brief, filter, counts').eq('id', flow.source_plan_id).maybeSingle();
+      segment = plan || null;
+    }
+    return res.status(200).json({ flow, steps: steps || [], enrollmentCounts, segment });
   }
 
   if (req.method === 'PATCH') {
@@ -105,6 +115,22 @@ export const enroll = withOwner(async (req, res, ownerEmail) => {
     if (r.ok) enrolled += 1; else skipped[r.skipped] = (skipped[r.skipped] || 0) + 1;
   }
   return res.status(200).json({ enrolled, skipped });
+});
+
+// One-click bulk-enroll for the common case: a flow drafted AFTER its
+// segment's contacts were already imported (stageApprove's own auto-enroll
+// only covers the reverse order -- a plan whose flow_id was already linked
+// before that import ran).
+export const enrollSegmentRoute = withOwner(async (req, res, ownerEmail) => {
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+  const { plan_id } = req.body || {};
+  if (!plan_id) return res.status(400).json({ error: 'plan_id is required' });
+  try {
+    const result = await enrollSegment({ planId: plan_id, flowId: req.params.id, enrolledBy: ownerEmail });
+    return res.status(200).json(result);
+  } catch (e) {
+    return res.status(400).json({ error: e.message });
+  }
 });
 
 export const run = withCron(async (req, res) => {

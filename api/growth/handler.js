@@ -33,6 +33,7 @@ const ROUTES = [
   { method: 'POST', pattern: ['weekly-plan', 'suggest-filter'], handler: weeklyPlan.suggestFilter },
   { method: 'POST', pattern: ['weekly-plan', 'propose'], handler: weeklyPlan.propose },
   { method: 'POST', pattern: ['weekly-plan', ':id', 'approve'], handler: weeklyPlan.approve },
+  { method: 'POST', pattern: ['weekly-plan', ':id', 'suggest-flow'], handler: weeklyPlan.suggestFlow },
   { method: 'GET', pattern: ['weekly-plan', ':id', 'staged'], handler: weeklyPlan.staged },
   { method: 'POST', pattern: ['weekly-plan', ':id', 'stage-approve'], handler: weeklyPlan.stageApproveRoute },
 
@@ -52,6 +53,7 @@ const ROUTES = [
   { method: 'PATCH', pattern: ['flows', ':id'], handler: flows.detail },
   { method: 'PUT', pattern: ['flows', ':id', 'steps'], handler: flows.steps },
   { method: 'POST', pattern: ['flows', ':id', 'enroll'], handler: flows.enroll },
+  { method: 'POST', pattern: ['flows', ':id', 'enroll-segment'], handler: flows.enrollSegmentRoute },
 
   { method: 'GET', pattern: ['deliverability'], handler: misc.deliverability },
   { method: 'GET', pattern: ['me'], handler: misc.me },

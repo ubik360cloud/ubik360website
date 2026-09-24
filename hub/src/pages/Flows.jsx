@@ -1,14 +1,18 @@
 import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { api } from '../lib/api.js';
 
 export default function Flows() {
   const [flows, setFlows] = useState([]);
   const [selected, setSelected] = useState(null);
+  const [segment, setSegment] = useState(null);
   const [steps, setSteps] = useState([]);
   const [creating, setCreating] = useState(false);
   const [newFlow, setNewFlow] = useState({ track: 'ic', name: '' });
   const [error, setError] = useState(null);
   const [busy, setBusy] = useState(false);
+  const [enrollResult, setEnrollResult] = useState(null);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   async function load() {
     try { const { flows: f } = await api.flows(); setFlows(f); }
@@ -16,10 +20,27 @@ export default function Flows() {
   }
   useEffect(() => { load(); }, []);
 
+  // Coming from "Draft flow for this segment" on the Apollo tab lands here
+  // with ?open=<flowId> so the new draft opens directly instead of leaving
+  // Jose to find it in the list himself.
+  useEffect(() => {
+    const openId = searchParams.get('open');
+    if (openId) { openFlow({ id: openId }); setSearchParams({}, { replace: true }); }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   async function openFlow(f) {
-    const { flow, steps: s } = await api.flow(f.id);
+    setEnrollResult(null);
+    const { flow, steps: s, segment: seg } = await api.flow(f.id);
     setSelected(flow);
+    setSegment(seg);
     setSteps(s.length ? s : [{ step_no: 1, delay_hours: 0, subject: '', body: '', cta_url: '' }]);
+  }
+
+  async function enrollSegmentNow() {
+    setBusy(true); setError(null);
+    try { const r = await api.enrollSegment(selected.id, segment.id); setEnrollResult(r); }
+    catch (e) { setError(e.message); }
+    finally { setBusy(false); }
   }
 
   async function createFlow() {
@@ -67,6 +88,35 @@ export default function Flows() {
       <div>
         <button className="btn btn-outline" onClick={() => setSelected(null)} style={{ marginBottom: '1rem' }}>&larr; Back to flows</button>
         <h1 style={{ fontSize: '1.375rem' }}>{selected.name} <span className={`badge badge-${selected.track}`}>{selected.track}</span> <span className="badge">{selected.status}</span></h1>
+        {selected.description && <p style={{ color: '#6b7280', marginTop: '-.5rem' }}>{selected.description}</p>}
+
+        {segment && (
+          <div className="card" style={{ marginBottom: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div>
+              <p style={{ margin: 0, fontSize: '.8125rem', color: '#6b7280' }}>Segment</p>
+              <p style={{ margin: '.25rem 0 0' }}>
+                <span className="badge">{segment.label || 'weekly plan'}</span> — {segment.counts?.imported ?? 0} imported contacts
+              </p>
+              {segment.brief && <p style={{ fontSize: '.8125rem', color: '#374151', marginTop: '.25rem' }}>{segment.brief}</p>}
+            </div>
+            <button className="btn btn-primary" disabled={busy || selected.status !== 'active'} onClick={enrollSegmentNow} title={selected.status !== 'active' ? 'Approve & activate the flow first' : ''}>
+              Enroll segment into this flow
+            </button>
+          </div>
+        )}
+        {segment && selected.status !== 'active' && (
+          <p style={{ fontSize: '.8125rem', color: '#6b7280', marginTop: '-.5rem' }}>
+            Approve &amp; activate the flow below before enrolling -- enrolling into a draft flow
+            would miss the send once you do activate it.
+          </p>
+        )}
+        {enrollResult && (
+          <p style={{ fontSize: '.8125rem', color: '#374151' }}>
+            Enrolled {enrollResult.enrolled} of {enrollResult.total} contact{enrollResult.total === 1 ? '' : 's'}
+            {enrollResult.skipped?.length > 0 && ` (skipped: ${enrollResult.skipped.join(', ')})`}.
+          </p>
+        )}
+
         {error && <p style={{ color: '#b91c1c' }}>{error}</p>}
         {steps.map((s, i) => (
           <div key={i} className="card" style={{ marginBottom: '1rem' }}>

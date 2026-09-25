@@ -202,6 +202,26 @@ before this existed) and `flows.source_plan_id` (set when a flow is created from
   pagination with an exact count). Only plans still needing a decision (`proposed`/`approved`/
   `pulling`/`staged`) get the full card now.
 
+## Enrollment idempotency fix + enroll-into-existing-flow (2026-09-25)
+
+`enrollContact`'s upsert used to always reset `current_step` to 0 and `next_send_at` to now on a
+conflict -- calling it twice for the same `(flow_id, contact_id)` (e.g. re-running "Enroll
+segment") would silently restart an already-progressed or already-completed contact from step 1
+and re-send what they'd already gotten. Now checks for an existing enrollment first and skips
+rather than resets (`insert`, not `upsert`).
+
+Answers "how do I add more contacts to the same campaign without a duplicate flow": each Apollo
+pull is its own segment/plan (`source_plan_id`), but any number of segments can feed one flow. The
+Apollo tab's completed-segments table has an "Enroll into existing flow" dropdown (lists that
+track's `active` flows) next to "Draft flow" -- `enrollSegment` only ever touches contacts tagged
+with the ONE plan id you call it with, so routing a new segment into an existing flow never
+re-touches contacts an earlier segment already enrolled.
+
+**Reminder for next session: Brevo sender verification for `jose@`/`grow@ubik360.com` is still
+unconfirmed** (see "What's left" below) -- couldn't check it directly (no access to the decrypted
+`BREVO_API_KEY`), so before assuming the daily cron will actually deliver anything once a flow gets
+real enrollments, verify in Brevo's dashboard (Senders & Domains) or ask Jose to confirm.
+
 ## What's left before this can actually send anything
 
 1. Add `GROWTH_ADMIN_SECRET` on Vercel (see above) so the two queued test pulls can actually run.

@@ -222,6 +222,19 @@ unconfirmed** (see "What's left" below) -- couldn't check it directly (no access
 `BREVO_API_KEY`), so before assuming the daily cron will actually deliver anything once a flow gets
 real enrollments, verify in Brevo's dashboard (Senders & Domains) or ask Jose to confirm.
 
+## Send-test-to-self (2026-09-25)
+
+Jose asked whether he could see an approved draft as it would actually land in a mailbox, and
+whether a signature gets added automatically -- neither existed. `POST /flows/:id/test-send`
+(`sendTestEmail()` in `_lib/flowEngine.js`) sends one step to an arbitrary address (his own inbox
+by default, via `GROWTH_OWNER_EMAIL`), reusing the exact same `buildStepBody()` path (CTA
+placement) and real `sendEmail`/`ensureOptOut` footer a contact would get -- subject gets a
+"[TEST] " prefix. Flows step editor has a "Send test to me" button per step (saves current edits
+first, so it reflects what's on screen). **CTA URL is just a plain appended line, no styled
+button; no signature is added automatically beyond the opt-out footer** -- noted directly in the
+UI now. Not tested by Claude Code itself (a real Brevo send, even a labeled test, is Jose's action
+to trigger, not something to do on his behalf) -- verify it works when he tries it.
+
 ## What's left before this can actually send anything
 
 1. Add `GROWTH_ADMIN_SECRET` on Vercel (see above) so the two queued test pulls can actually run.

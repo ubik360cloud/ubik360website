@@ -5,7 +5,7 @@
 import { withOwner } from '../_lib/auth.js';
 import { withCron } from '../_lib/cron.js';
 import { supabase } from '../_lib/supabase.js';
-import { proposeWeeklyPlan, proposeCustomPlan, approvePlan, stageApprove, previewSearch } from '../_lib/weeklyPlan.js';
+import { proposeWeeklyPlan, proposeCustomPlan, approvePlan, stageApprove, previewSearch, updatePlan } from '../_lib/weeklyPlan.js';
 import { proposeFilter } from '../_lib/filterAssistant.js';
 import { proposeFlow } from '../_lib/flowAssistant.js';
 
@@ -97,6 +97,21 @@ export const custom = withOwner(async (req, res) => {
   if (!filter || typeof filter !== 'object') return res.status(400).json({ error: 'filter object is required' });
   try {
     const plan = await proposeCustomPlan({ track, label, brief, filter, target: target || 10 });
+    return res.status(200).json({ plan });
+  } catch (e) {
+    return res.status(400).json({ error: e.message });
+  }
+});
+
+// Edits a still-'proposed' plan's filter/label/target/brief -- see
+// updatePlan's own comment for why this is refused once a plan has moved
+// past 'proposed' (Apollo's already been paid for whatever that filter
+// produced by then).
+export const update = withOwner(async (req, res) => {
+  if (req.method !== 'PATCH') return res.status(405).json({ error: 'Method not allowed' });
+  const { label, brief, filter, target } = req.body || {};
+  try {
+    const plan = await updatePlan(req.params.id, { label, brief, filter, target });
     return res.status(200).json({ plan });
   } catch (e) {
     return res.status(400).json({ error: e.message });

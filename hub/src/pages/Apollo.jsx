@@ -34,6 +34,41 @@ function PlanCard({ plan, onChange }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
   const [expanded, setExpanded] = useState(false);
+  // Editing a filter only makes sense while a plan is still 'proposed' --
+  // once approved, Apollo's already been paid for whatever that filter
+  // produced, so the stored filter becomes a historical record, not a knob.
+  const [editing, setEditing] = useState(false);
+  const [editFilterText, setEditFilterText] = useState('');
+  const [editTarget, setEditTarget] = useState(plan.filter?.target || 10);
+  const [editPreview, setEditPreview] = useState(null);
+
+  function openEdit() {
+    setEditFilterText(JSON.stringify(plan.filter || {}, null, 2));
+    setEditTarget(plan.filter?.target || 10);
+    setEditPreview(null);
+    setEditing(true);
+  }
+
+  async function previewEdit() {
+    setBusy(true); setError(null);
+    try {
+      const filter = JSON.parse(editFilterText);
+      const p = await api.previewFilter(filter, 100);
+      setEditPreview(p);
+    } catch (e) { setError(e.message.includes('JSON') ? 'Invalid JSON in the filter box.' : e.message); }
+    finally { setBusy(false); }
+  }
+
+  async function saveEdit() {
+    setBusy(true); setError(null);
+    try {
+      const filter = JSON.parse(editFilterText);
+      await api.updatePlan(plan.id, { filter, target: Number(editTarget) || 10 });
+      setEditing(false);
+      onChange();
+    } catch (e) { setError(e.message.includes('Unexpected token') ? 'Invalid JSON in the filter box.' : e.message); }
+    finally { setBusy(false); }
+  }
 
   async function loadStaged() {
     if (plan.status !== 'staged') return;
@@ -88,21 +123,56 @@ function PlanCard({ plan, onChange }) {
             Week of {plan.week_of} · target {plan.filter?.target}
             {plan.counts?.staged != null && ` · ${plan.counts.staged} staged`}
           </p>
-          <button className="btn btn-outline" style={{ fontSize: '.75rem', padding: '.15rem .5rem', marginTop: '.25rem' }} onClick={() => setExpanded((v) => !v)}>
-            {expanded ? 'hide filter' : 'show filter'}
-          </button>
+          {plan.status === 'proposed' && !editing && (
+            <button className="btn btn-outline" style={{ fontSize: '.75rem', padding: '.15rem .5rem', marginTop: '.25rem' }} onClick={openEdit}>
+              edit filter
+            </button>
+          )}
+          {plan.status !== 'proposed' && (
+            <button className="btn btn-outline" style={{ fontSize: '.75rem', padding: '.15rem .5rem', marginTop: '.25rem' }} onClick={() => setExpanded((v) => !v)}>
+              {expanded ? 'hide filter' : 'show filter'}
+            </button>
+          )}
           {expanded && (
             <pre style={{ fontSize: '.75rem', background: '#f9fafb', padding: '.5rem', marginTop: '.25rem', overflowX: 'auto' }}>
               {JSON.stringify(plan.filter, null, 2)}
             </pre>
           )}
         </div>
-        {plan.status === 'proposed' && (
+        {plan.status === 'proposed' && !editing && (
           <button className="btn btn-primary" disabled={busy} onClick={approve}>
             Approve &amp; pull from Apollo (spends credits)
           </button>
         )}
       </div>
+
+      {editing && (
+        <div style={{ marginTop: '.75rem', borderTop: '1px solid #f3f4f6', paddingTop: '.75rem' }}>
+          <div style={{ display: 'flex', gap: '.75rem', marginBottom: '.5rem' }}>
+            <label style={{ fontSize: '.8125rem', color: '#374151' }}>
+              Target{' '}
+              <input type="number" value={editTarget} onChange={(e) => setEditTarget(e.target.value)} style={{ width: '4rem', display: 'inline-block' }} />
+            </label>
+          </div>
+          <textarea
+            rows={10}
+            style={{ width: '100%', fontSize: '.75rem', fontFamily: 'monospace', padding: '.5rem', boxSizing: 'border-box' }}
+            value={editFilterText}
+            onChange={(e) => setEditFilterText(e.target.value)}
+          />
+          <div style={{ display: 'flex', gap: '.5rem', marginTop: '.5rem' }}>
+            <button className="btn btn-outline" disabled={busy} onClick={previewEdit}>Preview volume (free)</button>
+            <button className="btn btn-primary" disabled={busy} onClick={saveEdit}>Save changes</button>
+            <button className="btn btn-outline" disabled={busy} onClick={() => setEditing(false)}>Cancel</button>
+          </div>
+          {editPreview && (
+            <p style={{ fontSize: '.8125rem', color: '#374151', marginTop: '.5rem' }}>
+              {editPreview.total_entries} total match{editPreview.total_entries === 1 ? '' : 'es'}.
+              {editPreview.sample?.length > 0 && ` First few: ${editPreview.sample.slice(0, 5).map((s) => `${s.name || '?'} (${s.company || '?'})`).join(', ')}.`}
+            </p>
+          )}
+        </div>
+      )}
 
       {error && <p style={{ color: '#b91c1c' }}>{error}</p>}
 

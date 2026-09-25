@@ -32,6 +32,7 @@ export const api = {
     request('/weekly-plan/suggest-filter', { method: 'POST', body: JSON.stringify({ track, brief, prior_filter: priorFilter }) }),
   previewFilter: (filter, limit) => request('/weekly-plan/preview', { method: 'POST', body: JSON.stringify({ filter, limit }) }),
   createCustomPlan: (payload) => request('/weekly-plan/custom', { method: 'POST', body: JSON.stringify(payload) }),
+  updatePlan: (id, patch) => request(`/weekly-plan/${id}`, { method: 'PATCH', body: JSON.stringify(patch) }),
   suggestFlowForPlan: (planId) => request(`/weekly-plan/${planId}/suggest-flow`, { method: 'POST' }),
   weeklyPlanStaged: (id) => request(`/weekly-plan/${id}/staged`),
   approveWeeklyPlan: (id) => request(`/weekly-plan/${id}/approve`, { method: 'POST' }),

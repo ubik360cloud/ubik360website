@@ -34,6 +34,7 @@ const ROUTES = [
   { method: 'POST', pattern: ['weekly-plan', 'propose'], handler: weeklyPlan.propose },
   { method: 'POST', pattern: ['weekly-plan', ':id', 'approve'], handler: weeklyPlan.approve },
   { method: 'POST', pattern: ['weekly-plan', ':id', 'suggest-flow'], handler: weeklyPlan.suggestFlow },
+  { method: 'PATCH', pattern: ['weekly-plan', ':id'], handler: weeklyPlan.update },
   { method: 'GET', pattern: ['weekly-plan', ':id', 'staged'], handler: weeklyPlan.staged },
   { method: 'POST', pattern: ['weekly-plan', ':id', 'stage-approve'], handler: weeklyPlan.stageApproveRoute },
 

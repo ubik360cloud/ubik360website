@@ -199,6 +199,36 @@ export async function previewSearch(filter, { limit = 100 } = {}) {
   return { total_entries: totalEntries, returned: sample.length, sample };
 }
 
+/** Edits a plan's filter/label/target/brief -- only while it's still
+ *  'proposed'. Once approved, the filter is a historical record of what was
+ *  actually queried (Apollo was already paid for those exact results) --
+ *  editing it after the fact wouldn't change anything already pulled, it'd
+ *  just make the stored filter lie about what produced the staged
+ *  candidates. To refine after approving, create a new labeled plan (a
+ *  "v2") with the adjusted filter instead. */
+export async function updatePlan(planId, { label, brief, filter, target }) {
+  const db = supabase();
+  const { data: plan, error: loadErr } = await db.from('apollo_weekly_plans').select('status, filter, counts').eq('id', planId).single();
+  if (loadErr || !plan) throw new Error('plan not found');
+  if (plan.status !== 'proposed') {
+    throw new Error(`This plan is already '${plan.status}' -- its filter is a record of what was actually queried and can't be edited after the fact. Create a new labeled plan with the adjusted filter instead.`);
+  }
+
+  const patch = {};
+  if (label !== undefined) patch.label = label;
+  if (brief !== undefined) { patch.brief = brief; patch.rationale = brief; }
+  if (filter !== undefined || target !== undefined) {
+    const base = filter !== undefined ? filter : plan.filter;
+    const newTarget = target ?? plan.filter?.target;
+    patch.filter = { ...base, target: newTarget };
+    patch.counts = { ...(plan.counts || {}), target: newTarget };
+  }
+
+  const { data: updated, error } = await db.from('apollo_weekly_plans').update(patch).eq('id', planId).select().single();
+  if (error) throw error;
+  return updated;
+}
+
 /** Search + bulk_match + stage. Small enough (target ~20) to run inline
  *  within a single serverless invocation -- no fire-and-forget needed at
  *  this volume, unlike 360PrintStudio's ~600/week pull. */

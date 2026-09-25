@@ -158,20 +158,50 @@ function CompletedPlansTable({ track }) {
   const [page, setPage] = useState(1);
   const [error, setError] = useState(null);
   const [draftingId, setDraftingId] = useState(null);
+  const [activeFlows, setActiveFlows] = useState([]);
+  const [linkChoice, setLinkChoice] = useState({}); // planId -> flowId picked in the dropdown
+  const [enrollingId, setEnrollingId] = useState(null);
+  const [enrollMsg, setEnrollMsg] = useState({}); // planId -> last enroll result text
   const navigate = useNavigate();
   const pageSize = 10;
 
   async function load() {
     setError(null);
     try {
-      const { plans: p, total: t } = await api.weeklyPlans(track, { status: 'completed', page, pageSize });
+      const [{ plans: p, total: t }, { flows: f }] = await Promise.all([
+        api.weeklyPlans(track, { status: 'completed', page, pageSize }),
+        api.flows({ track }),
+      ]);
       setPlans(p);
       setTotal(t);
+      setActiveFlows((f || []).filter((fl) => fl.status === 'active'));
     } catch (e) {
       setError(e.message);
     }
   }
   useEffect(() => { load(); }, [track, page]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Routes a segment that already finished (imported/rejected) into an
+  // EXISTING flow instead of drafting a new one -- this is how "add more
+  // contacts to the same campaign" actually works: each Apollo pull creates
+  // its own plan/segment, but any number of segments can feed the same
+  // flow. enrollSegment only touches contacts tagged with THIS plan's id,
+  // so it's safe to run for a new segment without re-touching contacts
+  // already enrolled from an earlier one.
+  async function enrollIntoExisting(plan) {
+    const flowId = linkChoice[plan.id];
+    if (!flowId) return;
+    setEnrollingId(plan.id);
+    setError(null);
+    try {
+      const r = await api.enrollSegment(flowId, plan.id);
+      setEnrollMsg((m) => ({ ...m, [plan.id]: `Enrolled ${r.enrolled} of ${r.total}` }));
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setEnrollingId(null);
+    }
+  }
 
   async function draftFlow(plan) {
     setDraftingId(plan.id);
@@ -191,7 +221,7 @@ function CompletedPlansTable({ track }) {
       <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '.8125rem' }}>
         <thead>
           <tr style={{ textAlign: 'left', color: '#6b7280' }}>
-            <th style={{ padding: '.3rem 0' }}>Segment</th><th># contacts</th><th>Created on</th><th></th>
+            <th style={{ padding: '.3rem 0' }}>Segment</th><th># contacts</th><th>Created on</th><th colSpan={2}></th>
           </tr>
         </thead>
         <tbody>
@@ -204,6 +234,29 @@ function CompletedPlansTable({ track }) {
                 <button className="btn btn-outline" style={{ fontSize: '.75rem', padding: '.15rem .5rem' }} disabled={draftingId === plan.id} onClick={() => draftFlow(plan)}>
                   {draftingId === plan.id ? 'Drafting...' : plan.flow_id ? 'Draft another flow' : 'Draft flow'}
                 </button>
+              </td>
+              <td style={{ textAlign: 'right' }}>
+                {activeFlows.length > 0 && (
+                  <div style={{ display: 'flex', gap: '.25rem', alignItems: 'center', justifyContent: 'flex-end' }}>
+                    <select
+                      style={{ fontSize: '.75rem', padding: '.15rem' }}
+                      value={linkChoice[plan.id] || ''}
+                      onChange={(e) => setLinkChoice((c) => ({ ...c, [plan.id]: e.target.value }))}
+                    >
+                      <option value="">Enroll into existing flow...</option>
+                      {activeFlows.map((f) => <option key={f.id} value={f.id}>{f.name}</option>)}
+                    </select>
+                    <button
+                      className="btn btn-outline"
+                      style={{ fontSize: '.75rem', padding: '.15rem .5rem' }}
+                      disabled={!linkChoice[plan.id] || enrollingId === plan.id}
+                      onClick={() => enrollIntoExisting(plan)}
+                    >
+                      {enrollingId === plan.id ? 'Enrolling...' : 'Go'}
+                    </button>
+                  </div>
+                )}
+                {enrollMsg[plan.id] && <span style={{ fontSize: '.75rem', color: '#6b7280' }}>{enrollMsg[plan.id]}</span>}
               </td>
             </tr>
           ))}

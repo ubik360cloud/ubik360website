@@ -16,14 +16,24 @@ export async function enrollContact({ flowId, contactId, enrolledBy = 'owner' })
   const { data: suppressed } = await db.from('suppressions').select('email').eq('email', contact.email).maybeSingle();
   if (suppressed) return { ok: false, skipped: 'suppressed' };
 
+  // Enrolling is a create-only operation, never a reset -- the naive upsert
+  // this replaced always reset current_step to 0 and next_send_at to now,
+  // so re-running "Enroll segment" on a plan/flow that already has active or
+  // completed enrollments would silently restart those contacts from step 1
+  // and re-send what they'd already received. If a contact ever genuinely
+  // needs to redo a flow, that should be its own explicit action, not a
+  // side effect of enrolling a fresh batch.
+  const { data: existing } = await db.from('enrollments').select('id').eq('flow_id', flowId).eq('contact_id', contactId).maybeSingle();
+  if (existing) return { ok: false, skipped: 'already-enrolled' };
+
   const { data: step1 } = await db.from('flow_steps').select('delay_hours').eq('flow_id', flowId).eq('step_no', 1).eq('is_active', true).maybeSingle();
   if (!step1) return { ok: false, skipped: 'flow-has-no-active-step-1' };
 
   const nextSendAt = new Date(Date.now() + (step1.delay_hours || 0) * 3600e3).toISOString();
   const { error } = await db
     .from('enrollments')
-    .upsert({ flow_id: flowId, contact_id: contactId, status: 'active', current_step: 0, next_send_at: nextSendAt, enrolled_by: enrolledBy }, { onConflict: 'flow_id,contact_id' });
-  if (error) return { ok: false, skipped: 'upsert-failed' };
+    .insert({ flow_id: flowId, contact_id: contactId, status: 'active', current_step: 0, next_send_at: nextSendAt, enrolled_by: enrolledBy });
+  if (error) return { ok: false, skipped: 'insert-failed' };
   return { ok: true };
 }
 

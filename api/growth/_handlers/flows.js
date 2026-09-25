@@ -96,6 +96,7 @@ export const steps = withOwner(async (req, res) => {
     subject: s.subject,
     body: s.body,
     cta_url: s.cta_url || null,
+    cta_label: s.cta_label || null,
     is_active: s.is_active !== false,
   }));
   const { data, error } = await db.from('flow_steps').insert(rows).select();

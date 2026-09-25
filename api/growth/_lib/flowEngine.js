@@ -8,12 +8,15 @@ import { sendEmail } from './brevo.js';
 import { reserveSendSlot } from './sendCap.js';
 
 // Shared with sendTestEmail below so a test send renders EXACTLY what a
-// real contact would get -- same CTA placement, same opt-out footer (via
-// sendEmail -> ensureOptOut). Plain text, deliberately: the CTA URL is just
-// appended as its own line, not a styled button, matching brevo.js's
-// "read like a personal email, not a template" design.
+// real contact would get -- same CTA placement, same signature/opt-out
+// footer (via sendEmail -> ensureSignature -> ensureOptOut). Plain text,
+// deliberately: cta_label (e.g. "Let's Talk" / "¿Hablamos?") reads as a
+// short caption before the bare URL, the plain-text equivalent of anchor
+// text since there's no styled button here.
 function buildStepBody(step) {
-  return step.cta_url ? `${step.body}\n\n${step.cta_url}` : step.body;
+  if (!step.cta_url) return step.body;
+  const cta = step.cta_label ? `${step.cta_label}: ${step.cta_url}` : step.cta_url;
+  return `${step.body}\n\n${cta}`;
 }
 
 export async function enrollContact({ flowId, contactId, enrolledBy = 'owner' }) {

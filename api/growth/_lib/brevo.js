@@ -8,7 +8,17 @@ const SENDERS = {
   b2b: { email: 'grow@ubik360.com', name: 'Ubik 360' },
 };
 
+// Applies to every send, both tracks -- Jose signs cold outreach personally
+// (2026-09-25) regardless of the website's separate anonymous-positioning
+// test (that's a site-content decision, not an email one). No accent on
+// "Jose" and no "Founder" -- his own preference, CEO title is enough.
+const SIGNATURE = '\n\nJose M. Villegas, CEO Ubik 360';
+
 const OPT_OUT = '\n\n---\nIf you\'d rather not hear from me again, just reply "unsubscribe" and I\'ll stop.\nUbik 360 Enterprises LLC, 30 N Gould St Ste R, Sheridan, WY 82801';
+
+export function ensureSignature(body) {
+  return body.includes('Villegas') ? body : `${body}${SIGNATURE}`;
+}
 
 export function ensureOptOut(body) {
   return body.includes('unsubscribe') ? body : `${body}${OPT_OUT}`;
@@ -30,7 +40,7 @@ export async function sendEmail({ track, to, subject, text, replyTo }) {
       to: [{ email: to }],
       replyTo: replyTo ? { email: replyTo } : sender,
       subject,
-      textContent: ensureOptOut(text),
+      textContent: ensureOptOut(ensureSignature(text)),
     }),
   });
   const data = await res.json().catch(() => ({}));

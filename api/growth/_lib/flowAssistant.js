@@ -13,6 +13,12 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DEEPINFRA_URL = 'https://api.deepinfra.com/v1/openai/chat/completions';
 const MODEL = process.env.PROSPECT_MODEL || 'deepseek-ai/DeepSeek-V3';
 const SENDER_NAME = { ic: 'Jose Villegas', b2b: 'Ubik 360' };
+// Jose's real Calendly link (confirmed 2026-09-25) -- proposed as the CTA
+// on whichever step actually warrants a scheduling ask, with a labeled
+// caption per language ("Let's Talk" / "¿Hablamos?") since these are
+// plain-text emails with no styled button.
+const CALENDLY_URL = 'https://calendly.com/meet-ubik360/30min';
+const CTA_LABEL = { en: "Let's Talk", es: '¿Hablamos?' };
 
 // Language follows the segment's geography, not the track -- b2b covers
 // both Colombia and the US/Canada, and Jose wants Colombian recipients
@@ -68,13 +74,23 @@ ${loadPositioning(track)}
 ## Language
 ${languageInstruction}
 
+## Signature -- do NOT write one
+Every email gets "Jose M. Villegas, CEO Ubik 360" appended automatically after your body text,
+before it sends. Do not write a name, title, or sign-off anywhere in "body" -- no "Jose here",
+no "soy Jose de Ubik 360", no closing "Best, Jose". Write the body as if that line will follow it.
+
+## CTA
+Exactly one step (usually the one making the actual ask to talk) should carry a scheduling CTA:
+set "cta_url" to "${CALENDLY_URL}" and "cta_label" to "${CTA_LABEL[language]}" on that step only.
+Leave "cta_url" and "cta_label" null on every other step -- don't repeat the same link every step.
+
 ## Output -- return ONLY this JSON, no prose around it, no markdown code fence
 {
   "name": "short flow name, e.g. 'Colombia marketing directors - manufacturing'",
   "description": "1-2 sentences: who this reaches and the angle",
   "steps": [
-    { "step_no": 1, "delay_hours": 0, "subject": "...", "body": "...", "cta_url": null },
-    { "step_no": 2, "delay_hours": 96, "subject": "...", "body": "...", "cta_url": null }
+    { "step_no": 1, "delay_hours": 0, "subject": "...", "body": "...", "cta_url": null, "cta_label": null },
+    { "step_no": 2, "delay_hours": 96, "subject": "...", "body": "...", "cta_url": "${CALENDLY_URL}", "cta_label": "${CTA_LABEL[language]}" }
   ]
 }
 2-3 steps is usually right (an opener, a follow-up, maybe a short breakup message) -- don't pad to

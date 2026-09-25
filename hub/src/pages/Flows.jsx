@@ -149,12 +149,15 @@ export default function Flows() {
             </div>
             <input placeholder="Subject" defaultValue={s.subject} onChange={(e) => updateStep(i, 'subject', e.target.value)} style={{ marginBottom: '.5rem' }} />
             <textarea placeholder="Body" rows={6} defaultValue={s.body} onChange={(e) => updateStep(i, 'body', e.target.value)} style={{ marginBottom: '.5rem' }} />
-            <input placeholder="CTA URL (optional)" defaultValue={s.cta_url || ''} onChange={(e) => updateStep(i, 'cta_url', e.target.value)} style={{ marginBottom: '.5rem' }} />
+            <div style={{ display: 'flex', gap: '.5rem', marginBottom: '.5rem' }}>
+              <input placeholder="CTA label (optional, e.g. Let's Talk)" defaultValue={s.cta_label || ''} onChange={(e) => updateStep(i, 'cta_label', e.target.value)} style={{ flex: '0 0 40%' }} />
+              <input placeholder="CTA URL (optional)" defaultValue={s.cta_url || ''} onChange={(e) => updateStep(i, 'cta_url', e.target.value)} style={{ flex: 1 }} />
+            </div>
             <p style={{ fontSize: '.75rem', color: '#6b7280', margin: '0 0 .5rem' }}>
-              The CTA URL is appended as its own plain line after the body (most email clients
-              auto-link it -- there's no styled button). No signature is added automatically
-              except the compliance opt-out footer -- include your own sign-off in the body if you
-              want one.
+              The CTA appears as "label: url" on its own plain line after the body (no styled
+              button -- these are plain-text emails). "Jose M. Villegas, CEO Ubik 360" is added
+              automatically as a signature after every send, before the opt-out footer -- don't
+              write your own sign-off in the body, it'll double up.
             </p>
             <div style={{ display: 'flex', alignItems: 'center', gap: '.5rem' }}>
               <button className="btn btn-outline" style={{ fontSize: '.75rem', padding: '.15rem .5rem' }} disabled={testingStep === i} onClick={() => sendTest(i)}>

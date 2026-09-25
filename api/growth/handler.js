@@ -54,6 +54,7 @@ const ROUTES = [
   { method: 'PUT', pattern: ['flows', ':id', 'steps'], handler: flows.steps },
   { method: 'POST', pattern: ['flows', ':id', 'enroll'], handler: flows.enroll },
   { method: 'POST', pattern: ['flows', ':id', 'enroll-segment'], handler: flows.enrollSegmentRoute },
+  { method: 'POST', pattern: ['flows', ':id', 'test-send'], handler: flows.testSend },
 
   { method: 'GET', pattern: ['deliverability'], handler: misc.deliverability },
   { method: 'GET', pattern: ['me'], handler: misc.me },

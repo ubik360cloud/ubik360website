@@ -1,7 +1,7 @@
 import { withOwner } from '../_lib/auth.js';
 import { withCron } from '../_lib/cron.js';
 import { supabase } from '../_lib/supabase.js';
-import { enrollContact, runDueSteps } from '../_lib/flowEngine.js';
+import { enrollContact, runDueSteps, sendTestEmail } from '../_lib/flowEngine.js';
 import { enrollSegment } from '../_lib/weeklyPlan.js';
 
 export const listCreate = withOwner(async (req, res) => {
@@ -128,6 +128,21 @@ export const enrollSegmentRoute = withOwner(async (req, res, ownerEmail) => {
   try {
     const result = await enrollSegment({ planId: plan_id, flowId: req.params.id, enrolledBy: ownerEmail });
     return res.status(200).json(result);
+  } catch (e) {
+    return res.status(400).json({ error: e.message });
+  }
+});
+
+// Send-to-self so Jose can see exactly what a real contact would receive
+// before enrolling anyone -- see sendTestEmail's own comment. Defaults to
+// the hub's owner email (his own inbox) if he doesn't specify another.
+export const testSend = withOwner(async (req, res, ownerEmail) => {
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+  const { step_no, to } = req.body || {};
+  if (!step_no) return res.status(400).json({ error: 'step_no is required' });
+  try {
+    const result = await sendTestEmail({ flowId: req.params.id, stepNo: step_no, to: to || ownerEmail });
+    return res.status(200).json({ ok: true, ...result });
   } catch (e) {
     return res.status(400).json({ error: e.message });
   }

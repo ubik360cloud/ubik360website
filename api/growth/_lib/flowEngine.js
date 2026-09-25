@@ -7,6 +7,15 @@ import { supabase } from './supabase.js';
 import { sendEmail } from './brevo.js';
 import { reserveSendSlot } from './sendCap.js';
 
+// Shared with sendTestEmail below so a test send renders EXACTLY what a
+// real contact would get -- same CTA placement, same opt-out footer (via
+// sendEmail -> ensureOptOut). Plain text, deliberately: the CTA URL is just
+// appended as its own line, not a styled button, matching brevo.js's
+// "read like a personal email, not a template" design.
+function buildStepBody(step) {
+  return step.cta_url ? `${step.body}\n\n${step.cta_url}` : step.body;
+}
+
 export async function enrollContact({ flowId, contactId, enrolledBy = 'owner' }) {
   const db = supabase();
   const { data: contact } = await db.from('contacts').select('do_not_contact, status, email').eq('id', contactId).single();
@@ -35,6 +44,26 @@ export async function enrollContact({ flowId, contactId, enrolledBy = 'owner' })
     .insert({ flow_id: flowId, contact_id: contactId, status: 'active', current_step: 0, next_send_at: nextSendAt, enrolled_by: enrolledBy });
   if (error) return { ok: false, skipped: 'insert-failed' };
   return { ok: true };
+}
+
+/** Sends one step to an arbitrary address (Jose's own inbox by default) so
+ *  he can see exactly what a contact would receive -- subject, body, CTA
+ *  placement, and the real opt-out footer -- before enrolling anyone for
+ *  real. Doesn't touch enrollments, contacts, or the daily send cap; a test
+ *  send is not a real send. Subject gets a "[TEST] " prefix so it can't be
+ *  mistaken for the real thing sitting in an inbox. */
+export async function sendTestEmail({ flowId, stepNo, to }) {
+  const db = supabase();
+  const [{ data: flow }, { data: step }] = await Promise.all([
+    db.from('flows').select('track').eq('id', flowId).single(),
+    db.from('flow_steps').select('*').eq('flow_id', flowId).eq('step_no', stepNo).maybeSingle(),
+  ]);
+  if (!flow) throw new Error('flow not found');
+  if (!step) throw new Error(`step ${stepNo} not found on this flow`);
+  if (!step.subject?.trim() || !step.body?.trim()) throw new Error('this step has no subject/body yet');
+
+  await sendEmail({ track: flow.track, to, subject: `[TEST] ${step.subject}`, text: buildStepBody(step) });
+  return { to, subject: step.subject };
 }
 
 /** Sends every enrollment whose next step is due, respecting the shared
@@ -75,7 +104,7 @@ export async function runDueSteps() {
     }
 
     try {
-      const body = step.cta_url ? `${step.body}\n\n${step.cta_url}` : step.body;
+      const body = buildStepBody(step);
       await sendEmail({ track: flow.track, to: contact.email, subject: step.subject, text: body });
       await db.from('email_events').insert({ contact_id: enr.contact_id, track: flow.track, event_type: 'sent', source: 'flow' });
       sent += 1;

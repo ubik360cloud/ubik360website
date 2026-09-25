@@ -13,6 +13,8 @@ export default function Flows() {
   const [busy, setBusy] = useState(false);
   const [enrollResult, setEnrollResult] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [testingStep, setTestingStep] = useState(null);
+  const [testMsg, setTestMsg] = useState({});
 
   async function load() {
     try { const { flows: f } = await api.flows(); setFlows(f); }
@@ -76,6 +78,24 @@ export default function Flows() {
     finally { setBusy(false); }
   }
 
+  // Saves first so the test reflects whatever's currently in the form, not
+  // whatever was last saved -- otherwise a test-send while mid-edit would
+  // silently mail the OLD copy from the database, not what's on screen.
+  async function sendTest(i) {
+    setTestingStep(i);
+    setError(null);
+    setTestMsg((m) => ({ ...m, [i]: null }));
+    try {
+      await saveSteps();
+      const r = await api.testSendFlowStep(selected.id, steps[i].step_no);
+      setTestMsg((m) => ({ ...m, [i]: `Sent to ${r.to}` }));
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setTestingStep(null);
+    }
+  }
+
   async function pause() {
     setBusy(true);
     try { await api.updateFlow(selected.id, { status: 'paused' }); await openFlow(selected); await load(); }
@@ -129,7 +149,19 @@ export default function Flows() {
             </div>
             <input placeholder="Subject" defaultValue={s.subject} onChange={(e) => updateStep(i, 'subject', e.target.value)} style={{ marginBottom: '.5rem' }} />
             <textarea placeholder="Body" rows={6} defaultValue={s.body} onChange={(e) => updateStep(i, 'body', e.target.value)} style={{ marginBottom: '.5rem' }} />
-            <input placeholder="CTA URL (optional)" defaultValue={s.cta_url || ''} onChange={(e) => updateStep(i, 'cta_url', e.target.value)} />
+            <input placeholder="CTA URL (optional)" defaultValue={s.cta_url || ''} onChange={(e) => updateStep(i, 'cta_url', e.target.value)} style={{ marginBottom: '.5rem' }} />
+            <p style={{ fontSize: '.75rem', color: '#6b7280', margin: '0 0 .5rem' }}>
+              The CTA URL is appended as its own plain line after the body (most email clients
+              auto-link it -- there's no styled button). No signature is added automatically
+              except the compliance opt-out footer -- include your own sign-off in the body if you
+              want one.
+            </p>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '.5rem' }}>
+              <button className="btn btn-outline" style={{ fontSize: '.75rem', padding: '.15rem .5rem' }} disabled={testingStep === i} onClick={() => sendTest(i)}>
+                {testingStep === i ? 'Sending...' : 'Send test to me'}
+              </button>
+              {testMsg[i] && <span style={{ fontSize: '.75rem', color: '#6b7280' }}>{testMsg[i]}</span>}
+            </div>
           </div>
         ))}
         <div style={{ display: 'flex', gap: '.5rem' }}>

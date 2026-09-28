@@ -246,6 +246,14 @@ it (no silent fallback to DeepInfra, deliberately, so a missing key fails loudly
 quietly serving the old low-quality model). `DEEPINFRA_UBIK30_KEY` stays in place for image/video
 generation only, unaffected.
 
+**`OPENAI_API_KEY` added 2026-09-28, verified working** -- tested `suggest-flow` for all three
+existing segments (Canada b2b, Colombia, Canada ic) post-redeploy, real gpt-4o-mini content came
+back correctly (English/Spanish per geography, CTA on the right step only, no self-signature).
+Regenerated and saved fresh steps into all three existing flows (`5900101b...`, `0d753da7...`,
+`a132955c...`) -- noticeably better prose than the DeepSeek-V3 drafts. **The Canada b2b flow's 5
+live enrollments will get this new content on their next send, not the old copy** -- nothing was
+re-enrolled or re-sent, just the step content in place.
+
 ## Real gap found 2026-09-28: the daily send cron may not actually be running
 
 While investigating a "reset the drafts" request, found: the Canada b2b flow's 5 enrollments
@@ -257,9 +265,15 @@ problem. `get_runtime_logs`/`get_runtime_errors` both timed out before finding a
 Genuinely unresolved -- possible causes not yet ruled out: `CRON_SECRET` mismatch (Vercel signs
 its own cron requests with whatever value is currently set; if it was set once and something
 changed since, invocations would 401 before doing anything), or a real Hobby-plan cron reliability
-issue. **Check the Vercel dashboard's Cron Jobs tab directly (Settings → Cron Jobs) for each
-cron's last-invocation status/timestamp** -- that's the fastest way to see whether it's firing and
-failing vs. not firing at all, and wasn't available through the MCP tools tried here.
+issue. Jose confirmed via the dashboard (Settings → Cron Jobs) that the feature toggle is
+"Enabled" and all three crons are registered with the right schedules -- rules out "disabled" or
+"not registered," not "silently failing." **`npx vercel logs ubik360.com --since ...` returned "No
+logs found" for every query tried, including ones scoped to just the last 30 minutes covering
+requests known to have succeeded** -- that command appears unreliable for this project/plan, so
+its "no logs" result should NOT be read as proof the cron never fired; it's inconclusive, not
+confirmed. **The one reliable next step: click "View Logs" on the `/api/growth/flows/run` row in
+the dashboard's Cron Jobs tab** -- that's a different, working view Jose can check directly; it
+wasn't available through any MCP tool or CLI query tried this session.
 
 ## What's left before this can actually send anything
 

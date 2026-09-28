@@ -7,15 +7,14 @@
 // propose the filters... with an edit option." This proposes; the hub UI
 // always shows the result as an editable form before anything is created or
 // searched, so a bad suggestion costs nothing and is easy to correct.
-// Same DeepInfra pattern as prospectResearch.js (see that file's own
-// comment for why DeepInfra over Anthropic, and its fetch/JSON-parse shape).
+// Uses the shared LLM funnel in llm.js (OpenAI gpt-4o-mini by default as of
+// 2026-09-28 -- see that file's comment for the provider history).
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { chatComplete, parseJsonResponse } from './llm.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const DEEPINFRA_URL = 'https://api.deepinfra.com/v1/openai/chat/completions';
-const MODEL = process.env.PROSPECT_MODEL || 'deepseek-ai/DeepSeek-V3';
 
 // Mirrors weeklyPlan.js's APOLLO_SEARCH_KEYS allowlist -- kept as a separate
 // literal list (not imported) so this file only ever proposes keys that
@@ -79,31 +78,10 @@ narrow guess, never an empty object.`;
 }
 
 export async function proposeFilter({ track, brief, priorFilter }) {
-  const apiKey = process.env.DEEPINFRA_UBIK30_KEY;
-  if (!apiKey) throw new Error('DEEPINFRA_UBIK30_KEY is not set');
   if (track !== 'ic' && track !== 'b2b') throw new Error(`Invalid track '${track}'`);
   if (!brief || !brief.trim()) throw new Error('brief is required');
 
   const prompt = buildPrompt({ track, brief, priorFilter });
-  const res = await fetch(DEEPINFRA_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },
-    body: JSON.stringify({
-      model: MODEL,
-      messages: [{ role: 'user', content: prompt }],
-      max_tokens: 1200,
-      temperature: 0.3,
-    }),
-  });
-  if (!res.ok) throw new Error(`DeepInfra API ${res.status}: ${(await res.text()).slice(0, 300)}`);
-
-  const json = await res.json();
-  const text = json.choices?.[0]?.message?.content || '';
-  const match = text.match(/\{[\s\S]*\}/);
-  if (!match) throw new Error('No JSON in the response -- the suggestion came back unusable.');
-  try {
-    return JSON.parse(match[0]);
-  } catch (err) {
-    throw new Error(`The suggestion came back as malformed JSON: ${err.message}`);
-  }
+  const text = await chatComplete(prompt, { maxTokens: 1200, temperature: 0.3 });
+  return parseJsonResponse(text, 'suggestion');
 }

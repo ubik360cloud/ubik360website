@@ -1,17 +1,18 @@
 // Drafts a starting flow (name + multi-step email sequence) for a specific
 // segment -- an apollo_weekly_plans row, since its label/brief/filter
 // already describe exactly who the segment is and why it was built. Same
-// DeepInfra pattern as filterAssistant.js and prospectResearch.js. Always a
-// draft: the flow is created with status 'draft' and every step lands in
-// the editable Flows UI -- nothing sends until Jose reviews, edits, and
-// clicks "Approve & activate" there, same gate as a hand-written flow.
+// Uses the shared LLM funnel in llm.js -- switched from DeepInfra/DeepSeek-V3
+// to OpenAI gpt-4o-mini 2026-09-28 (Jose: email copy quality was poor).
+// Always a draft: the flow is created with status 'draft' and every step
+// lands in the editable Flows UI -- nothing sends until Jose reviews,
+// edits, and clicks "Approve & activate" there, same gate as a hand-written
+// flow.
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { chatComplete, parseJsonResponse } from './llm.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const DEEPINFRA_URL = 'https://api.deepinfra.com/v1/openai/chat/completions';
-const MODEL = process.env.PROSPECT_MODEL || 'deepseek-ai/DeepSeek-V3';
 const SENDER_NAME = { ic: 'Jose Villegas', b2b: 'Ubik 360' };
 // Jose's real Calendly link (confirmed 2026-09-25) -- proposed as the CTA
 // on whichever step actually warrants a scheduling ask, with a labeled
@@ -102,31 +103,10 @@ delay_hours is hours after the PREVIOUS step (0 for step 1).`;
 }
 
 export async function proposeFlow({ track, plan }) {
-  const apiKey = process.env.DEEPINFRA_UBIK30_KEY;
-  if (!apiKey) throw new Error('DEEPINFRA_UBIK30_KEY is not set');
   if (track !== 'ic' && track !== 'b2b') throw new Error(`Invalid track '${track}'`);
   if (!plan) throw new Error('plan is required');
 
   const prompt = buildPrompt({ track, plan });
-  const res = await fetch(DEEPINFRA_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },
-    body: JSON.stringify({
-      model: MODEL,
-      messages: [{ role: 'user', content: prompt }],
-      max_tokens: 1800,
-      temperature: 0.4,
-    }),
-  });
-  if (!res.ok) throw new Error(`DeepInfra API ${res.status}: ${(await res.text()).slice(0, 300)}`);
-
-  const json = await res.json();
-  const text = json.choices?.[0]?.message?.content || '';
-  const match = text.match(/\{[\s\S]*\}/);
-  if (!match) throw new Error('No JSON in the response -- the draft came back unusable.');
-  try {
-    return JSON.parse(match[0]);
-  } catch (err) {
-    throw new Error(`The draft came back as malformed JSON: ${err.message}`);
-  }
+  const text = await chatComplete(prompt, { maxTokens: 1800, temperature: 0.4 });
+  return parseJsonResponse(text, 'draft');
 }

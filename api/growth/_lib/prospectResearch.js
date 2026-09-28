@@ -1,24 +1,22 @@
 // Prospect research -> personalized outreach draft. Originally mirrored
 // 360PrintStudio's prospectEmail.js (Claude + native server-side web_search/
 // web_fetch tools); switched to DeepInfra 2026-09 per Jose (Anthropic API
-// cost). DeepInfra-hosted models have no built-in "go search the web"
-// capability, so this now fetches the given URL itself (plain HTTP, no AI,
-// no extra paid search API) and hands the page text to the model instead of
-// letting it browse autonomously. Trade-off: the model can no longer
-// discover pages it wasn't given (e.g. an unlinked partners page) -- if
-// that turns out to matter, add a search API as its own step later, don't
-// build it preemptively. The "verdict matters more than the email"
-// philosophy and JSON output shape are unchanged from the original.
+// cost), then to OpenAI gpt-4o-mini 2026-09-28 (Jose: DeepSeek-V3 email copy
+// quality was poor) -- see llm.js for the provider funnel. Whichever
+// provider is active has no built-in "go search the web" capability, so
+// this fetches the given URL itself (plain HTTP, no AI, no extra paid
+// search API) and hands the page text to the model instead of letting it
+// browse autonomously. Trade-off: the model can no longer discover pages it
+// wasn't given (e.g. an unlinked partners page) -- if that turns out to
+// matter, add a search API as its own step later, don't build it
+// preemptively. The "verdict matters more than the email" philosophy and
+// JSON output shape are unchanged from the original.
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { chatComplete, parseJsonResponse } from './llm.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const DEEPINFRA_URL = 'https://api.deepinfra.com/v1/openai/chat/completions';
-// DeepInfra never auto-selects a model -- every request names one. DeepSeek-V3
-// is a reasonable default quality/cost tradeoff for this task (judgment +
-// short personalized copy); swap freely via env var, no code change needed.
-const MODEL = process.env.PROSPECT_MODEL || 'deepseek-ai/DeepSeek-V3';
 const FETCH_TIMEOUT_MS = 10000;
 const MAX_PAGE_CHARS = 6000; // keeps the prompt (and cost) small
 
@@ -138,32 +136,10 @@ clearly that sending is not recommended.`;
 }
 
 export async function research({ track, name, company, urls, notes }) {
-  const apiKey = process.env.DEEPINFRA_UBIK30_KEY;
-  if (!apiKey) throw new Error('DEEPINFRA_UBIK30_KEY is not set');
   if (track !== 'ic' && track !== 'b2b') throw new Error(`Invalid track '${track}'`);
 
   const pages = await Promise.all((urls || []).map(async (u) => ({ url: u, text: await fetchPageText(u) })));
   const prompt = buildPrompt({ track, name, company, notes, pages });
-
-  const res = await fetch(DEEPINFRA_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },
-    body: JSON.stringify({
-      model: MODEL,
-      messages: [{ role: 'user', content: prompt }],
-      max_tokens: 2000,
-      temperature: 0.4,
-    }),
-  });
-  if (!res.ok) throw new Error(`DeepInfra API ${res.status}: ${(await res.text()).slice(0, 300)}`);
-
-  const json = await res.json();
-  const text = json.choices?.[0]?.message?.content || '';
-  const match = text.match(/\{[\s\S]*\}/);
-  if (!match) throw new Error('No JSON in the response -- the research came back unusable.');
-  try {
-    return JSON.parse(match[0]);
-  } catch (err) {
-    throw new Error(`The research came back as malformed JSON: ${err.message}`);
-  }
+  const text = await chatComplete(prompt, { maxTokens: 2000, temperature: 0.4 });
+  return parseJsonResponse(text, 'research');
 }

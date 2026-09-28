@@ -235,6 +235,32 @@ button; no signature is added automatically beyond the opt-out footer** -- noted
 UI now. Not tested by Claude Code itself (a real Brevo send, even a labeled test, is Jose's action
 to trigger, not something to do on his behalf) -- verify it works when he tries it.
 
+## LLM provider switched to OpenAI (2026-09-28)
+
+Jose: "the quality of the email messages is very bad." Extracted a shared `_lib/llm.js` funnel
+(`chatComplete` + `parseJsonResponse`) used by `filterAssistant.js`, `flowAssistant.js`, and
+`prospectResearch.js` -- second provider switch (Anthropic → DeepInfra → OpenAI), so the next one
+is a one-file change. `LLM_PROVIDER` (default `openai`) + `LLM_MODEL` (default `gpt-4o-mini`)
+control it. **Requires `OPENAI_API_KEY` to be set** -- none of these three features work without
+it (no silent fallback to DeepInfra, deliberately, so a missing key fails loudly instead of
+quietly serving the old low-quality model). `DEEPINFRA_UBIK30_KEY` stays in place for image/video
+generation only, unaffected.
+
+## Real gap found 2026-09-28: the daily send cron may not actually be running
+
+While investigating a "reset the drafts" request, found: the Canada b2b flow's 5 enrollments
+(created 2026-09-25 19:34 UTC, `next_send_at` already in the past) are still `status: 'active'`,
+`current_step: 0` -- never touched. `daily_send_log` has **zero rows ever** (the shared 10/day cap
+has never been touched even once). `npx vercel crons ls` confirms all three crons ARE registered
+and `enabled: true` on the current production deployment -- so this isn't a "cron not configured"
+problem. `get_runtime_logs`/`get_runtime_errors` both timed out before finding a root cause.
+Genuinely unresolved -- possible causes not yet ruled out: `CRON_SECRET` mismatch (Vercel signs
+its own cron requests with whatever value is currently set; if it was set once and something
+changed since, invocations would 401 before doing anything), or a real Hobby-plan cron reliability
+issue. **Check the Vercel dashboard's Cron Jobs tab directly (Settings → Cron Jobs) for each
+cron's last-invocation status/timestamp** -- that's the fastest way to see whether it's firing and
+failing vs. not firing at all, and wasn't available through the MCP tools tried here.
+
 ## What's left before this can actually send anything
 
 1. Add `GROWTH_ADMIN_SECRET` on Vercel (see above) so the two queued test pulls can actually run.

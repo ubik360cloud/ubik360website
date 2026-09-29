@@ -80,8 +80,17 @@ export default function Flows() {
   async function createFlow() {
     if (!newFlow.name.trim()) return;
     setBusy(true);
-    try { await api.createFlow(newFlow); setCreating(false); setNewFlow({ track: 'ic', name: '' }); await load(); }
-    catch (e) { setError(e.message); }
+    try {
+      const { flow } = await api.createFlow(newFlow);
+      setCreating(false);
+      setNewFlow({ track: 'ic', name: '' });
+      await load();
+      // Open it immediately -- the AI context box and step editor only
+      // live inside an opened flow, not on this list/creation screen, so
+      // staying here after creating one hid the exact thing Jose was
+      // looking for.
+      await openFlow(flow);
+    } catch (e) { setError(e.message); }
     finally { setBusy(false); }
   }
 

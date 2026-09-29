@@ -3,6 +3,7 @@ import { withCron } from '../_lib/cron.js';
 import { supabase } from '../_lib/supabase.js';
 import { enrollContact, runDueSteps, sendTestEmail } from '../_lib/flowEngine.js';
 import { enrollSegment } from '../_lib/weeklyPlan.js';
+import { proposeFlow } from '../_lib/flowAssistant.js';
 
 export const listCreate = withOwner(async (req, res) => {
   const db = supabase();
@@ -80,6 +81,33 @@ export const detail = withOwner(async (req, res, ownerEmail) => {
   }
 
   return res.status(405).json({ error: 'Method not allowed' });
+});
+
+// Lets Jose type free-text context directly on the Flows page ("how I want
+// this flow to look" -- tone, structure, what to mention/avoid) and get a
+// draft back, for an EXISTING flow rather than only at creation time from
+// the Apollo tab. Pure suggestion, no DB write -- the hub populates the
+// step editor with the result so he can review/edit before "Save steps".
+// Works with or without a linked segment (see proposeFlow's own comment).
+export const suggest = withOwner(async (req, res) => {
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+  const { instructions } = req.body || {};
+  const db = supabase();
+  const { data: flow, error } = await db.from('flows').select('track, source_plan_id').eq('id', req.params.id).single();
+  if (error || !flow) return res.status(404).json({ error: 'flow not found' });
+
+  let plan = null;
+  if (flow.source_plan_id) {
+    const { data: p } = await db.from('apollo_weekly_plans').select('*').eq('id', flow.source_plan_id).maybeSingle();
+    plan = p || null;
+  }
+
+  try {
+    const suggestion = await proposeFlow({ track: flow.track, plan, instructions });
+    return res.status(200).json(suggestion);
+  } catch (e) {
+    return res.status(400).json({ error: e.message });
+  }
 });
 
 export const steps = withOwner(async (req, res) => {

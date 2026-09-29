@@ -15,6 +15,15 @@ export default function Flows() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [testingStep, setTestingStep] = useState(null);
   const [testMsg, setTestMsg] = useState({});
+  const [instructions, setInstructions] = useState('');
+  const [suggesting, setSuggesting] = useState(false);
+  const [suggestedDescription, setSuggestedDescription] = useState(null);
+  // Step cards use uncontrolled inputs (defaultValue) for editing
+  // performance -- bumping this forces them to remount (fresh defaultValue)
+  // whenever `steps` is replaced wholesale (opening a flow, an AI
+  // suggestion) rather than edited in place, since React would otherwise
+  // reuse the existing DOM nodes by index and never show the new content.
+  const [stepsVersion, setStepsVersion] = useState(0);
 
   async function load() {
     try { const { flows: f } = await api.flows(); setFlows(f); }
@@ -32,10 +41,33 @@ export default function Flows() {
 
   async function openFlow(f) {
     setEnrollResult(null);
+    setInstructions('');
+    setSuggestedDescription(null);
     const { flow, steps: s, segment: seg } = await api.flow(f.id);
     setSelected(flow);
     setSegment(seg);
     setSteps(s.length ? s : [{ step_no: 1, delay_hours: 0, subject: '', body: '', cta_url: '' }]);
+    setStepsVersion((v) => v + 1);
+  }
+
+  // Lets Jose describe how he wants THIS flow to look (tone, structure,
+  // specific points to hit or avoid) right here on the Flows page, instead
+  // of only being able to draft a flow from the Apollo tab at creation
+  // time. Populates the step editor below with the result -- nothing is
+  // saved until he clicks "Save steps" himself, same review gate as any
+  // other edit.
+  async function suggestWithAI() {
+    setSuggesting(true);
+    setError(null);
+    try {
+      const s = await api.suggestForFlow(selected.id, instructions);
+      if (s.steps?.length) { setSteps(s.steps); setStepsVersion((v) => v + 1); setTestMsg({}); }
+      setSuggestedDescription(s.description || null);
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setSuggesting(false);
+    }
   }
 
   async function enrollSegmentNow() {
@@ -137,9 +169,27 @@ export default function Flows() {
           </p>
         )}
 
+        <div className="card" style={{ marginBottom: '1rem' }}>
+          <p style={{ margin: '0 0 .5rem', fontSize: '.8125rem', color: '#374151' }}>
+            Context for this flow — tone, structure, specific points to include or avoid, anything
+            beyond the segment's own targeting
+          </p>
+          <textarea
+            rows={3}
+            style={{ width: '100%', fontSize: '.8125rem', padding: '.5rem', boxSizing: 'border-box', marginBottom: '.5rem' }}
+            value={instructions}
+            onChange={(e) => setInstructions(e.target.value)}
+            placeholder="e.g. Keep it to 2 short steps, lead with the logistics angle not marketing, no mention of pricing."
+          />
+          <button className="btn btn-primary" disabled={suggesting || !instructions.trim()} onClick={suggestWithAI}>
+            {suggesting ? 'Drafting...' : 'Suggest steps with AI'}
+          </button>
+          {suggestedDescription && <p style={{ fontSize: '.8125rem', color: '#6b7280', marginTop: '.5rem' }}>{suggestedDescription}</p>}
+        </div>
+
         {error && <p style={{ color: '#b91c1c' }}>{error}</p>}
         {steps.map((s, i) => (
-          <div key={i} className="card" style={{ marginBottom: '1rem' }}>
+          <div key={`${stepsVersion}-${i}`} className="card" style={{ marginBottom: '1rem' }}>
             <div style={{ display: 'flex', gap: '.75rem', marginBottom: '.5rem', alignItems: 'center' }}>
               <strong>Step {s.step_no}</strong>
               <label style={{ fontSize: '.8125rem', color: '#6b7280' }}>

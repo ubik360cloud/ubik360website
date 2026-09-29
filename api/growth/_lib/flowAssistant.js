@@ -50,12 +50,31 @@ function loadPositioning(track) {
   }
 }
 
-function buildPrompt({ track, plan }) {
+function buildPrompt({ track, plan, instructions }) {
   const sender = SENDER_NAME[track] || 'Ubik 360';
   const language = detectLanguage(plan);
   const languageInstruction = language === 'es'
     ? 'Write every "subject" and "body" in Latin American Spanish (use "tú", not "vosotros" or Spain-specific slang) -- this segment\'s contacts are in a Spanish-speaking country. Keep "name" and "description" in English (Jose\'s own internal admin labels, not sent to anyone).'
-    : 'Write every "subject" and "body" in English -- this segment\'s contacts are in the US/Canada.';
+    : 'Write every "subject" and "body" in English.';
+
+  const segmentSection = plan
+    ? `## This segment -- who these contacts actually are and why they were targeted
+- Label: ${plan.label || '(standard weekly plan, no label)'}
+- Why this segment was built: ${plan.brief || plan.rationale || '(no brief given)'}
+- Apollo filter used (for context on titles/geography/industry targeted): ${JSON.stringify(plan.filter)}`
+    : `## Segment
+No specific Apollo segment is linked to this flow -- draft generically for this track's
+positioning and whatever Jose's instructions below describe about the intended audience.`;
+
+  const instructionsSection = instructions?.trim()
+    ? `## Jose's specific instructions for THIS flow -- follow these closely
+These are specific to this exact flow and take priority over the generic defaults below wherever
+they conflict (e.g. if he asks for a different tone, structure, number of steps, or something
+particular to mention or avoid):
+<instructions>
+${instructions.trim()}
+</instructions>`
+    : '';
 
   return `You are drafting a cold-outreach EMAIL SEQUENCE (a "flow") for ${sender} to send to a
 specific segment of contacts. You do NOT decide anything final -- a human always reviews and
@@ -67,10 +86,9 @@ maximally clever.
 ${loadPositioning(track)}
 </positioning>
 
-## This segment -- who these contacts actually are and why they were targeted
-- Label: ${plan.label || '(standard weekly plan, no label)'}
-- Why this segment was built: ${plan.brief || plan.rationale || '(no brief given)'}
-- Apollo filter used (for context on titles/geography/industry targeted): ${JSON.stringify(plan.filter)}
+${segmentSection}
+
+${instructionsSection}
 
 ## Language
 ${languageInstruction}
@@ -102,11 +120,16 @@ segment, not a 1:1 personalized email -- don't invent a specific company name or
 delay_hours is hours after the PREVIOUS step (0 for step 1).`;
 }
 
-export async function proposeFlow({ track, plan }) {
+/** `plan` is optional -- a flow with no linked segment still gets a draft,
+ *  just grounded only in the track's positioning + whatever `instructions`
+ *  says instead of a specific Apollo filter's targeting. `instructions` is
+ *  Jose's free-text ask for this specific flow (tone, structure, what to
+ *  mention/avoid) -- see the Flows page's "Context for this flow" box. */
+export async function proposeFlow({ track, plan, instructions }) {
   if (track !== 'ic' && track !== 'b2b') throw new Error(`Invalid track '${track}'`);
-  if (!plan) throw new Error('plan is required');
+  if (!plan && !instructions?.trim()) throw new Error('Give either a linked segment or some instructions to draft from.');
 
-  const prompt = buildPrompt({ track, plan });
+  const prompt = buildPrompt({ track, plan, instructions });
   const text = await chatComplete(prompt, { maxTokens: 1800, temperature: 0.4 });
   return parseJsonResponse(text, 'draft');
 }

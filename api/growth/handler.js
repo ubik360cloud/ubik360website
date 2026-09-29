@@ -53,6 +53,7 @@ const ROUTES = [
   { method: 'GET', pattern: ['flows', ':id'], handler: flows.detail },
   { method: 'PATCH', pattern: ['flows', ':id'], handler: flows.detail },
   { method: 'PUT', pattern: ['flows', ':id', 'steps'], handler: flows.steps },
+  { method: 'POST', pattern: ['flows', ':id', 'suggest'], handler: flows.suggest },
   { method: 'POST', pattern: ['flows', ':id', 'enroll'], handler: flows.enroll },
   { method: 'POST', pattern: ['flows', ':id', 'enroll-segment'], handler: flows.enrollSegmentRoute },
   { method: 'POST', pattern: ['flows', ':id', 'test-send'], handler: flows.testSend },

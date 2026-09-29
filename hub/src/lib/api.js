@@ -49,6 +49,7 @@ export const api = {
 
   flows: (params = {}) => request(`/flows?${new URLSearchParams(params)}`),
   createFlow: (payload) => request('/flows', { method: 'POST', body: JSON.stringify(payload) }),
+  suggestForFlow: (flowId, instructions) => request(`/flows/${flowId}/suggest`, { method: 'POST', body: JSON.stringify({ instructions }) }),
   enrollSegment: (flowId, planId) => request(`/flows/${flowId}/enroll-segment`, { method: 'POST', body: JSON.stringify({ plan_id: planId }) }),
   testSendFlowStep: (flowId, stepNo, to) => request(`/flows/${flowId}/test-send`, { method: 'POST', body: JSON.stringify({ step_no: stepNo, to }) }),
   flow: (id) => request(`/flows/${id}`),

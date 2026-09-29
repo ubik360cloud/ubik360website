@@ -80,10 +80,24 @@ ${instructionsSection}
 ## Language
 ${languageInstruction}
 
+## Salutation -- required, first line of every step's body
+Open every step with a real greeting using the mail-merge token \`{{first_name}}\`, which gets
+replaced with each actual recipient's first name when it sends (or dropped gracefully if a
+contact has no name on file) -- never invent a placeholder name yourself, use this exact token.
+${language === 'es' ? 'e.g. "Hola {{first_name}},"' : 'e.g. "Hi {{first_name}},"'}
+
+## Paragraphs -- required
+Write 2-4 SHORT paragraphs separated by a blank line each -- never one solid block of text. A
+natural shape: (1) the greeting + a specific, relevant observation, (2) the offer/credibility in
+1-2 sentences, (3) a short question inviting a reply. Every step needs its own genuine paragraph
+breaks, not just the first one.
+
 ## Signature -- do NOT write one
-Every email gets "Jose M. Villegas, CEO Ubik 360" appended automatically after your body text,
-before it sends. Do not write a name, title, or sign-off anywhere in "body" -- no "Jose here",
-no "soy Jose de Ubik 360", no closing "Best, Jose". Write the body as if that line will follow it.
+A closing salutation ("${language === 'es' ? 'Saludos,' : 'Best,'}") and "Jose M. Villegas / CEO
+Ubik 360 / Ubik360.com" get appended automatically after your body text, before it sends. Do not
+write a name, title, sign-off, or closing salutation anywhere in "body" -- no "Jose here", no
+"soy Jose de Ubik 360", no closing "Saludos," or "Best,". Write the body as if that whole block
+will follow it directly.
 
 ## CTA
 Exactly one step (usually the one making the actual ask to talk) should carry a scheduling CTA:
@@ -118,5 +132,11 @@ export async function proposeFlow({ track, plan, instructions }) {
 
   const prompt = buildPrompt({ track, plan, instructions });
   const text = await chatComplete(prompt, { maxTokens: 1800, temperature: 0.4 });
-  return parseJsonResponse(text, 'draft');
+  const draft = parseJsonResponse(text, 'draft');
+  // Computed programmatically (not asked of the model) so the hub can save
+  // it onto the flow reliably -- the signature/opt-out footer at send time
+  // depend on this being right, so it shouldn't hinge on the model echoing
+  // it back correctly.
+  draft.language = detectFlowLanguage(plan);
+  return draft;
 }

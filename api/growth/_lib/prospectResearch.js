@@ -119,10 +119,23 @@ finding from the page text that makes this relevant.
 ## Language
 ${languageInstruction}
 
+## Salutation -- required, first line of body
+Open with a real greeting using the prospect's ACTUAL first name from "Name" below (just the
+first name, not the full name) -- e.g. ${language === 'es' ? '"Hola Andrés,"' : '"Hi Andrew,"'}.
+If the name is genuinely unknown, use a neutral greeting instead
+(${language === 'es' ? '"Hola,"' : '"Hi there,"'}) -- never invent a name.
+
+## Paragraphs -- required
+Write 2-4 SHORT paragraphs separated by a blank line each -- never one solid block of text. A
+natural shape: (1) the greeting + the specific finding that makes this relevant, (2) the
+credibility/offer in 1-2 sentences, (3) a short question inviting a reply.
+
 ## Signature -- do NOT write one
-"Jose M. Villegas, CEO Ubik 360" gets appended automatically after your body text, before it
-sends. Do not write a name, title, or sign-off anywhere in "body" -- no "Jose here", no "soy Jose
-de Ubik 360", no closing "Best, Jose". Write the body as if that line will follow it.
+A closing salutation ("${language === 'es' ? 'Saludos,' : 'Best,'}") and "Jose M. Villegas / CEO
+Ubik 360 / Ubik360.com" get appended automatically after your body text, before it sends. Do not
+write a name, title, sign-off, or closing salutation anywhere in "body" -- no "Jose here", no
+"soy Jose de Ubik 360", no closing "Saludos," or "Best,". Write the body as if that whole block
+will follow it directly.
 
 ## Prospect
 Name: ${name || '(unknown)'}
@@ -154,5 +167,9 @@ export async function research({ track, name, company, urls, notes, country }) {
   const pages = await Promise.all((urls || []).map(async (u) => ({ url: u, text: await fetchPageText(u) })));
   const prompt = buildPrompt({ track, name, company, notes, pages, country });
   const text = await chatComplete(prompt, { maxTokens: 2000, temperature: 0.4 });
-  return parseJsonResponse(text, 'research');
+  const verdict = parseJsonResponse(text, 'research');
+  // Computed programmatically, not asked of the model -- see flowAssistant.js's
+  // identical reasoning for why this shouldn't hinge on the model echoing it back.
+  verdict.language = detectLanguage([country]);
+  return verdict;
 }

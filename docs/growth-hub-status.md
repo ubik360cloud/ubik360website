@@ -314,6 +314,44 @@ new "+ Import contacts from Apollo export" form on the Apollo tab shows a previe
 unmapped columns, first 5 rows) before importing. No credits spent, no Apollo API call at any
 point in this path.
 
+## Email personalization + language-aware footer (2026-09-29)
+
+Jose flagged a real Spanish send with three problems: no salutation despite Apollo giving us the
+contact's real name, one solid block of text with no paragraph breaks, and an English unsubscribe
+footer under a Spanish body. Proposed a revision, got approval with one correction ("My Signature
+must be always in 3 lines: Jose M. Villegas / CEO Ubik 360 / Ubik360.com" -- not the prior
+single-line format). Built:
+
+- **`{{first_name}}` mail-merge token** for flow templates (one static body sent to a whole
+  segment, so a real name can only be substituted at send time, not draft time).
+  `flowEngine.js`'s new `personalize(text, firstName, placeholder)` swaps the token for a real
+  first name; a contact with none on file gets the token AND its preceding space dropped (`"Hola
+  {{first_name}},"` folds to `"Hola,"` instead of leaving a gap). `sendTestEmail` shows a literal
+  `[First Name]`/`[Nombre]` placeholder instead, so a test send still demonstrates the token
+  exists without pretending to know a name it doesn't have.
+- **Real-name salutation for 1:1 drafts** (`prospectResearch.js`) since those are already
+  per-contact -- the prompt now uses the prospect's actual first name directly, no token needed.
+- **Paragraph structure**: both `flowAssistant.js`'s and `prospectResearch.js`'s prompts now
+  explicitly require 2-4 short paragraphs instead of one block.
+- **Language stored explicitly, not re-derived at send time**: new columns `flows.language` and
+  `oneoffs.language` (migration `007_language.sql`, default `'en'`), set from the shared
+  `_lib/language.js` geography detector when a draft is created, but editable afterward (a
+  language `<select>` on the Flows page's flow-detail header, and on each Drafts card) --
+  deliberately NOT re-computed from geography at send time, so hand-editing a draft into the other
+  language can't produce a footer that contradicts the body.
+- **Language-aware signature + opt-out**: `brevo.js`'s `SIGNATURE`/`OPT_OUT` are now `{en, es}`
+  maps; `ensureSignature`/`ensureOptOut` take a `lang` param (default `'en'`) and **always append
+  unconditionally** now -- the prior keyword-based dedup (skip if body already contains "Villegas"
+  or "unsubscribe") was itself a bug: a manually-edited body containing "Jose Villegas, CEO"
+  anywhere silently suppressed the real signature. Signature is the approved 3-line format:
+  `Jose M. Villegas\nCEO Ubik 360\nUbik360.com`. `sendEmail({..., lang})` threads this through from
+  both send paths: `flowEngine.js`'s `runDueSteps`/`sendTestEmail` pass `flow.language`,
+  `oneoffs.js`'s `send` handler passes `draft.language`.
+- Proactively fixed a latent double-signature bug this change would otherwise have introduced:
+  `prospectResearch.js`'s prompt still said to sign the draft off itself, which combined with the
+  new always-append signature would have produced two signatures. Removed that instruction from
+  the prompt now that `sendEmail` always appends one.
+
 ## What's left before this can actually send anything
 
 1. Add `GROWTH_ADMIN_SECRET` on Vercel (see above) so the two queued test pulls can actually run.

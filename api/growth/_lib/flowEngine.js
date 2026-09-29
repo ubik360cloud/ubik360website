@@ -19,6 +19,20 @@ function buildStepBody(step) {
   return `${step.body}\n\n${cta}`;
 }
 
+/** Substitutes the `{{first_name}}` mail-merge token flowAssistant.js's
+ *  drafts open every step with (2026-09-29, Jose: templates had no
+ *  salutation at all since one static body goes to a whole segment). A
+ *  real name replaces it directly; a contact with none on file gets the
+ *  token AND its preceding space dropped, so "Hola {{first_name}}," folds
+ *  down to "Hola," instead of leaving an awkward gap. `placeholder` lets
+ *  sendTestEmail show `[First Name]` instead of silently dropping it, so
+ *  a test send still demonstrates the token exists. */
+function personalize(text, firstName, placeholder) {
+  if (firstName) return text.split('{{first_name}}').join(firstName);
+  if (placeholder) return text.split('{{first_name}}').join(placeholder);
+  return text.split(' {{first_name}}').join('');
+}
+
 export async function enrollContact({ flowId, contactId, enrolledBy = 'owner' }) {
   const db = supabase();
   const { data: contact } = await db.from('contacts').select('do_not_contact, status, email').eq('id', contactId).single();
@@ -58,14 +72,15 @@ export async function enrollContact({ flowId, contactId, enrolledBy = 'owner' })
 export async function sendTestEmail({ flowId, stepNo, to }) {
   const db = supabase();
   const [{ data: flow }, { data: step }] = await Promise.all([
-    db.from('flows').select('track').eq('id', flowId).single(),
+    db.from('flows').select('track, language').eq('id', flowId).single(),
     db.from('flow_steps').select('*').eq('flow_id', flowId).eq('step_no', stepNo).maybeSingle(),
   ]);
   if (!flow) throw new Error('flow not found');
   if (!step) throw new Error(`step ${stepNo} not found on this flow`);
   if (!step.subject?.trim() || !step.body?.trim()) throw new Error('this step has no subject/body yet');
 
-  await sendEmail({ track: flow.track, to, subject: `[TEST] ${step.subject}`, text: buildStepBody(step) });
+  const text = personalize(buildStepBody(step), null, flow.language === 'es' ? '[Nombre]' : '[First Name]');
+  await sendEmail({ track: flow.track, to, subject: `[TEST] ${step.subject}`, text, lang: flow.language });
   return { to, subject: step.subject };
 }
 
@@ -92,8 +107,8 @@ export async function runDueSteps() {
     const nextStepNo = enr.current_step + 1;
     const [{ data: step }, { data: contact }, { data: flow }] = await Promise.all([
       db.from('flow_steps').select('*').eq('flow_id', enr.flow_id).eq('step_no', nextStepNo).eq('is_active', true).maybeSingle(),
-      db.from('contacts').select('email, do_not_contact, status').eq('id', enr.contact_id).single(),
-      db.from('flows').select('track, status').eq('id', enr.flow_id).single(),
+      db.from('contacts').select('email, first_name, do_not_contact, status').eq('id', enr.contact_id).single(),
+      db.from('flows').select('track, status, language').eq('id', enr.flow_id).single(),
     ]);
 
     if (!step || flow?.status !== 'active' || !contact || contact.do_not_contact || contact.status !== 'active') {
@@ -107,8 +122,8 @@ export async function runDueSteps() {
     }
 
     try {
-      const body = buildStepBody(step);
-      await sendEmail({ track: flow.track, to: contact.email, subject: step.subject, text: body });
+      const body = personalize(buildStepBody(step), contact.first_name);
+      await sendEmail({ track: flow.track, to: contact.email, subject: step.subject, text: body, lang: flow.language });
       await db.from('email_events').insert({ contact_id: enr.contact_id, track: flow.track, event_type: 'sent', source: 'flow' });
       sent += 1;
     } catch (e) {

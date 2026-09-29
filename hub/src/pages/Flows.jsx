@@ -63,11 +63,25 @@ export default function Flows() {
       const s = await api.suggestForFlow(selected.id, instructions);
       if (s.steps?.length) { setSteps(s.steps); setStepsVersion((v) => v + 1); setTestMsg({}); }
       setSuggestedDescription(s.description || null);
+      // The suggestion computes language from the segment's geography (or
+      // 'en' with none linked) -- save it immediately rather than leaving
+      // it to a separate step, since the signature/opt-out footer at send
+      // time depend on this being right.
+      if (s.language && s.language !== selected.language) {
+        await api.updateFlow(selected.id, { language: s.language });
+        setSelected((prev) => ({ ...prev, language: s.language }));
+      }
     } catch (e) {
       setError(e.message);
     } finally {
       setSuggesting(false);
     }
+  }
+
+  async function changeLanguage(language) {
+    setSelected((prev) => ({ ...prev, language }));
+    try { await api.updateFlow(selected.id, { language }); }
+    catch (e) { setError(e.message); }
   }
 
   async function enrollSegmentNow() {
@@ -148,8 +162,19 @@ export default function Flows() {
     return (
       <div>
         <button className="btn btn-outline" onClick={() => setSelected(null)} style={{ marginBottom: '1rem' }}>&larr; Back to flows</button>
-        <h1 style={{ fontSize: '1.375rem' }}>{selected.name} <span className={`badge badge-${selected.track}`}>{selected.track}</span> <span className="badge">{selected.status}</span></h1>
+        <h1 style={{ fontSize: '1.375rem' }}>
+          {selected.name} <span className={`badge badge-${selected.track}`}>{selected.track}</span> <span className="badge">{selected.status}</span>{' '}
+          <select value={selected.language || 'en'} onChange={(e) => changeLanguage(e.target.value)} style={{ width: 'auto', display: 'inline-block', fontSize: '.8125rem' }}>
+            <option value="en">English</option>
+            <option value="es">Español</option>
+          </select>
+        </h1>
         {selected.description && <p style={{ color: '#6b7280', marginTop: '-.5rem' }}>{selected.description}</p>}
+        <p style={{ fontSize: '.75rem', color: '#6b7280', marginTop: '-.75rem', marginBottom: '1rem' }}>
+          Language controls the auto-appended signature and opt-out footer's language at send
+          time -- set automatically from the segment when you draft with AI, override here if a
+          step gets hand-edited into the other language.
+        </p>
 
         {segment && (
           <div className="card" style={{ marginBottom: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -213,10 +238,13 @@ export default function Flows() {
               <input placeholder="CTA URL (optional)" defaultValue={s.cta_url || ''} onChange={(e) => updateStep(i, 'cta_url', e.target.value)} style={{ flex: 1 }} />
             </div>
             <p style={{ fontSize: '.75rem', color: '#6b7280', margin: '0 0 .5rem' }}>
-              The CTA appears as "label: url" on its own plain line after the body (no styled
-              button -- these are plain-text emails). "Jose M. Villegas, CEO Ubik 360" is added
-              automatically as a signature after every send, before the opt-out footer -- don't
-              write your own sign-off in the body, it'll double up.
+              Start the body with a real greeting using <code>{'{{first_name}}'}</code> (e.g. "Hola
+              {'{{first_name}}'},") -- it's replaced with each contact's actual first name when it
+              sends, or dropped gracefully if one isn't on file. The CTA appears as "label: url" on
+              its own plain line (no styled button -- these are plain-text emails). A closing
+              salutation + "Jose M. Villegas / CEO Ubik 360 / Ubik360.com" is added automatically
+              after every send, before the opt-out footer -- don't write your own sign-off in the
+              body, it'll double up.
             </p>
             <div style={{ display: 'flex', alignItems: 'center', gap: '.5rem' }}>
               <button className="btn btn-outline" style={{ fontSize: '.75rem', padding: '.15rem .5rem' }} disabled={testingStep === i} onClick={() => sendTest(i)}>

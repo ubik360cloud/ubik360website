@@ -16,12 +16,12 @@ export const listCreate = withOwner(async (req, res) => {
   }
 
   if (req.method === 'POST') {
-    const { track, name, description, send_window, per_contact_min_gap_hours, source_plan_id } = req.body || {};
+    const { track, name, description, send_window, per_contact_min_gap_hours, source_plan_id, language } = req.body || {};
     if (track !== 'ic' && track !== 'b2b') return res.status(400).json({ error: "track must be 'ic' or 'b2b'" });
     if (!name) return res.status(400).json({ error: 'name is required' });
     const { data, error } = await db
       .from('flows')
-      .insert({ track, name, description, send_window, per_contact_min_gap_hours, source_plan_id: source_plan_id || null })
+      .insert({ track, name, description, send_window, per_contact_min_gap_hours, source_plan_id: source_plan_id || null, language: language || 'en' })
       .select()
       .single();
     if (error) return res.status(500).json({ error: error.message });
@@ -55,7 +55,7 @@ export const detail = withOwner(async (req, res, ownerEmail) => {
   }
 
   if (req.method === 'PATCH') {
-    const { name, description, status, send_window, per_contact_min_gap_hours } = req.body || {};
+    const { name, description, status, send_window, per_contact_min_gap_hours, language } = req.body || {};
     if (status && !['draft', 'active', 'paused'].includes(status)) return res.status(400).json({ error: 'invalid status' });
 
     const patch = {};
@@ -63,6 +63,7 @@ export const detail = withOwner(async (req, res, ownerEmail) => {
     if (description !== undefined) patch.description = description;
     if (send_window !== undefined) patch.send_window = send_window;
     if (per_contact_min_gap_hours !== undefined) patch.per_contact_min_gap_hours = per_contact_min_gap_hours;
+    if (language !== undefined) patch.language = language;
     if (status === 'active') {
       const { data: steps } = await db.from('flow_steps').select('subject, body').eq('flow_id', req.params.id).eq('is_active', true);
       const problems = (steps || []).filter((s) => !s.subject?.trim() || !s.body?.trim());

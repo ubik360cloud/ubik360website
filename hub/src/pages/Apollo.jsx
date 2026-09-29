@@ -13,6 +13,7 @@ async function draftFlowFor(plan, navigate) {
     name: suggestion.name || `${plan.label || plan.track} flow`,
     description: suggestion.description,
     source_plan_id: plan.id,
+    language: suggestion.language || 'en',
   });
   if (suggestion.steps?.length) await api.setFlowSteps(flow.id, suggestion.steps);
   navigate(`/flows?open=${flow.id}`);

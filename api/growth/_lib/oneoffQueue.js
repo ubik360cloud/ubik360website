@@ -49,6 +49,7 @@ export async function dailyOneoffPull(track, { limit = DAILY_LIMIT_PER_TRACK } =
         research: verdict,
         subject: verdict.subject || null,
         body: verdict.body || null,
+        language: verdict.language || 'en',
         status: isSkip ? 'rejected' : 'pending',
         ...(isSkip ? { approved_at: new Date().toISOString(), approved_by: 'system:auto-skip' } : {}),
       });

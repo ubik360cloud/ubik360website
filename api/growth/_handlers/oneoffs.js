@@ -57,13 +57,14 @@ export const pullNow = withOwner(async (req, res) => {
 
 export const update = withOwner(async (req, res, ownerEmail) => {
   if (req.method !== 'PATCH') return res.status(405).json({ error: 'Method not allowed' });
-  const { subject, body, status } = req.body || {};
+  const { subject, body, status, language } = req.body || {};
   if (status && !['approved', 'rejected'].includes(status)) {
     return res.status(400).json({ error: "status must be 'approved' or 'rejected'" });
   }
   const patch = {};
   if (subject !== undefined) patch.subject = subject;
   if (body !== undefined) patch.body = body;
+  if (language !== undefined) patch.language = language;
   if (status) {
     patch.status = status;
     patch.approved_at = new Date().toISOString();
@@ -96,7 +97,7 @@ export const send = withOwner(async (req, res) => {
   if (!canSend) return res.status(429).json({ error: 'Daily send cap reached (10/day combined) -- try again tomorrow' });
 
   try {
-    await sendEmail({ track: draft.track, to: draft.contacts.email, subject: draft.subject, text: draft.body });
+    await sendEmail({ track: draft.track, to: draft.contacts.email, subject: draft.subject, text: draft.body, lang: draft.language });
   } catch (e) {
     return res.status(502).json({ error: `send failed: ${e.message}` });
   }

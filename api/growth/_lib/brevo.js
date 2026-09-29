@@ -12,29 +12,41 @@ const SENDERS = {
 // (2026-09-25) regardless of the website's separate anonymous-positioning
 // test (that's a site-content decision, not an email one). No accent on
 // "Jose" and no "Founder" -- his own preference, CEO title is enough.
-const SIGNATURE = '\n\nJose M. Villegas, CEO Ubik 360';
+// Always 3 lines (2026-09-29), and the closing salutation before it must
+// match the body's own language -- an English "Best," under a Spanish
+// email (or vice versa) reads exactly as sloppy as the wrong-language
+// opt-out footer this replaced. `lang` is passed by the caller (flows and
+// oneoffs both now store which language they were actually drafted in,
+// rather than re-deriving it from geography at send time -- see each
+// table's own migration comment for why).
+const SIGNATURE = {
+  en: '\n\nBest,\n\nJose M. Villegas\nCEO Ubik 360\nUbik360.com',
+  es: '\n\nSaludos,\n\nJose M. Villegas\nCEO Ubik 360\nUbik360.com',
+};
 
-const OPT_OUT = '\n\n---\nIf you\'d rather not hear from me again, just reply "unsubscribe" and I\'ll stop.\nUbik 360 Enterprises LLC, 30 N Gould St Ste R, Sheridan, WY 82801';
+const OPT_OUT = {
+  en: '\n\n---\nIf you\'d rather not hear from me again, just reply "unsubscribe" and I\'ll stop.\nUbik 360 Enterprises LLC, 30 N Gould St Ste R, Sheridan, WY 82801',
+  es: '\n\n---\nSi prefiere no recibir más mensajes míos, simplemente responda "cancelar" y no le volveré a escribir.\nUbik 360 Enterprises LLC, 30 N Gould St Ste R, Sheridan, WY 82801',
+};
 
-// Always appends -- a prior version skipped this whenever the body already
-// contained "Villegas" anywhere, meant to avoid double-signing an
-// AI-drafted email that self-introduced inline. In practice this silently
-// dropped the real closing signature the one time it mattered most: Jose
-// hand-editing a body to mention his own name/title, expecting the
-// standard closing signature to still follow. Consistency ("always
-// signed the same way") matters more here than avoiding an occasional
-// redundant mid-body self-introduction.
-export function ensureSignature(body) {
-  return `${body}${SIGNATURE}`;
+// Always appends, unconditionally -- a prior version skipped this whenever
+// the body already contained "Villegas" anywhere (or, for the opt-out,
+// the word "unsubscribe"), meant to avoid double-signing an AI-drafted
+// email that self-introduced inline. In practice this silently dropped the
+// real closing block the one time it mattered most: a hand-edited body
+// that happened to mention the same word. Consistency matters more here
+// than avoiding an occasional redundant mid-body mention.
+export function ensureSignature(body, lang = 'en') {
+  return `${body}${SIGNATURE[lang] || SIGNATURE.en}`;
 }
 
-export function ensureOptOut(body) {
-  return body.includes('unsubscribe') ? body : `${body}${OPT_OUT}`;
+export function ensureOptOut(body, lang = 'en') {
+  return `${body}${OPT_OUT[lang] || OPT_OUT.en}`;
 }
 
 /** Sends one plain-text email via Brevo. Throws on failure -- callers decide
  *  how to record/retry, this function has no side effects beyond the send. */
-export async function sendEmail({ track, to, subject, text, replyTo }) {
+export async function sendEmail({ track, to, subject, text, replyTo, lang = 'en' }) {
   const apiKey = process.env.BREVO_API_KEY;
   if (!apiKey) throw new Error('BREVO_API_KEY is not set');
   const sender = SENDERS[track];
@@ -48,7 +60,7 @@ export async function sendEmail({ track, to, subject, text, replyTo }) {
       to: [{ email: to }],
       replyTo: replyTo ? { email: replyTo } : sender,
       subject,
-      textContent: ensureOptOut(ensureSignature(text)),
+      textContent: ensureOptOut(ensureSignature(text, lang), lang),
       // Gmail/Outlook show a real "Unsubscribe" link next to the sender
       // name when this header is present, on top of the plain-text
       // reply-to-unsubscribe instructions in the body itself -- the body

@@ -105,9 +105,20 @@ export default function Drafts() {
                 <span className={`badge badge-${d.track}`}>{d.track}</span>{' '}
                 <strong>{d.contacts?.company}</strong> — {d.contacts?.email}
               </div>
-              {d.research && (
-                <span className="badge" title={d.research.why}>fit: {d.research.fit} ({d.research.confidence})</span>
-              )}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '.5rem' }}>
+                {d.research && (
+                  <span className="badge" title={d.research.why}>fit: {d.research.fit} ({d.research.confidence})</span>
+                )}
+                <select
+                  defaultValue={d.language || 'en'}
+                  onChange={(e) => edit(d.id, 'language', e.target.value)}
+                  title="Controls the auto-appended signature/opt-out footer's language at send time"
+                  style={{ width: 'auto', fontSize: '.75rem' }}
+                >
+                  <option value="en">English</option>
+                  <option value="es">Español</option>
+                </select>
+              </div>
             </div>
             {d.research?.why && <p style={{ fontSize: '.8125rem', color: '#6b7280', margin: '0 0 .75rem' }}>{d.research.why}</p>}
             <input

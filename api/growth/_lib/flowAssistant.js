@@ -11,6 +11,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { chatComplete, parseJsonResponse } from './llm.js';
+import { detectLanguage } from './language.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const SENDER_NAME = { ic: 'Jose Villegas', b2b: 'Ubik 360' };
@@ -21,25 +22,11 @@ const SENDER_NAME = { ic: 'Jose Villegas', b2b: 'Ubik 360' };
 const CALENDLY_URL = 'https://calendly.com/meet-ubik360/30min';
 const CTA_LABEL = { en: "Let's Talk", es: '¿Hablamos?' };
 
-// Language follows the segment's geography, not the track -- b2b covers
-// both Colombia and the US/Canada, and Jose wants Colombian recipients
-// emailed in (Latin American) Spanish, US/Canada recipients in English.
-// Only the actual email content (subject/body) switches; name/description
-// are Jose's own admin-facing metadata and stay in English regardless, so
-// the Flows list is consistently scannable.
-const SPANISH_LATAM_COUNTRIES = [
-  'colombia', 'mexico', 'méxico', 'argentina', 'chile', 'peru', 'perú', 'ecuador', 'venezuela',
-  'bolivia', 'paraguay', 'uruguay', 'panama', 'panamá', 'costa rica', 'guatemala', 'honduras',
-  'el salvador', 'nicaragua', 'dominican republic', 'república dominicana',
-];
-
-function detectLanguage(plan) {
-  const locs = [
-    ...(plan?.filter?.organization_locations || []),
-    ...(plan?.filter?.person_locations || []),
-  ].map((s) => String(s).toLowerCase());
-  const isLatam = locs.some((l) => SPANISH_LATAM_COUNTRIES.some((c) => l.includes(c)));
-  return isLatam ? 'es' : 'en';
+// name/description stay in English regardless of language -- Jose's own
+// admin-facing metadata, not sent to anyone, so the Flows list is
+// consistently scannable.
+function detectFlowLanguage(plan) {
+  return detectLanguage([...(plan?.filter?.organization_locations || []), ...(plan?.filter?.person_locations || [])]);
 }
 
 function loadPositioning(track) {
@@ -52,7 +39,7 @@ function loadPositioning(track) {
 
 function buildPrompt({ track, plan, instructions }) {
   const sender = SENDER_NAME[track] || 'Ubik 360';
-  const language = detectLanguage(plan);
+  const language = detectFlowLanguage(plan);
   const languageInstruction = language === 'es'
     ? 'Write every "subject" and "body" in Latin American Spanish (use "tú", not "vosotros" or Spain-specific slang) -- this segment\'s contacts are in a Spanish-speaking country. Keep "name" and "description" in English (Jose\'s own internal admin labels, not sent to anyone).'
     : 'Write every "subject" and "body" in English.';

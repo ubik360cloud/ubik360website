@@ -15,6 +15,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { chatComplete, parseJsonResponse } from './llm.js';
+import { detectLanguage } from './language.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const FETCH_TIMEOUT_MS = 10000;
@@ -69,8 +70,12 @@ async function fetchPageText(url) {
   }
 }
 
-function buildPrompt({ track, name, company, notes, pages }) {
+function buildPrompt({ track, name, company, notes, pages, country }) {
   const sender = SENDER_NAME[track] || 'Ubik 360';
+  const language = detectLanguage([country]);
+  const languageInstruction = language === 'es'
+    ? 'Write "subject" and "body" in Latin American Spanish (use "tú", not "vosotros" or Spain-specific slang) -- this prospect is in a Spanish-speaking country. Every other field (business_unit, what_they_do, why, findings, risks) stays in English -- internal notes for Jose, never sent.'
+    : 'Write "subject" and "body" in English.';
   const pageBlocks = pages
     .map((p) => (p.text
       ? `<page url="${p.url}">\n${p.text}\n</page>`
@@ -111,6 +116,14 @@ for THIS business to care," never for being the wrong type of business outright.
 First person, direct, no hype, no "I'm excited to reach out." Short. Reference the specific
 finding from the page text that makes this relevant.
 
+## Language
+${languageInstruction}
+
+## Signature -- do NOT write one
+"Jose M. Villegas, CEO Ubik 360" gets appended automatically after your body text, before it
+sends. Do not write a name, title, or sign-off anywhere in "body" -- no "Jose here", no "soy Jose
+de Ubik 360", no closing "Best, Jose". Write the body as if that line will follow it.
+
 ## Prospect
 Name: ${name || '(unknown)'}
 Company: ${company || '(infer from the page content)'}
@@ -128,18 +141,18 @@ ${notes ? `\nKnown notes (weigh these heavily):\n${notes}` : ''}
   "why": "2-3 sentences: why this pitch, or why to skip. Be blunt.",
   "risks": ["anything that would make this email land badly", "..."],
   "subject": "...",
-  "body": "the full email, ready to paste, signed off appropriately for the sender",
+  "body": "the full email, ready to paste, no signature (one is appended automatically)",
   "sources_read": ["url actually fetched with usable content", "..."]
 }
 If fit is "skip", still fill subject/body with the best available attempt but make "why" explain
 clearly that sending is not recommended.`;
 }
 
-export async function research({ track, name, company, urls, notes }) {
+export async function research({ track, name, company, urls, notes, country }) {
   if (track !== 'ic' && track !== 'b2b') throw new Error(`Invalid track '${track}'`);
 
   const pages = await Promise.all((urls || []).map(async (u) => ({ url: u, text: await fetchPageText(u) })));
-  const prompt = buildPrompt({ track, name, company, notes, pages });
+  const prompt = buildPrompt({ track, name, company, notes, pages, country });
   const text = await chatComplete(prompt, { maxTokens: 2000, temperature: 0.4 });
   return parseJsonResponse(text, 'research');
 }

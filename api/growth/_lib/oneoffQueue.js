@@ -29,7 +29,7 @@ export async function dailyOneoffPull(track, { limit = DAILY_LIMIT_PER_TRACK } =
 
   const { data: contacts } = await db
     .from('contacts')
-    .select('id, email, first_name, last_name, company, company_domain, title, do_not_contact, status')
+    .select('id, email, first_name, last_name, company, company_domain, title, country, do_not_contact, status')
     .in('id', candidateLeadIds.map((l) => l.contact_id));
   const contactById = Object.fromEntries((contacts || []).map((c) => [c.id, c]));
 
@@ -41,7 +41,7 @@ export async function dailyOneoffPull(track, { limit = DAILY_LIMIT_PER_TRACK } =
     const name = [contact.first_name, contact.last_name].filter(Boolean).join(' ');
     const url = `https://${contact.company_domain}`;
     try {
-      const verdict = await research({ track, name, company: contact.company, urls: [url], notes: null });
+      const verdict = await research({ track, name, company: contact.company, urls: [url], notes: null, country: contact.country });
       const isSkip = verdict.fit === 'skip';
       await db.from('oneoffs').insert({
         contact_id: contact.id,

@@ -42,6 +42,7 @@ export const api = {
   oneoffs: (params = {}) => request(`/oneoffs?${new URLSearchParams(params)}`),
   updateOneoff: (id, patch) => request(`/oneoffs/${id}`, { method: 'PATCH', body: JSON.stringify(patch) }),
   sendOneoff: (id) => request(`/oneoffs/${id}/send`, { method: 'POST' }),
+  pullOneoffsNow: (track) => request(`/oneoffs/pull-now${track ? `?track=${track}` : ''}`, { method: 'POST' }),
 
   leads: (params = {}) => request(`/leads?${new URLSearchParams(params)}`),
   lead: (id) => request(`/leads/${id}`),

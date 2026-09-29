@@ -40,6 +40,7 @@ const ROUTES = [
 
   { method: 'GET', pattern: ['oneoffs'], handler: oneoffs.list },
   { method: 'POST', pattern: ['oneoffs', 'pull'], handler: oneoffs.pull },
+  { method: 'POST', pattern: ['oneoffs', 'pull-now'], handler: oneoffs.pullNow },
   { method: 'PATCH', pattern: ['oneoffs', ':id'], handler: oneoffs.update },
   { method: 'POST', pattern: ['oneoffs', ':id', 'send'], handler: oneoffs.send },
 

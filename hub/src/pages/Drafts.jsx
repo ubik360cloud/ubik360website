@@ -6,12 +6,35 @@ export default function Drafts() {
   const [editing, setEditing] = useState({});
   const [busyId, setBusyId] = useState(null);
   const [error, setError] = useState(null);
+  const [pulling, setPulling] = useState(false);
+  const [pullResult, setPullResult] = useState(null);
 
   async function load() {
     try { const { oneoffs } = await api.oneoffs({ status: 'pending' }); setDrafts(oneoffs); }
     catch (e) { setError(e.message); }
   }
   useEffect(() => { load(); }, []);
+
+  // This queue is normally filled by a daily cron (research + draft ~5
+  // fresh leads per track) -- this button runs the exact same function on
+  // demand, for testing or because the cron's own reliability is a
+  // separate open question. Only researches contacts that have a
+  // company_domain and haven't been through this queue before (no
+  // duplicate drafts for the same contact).
+  async function pullNow() {
+    setPulling(true);
+    setError(null);
+    setPullResult(null);
+    try {
+      const { results } = await api.pullOneoffsNow();
+      setPullResult(results);
+      await load();
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setPulling(false);
+    }
+  }
 
   function edit(id, field, value) {
     setEditing((prev) => ({ ...prev, [id]: { ...prev[id], [field]: value } }));
@@ -51,9 +74,29 @@ export default function Drafts() {
 
   return (
     <div>
-      <h1 style={{ fontSize: '1.375rem', marginBottom: '1rem' }}>1:1 draft queue</h1>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+        <h1 style={{ fontSize: '1.375rem', margin: 0 }}>1:1 draft queue</h1>
+        <button className="btn btn-outline" disabled={pulling} onClick={pullNow}>
+          {pulling ? 'Researching...' : 'Pull fresh leads now'}
+        </button>
+      </div>
       {error && <p style={{ color: '#b91c1c' }}>{error}</p>}
-      {!drafts.length && <p>No pending drafts.</p>}
+      {pullResult && (
+        <p style={{ fontSize: '.8125rem', color: '#6b7280' }}>
+          {Object.entries(pullResult).map(([track, r]) => (
+            <span key={track} style={{ marginRight: '1rem' }}>
+              {track}: {r.error ? `error (${r.error})` : `${r.drafted} drafted, ${r.skipped} skipped`}
+            </span>
+          ))}
+        </p>
+      )}
+      {!drafts.length && (
+        <p>
+          No pending drafts. This queue normally fills itself daily (a cron researches ~5 fresh
+          leads per track and drafts a personalized email for each) -- click "Pull fresh leads now"
+          above to run that immediately instead of waiting.
+        </p>
+      )}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
         {drafts.map((d) => (
           <div key={d.id} className="card">

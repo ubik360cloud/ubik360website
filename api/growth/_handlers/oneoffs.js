@@ -33,6 +33,28 @@ export const pull = withCron(async (req, res) => {
   return res.status(200).json({ ok: true, results });
 });
 
+// Owner-triggerable equivalent of the cron above -- the Drafts page was
+// showing "no pending drafts" with no way to find out why, or to test the
+// pipeline, since the only producer was this cron-gated route (and the
+// daily cron's reliability is itself an open question -- see
+// docs/growth-hub-status.md). Same underlying function, same per-track
+// daily-limit dedupe (a lead only ever gets pulled once), just triggerable
+// on demand instead of waiting for 3pm ET.
+export const pullNow = withOwner(async (req, res) => {
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+  const track = req.query.track;
+  const tracks = track === 'ic' || track === 'b2b' ? [track] : ['ic', 'b2b'];
+  const results = {};
+  for (const t of tracks) {
+    try {
+      results[t] = await dailyOneoffPull(t);
+    } catch (e) {
+      results[t] = { error: e.message };
+    }
+  }
+  return res.status(200).json({ ok: true, results });
+});
+
 export const update = withOwner(async (req, res, ownerEmail) => {
   if (req.method !== 'PATCH') return res.status(405).json({ error: 'Method not allowed' });
   const { subject, body, status } = req.body || {};

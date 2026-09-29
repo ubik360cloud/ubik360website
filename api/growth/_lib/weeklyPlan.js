@@ -62,7 +62,7 @@ const TRACK_FILTERS = {
   },
 };
 
-function currentWeekOf() {
+export function currentWeekOf() {
   const et = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }));
   const day = et.getDay();
   const diffToMonday = day === 0 ? -6 : 1 - day;

@@ -6,6 +6,7 @@ import { withOwner } from '../_lib/auth.js';
 import { withCron } from '../_lib/cron.js';
 import { supabase } from '../_lib/supabase.js';
 import { proposeWeeklyPlan, proposeCustomPlan, approvePlan, stageApprove, previewSearch, updatePlan } from '../_lib/weeklyPlan.js';
+import { importManualContacts } from '../_lib/manualImport.js';
 import { proposeFilter } from '../_lib/filterAssistant.js';
 import { proposeFlow } from '../_lib/flowAssistant.js';
 
@@ -113,6 +114,22 @@ export const update = withOwner(async (req, res) => {
   try {
     const plan = await updatePlan(req.params.id, { label, brief, filter, target });
     return res.status(200).json({ plan });
+  } catch (e) {
+    return res.status(400).json({ error: e.message });
+  }
+});
+
+// Imports contacts Jose exported directly from Apollo's own platform (see
+// manualImport.js's own comment) into a segment -- new (label/brief) or an
+// existing one (plan_id) so multiple exports can build up the same
+// segment over time. No Apollo API call, no credits spent -- the hub
+// parses the CSV client-side and posts structured rows here.
+export const manualImport = withOwner(async (req, res) => {
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+  const { track, plan_id, label, brief, contacts } = req.body || {};
+  try {
+    const result = await importManualContacts({ track, planId: plan_id, label, brief, contacts });
+    return res.status(200).json(result);
   } catch (e) {
     return res.status(400).json({ error: e.message });
   }

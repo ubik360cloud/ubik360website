@@ -29,6 +29,7 @@ const ROUTES = [
   { method: 'GET', pattern: ['weekly-plan', 'current'], handler: weeklyPlan.current },
   { method: 'GET', pattern: ['weekly-plan', 'list'], handler: weeklyPlan.list },
   { method: 'POST', pattern: ['weekly-plan', 'custom'], handler: weeklyPlan.custom },
+  { method: 'POST', pattern: ['weekly-plan', 'manual-import'], handler: weeklyPlan.manualImport },
   { method: 'POST', pattern: ['weekly-plan', 'preview'], handler: weeklyPlan.preview },
   { method: 'POST', pattern: ['weekly-plan', 'suggest-filter'], handler: weeklyPlan.suggestFilter },
   { method: 'POST', pattern: ['weekly-plan', 'propose'], handler: weeklyPlan.propose },

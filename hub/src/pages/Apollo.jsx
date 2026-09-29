@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../lib/api.js';
+import { parseApolloExport } from '../lib/csv.js';
 
 const TRACKS = ['ic', 'b2b'];
 const ACTIVE_STATUSES = 'proposed,approved,pulling,staged,enrolling';
@@ -479,14 +480,175 @@ function NewPlanForm({ track, onCreated }) {
   );
 }
 
+// Jose: "I can filter and do a better segmentation directly in Apollo (for
+// now)... build a contact import tool for me to manually add Apollo
+// contacts I export from their platform" -- lets a CSV exported from
+// Apollo's own UI become a segment here (or add to one already created
+// this way), so a flow can still be built for those contacts later, same
+// as any Apollo-pull-sourced segment. No Apollo API call, no credits.
+function ManualImportForm({ track, onImported }) {
+  const [open, setOpen] = useState(false);
+  const [mode, setMode] = useState('new'); // 'new' | 'existing'
+  const [label, setLabel] = useState('');
+  const [brief, setBrief] = useState('');
+  const [existingPlans, setExistingPlans] = useState([]);
+  const [existingPlanId, setExistingPlanId] = useState('');
+  const [parsed, setParsed] = useState(null); // {contacts, mappedFields, unmappedHeaders}
+  const [fileName, setFileName] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState(null);
+  const [result, setResult] = useState(null);
+
+  useEffect(() => {
+    if (!open || mode !== 'existing') return;
+    api.weeklyPlans(track, { status: 'completed', pageSize: 50 })
+      .then(({ plans }) => setExistingPlans(plans))
+      .catch((e) => setError(e.message));
+  }, [open, mode, track]);
+
+  function onFile(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setFileName(file.name);
+    setResult(null);
+    setError(null);
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        setParsed(parseApolloExport(String(reader.result)));
+      } catch (err) {
+        setError(`Could not read that file: ${err.message}`);
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  async function doImport() {
+    if (!parsed?.contacts?.length) return;
+    setBusy(true);
+    setError(null);
+    try {
+      const payload = mode === 'existing'
+        ? { track, plan_id: existingPlanId, contacts: parsed.contacts }
+        : { track, label, brief, contacts: parsed.contacts };
+      const r = await api.manualImport(payload);
+      setResult(r);
+      onImported();
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  if (!open) {
+    return (
+      <button className="btn btn-outline" style={{ marginBottom: '1.5rem' }} onClick={() => setOpen(true)}>
+        + Import contacts from Apollo export
+      </button>
+    );
+  }
+
+  const canImport = parsed?.contacts?.length > 0 && (mode === 'new' ? label.trim() : existingPlanId) && !busy;
+
+  return (
+    <div className="card" style={{ marginBottom: '1.5rem' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <h2 style={{ fontSize: '1rem', margin: 0 }}>Import contacts — {track}</h2>
+        <button className="btn btn-outline" style={{ fontSize: '.75rem', padding: '.15rem .5rem' }} onClick={() => setOpen(false)}>close</button>
+      </div>
+      <p style={{ fontSize: '.8125rem', color: '#6b7280', margin: '.5rem 0' }}>
+        Export contacts from Apollo's own UI as CSV, then upload it here. Required column: Email.
+        First/last name, title, company, domain, city/state/country, and LinkedIn URL are picked
+        up automatically if present under Apollo's usual column names.
+      </p>
+
+      <div style={{ display: 'flex', gap: '1rem', marginBottom: '.75rem' }}>
+        <label style={{ fontSize: '.8125rem' }}>
+          <input type="radio" checked={mode === 'new'} onChange={() => setMode('new')} /> New segment
+        </label>
+        <label style={{ fontSize: '.8125rem' }}>
+          <input type="radio" checked={mode === 'existing'} onChange={() => setMode('existing')} /> Add to existing segment
+        </label>
+      </div>
+
+      {mode === 'new' ? (
+        <>
+          <input placeholder="Segment label, e.g. apollo-manual-canada-oct" value={label} onChange={(e) => setLabel(e.target.value)} style={{ marginBottom: '.5rem' }} />
+          <textarea placeholder="Brief (optional) — what this segment is / how you filtered it in Apollo" rows={2} value={brief} onChange={(e) => setBrief(e.target.value)} style={{ marginBottom: '.5rem', width: '100%', boxSizing: 'border-box' }} />
+        </>
+      ) : (
+        <select value={existingPlanId} onChange={(e) => setExistingPlanId(e.target.value)} style={{ marginBottom: '.5rem' }}>
+          <option value="">Choose a segment...</option>
+          {existingPlans.map((p) => <option key={p.id} value={p.id}>{p.label || p.track}</option>)}
+        </select>
+      )}
+
+      <input type="file" accept=".csv" onChange={onFile} style={{ marginBottom: '.5rem' }} />
+
+      {parsed && (
+        <div style={{ fontSize: '.8125rem', color: '#374151', marginBottom: '.5rem' }}>
+          <p style={{ margin: '.25rem 0' }}>
+            <strong>{fileName}</strong>: {parsed.contacts.length} contact{parsed.contacts.length === 1 ? '' : 's'} with a valid email found.
+          </p>
+          {parsed.unmappedHeaders.length > 0 && (
+            <p style={{ margin: '.25rem 0', color: '#6b7280' }}>
+              Columns not recognized (ignored): {parsed.unmappedHeaders.join(', ')}
+            </p>
+          )}
+          {parsed.contacts.length > 0 && (
+            <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '.5rem' }}>
+              <thead>
+                <tr style={{ textAlign: 'left', color: '#6b7280' }}>
+                  <th>Name</th><th>Title</th><th>Company</th><th>Email</th>
+                </tr>
+              </thead>
+              <tbody>
+                {parsed.contacts.slice(0, 5).map((c, i) => (
+                  <tr key={i} style={{ borderTop: '1px solid #f3f4f6' }}>
+                    <td>{[c.first_name, c.last_name].filter(Boolean).join(' ')}</td>
+                    <td>{c.title}</td>
+                    <td>{c.company}</td>
+                    <td>{c.email}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+          {parsed.contacts.length > 5 && <p style={{ margin: '.25rem 0', color: '#6b7280' }}>...and {parsed.contacts.length - 5} more.</p>}
+        </div>
+      )}
+
+      <button className="btn btn-primary" disabled={!canImport} onClick={doImport}>
+        {busy ? 'Importing...' : `Import ${parsed?.contacts?.length || ''} contacts`}
+      </button>
+
+      {result && (
+        <p style={{ fontSize: '.8125rem', color: '#374151', marginTop: '.5rem' }}>
+          Imported {result.imported}{result.skipped > 0 ? ` (skipped ${result.skipped} without a usable email)` : ''} into segment
+          "{result.plan?.label}". It'll show up in the completed-segments table below with a "Draft flow" option.
+        </p>
+      )}
+
+      {error && <p style={{ color: '#b91c1c', marginTop: '.5rem' }}>{error}</p>}
+    </div>
+  );
+}
+
 export default function Apollo() {
   const [track, setTrack] = useState('ic');
   const [autoSelected, setAutoSelected] = useState(false);
   const [plans, setPlans] = useState([]);
   const [error, setError] = useState(null);
+  // Bumped on every change (create/approve/import/manual-import) and mixed
+  // into CompletedPlansTable's key so it remounts and refetches -- it has
+  // its own pagination state, so it wouldn't otherwise notice a plan that
+  // just became 'completed', or a brand new manually-imported segment.
+  const [refreshKey, setRefreshKey] = useState(0);
 
   async function load() {
     setError(null);
+    setRefreshKey((v) => v + 1);
     try {
       const { plans: p } = await api.weeklyPlans(track, { status: ACTIVE_STATUSES });
       setPlans(p);
@@ -533,6 +695,7 @@ export default function Apollo() {
       </div>
 
       <NewPlanForm track={track} onCreated={load} />
+      <ManualImportForm track={track} onImported={load} />
 
       {error && <p style={{ color: '#b91c1c' }}>{error}</p>}
       {plans.length === 0 && <p>No plans currently need review for this track. The standard weekly plan proposes itself every Friday, or start a custom one above.</p>}
@@ -541,7 +704,7 @@ export default function Apollo() {
         <PlanCard key={plan.id} plan={plan} onChange={load} />
       ))}
 
-      <CompletedPlansTable key={track} track={track} />
+      <CompletedPlansTable key={`${track}-${refreshKey}`} track={track} />
     </div>
   );
 }

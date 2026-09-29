@@ -298,6 +298,22 @@ the producer, consistent with the still-unresolved cron question above. Added
 per-contact dedupe so re-clicking is safe) + a "Pull fresh leads now" button and an explanatory
 empty state on the Drafts page, so this doesn't depend on the cron mystery being resolved first.
 
+## Manual Apollo-export contact import (2026-09-29)
+
+Jose: better filtering/segmentation directly in Apollo's own UI than through this pipeline for
+now -- wants to export contacts there and still build flows for them. `_lib/manualImport.js`
+creates a segment directly (an `apollo_weekly_plans` row, `status: 'completed'`,
+`filter: {manual: true}`, no Apollo API call at all) or adds to an existing one (idempotent on
+`track`+`week_of`+`label`, same pattern as `proposeCustomPlan`), then upserts each row into
+`contacts` (`source: 'manual_import'`) + `leads`, tagged with `source_plan_id` so it shows up in
+the Apollo tab's completed-segments table with the same "Draft flow"/"Enroll into existing flow"
+actions any other segment gets. `POST /weekly-plan/manual-import`, verified end-to-end against
+production. `hub/src/lib/csv.js` is a small hand-written CSV parser + Apollo-export column-alias
+mapper (Email required; name/title/company/domain/city/state/country/LinkedIn auto-detected) --
+new "+ Import contacts from Apollo export" form on the Apollo tab shows a preview (row count,
+unmapped columns, first 5 rows) before importing. No credits spent, no Apollo API call at any
+point in this path.
+
 ## What's left before this can actually send anything
 
 1. Add `GROWTH_ADMIN_SECRET` on Vercel (see above) so the two queued test pulls can actually run.

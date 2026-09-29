@@ -275,6 +275,29 @@ confirmed. **The one reliable next step: click "View Logs" on the `/api/growth/f
 the dashboard's Cron Jobs tab** -- that's a different, working view Jose can check directly; it
 wasn't available through any MCP tool or CLI query tried this session.
 
+## "Context for this flow" box on the Flows page (2026-09-28)
+
+Jose: "I need to add a context box... so I can give you more details on how I want the flow to
+look." Drafting was previously only possible from the Apollo tab at plan-creation time. Now:
+`flowAssistant.js`'s `proposeFlow()` takes an optional free-text `instructions` (told to take
+priority over the generic defaults where they conflict) and an optional `plan` (a flow with no
+linked segment still drafts, just without segment-specific targeting). `POST /flows/:id/suggest`
+wires this to any existing flow; the Flows page step editor has a context textarea + "Suggest
+steps with AI" button that populates the editor for review -- nothing saves until "Save steps."
+
+## Drafts page was empty -- same root cause as the cron question (2026-09-28)
+
+Jose: "how does /drafts work? I have not seen anything there." Checked the database: zero rows
+ever in `oneoffs`. The page is the 1:1 research/draft queue -- normally filled by a daily cron
+(`oneoffs/pull`) that researches ~5 fresh leads per track (via `prospectResearch.js`, requires
+`contact.company_domain` to fetch their site) and drafts a personalized email + fit verdict for
+each. Confirmed real candidates exist and are ready (33 b2b + 13 ic leads, `stage='new'`, almost
+all with `company_domain` set) -- the queue was empty purely because nothing had ever triggered
+the producer, consistent with the still-unresolved cron question above. Added
+`POST /oneoffs/pull-now` (owner-authed, same `dailyOneoffPull` function the cron calls, same
+per-contact dedupe so re-clicking is safe) + a "Pull fresh leads now" button and an explanatory
+empty state on the Drafts page, so this doesn't depend on the cron mystery being resolved first.
+
 ## What's left before this can actually send anything
 
 1. Add `GROWTH_ADMIN_SECRET` on Vercel (see above) so the two queued test pulls can actually run.

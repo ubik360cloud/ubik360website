@@ -355,8 +355,14 @@ single-line format). Built:
 ## What's left before this can actually send anything
 
 1. Add `GROWTH_ADMIN_SECRET` on Vercel (see above) so the two queued test pulls can actually run.
-2. **Brevo sender verification** for `jose@ubik360.com` and `grow@ubik360.com` — check Brevo's
-   dashboard; may already be covered by ubik360.com's existing domain-level auth.
+2. **New real blocker found 2026-09-30**: a test-send attempt against the (now domain-authenticated)
+   Colombia flow failed with `403 permission_denied`: `"Unable to send email. Your SMTP account is
+   not yet activated. Please contact us at contact@brevo.com to request activation"` — this is
+   Brevo requiring manual account activation for actually sending (a separate step from the domain
+   authentication done earlier this session, which only proves the sending domain itself is valid).
+   **Jose needs to email/contact Brevo support to get the account activated** before any real or
+   test send — including the "Send test to me" button — can succeed. Nothing in this repo can work
+   around it.
 3. First real end-to-end test: sign in to the hub, manually trigger a weekly Apollo plan (small
    target, ~20 contacts/track) and review what comes back before letting cron automate it.
 

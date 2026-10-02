@@ -37,11 +37,12 @@ function buildPrompt({ track, name, title, company, companySize, industry, found
     : 'Write "subject" and "body" in English.';
 
   const facts = [
+    `Contact name: ${name || '(unknown)'}`,
+    `Contact title: ${title || '(unknown)'}`,
     `Company: ${company || '(unknown)'}`,
     `Industry: ${industry || '(unknown)'}`,
     `Company size: ${companySize ? `~${companySize} employees` : '(unknown)'}`,
     foundedYear ? `Founded: ${foundedYear}` : null,
-    `Contact title: ${title || '(unknown)'}`,
     `Location: ${country || '(unknown)'}`,
   ].filter(Boolean).join('\n');
 
@@ -92,7 +93,7 @@ don't just name it abstractly.
 ${languageInstruction}
 
 ## Salutation -- required, first line of body
-Open with a real greeting using the prospect's ACTUAL first name from "Contact" above (just the
+Open with a real greeting using the prospect's ACTUAL first name from "Contact name" above (just the
 first name, not the full name) -- e.g. ${language === 'es' ? '"Hola Andrés,"' : '"Hi Andrew,"'}.
 If the name is genuinely unknown, use a neutral greeting instead
 (${language === 'es' ? '"Hola,"' : '"Hi there,"'}) -- never invent a name.

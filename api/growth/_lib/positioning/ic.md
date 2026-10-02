@@ -14,32 +14,37 @@ directly, not buried in a procurement process.
 
 1. **Marketplace launch & brand building** (Amazon/Wayfair/Overstock) — proof: Fortezza Leather,
    zero Amazon presence to major seller, USPTO trademark registration, A+ content, Amazon Ads
-   strategy (2022-2023). Best fit: a brand selling on Amazon with no Brand Registry, no A+
-   content, generic photography, or no visible ad strategy.
+   strategy (2022-2023). Best fit: a small consumer-products/retail brand (roughly under ~50
+   employees), especially newer or still building its marketplace presence.
 2. **Multi-channel ecommerce scaling** — proof: Decohides, $0 to $1M revenue in 4 years across
-   Wayfair, Amazon, Overstock, and owned website. Best fit: a brand live on only one channel
-   (usually just Shopify or just Amazon) with no visible multi-marketplace presence.
+   Wayfair, Amazon, Overstock, and owned website. Best fit: a small-to-mid consumer brand likely
+   still concentrated on one or two channels given its size.
 3. **Meta Ads management at scale** — proof: up to 13x ROAS for 360 Print Studio / Overnight
-   Prints. Best fit: active Meta ad presence (check the ad library) with no clear in-house
-   performance-marketing lead.
+   Prints. Best fit: a brand or agency in a consumer-facing, ad-driven industry without the scale
+   to justify a dedicated in-house performance-marketing hire yet.
 4. **Ecommerce operations & automation** — proof: built order-management, customer-service
    automation, invoicing, and payment-reconciliation systems for 360 Print Studio / Overnight
-   Prints; 360 Print Studio went $0 to $100K in year one. Best fit: growing order volume,
-   multiple disconnected tools, visible operations-hire job postings.
+   Prints; 360 Print Studio went $0 to $100K in year one. Best fit: a growing operations-heavy
+   business (manufacturing, fulfillment, logistics-adjacent) at a size where manual, disconnected
+   tools are a plausible real pain, not yet big enough for a dedicated ops/automation team.
 
 ## Disqualifiers — skip, don't force a pitch
 
-- Enterprise brands with a visible in-house ecommerce/growth team already covering the angle.
-- No real marketplace/ads/ops signal found in research — don't invent one.
-- A brand that's clearly not actually selling (dead site, no recent activity) — no one to sell to.
+- Enterprise-sized companies (large headcount) — likely already have an in-house team covering
+  the angle; this pitch is for a business still small enough that a founder/single lead decides.
+- No usable industry or company-size data at all — nothing to reason a fit from, skip rather than
+  guess.
 
 ## Voice
 
 First person, Jose's own voice — direct, no hype, no "I'm excited to reach out." This is a
-contractor pitch, not a job application: the framing is "I noticed a specific gap in your
-[marketplace presence/ad strategy/ops], and I've solved exactly this before" — never "I'm looking
-for work." Reference something specific and real about the prospect's business, found in
-research, not assumed.
+contractor pitch, not a job application: the framing is "a business your size, in your industry,
+commonly has this exact gap — I've solved exactly this before" — never "I'm looking for work," and
+**never "I noticed you do X"** (stating back what they already know about their own business reads
+as fake, not as insight). Reason from industry + size, be upfront that the real specifics get
+figured out together, not assumed in advance. 2026-10-02: this replaced an earlier version that
+fetched and quoted the prospect's own website for specific findings — removed per Jose's feedback
+that the "I noticed..." opening read as a fake "I read your website" gesture.
 
 ## Output note
 

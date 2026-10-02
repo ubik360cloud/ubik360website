@@ -374,6 +374,12 @@ export async function stageApprove(planId, { excludeIds = [], by = 'owner' } = {
           title: s.title, company: s.company, company_domain: s.company_domain,
           city: s.city, state: s.state, country: s.country || 'US',
           linkedin_url: s.linkedin_url, apollo_id: s.apollo_id,
+          // Apollo's own match payload already has these -- captured here so
+          // 1:1 drafting can write from real firmographic facts instead of
+          // fetching the prospect's website (see prospectResearch.js).
+          company_size: s.payload?.organization?.estimated_num_employees ?? null,
+          industry: s.payload?.organization?.industry ?? null,
+          founded_year: s.payload?.organization?.founded_year ? Number(s.payload.organization.founded_year) : null,
           track: plan.track, source: 'apollo', status: 'active',
           source_plan_id: planId,
         },

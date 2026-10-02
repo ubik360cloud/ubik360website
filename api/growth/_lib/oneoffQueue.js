@@ -7,9 +7,11 @@ import { research } from './prospectResearch.js';
 
 const DAILY_LIMIT_PER_TRACK = Number(process.env.GROWTH_ONEOFF_DAILY_LIMIT_PER_TRACK || 5);
 
-/** Researches + drafts up to `limit` fresh leads for one track that have
- *  never been through this queue before (a lead is "done" once any oneoffs
- *  row exists for its contact -- including an auto-rejected skip). */
+/** Drafts up to `limit` fresh leads for one track that have never been
+ *  through this queue before (a lead is "done" once any oneoffs row exists
+ *  for its contact -- including an auto-rejected skip). Drafts straight
+ *  from Apollo's own structured firmographic data (company size, industry,
+ *  founded year), no website fetch -- see prospectResearch.js. */
 export async function dailyOneoffPull(track, { limit = DAILY_LIMIT_PER_TRACK } = {}) {
   const db = supabase();
   const { data: already } = await db.from('oneoffs').select('contact_id').eq('track', track);
@@ -29,19 +31,27 @@ export async function dailyOneoffPull(track, { limit = DAILY_LIMIT_PER_TRACK } =
 
   const { data: contacts } = await db
     .from('contacts')
-    .select('id, email, first_name, last_name, company, company_domain, title, country, do_not_contact, status')
+    .select('id, email, first_name, last_name, company, title, country, company_size, industry, founded_year, do_not_contact, status')
     .in('id', candidateLeadIds.map((l) => l.contact_id));
   const contactById = Object.fromEntries((contacts || []).map((c) => [c.id, c]));
 
   let drafted = 0, skipped = 0, errored = 0;
   for (const lead of candidateLeadIds) {
     const contact = contactById[lead.contact_id];
-    if (!contact?.email || contact.do_not_contact || contact.status !== 'active' || !contact.company_domain) continue;
+    if (!contact?.email || contact.do_not_contact || contact.status !== 'active') continue;
 
     const name = [contact.first_name, contact.last_name].filter(Boolean).join(' ');
-    const url = `https://${contact.company_domain}`;
     try {
-      const verdict = await research({ track, name, company: contact.company, urls: [url], notes: null, country: contact.country });
+      const verdict = await research({
+        track,
+        name,
+        title: contact.title,
+        company: contact.company,
+        companySize: contact.company_size,
+        industry: contact.industry,
+        foundedYear: contact.founded_year,
+        country: contact.country,
+      });
       const isSkip = verdict.fit === 'skip';
       await db.from('oneoffs').insert({
         contact_id: contact.id,

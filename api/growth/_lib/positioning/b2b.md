@@ -55,16 +55,21 @@ didn't screen out — filtered at the Apollo search level (`organization_num_emp
 - Enterprise companies with existing full internal marketing/HR departments and no visible
   friction (skip growth-marketing and staffing pitches both) — should already be filtered out by
   company size above, but skip on sight if one slips through.
-- Any business with no online presence to assess (can't verify fit — skip rather than guess).
+- Any contact with no usable industry or company-size data at all (nothing to reason from — skip
+  rather than guess at a fit).
 - Businesses already publicly working with a competing agency/fractional CMO (say so in the
   verdict, still draft if there's a genuine differentiated angle, otherwise skip).
 
 ## Voice
 
-First person, direct, no hype, no "excited to reach out." Reference something specific and real
-about the prospect's business — never a generic template line. If nothing specific was found
-in research, that itself is a reason to lower confidence or skip, not a reason to fall back to
-generic copy.
+First person, direct, no hype, no "excited to reach out." **Never open by telling the prospect
+what they already know** ("I noticed that [company] does X") — reason instead from their industry
+and size: a business of this size in this industry commonly faces the kind of problem the chosen
+pitch solves. Be upfront that the actual specifics (their processes, systems, pain points) get
+figured out together before proposing anything concrete — that honesty reads as competent, not
+presumptuous. 2026-10-02: this replaced an earlier version that fetched and quoted the prospect's
+own website — Jose flagged that "I noticed you do X" openings read as fake, since stating the
+obvious back to someone who already knows their own business doesn't demonstrate real insight.
 
 ## Output note
 

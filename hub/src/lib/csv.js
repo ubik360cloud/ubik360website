@@ -49,6 +49,9 @@ const FIELD_ALIASES = {
   state: ['state', 'person state'],
   country: ['country', 'person country'],
   linkedin_url: ['linkedin url', 'person linkedin url', 'linkedin'],
+  company_size: ['# employees', 'employees', 'company size', 'estimated employees'],
+  industry: ['industry', 'company industry'],
+  founded_year: ['founded year', 'company founded year', 'year founded'],
 };
 
 function cleanDomain(v) {
@@ -89,6 +92,9 @@ export function parseApolloExport(text) {
       state: get(r, 'state'),
       country: get(r, 'country'),
       linkedin_url: get(r, 'linkedin_url'),
+      company_size: get(r, 'company_size'),
+      industry: get(r, 'industry'),
+      founded_year: get(r, 'founded_year'),
     }))
     .filter((c) => c.email);
 

@@ -9,6 +9,7 @@ export default function Drafts() {
   const [error, setError] = useState(null);
   const [pulling, setPulling] = useState(false);
   const [pullResult, setPullResult] = useState(null);
+  const [lastSent, setLastSent] = useState(null);
 
   async function load() {
     try { const { oneoffs } = await api.oneoffs({ status: 'pending' }); setDrafts(oneoffs); }
@@ -63,11 +64,16 @@ export default function Drafts() {
 
   async function sendNow(d) {
     if (!window.confirm(`Send to ${d.contacts.email}?`)) return;
-    setBusyId(d.id); setError(null);
+    setBusyId(d.id); setError(null); setLastSent(null);
     try {
       await saveIfEdited(d);
       if (d.status !== 'approved') await api.updateOneoff(d.id, { status: 'approved' });
       await api.sendOneoff(d.id);
+      // The sent draft disappears from this list on the next load() (only
+      // pending ones are fetched) -- without this, a successful send looked
+      // identical to a silent no-op, since nothing stayed on screen to
+      // confirm it actually went out.
+      setLastSent({ email: d.contacts.email, company: d.contacts?.company });
       await load();
     } catch (e) { setError(e.message); }
     finally { setBusyId(null); }
@@ -82,6 +88,17 @@ export default function Drafts() {
         </button>
       </div>
       {error && <p style={{ color: '#b91c1c' }}>{error}</p>}
+      {lastSent && (
+        <p style={{ fontSize: '.8125rem', color: '#166534', background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: 4, padding: '.5rem .75rem' }}>
+          Sent to {lastSent.email}{lastSent.company ? ` (${lastSent.company})` : ''}.{' '}
+          <button
+            onClick={() => setLastSent(null)}
+            style={{ background: 'none', border: 'none', color: '#166534', textDecoration: 'underline', cursor: 'pointer', padding: 0, fontSize: 'inherit' }}
+          >
+            dismiss
+          </button>
+        </p>
+      )}
       {pullResult && (
         <p style={{ fontSize: '.8125rem', color: '#6b7280' }}>
           {Object.entries(pullResult).map(([track, r]) => (

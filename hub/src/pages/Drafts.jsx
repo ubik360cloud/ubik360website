@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { api } from '../lib/api.js';
+import { previewOneoff } from '../lib/emailPreview.js';
 
 export default function Drafts() {
   const [drafts, setDrafts] = useState([]);
@@ -133,6 +134,26 @@ export default function Drafts() {
               rows={8}
               onChange={(e) => edit(d.id, 'body', e.target.value)}
             />
+            <details open style={{ marginTop: '.5rem' }}>
+              <summary style={{ fontSize: '.75rem', color: '#6b7280', cursor: 'pointer' }}>
+                Preview -- exactly what this will send
+              </summary>
+              <pre
+                style={{
+                  fontSize: '.8125rem',
+                  background: '#f9fafb',
+                  border: '1px solid #e5e7eb',
+                  borderRadius: 4,
+                  padding: '.75rem',
+                  marginTop: '.5rem',
+                  whiteSpace: 'pre-wrap',
+                  wordBreak: 'break-word',
+                  fontFamily: 'inherit',
+                }}
+              >
+                {previewOneoff({ body: editing[d.id]?.body ?? d.body, language: editing[d.id]?.language ?? d.language })}
+              </pre>
+            </details>
             <div style={{ display: 'flex', gap: '.5rem', marginTop: '.75rem' }}>
               <button className="btn btn-primary" disabled={busyId === d.id} onClick={() => sendNow(d)}>Send now</button>
               <button className="btn btn-outline" disabled={busyId === d.id} onClick={() => approve(d)}>Approve (don't send yet)</button>

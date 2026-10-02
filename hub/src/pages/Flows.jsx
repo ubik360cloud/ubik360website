@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { api } from '../lib/api.js';
+import { previewFlowStep } from '../lib/emailPreview.js';
 
 export default function Flows() {
   const [flows, setFlows] = useState([]);
@@ -241,11 +242,30 @@ export default function Flows() {
               Start the body with a real greeting using <code>{'{{first_name}}'}</code> (e.g. "Hola
               {'{{first_name}}'},") -- it's replaced with each contact's actual first name when it
               sends, or dropped gracefully if one isn't on file. The CTA appears as "label: url" on
-              its own plain line (no styled button -- these are plain-text emails). A closing
-              salutation + "Jose M. Villegas / CEO Ubik 360 / Ubik360.com" is added automatically
-              after every send, before the opt-out footer -- don't write your own sign-off in the
-              body, it'll double up.
+              its own plain line (no styled button -- these are plain-text emails). Don't write your
+              own sign-off in the body -- the signature and opt-out shown in the preview below are
+              added automatically at send time, writing one yourself would double it up.
             </p>
+            <details open style={{ marginBottom: '.5rem' }}>
+              <summary style={{ fontSize: '.75rem', color: '#6b7280', cursor: 'pointer' }}>
+                Preview -- exactly what this step will send
+              </summary>
+              <pre
+                style={{
+                  fontSize: '.8125rem',
+                  background: '#f9fafb',
+                  border: '1px solid #e5e7eb',
+                  borderRadius: 4,
+                  padding: '.75rem',
+                  marginTop: '.5rem',
+                  whiteSpace: 'pre-wrap',
+                  wordBreak: 'break-word',
+                  fontFamily: 'inherit',
+                }}
+              >
+                {previewFlowStep({ body: s.body, ctaLabel: s.cta_label, ctaUrl: s.cta_url, language: selected.language })}
+              </pre>
+            </details>
             <div style={{ display: 'flex', alignItems: 'center', gap: '.5rem' }}>
               <button className="btn btn-outline" style={{ fontSize: '.75rem', padding: '.15rem .5rem' }} disabled={testingStep === i} onClick={() => sendTest(i)}>
                 {testingStep === i ? 'Sending...' : 'Send test to me'}

@@ -388,22 +388,48 @@ integration (`api/subscribe.js`) moved too, even though it wasn't itself broken,
   2/3, there's no sensible hardcoded default since the lists don't exist yet). `GROWTH_WEBHOOK_SECRET`
   is reused as-is for the new webhook URL.
 
-**Code is written and syntax-checked but deliberately NOT pushed yet** -- `api/subscribe.js`
-currently works against the live Brevo account; pushing this migration to `astro-migration` (which
-auto-deploys to production) before `SENDGRID_API_KEY`/list ids are actually set in Vercel would
-break real newsletter signups on the live site, not just leave the (already-broken) Growth Hub
-send path unfixed. **Waiting on Jose to**: create the SendGrid account, get an API key, create two
-Marketing Contacts lists (newsletter + contact) and note their UUIDs, and verify/authenticate the
-sending domain or individual senders (`jose@`/`grow@ubik360.com`) in SendGrid -- likely similar DNS
-CNAME work at Hostinger to what domain authentication needed in Brevo, but SendGrid's own dashboard
-will show the exact records once domain authentication is started there.
+**Completed and verified live, 2026-10-02.** Jose created the SendGrid account, filled out domain
+authentication for `ubik360.com` (automated security, branded links with auto-provisioned SSL --
+chose Hostinger as DNS host), and pasted the 7 resulting DNS records. All 7 were added at Hostinger
+and verified resolving via `nslookup ... 8.8.8.8`; SendGrid's own `/v3/whitelabel/domains` API
+confirmed `"valid": true` for the mail CNAME and both DKIM records. One important catch during
+setup: SendGrid's domain-auth wizard also displayed the **existing** `_dmarc.ubik360.com` TXT
+record (still pointed at `rua@dmarc.brevo.com`) as if it were part of the new record set -- it
+wasn't a new record to add, just a reference display of the current one. Adding a second DMARC
+record would have broken DMARC entirely (same class of mistake caught and fixed during the original
+Brevo setup) -- flagged and skipped.
+
+Two Marketing Contacts lists created via direct API calls (`POST /v3/marketing/lists`) rather than
+asking Jose to hunt down UUIDs manually: "Ubik360 Newsletter" and "Ubik360 Contact Form Leads".
+`SENDGRID_API_KEY`, `SENDGRID_LIST_NEWSLETTER`, `SENDGRID_LIST_CONTACT` staged on Vercel (writing
+these required explicit confirmation -- Auto Mode blocks secret-store writes by default). Verified
+with a raw test send (202, confirmed landed in Jose's inbox) before pushing.
+
+**Code pushed and deployed 2026-10-02** (commit `1316db4`). Live verification after deploy:
+- `POST /api/subscribe` against production actually upserted a test contact into the SendGrid
+  "Newsletter" list (confirmed via `/v3/marketing/contacts/search`, not just a 200 response --
+  the upsert endpoint is async, a bare 202/200 isn't proof by itself). Test contacts cleaned up
+  after.
+- `POST /api/growth/flows/:id/test-send` against the (Spanish-language, see the personalization
+  section above) Colombia flow succeeded for real, landing in Jose's inbox via the exact same
+  `sendEmail()` funnel the 1:1 draft send path also calls -- one successful test covers both send
+  paths since they share the same underlying function.
+
+**Not yet done:** the SendGrid Event Webhook itself isn't configured in SendGrid's dashboard yet
+(`Settings -> Mail Settings -> Event Webhook`, pointed at
+`https://ubik360.com/api/growth/webhooks/sendgrid?secret=<GROWTH_WEBHOOK_SECRET>`) -- sends work
+without it, this only affects bounce/complaint/unsubscribe auto-suppression. Also: click/open
+tracking should be turned off in SendGrid's Tracking settings to preserve the plain-bare-URL design
+(not yet confirmed done). The old `BREVO_API_KEY` env var on Vercel hasn't been removed -- harmless
+to leave since no code references it anymore, but worth deleting once everything's confirmed stable
+for a few days.
 
 ## What's left before this can actually send anything
 
 1. Add `GROWTH_ADMIN_SECRET` on Vercel (see above) so the two queued test pulls can actually run.
-2. **SendGrid migration above is code-complete but not deployed** -- needs the account, API key,
-   list ids, and sender/domain authentication before push + real env vars + redeploy.
-3. First real end-to-end test: sign in to the hub, manually trigger a weekly Apollo plan (small
+2. Configure the SendGrid Event Webhook in the dashboard (see above) for bounce/complaint tracking.
+3. Confirm click/open tracking is off in SendGrid's Tracking settings.
+4. First real end-to-end test: sign in to the hub, manually trigger a weekly Apollo plan (small
    target, ~20 contacts/track) and review what comes back before letting cron automate it.
 
 **Nothing sends a real cold email or spends unreviewed Apollo credits without Jose explicitly

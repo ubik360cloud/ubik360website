@@ -3,122 +3,328 @@
 > For brand voice, messaging guidelines, audience/ICP, and the marketing backend plan, see
 > [MARKETING.md](./MARKETING.md). This file covers site structure and dev conventions only.
 
-## MIGRATION IN PROGRESS (decided 2026-07, Jose)
+## What this is
+Bilingual marketing website for **Ubik 360** (legal entity: Ubik 360 Enterprises, Wyoming),
+José Villegas's consultancy — built with [Astro](https://astro.build) (static output), deployed on
+Vercel. **The site currently presents anonymously** (no personal name/face, team voice
+throughout) as a deliberate, temporary positioning test — see MARKETING.md "Anonymous/
+bigger-company positioning test" before assuming this is a bug or reverting it.
 
-Moving from plain static HTML to **Astro, deployed on Vercel**. Not yet built — the sections
-below still describe the current live (Hostinger) site. Rationale, found during a full
-content/code review:
-- Tailwind loaded via `<script src="https://cdn.tailwindcss.com">` on every page — Tailwind's own
-  docs call this dev-only; it ships the full JIT compiler as JS and recompiles styles client-side,
-  hurting page speed and causing visible style-in flash.
-- Nav/footer are empty `<div id="site-nav">`/`<div id="site-footer">` filled by JS after load
-  (`includes/nav.js`/`footer.js`) — causes layout shift, and a crawler/LLM that doesn't fully
-  execute JS may see a page with no navigation (bad for AEO, not just Core Web Vitals).
-- Every page duplicates the same ~60-line `<style>` block inline *and* loads `main.css`
-  separately — redundant CSS shipped per page.
-- `sitemap.xml` is hand-maintained and will drift as pages are added/retired.
-- The planned AI blog generator (see MARKETING.md) works far better against structured content
-  (Markdown + frontmatter, Astro content collections) than hand-built HTML per post.
-- Astro's file-based routing gives `/en/` and `/es/` as genuinely independent route trees, which
-  matches the corrected audience model (see MARKETING.md — EN/ES are NOT translation pairs).
+**EN and ES are not translations of each other — they're different offers to different
+audiences**: Colombia/LatAm business owners expanding outward on ES (plus an ES-only LatAm AI-
+implementation service with no EN equivalent); U.S./Canada business owners reaching inward for
+general growth marketing/fractional-CMO + LatAm nearshore staffing on EN (this broadened from an
+earlier Hispanic-market-specific framing — see MARKETING.md's "Growth marketing: general
+positioning" note). See MARKETING.md's "Audience / ICP" section before touching any EN or ES
+page — never assume a page should mirror its other-language counterpart, or that every page needs
+one at all.
 
-The EN/ES content rewrite already planned in MARKETING.md happens **directly in the Astro
-rebuild**, not twice. Once the migration lands, this file's Structure/Conventions sections below
-get rewritten to match — until then, treat everything past this point as the legacy reference.
+Repo: https://github.com/ubik360cloud/ubik360website (branch `astro-migration` — this is also the
+live Production branch, see "Hosting / deployment" below).
 
-## What this is (legacy/current — Hostinger static site)
-Bilingual (EN/ES) static marketing website for **Ubik 360**, José Villegas's
-consultancy. Two service tracks:
-- **Digital Marketing** — growth marketing / fractional CMO for Hispanic
-  businesses in the US & Canada.
-- **International Expansion** — market entry between Colombia, the US, and
-  Canada.
+## Migration status (as of 2026-07, page list last updated 2026-09)
+The site was previously plain static HTML with no build step (Tailwind CDN, JS-injected
+nav/footer, hand-maintained sitemap — see MARKETING.md for why that was replaced). The Astro
+rebuild is **live in production** on `ubik360.com` (see "Hosting / deployment" below) — fully
+deployed, DNS cut over from Hostinger, not just a preview.
 
-Plain HTML/CSS/JS, no build step, no framework, no package manager. Deployed
-as static files (currently Hostinger; see "Hosting" below). Repo:
-https://github.com/ubik360cloud/ubik360website
+**23 pages, all with real content** (page list last updated 2026-09 — this count/list drifts as
+Industries subpages get added; treat it as a snapshot, not gospel): `en/index.astro`,
+`en/about.astro`, `en/digital-marketing.astro`, `en/digital-marketing/printing.astro`,
+`en/digital-marketing/auto-dealership.astro`, `en/digital-marketing/ecommerce.astro` (Industries
+subpages under Digital Marketing's nav dropdown, three now, more possible — see "Known gaps"
+below), `en/nearshore-staffing.astro`, `en/international-expansion.astro`, `en/contact.astro`,
+`en/thank-you.astro`, `en/privacy-policy.astro`, `en/terms-of-service.astro`, `es/index.astro`,
+`es/sobre-mi.astro`, `es/expansion-internacional.astro`, `es/soluciones-ia.astro` (**ES-only, no
+EN counterpart** — see MARKETING.md "AI Solutions" section), `es/soluciones-ia/automotriz.astro`,
+`es/soluciones-ia/ecommerce.astro` (Industries subpages under Soluciones de IA, also ES-only,
+two now), `es/contacto.astro`, `es/gracias.astro`, `es/politica-de-privacidad.astro`,
+`es/terminos-de-servicio.astro`, plus the root language-redirector. Build verified clean
+(`npx astro build`).
+
+**Also currently active — see MARKETING.md "Anonymous/bigger-company positioning test":** the
+site presents anonymously (no personal name/face, Organization schema not Person) as a deliberate,
+temporary experiment. Don't "fix" this back to a named-person site without checking that section
+first — it's intentional, not an oversight, and has an explicit revert plan documented there.
+
+**Explicitly NOT done yet (real gaps, not oversights):**
+- Lead magnets: see "Known gaps / things to watch" below for the current live/orphaned breakdown
+  (this list has grown since this section was first written — new industry subpages keep adding
+  their own lead magnets, e.g. auto-dealership's).
+- A "create newsletter (with template) and send via Brevo" backend tool was requested 2026-07 but
+  explicitly deferred to its own session — see MARKETING.md "Marketing Backend — Plan".
 
 ## Structure
 ```
-index.html             → JS language-redirector only (noindex,nofollow; detects navigator.language,
-                          replaces to /es/ or /en/). NOT the Spanish homepage — that's es/index.html.
-en/                    → English pages (index, about, contact, digital-marketing,
-                          international-expansion, thank-you, thank-you-expansion)
-es/                    → Spanish pages (index, sobre-mi, contacto, marketing-digital,
-                          expansion-internacional, gracias, gracias-checklist)
-assets/css/main.css    → single stylesheet, brand tokens at the top
-assets/js/main.js      → page interactions
-assets/js/ubik360-chat-widget.js → floating chat widget (see "Chat widget")
-assets/images/         → photos, logo, favicons
-assets/downloads/      → gated lead-magnet HTML pages (checklists/reports)
-includes/nav.js        → injects the nav bar into a `<div id="site-nav">` on every page
-includes/footer.js     → injects the footer the same way
-Privacy-Policy.html, Terms-of-Service.html → legal, root-level, not localized
-robots.txt, sitemap.xml, google*.html      → SEO / search console verification
-.htaccess              → Apache caching/compression rules (Hostinger-specific)
+astro.config.mjs        → site URL (https://ubik360.com — real domain, already live), build.format:
+                          'file' (preserves legacy /en/about.html-style URLs instead of Astro's
+                          default clean-directory URLs — see note below)
+vercel.json              → rewrites /en/ and /en/index.html (and /es/ equivalents) to the physical
+                          en.html/es.html build output (see "Homepage URL quirk" below), plus
+                          redirects for URLs that changed shape during the rebuild (e.g. the old
+                          es/marketing-digital.html)
+api/subscribe.js        → Vercel serverless function (root-level /api dir, auto-detected by
+                          Vercel independently of the static Astro build — no adapter/output-mode
+                          change needed). Adds newsletter/contact-form emails to SendGrid — see
+                          "Newsletter (SendGrid)" below.
+src/layouts/Layout.astro → shared <head> (SEO meta, hreflang, OG, GTM, JSON-LD slot), wraps
+                          Nav + page content + Footer + NewsletterPopup + chat widget script
+src/components/Nav.astro    → real component (not JS-injected) — EN and ES link arrays are
+                              independent, edit each separately
+src/components/Footer.astro → same pattern; both EN and ES now have 3 columns (ES gained a
+                              "Soluciones de IA" column alongside Expansión Internacional/Ubik 360)
+src/components/PartnerLogos.astro → logo carousel (grid on desktop, horizontal scroll-snap
+                          carousel on mobile); each logo's card background is set per-logo (`bg`
+                          field) to match/contrast with that specific logo, not a single default
+src/components/NewsletterInline.astro, NewsletterPopup.astro → newsletter signup UI, POST to
+                          /api/subscribe — see "Newsletter (SendGrid)" below
+src/utils/langMap.ts     → explicit EN⇄ES page-equivalence map used by the language toggle (Nav +
+                          Footer) — falls back to that language's homepage for pages with no real
+                          counterpart, rather than guessing at a misleading match
+src/styles/global.css   → Tailwind v4 CSS-first theme (@theme block = brand tokens as real
+                          Tailwind colors) + legacy `--red`/`--black`/`--green`/`--oak` variable
+                          aliases so ported page markup keeps working without a find-replace pass.
+                          `h1,h2,h3` get the serif display font — NOT h4 (Footer's column titles
+                          are the only h4 on the site and must stay sans-serif; a stray h4 in this
+                          selector fake-bolded and looked blurry at small size, see git history)
+src/pages/en/            → English pages: index, about (Team), digital-marketing (+ Industries
+                          subpages: digital-marketing/printing, digital-marketing/auto-dealership),
+                          nearshore-staffing, international-expansion, contact, thank-you
+src/pages/es/            → Spanish pages: index (LatAm-first, not a translation of en/index),
+                          sobre-mi (Nuestro Equipo), expansion-internacional, soluciones-ia
+                          (ES-only, no EN counterpart — LatAm AI-implementation service; + its own
+                          Industries subpage: soluciones-ia/automotriz), contacto, gracias
+src/pages/index.astro    → JS language-redirector (noindex,nofollow) — NOT a homepage, just picks
+                          /en/ or /es/ by browser language
+public/assets/           → images (stock/, partners/, photos/), downloads (legacy lead-magnet
+                          HTML, unconverted), chat widget JS
 ```
 
-**EN and ES are not translations of each other — they're different offers to different
-audiences** (Colombia/LatAm business owners expanding outward on ES; US/Canada business owners
-reaching into the Hispanic market + LatAm sourcing/staffing on EN). See MARKETING.md's "Audience /
-ICP" section before touching any EN or ES page — content should NOT be assumed to mirror 1:1.
-Practical implications: `hreflang` alternate tags between an EN/ES page pair are only correct
-where the pages genuinely are the same content in two languages (currently just about/contact) —
-remove `hreflang` cross-links between pages that cover different content, since asserting they're
-translations of each other is actively wrong for SEO. The EN↔ES toggle in `includes/nav.js` links
-to the other language's *homepage*, not a per-page equivalent — that's deliberate, not a bug, and
-avoids a broken-link problem now that pages diverge.
+Legal pages (Privacy Policy, Terms of Service) are real Astro pages, not legacy static HTML —
+`en/privacy-policy.astro`, `en/terms-of-service.astro`, `es/politica-de-privacidad.astro`,
+`es/terminos-de-servicio.astro`, linked from both language Footers and in `langMap.ts` (genuine
+1:1 translations, unlike most EN/ES page pairs on this site). Converted 2026-09 from the legacy
+`public/Privacy-Policy.html`/`Terms-of-Service.html` (now deleted) — see each file's own comment
+for what was and wasn't changed during the port. One open item: the legal *substance* still
+reflects a Canadian business (PIPEDA, Ontario governing law, JAMS arbitration in London Ontario,
+CAD billing) even though Ubik 360 is now incorporated as Ubik 360 Enterprises in Wyoming — this
+was deliberately left untouched during the port (a jurisdiction question for Jose + counsel, not
+a copy-editing decision) and should get a legal review.
 
-## Brand tokens (`assets/css/main.css`)
-```
---red:   #931F1D   /* CTAs, buttons */
---black: #050505   /* text, dark sections */
---green: #659157   /* accents, section tags */
---oak:   #CEC5B5   /* light section backgrounds */
-```
-Headings use `DM Serif Display`; body text uses `Inter`. (Older docs in this
-repo mention a blue/orange/teal palette — that's stale, ignore it. The red/
-black/green/oak system above is what's live on every page.)
+**Homepage URL quirk:** Astro's `build.format:'file'` promotes a directory's `index.astro` up a
+level (`src/pages/en/index.astro` → physical file `en.html`, not `en/index.html`) — a known Astro
+behavior, not a bug in this project. Legacy canonical tags already point at `/en/` (bare, no
+`index.html`) and internal links use `/en/index.html`; `vercel.json` rewrites both to the physical
+`en.html` output so neither URL breaks and `/en.html` itself is never linked anywhere.
 
-## Shared nav/footer pattern
-Every page includes `<div id="site-nav"></div>` and a footer equivalent,
-then loads `includes/nav.js` / `includes/footer.js`, which inject markup via
-`innerHTML` (inline styles, not CSS classes) and detect language from the
-URL path (`/en/` vs everything else = Spanish). When editing nav/footer,
-edit these two JS files once — not each HTML page.
+**hreflang:** only set `alternatePath` on `<Layout>` where a page genuinely has a same-content
+counterpart in the other language (currently home↔home, about↔sobre-mi, contact↔contacto,
+thank-you↔gracias, plus the two legal-page pairs (privacy-policy↔politica-de-privacidad,
+terms-of-service↔terminos-de-servicio) — see `src/utils/langMap.ts`, which the language-toggle
+links use so this stays consistent). Never set it between pages with different content (e.g. the two homepages' actual
+content, or `es/soluciones-ia.astro` which has no EN equivalent at all) — that would assert a
+translation relationship that isn't true, which actively hurts SEO. See MARKETING.md.
+
+## Brand tokens (`src/styles/global.css` `@theme` block)
+```
+--color-brand-red:   #931F1D   /* CTAs, buttons */
+--color-brand-black: #050505   /* text, dark sections */
+--color-brand-green: #659157   /* accents, section tags */
+--color-brand-oak:   #CEC5B5   /* light section backgrounds */
+```
+Also aliased as legacy `--red`/`--black`/`--green`/`--oak` for ported inline styles. Headings use
+`DM Serif Display`; body text uses `Inter`. Reusable classes (`.btn-primary`, `.btn-outline`,
+`.section-tag`, `.service-card`, `.check-list`, `.step-badge`) are defined once in `global.css` —
+same names as the legacy `assets/css/main.css`, now real Tailwind `@apply` compositions.
 
 ## Chat widget
-`assets/js/ubik360-chat-widget.js` renders a floating chat bubble and talks
-to a separate backend: `https://ubik360-bot-production.up.railway.app/chat`
-(Railway-hosted bot, outside this repo). Language of greeting/prompts is
-inferred from `navigator.language`, independent of which EN/ES page it's on.
+`public/assets/js/ubik360-chat-widget.js` renders a floating chat bubble and talks to a separate
+backend: `https://ubik360-bot-production.up.railway.app/chat` (Railway-hosted bot, outside this
+repo). Loaded once, globally, in `Layout.astro`. **2026-07:** the client-side copy (greeting,
+subtitle, quick-reply prompts) was scrubbed of "Jose"/personal references to match the anonymous
+positioning test, and prompts updated from old Hispanic-market-specific framing to general growth
+marketing. **This only covers the widget's visible strings** — the bot's actual conversation logic
+and knowledge base live in the separate Railway service and were NOT updated; that service needs
+its own review to stay consistent with current positioning (out of reach from this repo).
+
+## Newsletter (SendGrid) — added 2026-07, migrated off Brevo 2026-09
+`NewsletterInline.astro` (homepage section) and `NewsletterPopup.astro` (site-wide bottom-corner
+slide-in, scroll/time/exit-intent triggered) POST `{ email, lang, source }` to `/api/subscribe`
+(`api/subscribe.js`, a Vercel serverless function auto-detected from the root `/api` directory —
+deliberately not an Astro API route, so no `output`/adapter change was needed on the otherwise-fully-
+static site). The function calls SendGrid's Marketing Contacts REST API server-side, keeping
+`SENDGRID_API_KEY` out of the client entirely. `source` maps to a specific SendGrid list, chosen
+server-side (a client can't pass an arbitrary list id):
+- `"newsletter"` (default) → `SENDGRID_LIST_NEWSLETTER` — used by both newsletter forms.
+- `"contact"` → `SENDGRID_LIST_CONTACT` — fired best-effort by `en/contact.astro`/`es/contacto.astro`
+  right after their existing Formspree submission succeeds, without blocking the redirect on it.
+  Formspree stays the actual lead-notification mechanism; SendGrid is just getting the contact into
+  a list too.
+
+List ids are the actual list UUIDs from SendGrid's Marketing > Contacts > Lists UI (env vars
+`SENDGRID_LIST_NEWSLETTER` / `SENDGRID_LIST_CONTACT`, no sensible hardcoded default — unlike
+Brevo's simple numeric ids, the lists have to exist in SendGrid first). The `PUT
+/v3/marketing/contacts` upsert call is asynchronous (returns 202 + a job id, not a synchronous
+success/failure) — treated as success on a 202, same as the old Brevo `updateEnabled: true`
+behavior of updating rather than erroring on a re-subscribe. The prior Brevo version also stored a
+`LANG` contact attribute; dropped in the SendGrid version since SendGrid custom fields need to be
+created in the dashboard first to get a field id to reference — not worth the setup for one
+attribute at this scale.
+
+**Migrated off Brevo 2026-09-30** (Jose: repeated friction with Brevo — most recently a "your SMTP
+account is not yet activated" 403 on every Growth Hub send attempt, on top of an earlier
+sender-validation issue that needed full domain authentication to fix. Switched to SendGrid, same
+provider 360PrintStudio already uses successfully; their free tier's 100/day is well above this
+site's newsletter volume). This also migrated the Growth Hub's cold-outreach sending — see that
+section below for its own `_lib/sendgrid.js`/webhook detail.
+
+**Needs before this works again in production:** a SendGrid account (Jose creating one), an API key
+(`SENDGRID_API_KEY`), and two Marketing Contacts lists created in SendGrid's dashboard with their
+UUIDs set as `SENDGRID_LIST_NEWSLETTER`/`SENDGRID_LIST_CONTACT`. Until those are set, `/api/subscribe`
+returns "Server not configured" (500) — same env-var-timing gotcha as before applies: a var added in
+the Vercel dashboard needs a fresh deploy to take effect, adding it alone does nothing until then.
+
+The repo has a linked Vercel CLI (`.vercel/project.json` present) — `npx vercel env ls`,
+`npx vercel ls`, and `npx vercel logs <deployment-url>` are useful for debugging this kind of thing
+directly instead of guessing.
+
+**Future/deferred (2026-07, Jose):** a backend tool to compose and send an actual newsletter (with
+templates) was requested but explicitly deferred to its own session — not started. See
+MARKETING.md "Marketing Backend — Plan" for the open question of whether that should be a custom
+tool or just SendGrid's own campaign composer (formerly framed around Brevo's, before the
+migration).
+
+## Growth Hub (Apollo outreach) — added 2026-09, deployed
+A small Apollo-driven cold-outreach system: `api/growth/**` in this repo (a single catch-all
+serverless function, `api/growth/handler.js`, routed via an explicit `vercel.json` rewrite
+(`/api/growth/:path*` → `/api/growth/handler?path=:path*` — Vercel's zero-config bracket-catch-all
+convention only reliably matched a single path segment for a non-Next.js app, so a plain filename
++ explicit rewrite replaced it) — the original one-file-per-route layout blew past
+Vercel Hobby's 12-functions-per-deployment cap) + a separate admin app (`hub/`, deployed to
+`marketing.ubik360.com`) + its own Supabase project `ubik360-growth` (same account as
+360PrintStudio's, isolated project, id `cwlffqbxgsyvduipuopl`). Two tracks sharing one system,
+capped at **10 sends/day combined**: `ic` (Jose's independent-contractor pitch, `jose@ubik360.com`)
+and `b2b` (Ubik 360's own outreach, `grow@ubik360.com`). Built using 360PrintStudio's marketing-hub
+as an architectural reference (weekly Apollo propose→approve→stage→import loop, AI-researched 1:1
+draft queue, approval-gated sends) — see `docs/growth-hub-status.md` for full build status.
+
+**1:1 research/draft model: DeepInfra, not Anthropic** (switched 2026-09, Jose — Anthropic API
+cost). `api/growth/_lib/prospectResearch.js` fetches the prospect's URL itself (plain HTTP, no AI)
+and hands the page text to a DeepInfra-hosted model (`PROSPECT_MODEL` env var, defaults to
+`deepseek-ai/DeepSeek-V3` — DeepInfra never auto-picks a model, every request names one). Trade-off
+vs. the original Anthropic-native `web_search`/`web_fetch` tool approach: the model can no longer
+autonomously discover pages it wasn't given a URL for. Key is `DEEPINFRA_UBIK30_KEY`, not a generic
+`DEEPINFRA_API_KEY` name.
+
+Deployed live at both `ubik360-growth-hub.vercel.app` (temporary, until `marketing.ubik360.com`'s
+DNS is added) and the main site's `/api/growth/*`. **Still not fully functional** — see
+`docs/growth-hub-status.md` for exactly which env vars are set vs. still missing before real sends
+can happen.
+
+**Outbound email: SendGrid, not Brevo (switched 2026-09-30, Jose — repeated Brevo friction, most
+recently a "your SMTP account is not yet activated" 403 blocking every send attempt).**
+`api/growth/_lib/sendgrid.js` is the single send funnel both the flow engine and 1:1-draft send
+handler call through (`SENDGRID_API_KEY`); `api/growth/_handlers/webhooks.js`'s `sendgrid` export
+handles SendGrid's Event Webhook (an array of events per POST, unlike Brevo's one-event-per-call
+shape) for bounce/complaint/unsubscribe auto-suppression. See "Newsletter (SendGrid)" above for the
+full migration note (that section also covers the separate `api/subscribe.js` list-signup
+integration, which moved to SendGrid in the same batch).
+
+## Known fixes made during the port (don't reintroduce these bugs)
+- **WhatsApp number:** the legacy `en/contact.html`/`es/contacto.html` linked a fake placeholder
+  number (`wa.me/15551234567` — a 555 number, never real). Fixed to the real number
+  (`wa.me/12265030456`, i.e. +1-226-503-0456) found elsewhere on the live site
+  (`assets/downloads/ceo_us_university_informe_final.html`).
+- **Contact email:** legacy `includes/footer.js` used `info@ubik360.com`; this was later
+  standardized sitewide (Footer + both contact pages) to `admin@ubik360.com` — **not**
+  `jose@ubik360.com`, which it briefly was during the port; the personal name in the address
+  conflicted with the anonymous positioning test once that started (2026-07).
+- **Footer LinkedIn:** legacy footer had `href="#"` as a placeholder, later fixed to a real
+  personal profile link, then **removed entirely** (2026-07) as part of the anonymous positioning
+  test — no company LinkedIn page exists yet to link instead. Don't re-add a personal LinkedIn
+  link without checking MARKETING.md's positioning-test section first.
+- **Footer logo:** was rendered via `filter:brightness(0) invert(1)` on the full color lockup at
+  36px tall — at that size the red/black marks became indistinguishable and read as a plain white
+  blob. Fixed by dropping the filter and placing the real-color logo on a small white chip instead.
 
 ## Hosting / deployment
-Currently deployed via Hostinger (File Manager / FTP upload of these static
-files — see `.htaccess` for the Apache caching rules Hostinger uses). This
-repo is the source of truth going forward; changes still need to be
-uploaded to Hostinger to go live unless/until we move deployment (e.g. to
-Cloudflare Pages/Vercel) — ask before assuming a hosting migration is in
-scope.
+**Live in production** on `https://ubik360.com` (Vercel project `ubik360`, org
+`ubik360clouds-projects`). DNS was cut over from Hostinger 2026-07 — apex `ubik360.com` is
+canonical/Production in Vercel, `www.ubik360.com` 308-redirects to it (matches `astro.config.mjs`'s
+`site` and every canonical tag/sitemap entry, which use the bare apex domain, not `www`). GitHub
+repo is connected, and the Production environment branch is `astro-migration` (Settings →
+Environments in the dashboard — **not** Settings → Git, which is where this lived in older Vercel
+versions and has no API equivalent). `git push` to this branch deploys straight to production.
+
+Hostinger hosting is retired (kept alive temporarily as a rollback safety net, DNS untouched there
+beyond the website `A`/`CNAME` records — MX/email records were deliberately left alone during the
+cutover). The repo's `.vercel/project.json` is already linked, so `npx vercel` CLI commands work
+directly without re-linking.
 
 ## Known gaps / things to watch
-- `assets/images/` has a few files with spaces in filenames (`profile pick
-  black tie.png`, `profile pick short sleeve.png`) — avoid referencing new
-  images with spaces; URL-encode existing ones if you link them.
-- `.github/copilot-instructions.md`, `README.md`, and
-  `WEBSITE-STRUCTURE-GUIDE.md` are leftover from an earlier version of the
-  site (they describe a `/services/`, `/case-studies/` subfolder structure
-  and a blue/orange palette that no longer exist). Prefer this file over
-  those for current structure; update or remove them if they get more out
-  of sync.
-- No contact form backend visible in this repo — contact pages likely rely
-  on Calendly (`https://calendly.com/jose-ubik360/30min`) and/or the chat
-  widget.
+- `public/assets/images/` has a few files with spaces in filenames (`profile pick black tie.png`,
+  `profile pick short sleeve.png`) — avoid referencing new images with spaces; URL-encode existing
+  ones if you link them.
+- Lead magnets: `public/assets/downloads/*.html` currently has 3 files, all linked from a live
+  page — `administrative-scale-up-ubik360.html` (EN nearshore-staffing), `dealership-marketing-
+  scorecard-ubik360.html` (EN auto-dealership), `checklist-incorporacion-usa-ubik360.html` (ES
+  expansion-internacional). Two older orphaned files (`captacion-leads-proximidad-ubik360.html`,
+  `hispanic-market-accelerator-ubik360.html` — stale Hispanic-market-specific framing,
+  `jose@ubik360.com` footer email) were deleted 2026-09 as unreferenced and superseded. EN
+  `digital-marketing/printing.astro` and `international-expansion.astro` have no lead magnet of
+  their own yet — see MARKETING.md for candidate ideas.
+- Contact form still submits to Formspree (`action="https://formspree.io/f/mlganpda"`) as its
+  primary mechanism, now *also* best-effort adding the contact to SendGrid (see "Newsletter
+  (SendGrid)" above) — Formspree isn't being replaced, just supplemented.
+- `src/components/RouteMotif.astro` and `PlaceholderImage.astro` are likely unused now (every page
+  moved to full-width photo hero banners during the 2026-07 UI pass) — check before deleting, but
+  don't be surprised to find no references.
+- A handful of test/debug emails (`test-verify-brevo*@example.com`) were added to Brevo lists 2/3
+  while debugging the integration — safe to delete from Brevo's contact lists, not real leads.
 
-## Conventions (legacy site — superseded by the Astro migration above once it lands)
-- Keep pages static HTML; don't add Node tooling.
-- When creating a new page, copy the closest existing page as a template to
-  keep nav/footer includes and meta tags consistent — but write content for
-  its actual audience (see MARKETING.md), don't assume it should translate
-  an existing page in the other language.
-- Keep `sitemap.xml` in sync when adding/removing pages.
+## Conventions
+- When creating a new page, copy the closest already-ported page (`en/about.astro` or
+  `en/contact.astro`) as a structural template — but write content for its actual audience (see
+  MARKETING.md), never assume it should translate an existing page in the other language, and
+  never assume every page needs an equivalent in the other language at all (`es/soluciones-ia.astro`
+  doesn't).
+- Keep the legacy `var(--red)` etc. inline styles working via the alias block in `global.css`
+  rather than doing a find-replace to Tailwind classes on every ported page — lower risk, and both
+  compile to the same real Tailwind-generated CSS variables.
+- Dynamic Tailwind class names (e.g. `` `grid-cols-${n}` ``) don't work — Tailwind's scanner needs
+  literal class strings. Pick from a small set of literal options instead (see `Footer.astro`'s
+  `colsClass` for the pattern).
+- `@astrojs/sitemap` generates `sitemap-index.xml` automatically at build time — don't
+  hand-maintain a `sitemap.xml` file. A new page under `src/pages/` is picked up automatically;
+  the only manual step for a new page is adding it to `Nav.astro`/`Footer.astro`.
+- **Page/section pattern (2026-07 UI pass):** hero sections are full-width photo banners
+  (`absolute inset-0` image + a two-layer gradient scrim — a directional layer for desktop plus a
+  flat semi-transparent layer underneath so text stays readable even on narrow mobile widths where
+  the directional fade alone wouldn't cover enough of the image), not boxed square images.
+  Sections alternate background color (white/oak/red/black) rather than defaulting to
+  center-aligned white throughout, and use asymmetric image+text layouts (image one side, copy the
+  other) instead of stacked center-aligned blocks. Never let a flat-color section sit directly
+  against the (always-black) Footer with no visual break — check the last section's background
+  before adding a new page.
+- **CTA copy is standardized, not freely worded per page.** The same Calendly-booking action
+  should carry the same label everywhere it appears on a given page family — currently "Schedule a
+  Growth Call" (EN growth-marketing pages: home, digital-marketing, about) / "Schedule a
+  Consultation" (EN expansion/staffing pages) / "Agenda tu Consulta de Expansión" (ES, all pages)
+  / a neutral phrase on the shared thank-you pages. Genuinely different actions on the same page
+  (e.g. Contact's pick-a-slot vs. book-a-video-call vs. request-in-person) should stay worded
+  differently since they're different choices, not the same CTA repeated.
+- **Verify stock photo sourcing before using it, not after.** Twice during this project a
+  seemingly-generic stock photo turned out to be a screenshot of a real branded product's UI (a
+  LinkedIn marketing page, and separately OpenAI's ChatGPT app) — using either would have implied
+  affiliation with that company. Actually view the image (not just trust a search-result
+  description) before wiring it into a page, especially anything showing a phone/screen/app UI.
+- **New hero/page images: generate via DeepInfra, don't source stock photos** (changed 2026-09,
+  Jose). `black-forest-labs/FLUX-2-klein-4b` via `https://api.deepinfra.com/v1/inference/<model>`,
+  auth key `DEEPINFRA_UBIK30_KEY` in the local (gitignored) `.env.local` — read it from disk, don't
+  try to pull it from Vercel via API (that specific action is hard-blocked in this environment,
+  unlike most other provisioning actions which just need a retry). Request web-appropriate
+  dimensions (e.g. 1536×864 for a 16:9 hero), not maximum resolution — first real use came back an
+  already-lightweight ~110KB JPEG at that size. The verify-before-use rule above still applies in
+  full: actually view every generated image before wiring it in — AI generation can hallucinate
+  quasi-readable text/logos on props (shipping labels, screens, signage), not just replicate real
+  branding the way a sourced photo can.

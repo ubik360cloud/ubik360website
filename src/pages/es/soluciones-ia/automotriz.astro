@@ -1,0 +1,294 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+// NEW (2026-07): industry subpage under Soluciones de IA (not under a
+// separate menu -- lives at Soluciones de IA > Industrias > Automotriz per
+// Jose, so no new top-level nav item). Deliberately blends two sources:
+// (1) the real dealership pain points from en/digital-marketing/
+// auto-dealership.astro (inventory sync, slow lead response, disconnected
+// systems), and (2) the AI Solutions positioning from es/soluciones-ia.astro
+// (custom-built systems, not a generic/frustrating chatbot; understand the
+// business model -- what drives revenue, what eats margin, and be honest
+// when something is a process/people problem, not a technology problem).
+//
+// Deliberately does NOT reuse the EN page's Digital-Jockey-partnership
+// aggregate stats or its gated lead-magnet-form pattern -- this is a
+// different delivery model (Ubik 360's own AI-build capability, not the
+// paid-media technology partnership), so it follows soluciones-ia.astro's
+// simpler structure instead: no stat strip, no gated download, just the
+// Calendly diagnostic CTA throughout.
+// Reuses the auto-dealership-hero.jpg image (already vetted -- no brand
+// badges, generic light-trail photo) rather than sourcing a new one.
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: '¿Esto reemplaza a mi equipo de ventas?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'No. El sistema califica leads, responde de inmediato y agenda citas o pruebas de manejo — tu equipo sigue cerrando la venta. La diferencia es que ningún lead se enfría esperando una respuesta.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: '¿Es lo mismo que un chatbot de WhatsApp genérico?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'No. Un chatbot genérico responde con guiones fijos y frustra al cliente en cuanto la pregunta se sale del script. Lo que construimos se integra con tu inventario real y tus procesos reales — conoce lo que tienes disponible hoy, no una lista genérica.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: '¿Funciona con el sistema o CRM que ya tenemos?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'En la mayoría de los casos sí, lo conectamos directamente. El diagnóstico inicial confirma qué se puede integrar directamente y qué requiere un ajuste — nunca prometemos una integración antes de confirmarla.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: '¿Cuánto cuesta esto para un concesionario en Colombia o Latinoamérica?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Depende del alcance — desde un sistema de atención y seguimiento puntual hasta una integración completa de inventario, CRM y reportes. Construimos a la medida de lo que tu concesionario realmente necesita y puede sostener, no una plataforma empresarial de EE.UU. adaptada a la fuerza. El diagnóstico gratuito define alcance y costo antes de empezar.',
+      },
+    },
+  ],
+};
+---
+
+<Layout
+  lang="es"
+  path="/es/soluciones-ia/automotriz.html"
+  title="IA para Concesionarios de Autos | Ubik 360"
+  description="Sistemas de IA confiables, integrales y a la medida para concesionarios — atención y seguimiento inteligente, sincronización de inventario, e integración de sistemas. No es un chatbot genérico."
+  structuredData={faqSchema}
+>
+  <!-- HERO: banner de ancho completo -->
+  <section class="relative" style="overflow:hidden;">
+    <img
+      src="/assets/images/stock/auto-dealership-hero.jpg"
+      alt="Estelas de luz en una autopista de noche"
+      class="absolute inset-0 w-full h-full object-cover"
+      loading="eager"
+    />
+    <div class="absolute inset-0" style="background:linear-gradient(rgba(5,5,5,.5), rgba(5,5,5,.5)), linear-gradient(100deg, rgba(5,5,5,.92) 0%, rgba(5,5,5,.78) 38%, rgba(5,5,5,.35) 68%, rgba(5,5,5,.15) 100%);"></div>
+    <div class="relative max-w-6xl mx-auto px-6 flex items-center" style="min-height:32rem; padding:6rem 1.5rem;">
+      <div class="max-w-xl">
+        <span class="section-tag mb-4" style="color:var(--oak);">Industria Automotriz</span>
+        <h1 class="text-4xl lg:text-5xl leading-tight mb-5" style="color:#fff;">
+          Sistemas de IA reales para concesionarios — no un chatbot que frustra a tus clientes.
+        </h1>
+        <p class="text-lg leading-relaxed mb-8" style="color:#e5e7eb;">
+          Atención y seguimiento inteligente, sincronización de inventario, e integración de
+          sistemas — construidos para cómo realmente opera tu concesionario: confiables,
+          integrales, y a la medida de tu presupuesto.
+        </p>
+        <a href="https://calendly.com/meet-ubik360/30min" target="_blank" rel="noopener" class="btn-primary">Agenda un Diagnóstico Gratuito</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- EL PROBLEMA -->
+  <section style="background:#fff; padding:4rem 0;">
+    <div class="max-w-3xl mx-auto px-6 text-center">
+      <p style="font-size:1.0625rem; color:#374151; line-height:1.8;">
+        La mayoría de los concesionarios en Latinoamérica ya intentaron un chatbot genérico — y
+        terminaron frustrando más clientes de los que ayudaron. El problema real casi nunca es
+        "necesitamos IA". Es que los leads se enfrían mientras nadie responde a tiempo, el
+        inventario en tus anuncios no coincide con lo que realmente tienes en el lote, y tus
+        sistemas de ventas, inventario y facturación no se hablan entre sí.
+      </p>
+    </div>
+  </section>
+
+  <!-- LO QUE CONSTRUIMOS -->
+  <section style="background:var(--oak); padding:4rem 0;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="max-w-2xl mb-10">
+        <span class="section-tag mb-3" style="color:var(--red);">Lo Que Construimos</span>
+        <h2 class="text-3xl lg:text-4xl mb-4" style="color:var(--black);">Sistemas construidos para vender vehículos, no para impresionar en una demo.</h2>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div style="background:#fff; border-radius:.875rem; padding:1.75rem;">
+          <h3 class="text-lg mb-2" style="color:var(--black);">Atención y Seguimiento Inteligente</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Responde de inmediato por WhatsApp o web, con tu inventario real — califica, agenda pruebas de manejo, y da seguimiento automático a cada lead.</p>
+        </div>
+        <div style="background:#fff; border-radius:.875rem; padding:1.75rem;">
+          <h3 class="text-lg mb-2" style="color:var(--black);">Sincronización de Inventario</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Tus anuncios y tu sitio reflejan lo que realmente tienes en el lote — los vehículos vendidos se retiran automáticamente.</p>
+        </div>
+        <div style="background:#fff; border-radius:.875rem; padding:1.75rem;">
+          <h3 class="text-lg mb-2" style="color:var(--black);">Integración de Sistemas</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Conectamos CRM, inventario y facturación en un solo flujo — sin reingresar la misma información tres veces.</p>
+        </div>
+        <div style="background:#fff; border-radius:.875rem; padding:1.75rem;">
+          <h3 class="text-lg mb-2" style="color:var(--black);">Reportes en Tiempo Real</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Un panel claro que reúne datos de sistemas que hoy están desconectados, para saber qué está funcionando sin esperar un informe mensual.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NUESTRO ENFOQUE (asimétrico) -->
+  <section style="background:#fff; padding:4rem 0;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
+        <div>
+          <span class="section-tag mb-3">Nuestro Enfoque</span>
+          <h2 class="text-3xl lg:text-4xl mb-6" style="color:var(--black);">Primero entendemos tu concesionario. Después construimos la tecnología.</h2>
+          <div style="display:flex; flex-direction:column; gap:1.25rem; font-size:1.0625rem; color:#374151; line-height:1.85;">
+            <p>
+              Antes de proponer un solo sistema, entendemos qué genera ingresos en tu operación —
+              qué categorías de vehículos convierten mejor, qué fuentes de leads realmente
+              producen ventas — y qué está comiendo margen: procesos manuales, seguimiento
+              perdido, tiempo del equipo en tareas que un sistema puede hacer solo.
+            </p>
+            <p>
+              Construimos sistemas confiables — no una demo que se ve bien pero falla en
+              producción — con una perspectiva integral de tu operación completa, y a un costo
+              accesible para la realidad de un concesionario en Latinoamérica, no una plataforma
+              empresarial diseñada para el mercado de EE.UU. adaptada a la fuerza.
+            </p>
+          </div>
+        </div>
+        <img
+          src="/assets/images/stock/marketing-analytics-dashboard.jpg"
+          alt="Panel de análisis de marketing"
+          class="w-full rounded-xl object-cover aspect-[4/3]"
+          loading="lazy"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- NO TODO ES UN PROBLEMA DE TECNOLOGÍA (rojo) -->
+  <section style="background:var(--red); padding:4rem 0;">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+      <span class="section-tag mb-3" style="color:#fff; opacity:.85;">Honestidad Antes que Venta</span>
+      <h2 class="text-3xl lg:text-4xl mb-6" style="color:#fff;">No todo es un problema de tecnología.</h2>
+      <p style="font-size:1.0625rem; color:rgba(255,255,255,.88); line-height:1.85;">
+        Algunos concesionarios necesitan un sistema mejor. Otros necesitan un proceso de
+        seguimiento más claro, o simplemente una persona responsable de ejecutarlo — eso no se
+        resuelve con más tecnología. Antes de construir una sola línea de código, te decimos con
+        claridad cuál es tu caso, incluso cuando la respuesta honesta es que todavía no necesitas
+        construir nada nuevo.
+      </p>
+    </div>
+  </section>
+
+  <!-- PROCESO -->
+  <section style="background:#f9fafb; padding:4rem 0;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="max-w-xl mb-12">
+        <span class="section-tag mb-3">El Proceso</span>
+        <h2 class="text-3xl lg:text-4xl" style="color:var(--black);">Cómo trabajamos</h2>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div>
+          <div style="width:3rem; height:3rem; border-radius:9999px; border:2px solid var(--red); display:flex; align-items:center; justify-content:center; margin-bottom:1.25rem;">
+            <span style="font-family:'DM Serif Display',serif; font-size:1.25rem; color:var(--red);">1</span>
+          </div>
+          <h3 style="font-family:'DM Serif Display',serif; font-size:1.0625rem; color:var(--black); margin:0 0 .5rem;">Diagnóstico</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Entendemos tu operación real: qué genera ingresos, dónde se pierde tiempo, y qué se puede automatizar primero.</p>
+        </div>
+        <div>
+          <div style="width:3rem; height:3rem; border-radius:9999px; border:2px solid var(--red); display:flex; align-items:center; justify-content:center; margin-bottom:1.25rem;">
+            <span style="font-family:'DM Serif Display',serif; font-size:1.25rem; color:var(--red);">2</span>
+          </div>
+          <h3 style="font-family:'DM Serif Display',serif; font-size:1.0625rem; color:var(--black); margin:0 0 .5rem;">Diseño de la Solución</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Definimos exactamente qué se va a construir, con qué alcance, y qué resultado esperar.</p>
+        </div>
+        <div>
+          <div style="width:3rem; height:3rem; border-radius:9999px; border:2px solid var(--red); display:flex; align-items:center; justify-content:center; margin-bottom:1.25rem;">
+            <span style="font-family:'DM Serif Display',serif; font-size:1.25rem; color:var(--red);">3</span>
+          </div>
+          <h3 style="font-family:'DM Serif Display',serif; font-size:1.0625rem; color:var(--black); margin:0 0 .5rem;">Construcción</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Construimos e integramos el sistema directamente con tu inventario, CRM y procesos actuales.</p>
+        </div>
+        <div>
+          <div style="width:3rem; height:3rem; border-radius:9999px; border:2px solid var(--red); display:flex; align-items:center; justify-content:center; margin-bottom:1.25rem;">
+            <span style="font-family:'DM Serif Display',serif; font-size:1.25rem; color:var(--red);">4</span>
+          </div>
+          <h3 style="font-family:'DM Serif Display',serif; font-size:1.0625rem; color:var(--black); margin:0 0 .5rem;">Acompañamiento</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Ajustamos el sistema con datos reales de uso — no lo dejamos solo después de entregarlo.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section style="background:#fff; padding:4rem 0;">
+    <div class="max-w-3xl mx-auto px-6">
+      <div class="text-center mb-12">
+        <span class="section-tag mb-3">Preguntas Frecuentes</span>
+        <h2 class="text-3xl lg:text-4xl" style="color:var(--black);">Lo que más preguntan</h2>
+      </div>
+      <div id="faq-list">
+        <div class="faq-item">
+          <button class="faq-question">
+            ¿Esto reemplaza a mi equipo de ventas?
+            <svg class="faq-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer">No. El sistema califica leads, responde de inmediato y agenda citas o pruebas de manejo — tu equipo sigue cerrando la venta. La diferencia es que ningún lead se enfría esperando una respuesta.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            ¿Es lo mismo que un chatbot de WhatsApp genérico?
+            <svg class="faq-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer">No. Un chatbot genérico responde con guiones fijos y frustra al cliente en cuanto la pregunta se sale del script. Lo que construimos se integra con tu inventario real y tus procesos reales — conoce lo que tienes disponible hoy, no una lista genérica.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            ¿Funciona con el sistema o CRM que ya tenemos?
+            <svg class="faq-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer">En la mayoría de los casos sí, lo conectamos directamente. El diagnóstico inicial confirma qué se puede integrar directamente y qué requiere un ajuste — nunca prometemos una integración antes de confirmarla.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            ¿Cuánto cuesta esto para un concesionario en Colombia o Latinoamérica?
+            <svg class="faq-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer">Depende del alcance — desde un sistema de atención y seguimiento puntual hasta una integración completa de inventario, CRM y reportes. Construimos a la medida de lo que tu concesionario realmente necesita y puede sostener, no una plataforma empresarial de EE.UU. adaptada a la fuerza. El diagnóstico gratuito define alcance y costo antes de empezar.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA: banner de ancho completo -->
+  <section class="relative" style="overflow:hidden;">
+    <img
+      src="/assets/images/stock/auto-dealership-hero.jpg"
+      alt="Estelas de luz en una autopista de noche"
+      class="absolute inset-0 w-full h-full object-cover"
+      loading="lazy"
+    />
+    <div class="absolute inset-0" style="background:rgba(5,5,5,.8);"></div>
+    <div class="relative max-w-3xl mx-auto px-6 text-center" style="padding:6rem 1.5rem;">
+      <span class="section-tag mb-4" style="color:var(--oak);">Da el Primer Paso</span>
+      <h2 class="text-3xl lg:text-4xl mb-5" style="color:#fff;">¿Listo para automatizar tu concesionario de verdad?</h2>
+      <p style="color:#e5e7eb; font-size:1.125rem; line-height:1.7; max-width:30rem; margin:0 auto 2.5rem;">
+        Una llamada de 30 minutos para entender tu operación y mostrarte qué es realmente posible.
+        Sin costo, sin compromiso.
+      </p>
+      <a href="https://calendly.com/meet-ubik360/30min" target="_blank" rel="noopener" class="btn-primary" style="font-size:1rem; padding:1rem 2.5rem;">
+        Agenda tu Diagnóstico Gratuito
+      </a>
+    </div>
+  </section>
+
+  <script>
+    document.querySelectorAll('.faq-question').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const item = btn.closest('.faq-item');
+        const isOpen = item?.classList.contains('open');
+        document.querySelectorAll('.faq-item').forEach((i) => i.classList.remove('open'));
+        if (!isOpen) item?.classList.add('open');
+      });
+    });
+  </script>
+</Layout>

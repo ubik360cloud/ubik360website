@@ -65,8 +65,8 @@ vercel.json              → rewrites /en/ and /en/index.html (and /es/ equivale
                           es/marketing-digital.html)
 api/subscribe.js        → Vercel serverless function (root-level /api dir, auto-detected by
                           Vercel independently of the static Astro build — no adapter/output-mode
-                          change needed). Adds newsletter/contact-form emails to Brevo — see
-                          "Newsletter (Brevo)" below.
+                          change needed). Adds newsletter/contact-form emails to SendGrid — see
+                          "Newsletter (SendGrid)" below.
 src/layouts/Layout.astro → shared <head> (SEO meta, hreflang, OG, GTM, JSON-LD slot), wraps
                           Nav + page content + Footer + NewsletterPopup + chat widget script
 src/components/Nav.astro    → real component (not JS-injected) — EN and ES link arrays are
@@ -77,7 +77,7 @@ src/components/PartnerLogos.astro → logo carousel (grid on desktop, horizontal
                           carousel on mobile); each logo's card background is set per-logo (`bg`
                           field) to match/contrast with that specific logo, not a single default
 src/components/NewsletterInline.astro, NewsletterPopup.astro → newsletter signup UI, POST to
-                          /api/subscribe — see "Newsletter (Brevo)" below
+                          /api/subscribe — see "Newsletter (SendGrid)" below
 src/utils/langMap.ts     → explicit EN⇄ES page-equivalence map used by the language toggle (Nav +
                           Footer) — falls back to that language's homepage for pages with no real
                           counterpart, rather than guessing at a misleading match
@@ -147,44 +147,52 @@ marketing. **This only covers the widget's visible strings** — the bot's actua
 and knowledge base live in the separate Railway service and were NOT updated; that service needs
 its own review to stay consistent with current positioning (out of reach from this repo).
 
-## Newsletter (Brevo) — added 2026-07
+## Newsletter (SendGrid) — added 2026-07, migrated off Brevo 2026-09
 `NewsletterInline.astro` (homepage section) and `NewsletterPopup.astro` (site-wide bottom-corner
 slide-in, scroll/time/exit-intent triggered) POST `{ email, lang, source }` to `/api/subscribe`
 (`api/subscribe.js`, a Vercel serverless function auto-detected from the root `/api` directory —
 deliberately not an Astro API route, so no `output`/adapter change was needed on the otherwise-fully-
-static site). The function calls Brevo's REST API server-side, keeping `BREVO_API_KEY` out of the
-client entirely. `source` maps to a specific Brevo list, chosen server-side (a client can't pass an
-arbitrary list ID):
-- `"newsletter"` (default) → list 2 — used by both newsletter forms.
-- `"contact"` → list 3 — fired best-effort by `en/contact.astro`/`es/contacto.astro` right after
-  their existing Formspree submission succeeds, without blocking the redirect on it. Formspree
-  stays the actual lead-notification mechanism; Brevo is just getting the contact into a list too.
+static site). The function calls SendGrid's Marketing Contacts REST API server-side, keeping
+`SENDGRID_API_KEY` out of the client entirely. `source` maps to a specific SendGrid list, chosen
+server-side (a client can't pass an arbitrary list id):
+- `"newsletter"` (default) → `SENDGRID_LIST_NEWSLETTER` — used by both newsletter forms.
+- `"contact"` → `SENDGRID_LIST_CONTACT` — fired best-effort by `en/contact.astro`/`es/contacto.astro`
+  right after their existing Formspree submission succeeds, without blocking the redirect on it.
+  Formspree stays the actual lead-notification mechanism; SendGrid is just getting the contact into
+  a list too.
 
-List IDs are overridable via `BREVO_LIST_NEWSLETTER` / `BREVO_LIST_CONTACT` env vars.
-`updateEnabled: true` on the Brevo call means re-subscribing an existing contact updates them
-instead of erroring.
+List ids are the actual list UUIDs from SendGrid's Marketing > Contacts > Lists UI (env vars
+`SENDGRID_LIST_NEWSLETTER` / `SENDGRID_LIST_CONTACT`, no sensible hardcoded default — unlike
+Brevo's simple numeric ids, the lists have to exist in SendGrid first). The `PUT
+/v3/marketing/contacts` upsert call is asynchronous (returns 202 + a job id, not a synchronous
+success/failure) — treated as success on a 202, same as the old Brevo `updateEnabled: true`
+behavior of updating rather than erroring on a re-subscribe. The prior Brevo version also stored a
+`LANG` contact attribute; dropped in the SendGrid version since SendGrid custom fields need to be
+created in the dashboard first to get a field id to reference — not worth the setup for one
+attribute at this scale.
 
-**Two real gotchas hit while wiring this up — check these first if it breaks again:**
-1. **Env var timing:** Vercel env vars only apply to deployments created *after* the var was
-   added — adding `BREVO_API_KEY` in the dashboard does nothing until the next deploy. If a
-   just-added key still seems to fail with "Server not configured," push a trivial commit (or
-   redeploy) rather than assuming the key itself is wrong.
-2. **Brevo IP allowlisting:** Brevo can restrict API access to specific IPs, and it's a **separate
-   toggle for SMTP keys vs. REST API keys** on the same settings page
-   (`app.brevo.com/security/authorised_ips`) — disabling it under the wrong tab looks identical
-   from the outside (same 401 `unauthorized: unrecognised IP` error) and is easy to miss. Vercel
-   serverless functions don't have a single static outbound IP on the Hobby plan, so this
-   restriction needs to be off (or would need Vercel's paid static-IP add-on) for the integration
-   to work at all.
+**Migrated off Brevo 2026-09-30** (Jose: repeated friction with Brevo — most recently a "your SMTP
+account is not yet activated" 403 on every Growth Hub send attempt, on top of an earlier
+sender-validation issue that needed full domain authentication to fix. Switched to SendGrid, same
+provider 360PrintStudio already uses successfully; their free tier's 100/day is well above this
+site's newsletter volume). This also migrated the Growth Hub's cold-outreach sending — see that
+section below for its own `_lib/sendgrid.js`/webhook detail.
+
+**Needs before this works again in production:** a SendGrid account (Jose creating one), an API key
+(`SENDGRID_API_KEY`), and two Marketing Contacts lists created in SendGrid's dashboard with their
+UUIDs set as `SENDGRID_LIST_NEWSLETTER`/`SENDGRID_LIST_CONTACT`. Until those are set, `/api/subscribe`
+returns "Server not configured" (500) — same env-var-timing gotcha as before applies: a var added in
+the Vercel dashboard needs a fresh deploy to take effect, adding it alone does nothing until then.
 
 The repo has a linked Vercel CLI (`.vercel/project.json` present) — `npx vercel env ls`,
 `npx vercel ls`, and `npx vercel logs <deployment-url>` are useful for debugging this kind of thing
 directly instead of guessing.
 
-**Future/deferred (2026-07, Jose):** a backend tool to compose and send an actual newsletter
-(with templates) through Brevo was requested but explicitly deferred to its own session — not
-started. See MARKETING.md "Marketing Backend — Plan" for the open question of whether that should
-be a custom tool or just Brevo's own campaign composer.
+**Future/deferred (2026-07, Jose):** a backend tool to compose and send an actual newsletter (with
+templates) was requested but explicitly deferred to its own session — not started. See
+MARKETING.md "Marketing Backend — Plan" for the open question of whether that should be a custom
+tool or just SendGrid's own campaign composer (formerly framed around Brevo's, before the
+migration).
 
 ## Growth Hub (Apollo outreach) — added 2026-09, deployed
 A small Apollo-driven cold-outreach system: `api/growth/**` in this repo (a single catch-all
@@ -212,6 +220,15 @@ Deployed live at both `ubik360-growth-hub.vercel.app` (temporary, until `marketi
 DNS is added) and the main site's `/api/growth/*`. **Still not fully functional** — see
 `docs/growth-hub-status.md` for exactly which env vars are set vs. still missing before real sends
 can happen.
+
+**Outbound email: SendGrid, not Brevo (switched 2026-09-30, Jose — repeated Brevo friction, most
+recently a "your SMTP account is not yet activated" 403 blocking every send attempt).**
+`api/growth/_lib/sendgrid.js` is the single send funnel both the flow engine and 1:1-draft send
+handler call through (`SENDGRID_API_KEY`); `api/growth/_handlers/webhooks.js`'s `sendgrid` export
+handles SendGrid's Event Webhook (an array of events per POST, unlike Brevo's one-event-per-call
+shape) for bounce/complaint/unsubscribe auto-suppression. See "Newsletter (SendGrid)" above for the
+full migration note (that section also covers the separate `api/subscribe.js` list-signup
+integration, which moved to SendGrid in the same batch).
 
 ## Known fixes made during the port (don't reintroduce these bugs)
 - **WhatsApp number:** the legacy `en/contact.html`/`es/contacto.html` linked a fake placeholder
@@ -257,8 +274,8 @@ directly without re-linking.
   `digital-marketing/printing.astro` and `international-expansion.astro` have no lead magnet of
   their own yet — see MARKETING.md for candidate ideas.
 - Contact form still submits to Formspree (`action="https://formspree.io/f/mlganpda"`) as its
-  primary mechanism, now *also* best-effort adding the contact to Brevo (see "Newsletter (Brevo)"
-  above) — Formspree isn't being replaced, just supplemented.
+  primary mechanism, now *also* best-effort adding the contact to SendGrid (see "Newsletter
+  (SendGrid)" above) — Formspree isn't being replaced, just supplemented.
 - `src/components/RouteMotif.astro` and `PlaceholderImage.astro` are likely unused now (every page
   moved to full-width photo hero banners during the 2026-07 UI pass) — check before deleting, but
   don't be surprised to find no references.

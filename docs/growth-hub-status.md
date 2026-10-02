@@ -33,7 +33,7 @@ deployment (not a separate server — volume is far too low to justify an always
 | `prospectResearch.js` | **switched from Anthropic to DeepInfra 2026-09** (Jose, cost). Fetches the prospect's URL itself (plain HTTP, no AI, no extra paid search API) and hands the page text to a DeepInfra-hosted model (`PROSPECT_MODEL` env var, defaults to `deepseek-ai/DeepSeek-V3` — DeepInfra never auto-picks a model). Trade-off vs. the original Anthropic-native `web_search`/`web_fetch` tools: no more autonomous discovery of pages not explicitly given a URL. Key: `DEEPINFRA_UBIK30_KEY` (Jose's own naming, not a generic `DEEPINFRA_API_KEY`). |
 | Hub app (`hub/`) | **deployed and live** at `ubik360-growth-hub.vercel.app`. Hit its own build failure first: `npm audit fix --force` had bumped `vite` to 8.3.0 locally, which `@vitejs/plugin-react@4.7.0` doesn't support -- local npm let it through with a warning, Vercel's strict `npm install` didn't. Pinned back to `vite@^7.1.12`. Sign-in (Supabase magic link) works end-to-end. |
 | `vercel.json` crons | added to the main `ubik360` project: weekly Apollo propose (Fri 08:00 ET), daily oneoff pull (10:00 ET), daily flow runner (11:00 ET) |
-| Brevo | not yet touched — `jose@`/`grow@ubik360.com` need adding as verified senders (or confirming ubik360.com's domain-level auth already covers them) |
+| Email sending | **switched from Brevo to SendGrid 2026-09-30** (Jose: repeated Brevo friction) — see the dedicated section below for full detail and what's still needed before it can send. |
 
 ## Row Level Security — why zero policies is correct here
 
@@ -352,17 +352,57 @@ single-line format). Built:
   new always-append signature would have produced two signatures. Removed that instruction from
   the prompt now that `sendEmail` always appends one.
 
+## Switched from Brevo to SendGrid entirely (2026-09-30)
+
+The account-activation 403 above was the last straw on top of the earlier sender-validation issue
+that needed full domain authentication to fix -- Jose: "I always encounter these kind of problems
+with Brevo... this is why 360PrintStudio uses Sendgrid." Decided to migrate **everything** off
+Brevo, not just the Growth Hub's cold-outreach sends -- the newsletter/contact-form signup
+integration (`api/subscribe.js`) moved too, even though it wasn't itself broken, per Jose's explicit
+"everything off Brevo" call.
+
+- **`api/growth/_lib/sendgrid.js`** replaces `_lib/brevo.js` (deleted) -- same exported shape
+  (`sendEmail`, `ensureSignature`, `ensureOptOut`) so `flowEngine.js` and `oneoffs.js`'s `send`
+  handler needed only an import-path change, no logic change. Uses SendGrid's `POST
+  /v3/mail/send`; success is a 202 with an empty body (no JSON to parse, unlike Brevo's synchronous
+  JSON response). Same 3-line signature, same language-aware opt-out footer, same `List-Unsubscribe`
+  header -- none of the personalization work above needed to change.
+- **`api/growth/_handlers/webhooks.js`**'s export renamed `brevo` → `sendgrid`, webhook shape
+  changed to match: SendGrid's Event Webhook always POSTs a JSON **array** of events per call
+  (Brevo sent one event object per call) -- the handler now loops. Bounce classification also
+  differs: SendGrid uses one `bounce` event type with a `type` field (`"bounce"` = hard,
+  `"blocked"` = soft) instead of Brevo's separate `hard_bounce`/`soft_bounce` event names,
+  and adds a `dropped` event Brevo didn't have (mapped to `bounced` but never auto-suppressing,
+  same as a soft bounce -- a drop is often itself caused by an existing suppression, not a new
+  reason to add one). `handler.js`'s route moved from `webhooks/brevo` to `webhooks/sendgrid`.
+- **`api/subscribe.js`** now calls SendGrid's Marketing Contacts `PUT /v3/marketing/contacts`
+  instead of Brevo's `POST /v3/contacts`. One real behavior change: this endpoint is
+  **asynchronous** (a 202 means the upsert job was accepted, not confirmed done) -- treated as
+  success, which is good enough here. Also dropped the `LANG` contact attribute the Brevo version
+  stored: SendGrid custom fields need to be created in the dashboard first to get a field id to
+  reference, not worth the extra setup for one attribute at this scale. List membership alone still
+  separates newsletter vs. contact-form signups.
+- Env vars: `SENDGRID_API_KEY` (shared by both the Growth Hub sends and the newsletter signup --
+  one key, one SendGrid account), `SENDGRID_LIST_NEWSLETTER`/`SENDGRID_LIST_CONTACT` (the actual
+  list UUIDs from SendGrid's Marketing > Contacts > Lists UI -- unlike Brevo's simple numeric ids
+  2/3, there's no sensible hardcoded default since the lists don't exist yet). `GROWTH_WEBHOOK_SECRET`
+  is reused as-is for the new webhook URL.
+
+**Code is written and syntax-checked but deliberately NOT pushed yet** -- `api/subscribe.js`
+currently works against the live Brevo account; pushing this migration to `astro-migration` (which
+auto-deploys to production) before `SENDGRID_API_KEY`/list ids are actually set in Vercel would
+break real newsletter signups on the live site, not just leave the (already-broken) Growth Hub
+send path unfixed. **Waiting on Jose to**: create the SendGrid account, get an API key, create two
+Marketing Contacts lists (newsletter + contact) and note their UUIDs, and verify/authenticate the
+sending domain or individual senders (`jose@`/`grow@ubik360.com`) in SendGrid -- likely similar DNS
+CNAME work at Hostinger to what domain authentication needed in Brevo, but SendGrid's own dashboard
+will show the exact records once domain authentication is started there.
+
 ## What's left before this can actually send anything
 
 1. Add `GROWTH_ADMIN_SECRET` on Vercel (see above) so the two queued test pulls can actually run.
-2. **New real blocker found 2026-09-30**: a test-send attempt against the (now domain-authenticated)
-   Colombia flow failed with `403 permission_denied`: `"Unable to send email. Your SMTP account is
-   not yet activated. Please contact us at contact@brevo.com to request activation"` — this is
-   Brevo requiring manual account activation for actually sending (a separate step from the domain
-   authentication done earlier this session, which only proves the sending domain itself is valid).
-   **Jose needs to email/contact Brevo support to get the account activated** before any real or
-   test send — including the "Send test to me" button — can succeed. Nothing in this repo can work
-   around it.
+2. **SendGrid migration above is code-complete but not deployed** -- needs the account, API key,
+   list ids, and sender/domain authentication before push + real env vars + redeploy.
 3. First real end-to-end test: sign in to the hub, manually trigger a weekly Apollo plan (small
    target, ~20 contacts/track) and review what comes back before letting cron automate it.
 

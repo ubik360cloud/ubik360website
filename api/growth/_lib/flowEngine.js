@@ -4,7 +4,7 @@
 // per contact per flow") since this system runs at 10 sends/day combined,
 // not thousands; add sophistication if/when volume actually needs it.
 import { supabase } from './supabase.js';
-import { sendEmail } from './brevo.js';
+import { sendEmail } from './sendgrid.js';
 import { reserveSendSlot } from './sendCap.js';
 
 // Shared with sendTestEmail below so a test send renders EXACTLY what a

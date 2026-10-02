@@ -2,7 +2,7 @@ import { withOwner } from '../_lib/auth.js';
 import { withCron } from '../_lib/cron.js';
 import { supabase } from '../_lib/supabase.js';
 import { dailyOneoffPull } from '../_lib/oneoffQueue.js';
-import { sendEmail } from '../_lib/brevo.js';
+import { sendEmail } from '../_lib/sendgrid.js';
 import { reserveSendSlot } from '../_lib/sendCap.js';
 
 export const list = withOwner(async (req, res) => {

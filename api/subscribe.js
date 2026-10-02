@@ -1,20 +1,33 @@
 // Vercel serverless function (auto-detected from the root /api directory --
 // no Astro adapter/output-mode change needed since this sits alongside the
-// static build, not inside it). Keeps the Brevo API key server-side only;
-// the client never sees it.
+// static build, not inside it). Keeps the SendGrid API key server-side
+// only; the client never sees it.
 //
-// Two sources feed this, mapped server-side to two different Brevo lists so
-// a client can't just POST an arbitrary listId:
-//   - "newsletter" (default) -> list 2 -- NewsletterInline.astro, NewsletterPopup.astro
-//   - "contact"              -> list 3 -- en/contact.astro, es/contacto.astro (fired
+// Replaces the earlier Brevo integration (2026-09-30, Jose: repeated
+// friction with Brevo, switching everything to SendGrid -- same provider
+// 360PrintStudio already uses).
+//
+// Two sources feed this, mapped server-side to two different SendGrid
+// marketing lists so a client can't just POST an arbitrary list id:
+//   - "newsletter" (default) -> SENDGRID_LIST_NEWSLETTER -- NewsletterInline.astro, NewsletterPopup.astro
+//   - "contact"              -> SENDGRID_LIST_CONTACT -- en/contact.astro, es/contacto.astro (fired
 //     best-effort after Formspree succeeds, doesn't block the redirect)
-// Both list IDs are overridable via BREVO_LIST_NEWSLETTER / BREVO_LIST_CONTACT
-// env vars without a code change. Requires BREVO_API_KEY to be set in Vercel
-// project settings -- NOTE: env var changes only apply to deployments
-// created after the var was added, so a fresh deploy is needed once it's set.
+// Both list ids must be set in Vercel project settings as the actual list
+// UUIDs from SendGrid's Marketing > Contacts > Lists UI (unlike Brevo's
+// simple numeric ids, there's no sensible hardcoded default here -- the
+// lists have to exist in SendGrid first). Requires SENDGRID_API_KEY too --
+// NOTE: env var changes only apply to deployments created after the var
+// was added, so a fresh deploy is needed once these are set.
+//
+// Note: the prior Brevo version also stored a LANG contact attribute.
+// SendGrid's contact custom fields require a field to be created in the
+// dashboard first (to get a generated field id to reference) -- not worth
+// the extra setup for a single attribute at this scale, so that's dropped;
+// list membership alone still distinguishes newsletter vs. contact-form
+// signups.
 const LISTS = {
-  newsletter: Number(process.env.BREVO_LIST_NEWSLETTER) || 2,
-  contact: Number(process.env.BREVO_LIST_CONTACT) || 3,
+  newsletter: process.env.SENDGRID_LIST_NEWSLETTER,
+  contact: process.env.SENDGRID_LIST_CONTACT,
 };
 
 export default async function handler(req, res) {
@@ -23,51 +36,49 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { email, lang, source } = req.body || {};
+  const { email, source } = req.body || {};
 
   if (typeof email !== 'string' || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return res.status(400).json({ error: 'Invalid email' });
   }
 
-  const apiKey = process.env.BREVO_API_KEY;
+  const apiKey = process.env.SENDGRID_API_KEY;
   if (!apiKey) {
-    console.error('BREVO_API_KEY is not set');
+    console.error('SENDGRID_API_KEY is not set');
     return res.status(500).json({ error: 'Server not configured' });
   }
 
-  const listId = LISTS[source] ?? LISTS.newsletter;
+  const listId = LISTS[source] || LISTS.newsletter;
+  if (!listId) {
+    console.error(`No SendGrid list configured for source '${source || 'newsletter'}'`);
+    return res.status(500).json({ error: 'Server not configured' });
+  }
 
   try {
-    const brevoRes = await fetch('https://api.brevo.com/v3/contacts', {
-      method: 'POST',
+    const sgRes = await fetch('https://api.sendgrid.com/v3/marketing/contacts', {
+      method: 'PUT',
       headers: {
-        'api-key': apiKey,
+        Authorization: `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
-        Accept: 'application/json',
       },
       body: JSON.stringify({
-        email,
-        listIds: [listId],
-        updateEnabled: true,
-        attributes: { LANG: lang === 'en' ? 'EN' : 'ES' },
+        list_ids: [listId],
+        contacts: [{ email }],
       }),
     });
 
-    if (brevoRes.ok) {
+    // This endpoint is asynchronous -- a 202 means the upsert job was
+    // accepted, not that it has finished yet. Good enough here: we don't
+    // need to confirm completion synchronously, just that SendGrid took it.
+    if (sgRes.status === 202) {
       return res.status(200).json({ ok: true });
     }
 
-    const data = await brevoRes.json().catch(() => ({}));
-    // updateEnabled:true should prevent this, but treat an existing contact
-    // as a successful subscription either way rather than surfacing an error.
-    if (brevoRes.status === 400 && data.code === 'duplicate_parameter') {
-      return res.status(200).json({ ok: true });
-    }
-
-    console.error('Brevo API error', brevoRes.status, data);
+    const data = await sgRes.json().catch(() => ({}));
+    console.error('SendGrid API error', sgRes.status, data);
     return res.status(502).json({ error: 'Subscription failed' });
   } catch (err) {
-    console.error('Brevo request failed', err);
+    console.error('SendGrid request failed', err);
     return res.status(500).json({ error: 'Subscription failed' });
   }
 }

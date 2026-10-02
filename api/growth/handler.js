@@ -19,7 +19,7 @@ import * as oneoffs from './_handlers/oneoffs.js';
 import * as leads from './_handlers/leads.js';
 import * as flows from './_handlers/flows.js';
 import * as misc from './_handlers/misc.js';
-import { brevo } from './_handlers/webhooks.js';
+import { sendgrid } from './_handlers/webhooks.js';
 
 // Route pattern segments: a string matches literally, `:id` captures into
 // req.params.id. Order matters only in that more-specific patterns should
@@ -63,7 +63,7 @@ const ROUTES = [
   { method: 'GET', pattern: ['deliverability'], handler: misc.deliverability },
   { method: 'GET', pattern: ['me'], handler: misc.me },
 
-  { method: 'POST', pattern: ['webhooks', 'brevo'], handler: brevo },
+  { method: 'POST', pattern: ['webhooks', 'sendgrid'], handler: sendgrid },
 ];
 
 function matchRoute(method, segments) {
@@ -85,7 +85,7 @@ function matchRoute(method, segments) {
 export default async function handler(req, res) {
   // OPTIONS preflight for any route -- individual handlers apply CORS via
   // withOwner, but a browser can preflight before we even know which route
-  // it's hitting, and webhooks.brevo (no withOwner) never needs it (server-
+  // it's hitting, and webhooks.sendgrid (no withOwner) never needs it (server-
   // to-server only), so handle the generic case here too.
   if (req.method === 'OPTIONS') {
     res.setHeader('Access-Control-Allow-Origin', process.env.GROWTH_HUB_ORIGIN || 'https://marketing.ubik360.com');

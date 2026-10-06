@@ -228,7 +228,7 @@ export default function Flows() {
         {enrollResult && (
           <p style={{ fontSize: '.8125rem', color: '#374151' }}>
             Enrolled {enrollResult.enrolled} of {enrollResult.total} contact{enrollResult.total === 1 ? '' : 's'}
-            {enrollResult.skipped?.length > 0 && ` (skipped: ${enrollResult.skipped.join(', ')})`}.
+            {enrollResult.skipped?.length > 0 && ` (skipped: ${Object.entries(enrollResult.skipped.reduce((m, r) => ({ ...m, [r]: (m[r] || 0) + 1 }), {})).map(([r, n]) => `${n} ${r}`).join(', ')})`}.
           </p>
         )}
 

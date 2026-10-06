@@ -187,6 +187,15 @@ export const testSend = withOwner(async (req, res, ownerEmail) => {
   }
 });
 
+// Owner-triggerable preview of what the next scheduled run WOULD send (per
+// flow: how many are due vs. how many the day's remaining allowance covers),
+// without sending anything.
+export const runPreview = withOwner(async (req, res) => {
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+  try { return res.status(200).json(await runDueSteps({ dryRun: true })); }
+  catch (e) { return res.status(500).json({ error: e.message }); }
+});
+
 export const run = withCron(async (req, res) => {
   try {
     const result = await runDueSteps();

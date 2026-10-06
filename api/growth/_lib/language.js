@@ -34,3 +34,12 @@ export function majorityLanguage(countries) {
   const es = known.filter((c) => detectLanguage([c]) === 'es').length;
   return es > known.length - es ? 'es' : 'en';
 }
+
+/** Language one contact should be written to from their own country, or
+ *  null when the country is blank/unknown (so callers don't treat "no data"
+ *  as "English" and wrongly block someone). A contact's country is where
+ *  the PERSON is per Apollo, which can differ from their company's (a
+ *  Colombian company's US-based director is still an English-speaker). */
+export function languageForCountry(country) {
+  return country && String(country).trim() ? detectLanguage([country]) : null;
+}

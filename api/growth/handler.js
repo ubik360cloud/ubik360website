@@ -60,6 +60,7 @@ const ROUTES = [
   { method: 'GET', pattern: ['flows'], handler: flows.listCreate },
   { method: 'POST', pattern: ['flows'], handler: flows.listCreate },
   { method: 'POST', pattern: ['flows', 'run'], handler: flows.run },
+  { method: 'POST', pattern: ['flows', 'run-preview'], handler: flows.runPreview },
   { method: 'GET', pattern: ['flows', ':id'], handler: flows.detail },
   { method: 'PATCH', pattern: ['flows', ':id'], handler: flows.detail },
   { method: 'PUT', pattern: ['flows', ':id', 'steps'], handler: flows.steps },

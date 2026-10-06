@@ -6,6 +6,7 @@
 import { supabase } from './supabase.js';
 import { sendEmail } from './sendgrid.js';
 import { reserveSendSlot, sendsRemainingToday } from './sendCap.js';
+import { languageForCountry } from './language.js';
 
 // Shared with sendTestEmail below so a test send renders EXACTLY what a
 // real contact would get -- same CTA placement, same signature/opt-out
@@ -35,12 +36,18 @@ function personalize(text, firstName, placeholder) {
 
 export async function enrollContact({ flowId, contactId, enrolledBy = 'owner' }) {
   const db = supabase();
-  const { data: contact } = await db.from('contacts').select('do_not_contact, status, email').eq('id', contactId).single();
+  const { data: contact } = await db.from('contacts').select('do_not_contact, status, email, country').eq('id', contactId).single();
   if (!contact || contact.do_not_contact || contact.status !== 'active') {
     return { ok: false, skipped: 'contact-not-eligible' };
   }
   const { data: suppressed } = await db.from('suppressions').select('email').eq('email', contact.email).maybeSingle();
   if (suppressed) return { ok: false, skipped: 'suppressed' };
+
+  // A flow is written in ONE language; a contact whose own country says the
+  // other one (a US-based director at a Colombian company) shouldn't get it.
+  const { data: flowRow } = await db.from('flows').select('language').eq('id', flowId).single();
+  const contactLang = languageForCountry(contact.country);
+  if (contactLang && flowRow && contactLang !== flowRow.language) return { ok: false, skipped: 'language-mismatch' };
 
   // Enrolling is a create-only operation, never a reset -- the naive upsert
   // this replaced always reset current_step to 0 and next_send_at to now,
@@ -116,7 +123,7 @@ const SEND_CONCURRENCY = 5;
  *  morning's 1:1 sends have already claimed their share). Time-budgeted so
  *  a big batch can't run into the serverless function's duration limit:
  *  whatever isn't reached stays due and goes out on the next run. */
-export async function runDueSteps({ budgetMs = 45000 } = {}) {
+export async function runDueSteps({ budgetMs = 45000, dryRun = false } = {}) {
   const started = Date.now();
   const db = supabase();
 
@@ -135,7 +142,7 @@ export async function runDueSteps({ budgetMs = 45000 } = {}) {
 
   const flowIds = [...new Set(due.map((e) => e.flow_id))];
   const [{ data: flows }, { data: allSteps }] = await Promise.all([
-    db.from('flows').select('id, track, status, language').in('id', flowIds),
+    db.from('flows').select('id, name, track, status, language').in('id', flowIds),
     db.from('flow_steps').select('*').in('flow_id', flowIds).eq('is_active', true),
   ]);
   const flowById = Object.fromEntries((flows || []).map((f) => [f.id, f]));
@@ -147,11 +154,18 @@ export async function runDueSteps({ budgetMs = 45000 } = {}) {
   const dueByFlow = {};
   for (const e of due) if (flowById[e.flow_id]?.status === 'active') (dueByFlow[e.flow_id] ||= []).push(e);
   const quotas = allocateQuota(remaining, Object.fromEntries(Object.entries(dueByFlow).map(([k, v]) => [k, v.length])));
+  if (dryRun) {
+    return {
+      dryRun: true,
+      remaining,
+      plan: Object.entries(dueByFlow).map(([flowId, list]) => ({ flow: flowById[flowId].name, due: list.length, wouldSend: quotas[flowId] || 0 })),
+    };
+  }
   const selected = Object.entries(dueByFlow).flatMap(([flowId, list]) => list.slice(0, quotas[flowId] || 0));
   if (!selected.length) return { sent: 0, skipped: 0, remaining, perFlow: {} };
 
   const contactIds = [...new Set(selected.map((e) => e.contact_id))];
-  const { data: contacts } = await db.from('contacts').select('id, email, first_name, do_not_contact, status').in('id', contactIds);
+  const { data: contacts } = await db.from('contacts').select('id, email, first_name, country, do_not_contact, status').in('id', contactIds);
   const contactById = Object.fromEntries((contacts || []).map((c) => [c.id, c]));
   const { data: suppressions } = await db.from('suppressions').select('email').in('email', (contacts || []).map((c) => c.email));
   const suppressed = new Set((suppressions || []).map((s) => s.email));
@@ -171,6 +185,12 @@ export async function runDueSteps({ budgetMs = 45000 } = {}) {
       return;
     }
     if (suppressed.has(contact.email)) {
+      await db.from('enrollments').update({ status: 'stopped' }).eq('id', enr.id);
+      return;
+    }
+    // Safety net behind enrollContact's own check (older enrollments predate it).
+    const contactLang = languageForCountry(contact.country);
+    if (contactLang && contactLang !== flow.language) {
       await db.from('enrollments').update({ status: 'stopped' }).eq('id', enr.id);
       return;
     }

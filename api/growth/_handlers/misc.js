@@ -12,8 +12,8 @@ export const deliverability = withOwner(async (req, res) => {
     db.from('suppressions').select('reason'),
     db.from('contacts').select('status, track'),
     sendStatusToday(),
-    db.from('enrollments').select('id', { count: 'exact', head: true }).eq('status', 'active'),
-    db.from('enrollments').select('id', { count: 'exact', head: true }).eq('status', 'active').lte('next_send_at', new Date().toISOString()),
+    activeFlowEnrollmentCount(db, false),
+    activeFlowEnrollmentCount(db, true),
   ]);
 
   const bySource = {};
@@ -44,3 +44,14 @@ export const deliverability = withOwner(async (req, res) => {
 export const me = withOwner(async (req, res, ownerEmail) => {
   return res.status(200).json({ email: ownerEmail });
 });
+
+// Only enrollments in flows that are actually running count as "waiting" --
+// a paused flow's contacts aren't going to receive anything.
+async function activeFlowEnrollmentCount(db, dueOnly) {
+  const { data: flows } = await db.from('flows').select('id').eq('status', 'active');
+  const ids = (flows || []).map((f) => f.id);
+  if (!ids.length) return { count: 0 };
+  let q = db.from('enrollments').select('id', { count: 'exact', head: true }).eq('status', 'active').in('flow_id', ids);
+  if (dueOnly) q = q.lte('next_send_at', new Date().toISOString());
+  return q;
+}

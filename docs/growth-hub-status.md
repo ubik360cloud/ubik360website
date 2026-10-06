@@ -466,6 +466,51 @@ is needed (and it saves tokens).
   examples from sent+edited drafts, needs `oneoffs.ai_original_body` captured at creation) was
   scoped but not built.
 
+## Why no flow ever sent, and the sending model that replaced it (2026-10-06)
+
+Jose: three flows active for a week, dashboard shows no flow emails. Cause: **Vercel Cron calls its
+paths with HTTP GET**, but all three cron routes (`flows/run`, `oneoffs/pull`, `weekly-plan/propose`)
+were POST-only -- 404s, and GET `/flows/run` was captured by GET `/flows/:id` (owner auth, 401).
+So the daily flow runner, the daily 1:1 draft pull and the Friday Apollo proposal had **never run
+on their own** since launch (earlier manual tests all used POST, which is why it looked fine).
+Fixed by registering GET versions *before* `:id` in `handler.js`. Proof: `/flows/run` now answers
+`Unauthorized` from the cron handler instead of "Missing bearer token" from the owner handler.
+
+**New sending model** (`sendCap.js`, `flowEngine.js`): 100/day account-wide (SendGrid free tier),
+1:1 drafts limited to 10/day of that. The flow runner fires once a day at **18:00 UTC (2PM ET)**
+(`vercel.json`), takes whatever is left of the day's allowance after the morning's 1:1 sends, and
+splits it evenly across active flows (`allocateQuota`: a flow with few due contacts hands its unused
+share to the others, e.g. 5 / 18 / 437 due with 100 available -> 5 / 18 / 77). Batched queries,
+5-way concurrency, 45s time budget (function maxDuration 60s); anything not reached stays due for
+the next run. Consequence of the 2PM design: 1:1 sends after the run only get what's left.
+`GROWTH_DAILY_TOTAL_CAP` (Vercel env) is set to **30** as a deliberate warm-up for a brand-new
+SendGrid account/domain sending cold email; raise toward 100 once bounces/complaints look clean
+(the old `GROWTH_DAILY_SEND_CAP` is no longer read). `POST /flows/run-preview` (owner auth) shows
+what the next run would send per flow without sending anything.
+
+**Other fixes in the same batch:**
+1. Language: a segment's language now comes from its contacts' countries (majority), not Apollo
+   filter text -- a manual import's filter is `{manual:true}`, which had flipped the Colombian flow
+   back to English. Per contact, `enrollContact` refuses (and the runner stops at send time) anyone
+   whose own country implies the other language. Apollo's country is where the *person* lives, so
+   the 437-contact Colombian segment actually held 32 US, 3 France, 1 each Spain/UAE/Brazil -- those
+   38 enrollments were stopped (reversible: set back to `active`, or enroll them in an English
+   flow). The Flows page shows the Spanish/English contact mix and warns on a mismatch.
+2. Drafts: amber banner when a 1:1 contact is already in a flow or was emailed by one
+   (`flow_history` on `GET /oneoffs`), repeated in the send confirmation.
+3. Apollo tab: removed "Enroll into existing flow"; the Flows tab has "Enroll another segment into
+   this flow" instead.
+4. SendGrid event webhook enabled via API (delivered/bounce/dropped/spam/unsubscribe) pointing at
+   `/api/growth/webhooks/sendgrid?secret=...` with a freshly generated `GROWTH_WEBHOOK_SECRET` (also
+   in gitignored `.env.local`); click and open tracking switched OFF in SendGrid (both were on,
+   which rewrites links through a tracking redirect).
+5. Dashboard: sent-today of the cap, 1:1 vs flow sends, contacts waiting in *running* flows.
+
+**Flows paused for stale copy:** "Canada ecommerce brands - nearshore staffing" (18) and "Canada
+ecommerce & agency staffing test" (5) predate the personalization work (no greeting / "Hello there" /
+"I noticed your recent hiring activity..."); paused until redrafted. "Colombia marketing directors -
+manufacturing" (0 enrolled) has Spanish copy and language now set to es, but an old-style opener.
+
 ## What's left before this can actually send anything
 
 1. Add `GROWTH_ADMIN_SECRET` on Vercel (see above) so the two queued test pulls can actually run.

@@ -203,7 +203,7 @@ convention only reliably matched a single path segment for a non-Next.js app, so
 Vercel Hobby's 12-functions-per-deployment cap) + a separate admin app (`hub/`, deployed to
 `marketing.ubik360.com`) + its own Supabase project `ubik360-growth` (same account as
 360PrintStudio's, isolated project, id `cwlffqbxgsyvduipuopl`). Two tracks sharing one system,
-capped at **10 sends/day combined**: `ic` (Jose's independent-contractor pitch, `jose@ubik360.com`)
+capped at **100 sends/day total** (SendGrid free tier; ramped via `GROWTH_DAILY_TOTAL_CAP`, see docs) with **10/day max for 1:1 drafts**: `ic` (Jose's independent-contractor pitch, `jose@ubik360.com`)
 and `b2b` (Ubik 360's own outreach, `grow@ubik360.com`). Built using 360PrintStudio's marketing-hub
 as an architectural reference (weekly Apollo propose→approve→stage→import loop, AI-researched 1:1
 draft queue, approval-gated sends) — see `docs/growth-hub-status.md` for full build status.

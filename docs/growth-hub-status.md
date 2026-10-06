@@ -424,6 +424,48 @@ tracking should be turned off in SendGrid's Tracking settings to preserve the pl
 to leave since no code references it anymore, but worth deleting once everything's confirmed stable
 for a few days.
 
+## 1:1 drafting rewrite: Apollo firmographics, no website fetch, service-pitch picker (2026-10-02 to 10-06)
+
+Jose: every 1:1 draft opened "I noticed that [company] does X" -- reads fake, and states the
+obvious back to someone who knows their own business. Also pointed out Apollo already gives us
+name, role, company, headcount, founding year, location and industry, so no per-prospect research
+is needed (and it saves tokens).
+
+- **`prospectResearch.js` no longer fetches anything.** The plain-HTTP website fetch and the page
+  text in the prompt are gone. The prompt gets a flat structured-facts block (contact name/title,
+  company, industry, size, founded year, country) and is told to reason from industry + size ("a
+  company of this size in this industry commonly faces X"), be upfront that specifics get worked
+  out together, and never open by restating what the company does. Verdict JSON dropped
+  `findings`/`sources_read`; `decisive_signal` is now a structured fact.
+- **Data:** migration `008_firmographics.sql` adds `contacts.company_size/industry/founded_year`.
+  Apollo's match payload already had these (`apollo_staging.payload->organization`) but they were
+  dropped at the contacts insert; `stageApprove`, `manualImport.js` and `hub/src/lib/csv.js`
+  (Apollo export column aliases) now keep them, and 47 existing contacts were backfilled from
+  staging payloads. Manually imported contacts only have them if the CSV export included those
+  columns. `oneoffQueue.js` no longer requires `company_domain`.
+- **Bug caught in testing:** the first version of the rewrite left the contact's own name out of
+  the facts block, so every draft greeted "Hola,". Fixed (1e05cc0). Lesson: test-draft real
+  contacts after any prompt rewrite, don't assume.
+- **Wrong-angle bug (DISTRIMOTOS, a Colombian motorcycle-parts manufacturer, got a growth-marketing
+  pitch).** Two causes in `positioning/b2b.md`: option 1 is scoped to NA businesses but nothing
+  stopped it being picked for Colombia, and option 5 (manufacturing ops tooling) still required
+  "research surfaced a real pain point", which can never be true now. Fixed with an explicit
+  "Angle selection" gate section (Colombia + manufacturing -> option 5; prospect is itself an agency
+  -> agency_subcontracting) and option 5 reworded around legacy-systems integration, process
+  automation and cross-department data analysis. `ic.md`'s "best fit" criteria were likewise
+  rewritten from observed-website signals to industry/size heuristics.
+- **Service-pitch picker:** `POST /oneoffs/:id/redraft {business_unit}` re-drafts a not-yet-sent
+  draft with the angle forced (`research({forcedBusinessUnit})`); a previously auto-skipped draft
+  goes back to pending. Each Drafts card has a "Service pitch" dropdown + "Redraft with this angle"
+  button (warns before discarding unsaved edits). Angle lists live in two places that must stay in
+  sync: `VALID_BUSINESS_UNITS` in `_handlers/oneoffs.js` and `ANGLES` in `hub/src/pages/Drafts.jsx`.
+- **Known limits:** the draft's quality depends on Apollo's industry tagging (CASTEM, an
+  investment-casting manufacturer, came back as "mining & metals"). Draft output doesn't yet name
+  the specific departments (logistics, production, sales, marketing, accounting) Jose's own sample
+  email listed -- worth adding to option 5's brief. The "learn from my edits" feature (few-shot
+  examples from sent+edited drafts, needs `oneoffs.ai_original_body` captured at creation) was
+  scoped but not built.
+
 ## What's left before this can actually send anything
 
 1. Add `GROWTH_ADMIN_SECRET` on Vercel (see above) so the two queued test pulls can actually run.

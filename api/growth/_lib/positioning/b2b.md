@@ -12,6 +12,19 @@ Specifically: founders, SMEs, and decision-makers at growth-stage businesses —
 industry or company size beyond "growth-stage and actually deciding on marketing/staffing/ops
 spend."
 
+## Angle selection — check these geography/industry gates FIRST
+
+Before reasoning freely among the options below, apply these in order — don't default to the
+generic growth-marketing pitch just because it's listed first:
+
+1. If the prospect is **Colombia-based AND their industry is manufacturing/industrial/production**
+   (metals, automotive, plastics, food processing, machinery, etc.) → use option 5
+   (**manufacturing_ops_tooling**), not growth marketing. Growth marketing (option 1) is scoped to
+   **NA businesses only** — a Colombian manufacturer should never get the generic marketing pitch.
+2. If the prospect's own business IS a marketing/ad agency (industry says marketing/advertising)
+   → use option 4(b) (**agency_subcontracting**), never a direct growth-marketing pitch to them.
+3. Otherwise, pick among the remaining options by best industry/size fit.
+
 ## What we sell (pick the ONE that fits this prospect, don't pitch all three)
 
 1. **General growth marketing / fractional CMO** — for any NA business, no industry qualifier.
@@ -35,11 +48,12 @@ spend."
    brand — check whether the prospect's own business IS a marketing/ad agency before choosing this
    angle.
 5. **Manufacturing production & logistics tooling (Colombia test, 2026-09)** — for a Colombia-based
-   manufacturer: custom software/automation tooling for production planning and logistics
-   coordination (not a generic "digital marketing" pitch — this is an ops/tooling pitch). Only use
-   this angle for an actual manufacturing/production business, and only when the research surfaced
-   a real, specific production or logistics pain point to reference — otherwise skip rather than
-   force it.
+   manufacturer: custom software/automation tooling to integrate legacy systems, automate
+   processes, and analyze data across departments (production, logistics, sales, marketing) for
+   data-driven decisions (not a generic "digital marketing" pitch — this is an ops/tooling pitch).
+   The industry classification alone (manufacturing/industrial/automotive/etc.) is enough signal to
+   use this angle for a Colombia-based company this size — no specific discovered pain point is
+   needed or available, see "Angle selection" above.
 
 ## Target company size
 

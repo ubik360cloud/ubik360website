@@ -44,6 +44,7 @@ const ROUTES = [
   { method: 'POST', pattern: ['oneoffs', 'pull-now'], handler: oneoffs.pullNow },
   { method: 'PATCH', pattern: ['oneoffs', ':id'], handler: oneoffs.update },
   { method: 'POST', pattern: ['oneoffs', ':id', 'send'], handler: oneoffs.send },
+  { method: 'POST', pattern: ['oneoffs', ':id', 'redraft'], handler: oneoffs.redraft },
 
   { method: 'GET', pattern: ['leads'], handler: leads.list },
   { method: 'GET', pattern: ['leads', ':id'], handler: leads.detail },

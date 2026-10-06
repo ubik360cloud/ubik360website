@@ -29,7 +29,7 @@ function loadPositioning(track) {
   }
 }
 
-function buildPrompt({ track, name, title, company, companySize, industry, foundedYear, country }) {
+function buildPrompt({ track, name, title, company, companySize, industry, foundedYear, country, forcedBusinessUnit }) {
   const sender = SENDER_NAME[track] || 'Ubik 360';
   const language = detectLanguage([country]);
   const languageInstruction = language === 'es'
@@ -79,10 +79,18 @@ proposing anything concrete. This reads as competent and non-presumptuous, the o
 generic mass-blast pitch.
 
 ## Decide the pitch
-Work through the positioning brief's numbered options and pick the ONE that best fits this
-prospect's industry, size, and title. Choosing "skip" is a success, not a failure -- but skip only
-for "no honest reason for a business like this to care," never for being the wrong type of
-business outright.
+${forcedBusinessUnit
+    ? `Jose has already picked the service angle for this draft: **${forcedBusinessUnit}**. Use ONLY
+that option's own description from the positioning brief -- do not reconsider or substitute a
+different angle, and set "business_unit" in your output to exactly "${forcedBusinessUnit}". You may
+still flag real concerns in "why"/"risks", but do not set "fit" to "skip" solely because you'd have
+picked a different angle yourself -- the angle is fixed, not up for debate.`
+    : `If the positioning brief has an "Angle selection" or similar gating section listing
+geography/industry rules to check FIRST, apply those before reasoning freely -- don't default to
+whichever option is listed first just because it's generic. Otherwise, work through the brief's
+numbered options and pick the ONE that best fits this prospect's industry, size, and title.
+Choosing "skip" is a success, not a failure -- but skip only for "no honest reason for a business
+like this to care," never for being the wrong type of business outright.`}
 
 ## Write like a confident consultant, not a generic marketer
 First person, direct, no hype, no "I'm excited to reach out." Short. Describe the chosen service
@@ -127,10 +135,10 @@ If fit is "skip", still fill subject/body with the best available attempt but ma
 clearly that sending is not recommended.`;
 }
 
-export async function research({ track, name, title, company, companySize, industry, foundedYear, country }) {
+export async function research({ track, name, title, company, companySize, industry, foundedYear, country, forcedBusinessUnit }) {
   if (track !== 'ic' && track !== 'b2b') throw new Error(`Invalid track '${track}'`);
 
-  const prompt = buildPrompt({ track, name, title, company, companySize, industry, foundedYear, country });
+  const prompt = buildPrompt({ track, name, title, company, companySize, industry, foundedYear, country, forcedBusinessUnit });
   const text = await chatComplete(prompt, { maxTokens: 1200, temperature: 0.4 });
   const verdict = parseJsonResponse(text, 'research');
   // Computed programmatically, not asked of the model -- see flowAssistant.js's

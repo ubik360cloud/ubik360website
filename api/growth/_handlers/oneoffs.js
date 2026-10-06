@@ -2,6 +2,7 @@ import { withOwner } from '../_lib/auth.js';
 import { withCron } from '../_lib/cron.js';
 import { supabase } from '../_lib/supabase.js';
 import { dailyOneoffPull } from '../_lib/oneoffQueue.js';
+import { research } from '../_lib/prospectResearch.js';
 import { sendEmail } from '../_lib/sendgrid.js';
 import { reserveSendSlot } from '../_lib/sendCap.js';
 
@@ -73,6 +74,65 @@ export const update = withOwner(async (req, res, ownerEmail) => {
   const db = supabase();
   const { data, error } = await db.from('oneoffs').update(patch).eq('id', req.params.id).select().single();
   if (error) return res.status(500).json({ error: error.message });
+  return res.status(200).json({ oneoff: data });
+});
+
+// The "service pitch picker": re-drafts a still-unsent draft with a service
+// angle Jose picked himself instead of the model's own choice (2026-10-06,
+// after DISTRIMOTOS -- a Colombian motorcycle-parts manufacturer -- got a
+// generic growth-marketing pitch when the ops/systems-integration angle was
+// obviously the right one). Replaces subject/body/research/language in place
+// and leaves status alone; refuses anything already sent.
+const VALID_BUSINESS_UNITS = {
+  b2b: ['growth_marketing', 'nearshore_staffing', 'international_expansion', 'ecommerce_growth', 'agency_subcontracting', 'manufacturing_ops_tooling'],
+  ic: ['marketplace_launch', 'multichannel_scaling', 'meta_ads', 'ops_automation'],
+};
+
+export const redraft = withOwner(async (req, res) => {
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+  const { business_unit: businessUnit } = req.body || {};
+  const db = supabase();
+
+  const { data: draft, error } = await db
+    .from('oneoffs')
+    .select('*, contacts(first_name, last_name, title, company, country, company_size, industry, founded_year)')
+    .eq('id', req.params.id)
+    .single();
+  if (error || !draft) return res.status(404).json({ error: 'draft not found' });
+  if (draft.status === 'sent') return res.status(400).json({ error: 'this draft was already sent' });
+  if (!VALID_BUSINESS_UNITS[draft.track]?.includes(businessUnit)) {
+    return res.status(400).json({ error: `business_unit must be one of: ${VALID_BUSINESS_UNITS[draft.track].join(', ')}` });
+  }
+
+  const c = draft.contacts;
+  let verdict;
+  try {
+    verdict = await research({
+      track: draft.track,
+      name: [c.first_name, c.last_name].filter(Boolean).join(' '),
+      title: c.title,
+      company: c.company,
+      companySize: c.company_size,
+      industry: c.industry,
+      foundedYear: c.founded_year,
+      country: c.country,
+      forcedBusinessUnit: businessUnit,
+    });
+  } catch (e) {
+    return res.status(502).json({ error: `redraft failed: ${e.message}` });
+  }
+
+  // A previously auto-skipped draft was marked rejected by the system; once
+  // Jose picks an angle himself, put it back in the pending queue.
+  const patch = {
+    research: verdict,
+    subject: verdict.subject || null,
+    body: verdict.body || null,
+    language: verdict.language || draft.language,
+    ...(draft.approved_by === 'system:auto-skip' ? { status: 'pending', approved_at: null, approved_by: null } : {}),
+  };
+  const { data, error: updErr } = await db.from('oneoffs').update(patch).eq('id', req.params.id).select().single();
+  if (updErr) return res.status(500).json({ error: updErr.message });
   return res.status(200).json({ oneoff: data });
 });
 

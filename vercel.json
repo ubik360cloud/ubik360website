@@ -9,10 +9,13 @@
     { "source": "/es/index.html", "destination": "/es.html" },
     { "source": "/api/growth/:path*", "destination": "/api/growth/handler?path=:path*" }
   ],
+  "functions": {
+    "api/growth/handler.js": { "maxDuration": 60 }
+  },
   "crons": [
     { "path": "/api/growth/weekly-plan/propose", "schedule": "0 13 * * 5" },
     { "path": "/api/growth/oneoffs/pull", "schedule": "0 15 * * *" },
-    { "path": "/api/growth/flows/run", "schedule": "0 16 * * *" }
+    { "path": "/api/growth/flows/run", "schedule": "0 18 * * *" }
   ],
   "redirects": [
     {

@@ -19,7 +19,10 @@ export default function Dashboard() {
     <div>
       <h1 style={{ fontSize: '1.375rem', marginBottom: '1.5rem' }}>Dashboard</h1>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
-        <StatTile label="Sends remaining today" value={stats.sendsRemainingToday} />
+        <StatTile label={`Sent today (of ${stats.sendStatus.totalCap})`} value={stats.sendStatus.sentTotal} />
+        <StatTile label={`1:1 sent today (of ${stats.sendStatus.oneoffCap})`} value={stats.sendStatus.oneoffSent} />
+        <StatTile label="Flow emails sent today" value={stats.sendStatus.flowSent} />
+        <StatTile label="Contacts waiting in flows" value={stats.flowQueue.activeEnrollments} />
         <StatTile label="Pending drafts" value={pendingDrafts} />
         <StatTile label="Active contacts" value={stats.contacts.byStatus.active || 0} />
         <StatTile label="Suppressed" value={stats.suppressions.total} />
@@ -27,6 +30,12 @@ export default function Dashboard() {
 
       <div className="card">
         <h2 style={{ fontSize: '1rem', marginTop: 0 }}>Last 30 days, by track</h2>
+        <p style={{ fontSize: '.8125rem', color: '#6b7280', marginTop: '-.25rem' }}>
+          Sent by source: {stats.sentBySource?.flow || 0} from flows, {stats.sentBySource?.oneoff || 0} 1:1 drafts.
+          Flow emails go out once a day around 2PM ET, using whatever is left of the 100/day allowance
+          after your 1:1 sends, split evenly across active flows. Delivered/bounced counts only appear once
+          SendGrid's event webhook is reporting back; opens are not tracked.
+        </p>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '.875rem' }}>
           <thead>
             <tr style={{ textAlign: 'left', color: '#6b7280' }}>

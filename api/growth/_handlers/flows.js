@@ -4,6 +4,7 @@ import { supabase } from '../_lib/supabase.js';
 import { enrollContact, runDueSteps, sendTestEmail } from '../_lib/flowEngine.js';
 import { enrollSegment } from '../_lib/weeklyPlan.js';
 import { proposeFlow } from '../_lib/flowAssistant.js';
+import { detectLanguage } from '../_lib/language.js';
 
 export const listCreate = withOwner(async (req, res) => {
   const db = supabase();
@@ -50,6 +51,14 @@ export const detail = withOwner(async (req, res, ownerEmail) => {
     if (flow.source_plan_id) {
       const { data: plan } = await db.from('apollo_weekly_plans').select('id, label, brief, filter, counts').eq('id', flow.source_plan_id).maybeSingle();
       segment = plan || null;
+      // How many of the segment's contacts need Spanish vs English, from their
+      // own countries -- lets the hub warn when a flow's language doesn't match.
+      if (segment) {
+        const { data: cs } = await db.from('contacts').select('country').eq('source_plan_id', flow.source_plan_id).limit(1000);
+        const counts = { es: 0, en: 0 };
+        for (const c of cs || []) counts[detectLanguage([c.country])] += 1;
+        segment.language_counts = counts;
+      }
     }
     return res.status(200).json({ flow, steps: steps || [], enrollmentCounts, segment });
   }

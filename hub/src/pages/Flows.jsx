@@ -19,6 +19,8 @@ export default function Flows() {
   const [instructions, setInstructions] = useState('');
   const [suggesting, setSuggesting] = useState(false);
   const [suggestedDescription, setSuggestedDescription] = useState(null);
+  const [otherSegments, setOtherSegments] = useState([]);
+  const [otherChoice, setOtherChoice] = useState('');
   // Step cards use uncontrolled inputs (defaultValue) for editing
   // performance -- bumping this forces them to remount (fresh defaultValue)
   // whenever `steps` is replaced wholesale (opening a flow, an AI
@@ -45,6 +47,11 @@ export default function Flows() {
     setInstructions('');
     setSuggestedDescription(null);
     const { flow, steps: s, segment: seg } = await api.flow(f.id);
+    setOtherChoice('');
+    // Other finished segments of this track that can also feed this flow.
+    api.weeklyPlans(flow.track, { status: 'completed', page: 1, pageSize: 50 })
+      .then(({ plans }) => setOtherSegments((plans || []).filter((p) => p.id !== flow.source_plan_id)))
+      .catch(() => setOtherSegments([]));
     setSelected(flow);
     setSegment(seg);
     setSteps(s.length ? s : [{ step_no: 1, delay_hours: 0, subject: '', body: '', cta_url: '' }]);
@@ -85,9 +92,9 @@ export default function Flows() {
     catch (e) { setError(e.message); }
   }
 
-  async function enrollSegmentNow() {
+  async function enrollSegmentNow(planId = segment?.id) {
     setBusy(true); setError(null);
-    try { const r = await api.enrollSegment(selected.id, segment.id); setEnrollResult(r); }
+    try { const r = await api.enrollSegment(selected.id, planId); setEnrollResult(r); }
     catch (e) { setError(e.message); }
     finally { setBusy(false); }
   }
@@ -185,8 +192,20 @@ export default function Flows() {
                 <span className="badge">{segment.label || 'weekly plan'}</span> — {segment.counts?.imported ?? 0} imported contacts
               </p>
               {segment.brief && <p style={{ fontSize: '.8125rem', color: '#374151', marginTop: '.25rem' }}>{segment.brief}</p>}
+              {segment.language_counts && (segment.language_counts.es + segment.language_counts.en > 0) && (
+                <p style={{ fontSize: '.75rem', color: '#6b7280', marginTop: '.25rem', marginBottom: 0 }}>
+                  Contacts by language (from their country): {segment.language_counts.es} Spanish, {segment.language_counts.en} English.
+                  {(() => {
+                    const majority = segment.language_counts.es > segment.language_counts.en ? 'es' : 'en';
+                    const mixed = segment.language_counts.es > 0 && segment.language_counts.en > 0;
+                    if (selected.language !== majority) return <strong style={{ color: '#b91c1c' }}> This flow is set to {selected.language === 'es' ? 'Spanish' : 'English'} but most contacts need {majority === 'es' ? 'Spanish' : 'English'} -- fix the language selector above.</strong>;
+                    if (mixed) return <strong style={{ color: '#92400e' }}> This segment mixes both languages -- the flow can only send one; consider splitting it.</strong>;
+                    return null;
+                  })()}
+                </p>
+              )}
             </div>
-            <button className="btn btn-primary" disabled={busy || selected.status !== 'active'} onClick={enrollSegmentNow} title={selected.status !== 'active' ? 'Approve & activate the flow first' : ''}>
+            <button className="btn btn-primary" disabled={busy || selected.status !== 'active'} onClick={() => enrollSegmentNow()} title={selected.status !== 'active' ? 'Approve & activate the flow first' : ''}>
               Enroll segment into this flow
             </button>
           </div>
@@ -196,6 +215,15 @@ export default function Flows() {
             Approve &amp; activate the flow below before enrolling -- enrolling into a draft flow
             would miss the send once you do activate it.
           </p>
+        )}
+        {selected.status === 'active' && otherSegments.length > 0 && (
+          <div style={{ display: 'flex', gap: '.5rem', alignItems: 'center', marginBottom: '1rem' }}>
+            <select value={otherChoice} onChange={(e) => setOtherChoice(e.target.value)} style={{ width: 'auto', fontSize: '.8125rem' }}>
+              <option value="">Enroll another segment into this flow...</option>
+              {otherSegments.map((p) => <option key={p.id} value={p.id}>{p.label || 'weekly plan'} ({p.counts?.imported ?? 0} contacts)</option>)}
+            </select>
+            <button className="btn btn-outline" disabled={!otherChoice || busy} onClick={() => enrollSegmentNow(otherChoice)}>Enroll</button>
+          </div>
         )}
         {enrollResult && (
           <p style={{ fontSize: '.8125rem', color: '#374151' }}>

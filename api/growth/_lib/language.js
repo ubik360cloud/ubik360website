@@ -18,3 +18,19 @@ export function detectLanguage(locations) {
   const isLatam = locs.some((l) => SPANISH_LATAM_COUNTRIES.some((c) => l.includes(c)));
   return isLatam ? 'es' : 'en';
 }
+
+/** Language for a whole segment from its contacts' own countries: the
+ *  majority wins, tie goes to Spanish only if strictly more are Spanish
+ *  (ties -> English). Returns null with no usable countries so the caller
+ *  can fall back to something else. Jose's rule (2026-10-06): Colombia,
+ *  Mexico, Venezuela and the other Spanish-speaking LatAm countries ->
+ *  Spanish; US, Canada, UK, UAE (his current target list) -> English. A
+ *  manually-imported segment has no geography in its filter (just
+ *  {manual:true}), which silently defaulted a Colombian flow to English --
+ *  the contacts' countries are the ground truth. */
+export function majorityLanguage(countries) {
+  const known = (countries || []).filter(Boolean);
+  if (!known.length) return null;
+  const es = known.filter((c) => detectLanguage([c]) === 'es').length;
+  return es > known.length - es ? 'es' : 'en';
+}

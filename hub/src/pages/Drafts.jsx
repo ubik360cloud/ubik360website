@@ -101,7 +101,8 @@ export default function Drafts() {
   }
 
   async function sendNow(d) {
-    if (!window.confirm(`Send to ${d.contacts.email}?`)) return;
+    const inFlow = d.flow_history?.length ? `\n\nNote: they're already in a flow ("${d.flow_history.map((h) => h.flow_name).join('", "')}").` : '';
+    if (!window.confirm(`Send to ${d.contacts.email}?${inFlow}`)) return;
     setBusyId(d.id); setError(null); setLastSent(null);
     try {
       await saveIfEdited(d);
@@ -176,6 +177,21 @@ export default function Drafts() {
                 </select>
               </div>
             </div>
+            {d.flow_history?.length > 0 && (
+              <div style={{ fontSize: '.8125rem', color: '#92400e', background: '#fffbeb', border: '1px solid #fde68a', borderRadius: 4, padding: '.5rem .75rem', marginBottom: '.5rem' }}>
+                <strong>Heads up: this contact is already in a flow.</strong>{' '}
+                {d.flow_history.map((h, i) => (
+                  <span key={i}>
+                    {i > 0 && ' '}
+                    &ldquo;{h.flow_name}&rdquo; ({h.status === 'active' ? 'still running' : h.status}):{' '}
+                    {h.emails_sent > 0
+                      ? `${h.emails_sent} email${h.emails_sent === 1 ? '' : 's'} already sent${h.last_sent_at ? `, last on ${new Date(h.last_sent_at).toLocaleDateString()}` : ''}.`
+                      : 'nothing sent yet, but it will start emailing them automatically.'}
+                  </span>
+                ))}{' '}
+                Consider whether to email again, or tailor this message to what they already received.
+              </div>
+            )}
             {d.research?.why && <p style={{ fontSize: '.8125rem', color: '#6b7280', margin: '0 0 .5rem' }}>{d.research.why}</p>}
             <div style={{ display: 'flex', alignItems: 'center', gap: '.5rem', marginBottom: '.75rem' }}>
               <label style={{ fontSize: '.75rem', color: '#6b7280' }}>Service pitch:</label>

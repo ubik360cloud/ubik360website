@@ -11,7 +11,8 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { chatComplete, parseJsonResponse } from './llm.js';
-import { detectLanguage } from './language.js';
+import { detectLanguage, majorityLanguage } from './language.js';
+import { supabase } from './supabase.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const SENDER_NAME = { ic: 'Jose Villegas', b2b: 'Ubik 360' };
@@ -25,8 +26,19 @@ const CTA_LABEL = { en: "Let's Talk", es: '¿Hablamos?' };
 // name/description stay in English regardless of language -- Jose's own
 // admin-facing metadata, not sent to anyone, so the Flows list is
 // consistently scannable.
-function detectFlowLanguage(plan) {
-  return detectLanguage([...(plan?.filter?.organization_locations || []), ...(plan?.filter?.person_locations || [])]);
+// The segment's actual imported contacts are the ground truth when there are
+// any (a manual CSV import's filter is just {manual:true}, no geography at
+// all); the Apollo filter's location strings are the fallback for a plan
+// that hasn't imported anyone yet.
+function detectFlowLanguage(plan, contactCountries = []) {
+  return majorityLanguage(contactCountries)
+    || detectLanguage([...(plan?.filter?.organization_locations || []), ...(plan?.filter?.person_locations || [])]);
+}
+
+async function segmentContactCountries(plan) {
+  if (!plan?.id) return [];
+  const { data } = await supabase().from('contacts').select('country').eq('source_plan_id', plan.id).limit(1000);
+  return (data || []).map((r) => r.country);
 }
 
 function loadPositioning(track) {
@@ -37,9 +49,8 @@ function loadPositioning(track) {
   }
 }
 
-function buildPrompt({ track, plan, instructions }) {
+function buildPrompt({ track, plan, instructions, language }) {
   const sender = SENDER_NAME[track] || 'Ubik 360';
-  const language = detectFlowLanguage(plan);
   const languageInstruction = language === 'es'
     ? 'Write every "subject" and "body" in Latin American Spanish (use "tú", not "vosotros" or Spain-specific slang) -- this segment\'s contacts are in a Spanish-speaking country. Keep "name" and "description" in English (Jose\'s own internal admin labels, not sent to anyone).'
     : 'Write every "subject" and "body" in English.';
@@ -130,13 +141,14 @@ export async function proposeFlow({ track, plan, instructions }) {
   if (track !== 'ic' && track !== 'b2b') throw new Error(`Invalid track '${track}'`);
   if (!plan && !instructions?.trim()) throw new Error('Give either a linked segment or some instructions to draft from.');
 
-  const prompt = buildPrompt({ track, plan, instructions });
+  const language = detectFlowLanguage(plan, await segmentContactCountries(plan));
+  const prompt = buildPrompt({ track, plan, instructions, language });
   const text = await chatComplete(prompt, { maxTokens: 1800, temperature: 0.4 });
   const draft = parseJsonResponse(text, 'draft');
   // Computed programmatically (not asked of the model) so the hub can save
   // it onto the flow reliably -- the signature/opt-out footer at send time
   // depend on this being right, so it shouldn't hinge on the model echoing
   // it back correctly.
-  draft.language = detectFlowLanguage(plan);
+  draft.language = language;
   return draft;
 }

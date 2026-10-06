@@ -5,7 +5,7 @@
 // not thousands; add sophistication if/when volume actually needs it.
 import { supabase } from './supabase.js';
 import { sendEmail } from './sendgrid.js';
-import { reserveSendSlot } from './sendCap.js';
+import { reserveSendSlot, sendsRemainingToday } from './sendCap.js';
 
 // Shared with sendTestEmail below so a test send renders EXACTLY what a
 // real contact would get -- same CTA placement, same signature/opt-out
@@ -84,55 +84,113 @@ export async function sendTestEmail({ flowId, stepNo, to }) {
   return { to, subject: step.subject };
 }
 
-/** Sends every enrollment whose next step is due, respecting the shared
- *  daily cap and suppression list. Designed to be called by a daily cron
- *  tick -- intentionally not a tight polling loop, this system's volume
- *  doesn't need one. */
-export async function runDueSteps() {
+/** Splits `budget` sends across flows as evenly as possible: everyone gets an
+ *  equal share, and a flow with fewer due contacts than its share hands the
+ *  leftover back to the others (so 5 + 18 + 437 due with a budget of 100
+ *  becomes 5 / 18 / 77, not 33 / 33 / 33 with 49 sends wasted). */
+export function allocateQuota(budget, dueCounts) {
+  const quotas = Object.fromEntries(Object.keys(dueCounts).map((k) => [k, 0]));
+  let left = budget;
+  let open = Object.keys(dueCounts).filter((k) => dueCounts[k] > 0);
+  while (left > 0 && open.length) {
+    const share = Math.max(1, Math.floor(left / open.length));
+    const stillOpen = [];
+    for (const k of open) {
+      if (left <= 0) break;
+      const give = Math.min(share, dueCounts[k] - quotas[k], left);
+      quotas[k] += give;
+      left -= give;
+      if (quotas[k] < dueCounts[k]) stillOpen.push(k);
+    }
+    open = stillOpen;
+  }
+  return quotas;
+}
+
+const SEND_CONCURRENCY = 5;
+
+/** Sends every enrollment whose next step is due, using whatever is left of
+ *  today's total send allowance (100 minus anything already sent today,
+ *  1:1 included -- see sendCap.js), split evenly across active flows
+ *  (allocateQuota). Called by the daily cron (2PM ET / 18:00 UTC, so a
+ *  morning's 1:1 sends have already claimed their share). Time-budgeted so
+ *  a big batch can't run into the serverless function's duration limit:
+ *  whatever isn't reached stays due and goes out on the next run. */
+export async function runDueSteps({ budgetMs = 45000 } = {}) {
+  const started = Date.now();
   const db = supabase();
-  const nowIso = new Date().toISOString();
+
+  const remaining = await sendsRemainingToday();
+  if (remaining <= 0) return { sent: 0, skipped: 0, remaining: 0, perFlow: {} };
+
   const { data: due, error } = await db
     .from('enrollments')
     .select('id, flow_id, contact_id, current_step')
     .eq('status', 'active')
-    .lte('next_send_at', nowIso)
-    .limit(50);
+    .lte('next_send_at', new Date().toISOString())
+    .order('next_send_at', { ascending: true })
+    .limit(1000);
   if (error) throw error;
+  if (!due?.length) return { sent: 0, skipped: 0, remaining, perFlow: {} };
 
-  let sent = 0, skipped = 0;
-  for (const enr of due || []) {
-    const canSend = await reserveSendSlot();
-    if (!canSend) { skipped += 1; break; } // cap reached -- stop, the rest stay due for tomorrow
+  const flowIds = [...new Set(due.map((e) => e.flow_id))];
+  const [{ data: flows }, { data: allSteps }] = await Promise.all([
+    db.from('flows').select('id, track, status, language').in('id', flowIds),
+    db.from('flow_steps').select('*').in('flow_id', flowIds).eq('is_active', true),
+  ]);
+  const flowById = Object.fromEntries((flows || []).map((f) => [f.id, f]));
+  const stepsByFlow = {};
+  for (const s of allSteps || []) (stepsByFlow[s.flow_id] ||= {})[s.step_no] = s;
 
+  // Enrollments of flows that aren't active any more (paused/draft) aren't
+  // this run's business -- they stay as they are, same as before.
+  const dueByFlow = {};
+  for (const e of due) if (flowById[e.flow_id]?.status === 'active') (dueByFlow[e.flow_id] ||= []).push(e);
+  const quotas = allocateQuota(remaining, Object.fromEntries(Object.entries(dueByFlow).map(([k, v]) => [k, v.length])));
+  const selected = Object.entries(dueByFlow).flatMap(([flowId, list]) => list.slice(0, quotas[flowId] || 0));
+  if (!selected.length) return { sent: 0, skipped: 0, remaining, perFlow: {} };
+
+  const contactIds = [...new Set(selected.map((e) => e.contact_id))];
+  const { data: contacts } = await db.from('contacts').select('id, email, first_name, do_not_contact, status').in('id', contactIds);
+  const contactById = Object.fromEntries((contacts || []).map((c) => [c.id, c]));
+  const { data: suppressions } = await db.from('suppressions').select('email').in('email', (contacts || []).map((c) => c.email));
+  const suppressed = new Set((suppressions || []).map((s) => s.email));
+
+  let sent = 0, skipped = 0, outOfTime = false, capHit = false;
+  const perFlow = {};
+  const queue = [...selected];
+
+  async function processOne(enr) {
+    const flow = flowById[enr.flow_id];
     const nextStepNo = enr.current_step + 1;
-    const [{ data: step }, { data: contact }, { data: flow }] = await Promise.all([
-      db.from('flow_steps').select('*').eq('flow_id', enr.flow_id).eq('step_no', nextStepNo).eq('is_active', true).maybeSingle(),
-      db.from('contacts').select('email, first_name, do_not_contact, status').eq('id', enr.contact_id).single(),
-      db.from('flows').select('track, status, language').eq('id', enr.flow_id).single(),
-    ]);
+    const step = stepsByFlow[enr.flow_id]?.[nextStepNo];
+    const contact = contactById[enr.contact_id];
 
-    if (!step || flow?.status !== 'active' || !contact || contact.do_not_contact || contact.status !== 'active') {
+    if (!step || !contact || contact.do_not_contact || contact.status !== 'active') {
       await db.from('enrollments').update({ status: 'completed', completed_at: new Date().toISOString() }).eq('id', enr.id);
-      continue;
+      return;
     }
-    const { data: suppressed } = await db.from('suppressions').select('email').eq('email', contact.email).maybeSingle();
-    if (suppressed) {
+    if (suppressed.has(contact.email)) {
       await db.from('enrollments').update({ status: 'stopped' }).eq('id', enr.id);
-      continue;
+      return;
     }
 
+    // Reserved right before the send (not up front) so skipped/completed
+    // enrollments above never burn a slot.
+    if (!(await reserveSendSlot({ kind: 'flow' }))) { capHit = true; return; }
     try {
       const body = personalize(buildStepBody(step), contact.first_name);
       await sendEmail({ track: flow.track, to: contact.email, subject: step.subject, text: body, lang: flow.language });
       await db.from('email_events').insert({ contact_id: enr.contact_id, track: flow.track, event_type: 'sent', source: 'flow' });
       sent += 1;
+      perFlow[enr.flow_id] = (perFlow[enr.flow_id] || 0) + 1;
     } catch (e) {
       console.error(`[flowEngine] send failed for enrollment ${enr.id}:`, e.message);
       skipped += 1;
-      continue;
+      return;
     }
 
-    const { data: nextStep } = await db.from('flow_steps').select('delay_hours').eq('flow_id', enr.flow_id).eq('step_no', nextStepNo + 1).eq('is_active', true).maybeSingle();
+    const nextStep = stepsByFlow[enr.flow_id]?.[nextStepNo + 1];
     if (nextStep) {
       await db.from('enrollments').update({
         current_step: nextStepNo,
@@ -142,5 +200,16 @@ export async function runDueSteps() {
       await db.from('enrollments').update({ status: 'completed', current_step: nextStepNo, completed_at: new Date().toISOString() }).eq('id', enr.id);
     }
   }
-  return { sent, skipped };
+
+  async function worker() {
+    while (queue.length && !capHit) {
+      if (Date.now() - started > budgetMs) { outOfTime = true; return; }
+      const enr = queue.shift();
+      try { await processOne(enr); }
+      catch (e) { console.error(`[flowEngine] enrollment ${enr.id} failed:`, e.message); skipped += 1; }
+    }
+  }
+  await Promise.all(Array.from({ length: SEND_CONCURRENCY }, worker));
+
+  return { sent, skipped, remaining: Math.max(0, remaining - sent), perFlow, outOfTime, capHit };
 }

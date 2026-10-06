@@ -18,7 +18,33 @@ export const list = withOwner(async (req, res) => {
   if (req.query.track) query = query.eq('track', req.query.track);
   const { data, error } = await query;
   if (error) return res.status(500).json({ error: error.message });
-  return res.status(200).json({ oneoffs: data || [] });
+  const oneoffs = data || [];
+
+  // 2026-10-06 (Jose): flag a 1:1 draft whose contact is already in a flow
+  // (or was already emailed by one), so he can decide whether to email again
+  // or tailor the message -- nothing prevents the overlap, this just makes
+  // it visible. `emails_sent` is the enrollment's own progress (steps sent
+  // in that flow); `last_sent_at` comes from the contact's flow send events.
+  const contactIds = [...new Set(oneoffs.map((o) => o.contact_id))];
+  if (contactIds.length) {
+    const [{ data: enrollments }, { data: events }] = await Promise.all([
+      db.from('enrollments').select('contact_id, status, current_step, flows(name)').in('contact_id', contactIds),
+      db.from('email_events').select('contact_id, created_at').in('contact_id', contactIds).eq('source', 'flow').eq('event_type', 'sent').order('created_at', { ascending: false }),
+    ]);
+    const lastSent = {};
+    for (const e of events || []) if (!lastSent[e.contact_id]) lastSent[e.contact_id] = e.created_at;
+    const historyByContact = {};
+    for (const en of enrollments || []) {
+      (historyByContact[en.contact_id] ||= []).push({
+        flow_name: en.flows?.name || 'a flow',
+        status: en.status,
+        emails_sent: en.current_step,
+        last_sent_at: lastSent[en.contact_id] || null,
+      });
+    }
+    for (const o of oneoffs) o.flow_history = historyByContact[o.contact_id] || [];
+  }
+  return res.status(200).json({ oneoffs });
 });
 
 export const pull = withCron(async (req, res) => {
@@ -153,8 +179,8 @@ export const send = withOwner(async (req, res) => {
   const { data: suppressed } = await db.from('suppressions').select('email').eq('email', draft.contacts.email).maybeSingle();
   if (suppressed) return res.status(400).json({ error: 'contact is suppressed' });
 
-  const canSend = await reserveSendSlot();
-  if (!canSend) return res.status(429).json({ error: 'Daily send cap reached (10/day combined) -- try again tomorrow' });
+  const canSend = await reserveSendSlot({ kind: 'oneoff' });
+  if (!canSend) return res.status(429).json({ error: 'Daily send limit reached (10 one-off emails per day, 100 total including flows) -- try again tomorrow' });
 
   try {
     await sendEmail({ track: draft.track, to: draft.contacts.email, subject: draft.subject, text: draft.body, lang: draft.language });

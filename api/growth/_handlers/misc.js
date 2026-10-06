@@ -1,23 +1,27 @@
 import { withOwner } from '../_lib/auth.js';
 import { supabase } from '../_lib/supabase.js';
-import { sendsRemainingToday } from '../_lib/sendCap.js';
+import { sendStatusToday } from '../_lib/sendCap.js';
 
 export const deliverability = withOwner(async (req, res) => {
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
   const db = supabase();
   const since = new Date(Date.now() - 30 * 864e5).toISOString();
 
-  const [{ data: events }, { data: suppressions }, { data: contacts }, remaining] = await Promise.all([
-    db.from('email_events').select('event_type, track, created_at').gte('created_at', since),
+  const [{ data: events }, { data: suppressions }, { data: contacts }, sendStatus, waiting, dueNow] = await Promise.all([
+    db.from('email_events').select('event_type, track, source, created_at').gte('created_at', since),
     db.from('suppressions').select('reason'),
     db.from('contacts').select('status, track'),
-    sendsRemainingToday(),
+    sendStatusToday(),
+    db.from('enrollments').select('id', { count: 'exact', head: true }).eq('status', 'active'),
+    db.from('enrollments').select('id', { count: 'exact', head: true }).eq('status', 'active').lte('next_send_at', new Date().toISOString()),
   ]);
 
+  const bySource = {};
   const byType = {};
   const byTrack = { ic: {}, b2b: {} };
   for (const e of events || []) {
     byType[e.event_type] = (byType[e.event_type] || 0) + 1;
+    if (e.event_type === 'sent' && e.source) bySource[e.source] = (bySource[e.source] || 0) + 1;
     if (e.track) byTrack[e.track][e.event_type] = (byTrack[e.track][e.event_type] || 0) + 1;
   }
   const suppressionsByReason = {};
@@ -29,7 +33,11 @@ export const deliverability = withOwner(async (req, res) => {
     last30d: { byType, byTrack },
     suppressions: { total: suppressions?.length || 0, byReason: suppressionsByReason },
     contacts: { total: contacts?.length || 0, byStatus: contactsByStatus },
-    sendsRemainingToday: remaining,
+    sendStatus,
+    flowQueue: { activeEnrollments: waiting.count || 0, dueNow: dueNow.count || 0 },
+    // Last 30 days of sends split by where they came from (flow vs 1:1) --
+    // the by-track table can't tell the two apart.
+    sentBySource: bySource,
   });
 });
 

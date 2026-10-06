@@ -33,6 +33,13 @@ const ROUTES = [
   { method: 'POST', pattern: ['weekly-plan', 'preview'], handler: weeklyPlan.preview },
   { method: 'POST', pattern: ['weekly-plan', 'suggest-filter'], handler: weeklyPlan.suggestFilter },
   { method: 'POST', pattern: ['weekly-plan', 'propose'], handler: weeklyPlan.propose },
+  // Vercel Cron invokes its paths with HTTP GET, not POST -- registered here as
+  // well as the POST versions above/below (kept for manual testing), or every
+  // scheduled run 404s. GET /flows/run must also come BEFORE GET /flows/:id
+  // further down, or ':id' captures 'run' and the owner-auth check 401s it.
+  { method: 'GET', pattern: ['weekly-plan', 'propose'], handler: weeklyPlan.propose },
+  { method: 'GET', pattern: ['oneoffs', 'pull'], handler: oneoffs.pull },
+  { method: 'GET', pattern: ['flows', 'run'], handler: flows.run },
   { method: 'POST', pattern: ['weekly-plan', ':id', 'approve'], handler: weeklyPlan.approve },
   { method: 'POST', pattern: ['weekly-plan', ':id', 'suggest-flow'], handler: weeklyPlan.suggestFlow },
   { method: 'PATCH', pattern: ['weekly-plan', ':id'], handler: weeklyPlan.update },

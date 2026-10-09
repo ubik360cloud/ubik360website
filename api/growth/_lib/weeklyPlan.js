@@ -40,6 +40,49 @@ function buildSearchBody(filter) {
   return body;
 }
 
+// Per-company cap (2026-10-09, Jose: a pull spent credits on 16 contacts from
+// one company, Sewell Automotive). Lives in the plan's filter JSON as
+// `max_per_company` -- a bookkeeping key, not an Apollo parameter, so
+// buildSearchBody's allowlist already keeps it out of the request. Default 2;
+// 0 means no cap. Counts contacts we ALREADY have (contacts + staged) for
+// that company too, so repeated pulls can't creep past it, and is applied to
+// the free search results BEFORE the paid bulk_match step -- applying it
+// afterwards would mean the credits were already spent.
+const DEFAULT_MAX_PER_COMPANY = 2;
+
+function maxPerCompany(filter) {
+  const raw = filter?.max_per_company;
+  if (raw === undefined || raw === null || raw === '') return DEFAULT_MAX_PER_COMPANY;
+  const n = Number(raw);
+  return Number.isFinite(n) && n >= 0 ? n : DEFAULT_MAX_PER_COMPANY;
+}
+
+const normalizeName = (s) => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+const normalizeDomain = (s) => String(s || '').toLowerCase().replace(/^https?:\/\//, '').replace(/^www\./, '').split('/')[0];
+
+/** Every key a company might be recognized by (name and/or domain) -- a
+ *  search result may carry only one of them, and an existing contact the
+ *  other, so counts are kept and checked under both. */
+function companyKeys({ name, domain }) {
+  const keys = [];
+  if (normalizeDomain(domain)) keys.push(`d:${normalizeDomain(domain)}`);
+  if (normalizeName(name)) keys.push(`n:${normalizeName(name)}`);
+  return keys;
+}
+
+function makeCompanyCounter(limit) {
+  const counts = new Map();
+  const current = (keys) => Math.max(0, ...keys.map((k) => counts.get(k) || 0));
+  return {
+    full: (keys) => limit > 0 && keys.length > 0 && current(keys) >= limit,
+    add: (keys) => { const next = current(keys) + 1; for (const k of keys) counts.set(k, next); },
+    // For rows already in the database: bump each key by one without
+    // collapsing them, so a name-only match and a domain-only match both
+    // still see this company.
+    addExisting: (keys) => { for (const k of keys) counts.set(k, (counts.get(k) || 0) + 1); },
+  };
+}
+
 // One filter set per track -- see positioning/{track}.md for the pitch each
 // of these feeds. Kept here (not in the DB) so a filter change is a code
 // review, same reasoning 360PrintStudio's PERSONAS array uses.
@@ -48,6 +91,11 @@ const TRACK_FILTERS = {
     person_titles: ['founder', 'ceo', 'co-founder', 'president', 'head of ecommerce', 'director of ecommerce'],
     q_organization_keyword_tags: ['ecommerce', 'direct to consumer', 'amazon seller'],
     person_locations: ['United States'],
+    // Small brands where a founder or single ecommerce lead makes the call
+    // (see positioning/ic.md). Size is a per-plan choice -- edit this in the
+    // plan's filter JSON for a different industry.
+    organization_num_employees_ranges: ['1,50'],
+    max_per_company: 2,
   },
   b2b: {
     person_titles: ['founder', 'ceo', 'owner', 'president', 'director', 'general manager'],
@@ -59,6 +107,7 @@ const TRACK_FILTERS = {
     // Audifarma) turned out to be large companies the titles filter alone
     // didn't catch. Apply to every b2b geography, not just Colombia.
     organization_num_employees_ranges: ['25,100'],
+    max_per_company: 2,
   },
 };
 
@@ -243,8 +292,8 @@ export async function pullApolloForPlan(planId) {
   const searchBody = buildSearchBody(plan.filter);
 
   const [{ data: existingContacts }, { data: existingStaging }] = await Promise.all([
-    db.from('contacts').select('email'),
-    db.from('apollo_staging').select('apollo_id, email'),
+    db.from('contacts').select('email, company, company_domain'),
+    db.from('apollo_staging').select('apollo_id, email, company, company_domain, status'),
   ]);
   const haveEmails = new Set([
     ...(existingContacts || []).map((c) => c.email?.toLowerCase()).filter(Boolean),
@@ -252,20 +301,40 @@ export async function pullApolloForPlan(planId) {
   ]);
   const haveApolloIds = new Set((existingStaging || []).map((c) => c.apollo_id).filter(Boolean));
 
+  // Per-company cap -- see maxPerCompany(). Two counters: one gates the free
+  // search results (before any credits are spent), a second re-checks the
+  // matched records' own company data afterwards in case a search result
+  // carried less company info than the full match did.
+  const limit = maxPerCompany(plan.filter);
+  const searchCounter = makeCompanyCounter(limit);
+  const matchCounter = makeCompanyCounter(limit);
+  for (const row of [...(existingContacts || []), ...(existingStaging || []).filter((r) => r.status !== 'rejected')]) {
+    const keys = companyKeys({ name: row.company, domain: row.company_domain });
+    searchCounter.addExisting(keys);
+    matchCounter.addExisting(keys);
+  }
+  let skippedByCompanyCap = 0;
+
   const candidateIds = [];
   let page = 1;
   while (candidateIds.length < target * 2 && page <= MAX_PAGES) {
     let res;
     try {
-      res = await apolloFetch('/mixed_people/api_search', { ...searchBody, page });
+      res = await apolloFetch('/mixed_people/api_search', { ...searchBody, page, per_page: 100 });
     } catch (e) {
       console.error('[weeklyPlan] search page failed:', e.message);
       break;
     }
     const people = res.people || [];
     if (!people.length) break;
-    for (const p of people) if (!haveApolloIds.has(p.id)) candidateIds.push(p.id);
-    if (page * 50 >= (res.total_entries || 0)) break;
+    for (const p of people) {
+      if (haveApolloIds.has(p.id)) continue;
+      const keys = companyKeys({ name: p.organization?.name, domain: p.organization?.primary_domain });
+      if (searchCounter.full(keys)) { skippedByCompanyCap += 1; continue; }
+      searchCounter.add(keys);
+      candidateIds.push(p.id);
+    }
+    if (page * 100 >= (res.total_entries || 0)) break;
     page += 1;
   }
 
@@ -288,6 +357,9 @@ export async function pullApolloForPlan(planId) {
       if (!m.email || m.email_status !== 'verified') continue;
       const emailLower = m.email.toLowerCase();
       if (haveEmails.has(emailLower)) continue;
+      const matchKeys = companyKeys({ name: m.organization?.name, domain: m.organization?.primary_domain });
+      if (matchCounter.full(matchKeys)) { skippedByCompanyCap += 1; continue; }
+      matchCounter.add(matchKeys);
       haveEmails.add(emailLower);
       withEmail += 1;
       toInsert.push({
@@ -314,7 +386,7 @@ export async function pullApolloForPlan(planId) {
     if (insErr) console.error('[weeklyPlan] staging insert failed:', insErr.message);
   }
 
-  const counts = { ...(plan.counts || {}), target, searched: candidateIds.length, bulk_matched: bulkMatched, staged: toInsert.length };
+  const counts = { ...(plan.counts || {}), target, searched: candidateIds.length, bulk_matched: bulkMatched, staged: toInsert.length, skipped_company_cap: skippedByCompanyCap, max_per_company: limit };
   await db.from('apollo_weekly_plans').update({ status: 'staged', counts }).eq('id', planId);
   return counts;
 }

@@ -32,7 +32,28 @@ function PlanCard({ plan, onChange }) {
   // reviewed this list and it looks right" being the common case.
   const [included, setIncluded] = useState(new Set());
 
-  useEffect(() => { setIncluded(new Set(staged.map((s) => s.id))); }, [staged]);
+  // Per-company cap (plan.filter.max_per_company, default 2, 0 = none): the
+  // first N candidates per company start checked, the rest start unchecked.
+  // Credits for the extras were already spent when the pull ran (older pulls
+  // predate the server-side cap), so this just stops them being imported.
+  const maxPerCompany = (() => {
+    const raw = plan.filter?.max_per_company;
+    const n = Number(raw);
+    return raw === undefined || raw === null || raw === '' || !Number.isFinite(n) || n < 0 ? 2 : n;
+  })();
+  function defaultIncluded(list) {
+    if (!maxPerCompany) return new Set(list.map((s) => s.id));
+    const seen = {};
+    const out = new Set();
+    for (const s of list) {
+      const key = String(s.company_domain || s.company || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+      if (!key) { out.add(s.id); continue; }
+      seen[key] = (seen[key] || 0) + 1;
+      if (seen[key] <= maxPerCompany) out.add(s.id);
+    }
+    return out;
+  }
+  useEffect(() => { setIncluded(defaultIncluded(staged)); }, [staged]); // eslint-disable-line react-hooks/exhaustive-deps
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
   const [expanded, setExpanded] = useState(false);
@@ -123,7 +144,10 @@ function PlanCard({ plan, onChange }) {
           {plan.brief && <p style={{ fontSize: '.8125rem', color: '#374151', marginTop: '.25rem' }}>{plan.brief}</p>}
           <p style={{ fontSize: '.8125rem', color: '#6b7280' }}>
             Week of {plan.week_of} · target {plan.filter?.target}
+            {` · company size ${plan.filter?.organization_num_employees_ranges?.join(' / ').replace(/,/g, '–') || 'any'}`}
+            {` · max ${plan.filter?.max_per_company ?? 2} per company`}
             {plan.counts?.staged != null && ` · ${plan.counts.staged} staged`}
+            {plan.counts?.skipped_company_cap > 0 && ` · ${plan.counts.skipped_company_cap} skipped by the per-company cap`}
           </p>
           {plan.status === 'proposed' && !editing && (
             <button className="btn btn-outline" style={{ fontSize: '.75rem', padding: '.15rem .5rem', marginTop: '.25rem' }} onClick={openEdit}>
@@ -195,6 +219,13 @@ function PlanCard({ plan, onChange }) {
               </button>
             </div>
           </div>
+          {maxPerCompany > 0 && staged.length - defaultIncluded(staged).size > 0 && (
+            <p style={{ fontSize: '.8125rem', color: '#92400e', background: '#fffbeb', border: '1px solid #fde68a', borderRadius: 4, padding: '.4rem .6rem', marginTop: 0 }}>
+              {staged.length - defaultIncluded(staged).size} candidate{staged.length - defaultIncluded(staged).size === 1 ? ' is' : 's are'} unchecked because
+              they'd be more than {maxPerCompany} contact{maxPerCompany === 1 ? '' : 's'} from the same company
+              (the per-company cap). Tick any you do want.
+            </p>
+          )}
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '.8125rem' }}>
             <thead>
               <tr style={{ textAlign: 'left', color: '#6b7280' }}>

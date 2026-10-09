@@ -511,6 +511,29 @@ ecommerce & agency staffing test" (5) predate the personalization work (no greet
 "I noticed your recent hiring activity..."); paused until redrafted. "Colombia marketing directors -
 manufacturing" (0 enrolled) has Spanish copy and language now set to es, but an old-style opener.
 
+## Per-company cap and per-campaign company size (2026-10-09)
+
+Jose pulled a plan and the pull spent Apollo credits on 16 contacts from one company (Sewell
+Automotive Companies). Rule: **at most 2 contacts per company**, and company size should be a
+per-campaign choice (small businesses for one industry, larger for another), not a blanket rule.
+
+- `max_per_company` lives in the plan's filter JSON (default 2, `0` = no cap). It is a bookkeeping
+  key, not an Apollo parameter -- `buildSearchBody`'s allowlist already keeps it out of the request.
+  Enforced in `pullApolloForPlan` against the free search results **before** the paid `bulk_match`
+  step (applying it afterwards would mean the credits were already spent), and counted against
+  contacts we already have (contacts + non-rejected staged rows) so repeated pulls can't creep past
+  it. A company is recognized by domain and/or normalized name, since a search result may carry only
+  one. A second check on the matched record's own company data keeps extras out of staging. The pull
+  now requests 100 results per page (was Apollo's smaller default) so skipping extras doesn't starve
+  the target; `counts.skipped_company_cap` records how many were skipped.
+- Company size: both default track filters carry `organization_num_employees_ranges` (b2b `25,100`,
+  ic `1,50`); the AI filter suggester is told to always set it from the brief (or choose and explain),
+  and `positioning/b2b.md` now calls 25-100 a default, not a rule. Each plan card shows its size
+  range and cap.
+- Staged review screen: candidates beyond the cap start **unchecked** (with a note), for batches
+  pulled before this existed. Credits for those were already spent and can't be recovered.
+- Not covered: manual CSV imports (the Apollo export is whatever Jose chose to export).
+
 ## What's left before this can actually send anything
 
 1. Add `GROWTH_ADMIN_SECRET` on Vercel (see above) so the two queued test pulls can actually run.

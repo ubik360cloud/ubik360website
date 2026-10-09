@@ -57,12 +57,16 @@ generic growth-marketing pitch just because it's listed first:
 
 ## Target company size
 
-**25–100 employees, across every geography (US, Canada, Colombia).** Small enough that Jose/Ubik
-360 reaches an actual owner/decision-maker directly instead of a gatekeeper, big enough to
-actually have marketing/ops spend to redirect. Added 2026-09-24 after the Colombia test pull's
-Apollo results (Alquería, Audifarma) turned out to be large companies the job-title filter alone
-didn't screen out — filtered at the Apollo search level (`organization_num_employees_ranges`) in
-`_lib/weeklyPlan.js`, not just judged during research/drafting.
+**Default 25–100 employees** (US, Canada, Colombia) -- small enough that Jose/Ubik 360 reaches an
+actual owner/decision-maker directly instead of a gatekeeper, big enough to actually have
+marketing/ops spend to redirect. Added 2026-09-24 after the Colombia test pull's Apollo results
+(Alquería, Audifarma) turned out to be large companies the job-title filter alone didn't screen out.
+**It is a per-campaign setting, not a rule (2026-10-09, Jose):** every plan's filter carries its
+own `organization_num_employees_ranges`, and a different industry can legitimately call for
+smaller or larger companies (e.g. an auto-dealership group vs. a founder-led ecommerce shop) --
+this default applies only when a campaign doesn't say otherwise. Enforced at the Apollo search
+level in `_lib/weeklyPlan.js`, not just judged during drafting. Every plan also caps contacts
+per company (`max_per_company`, default 2) so one large group can't absorb the pull.
 
 ## Disqualifiers — skip, don't force a pitch
 

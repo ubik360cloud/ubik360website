@@ -26,7 +26,8 @@ const APOLLO_FILTER_DOCS = `
 - person_seniorities (array): e.g. ["owner","founder","c_suite","director","manager"].
 - person_locations (array of strings): the PERSON's own location, e.g. ["Canada"]. Can differ from the company's HQ (remote workers) -- prefer organization_locations for "company is based in X".
 - organization_locations (array of strings): the COMPANY's HQ location.
-- organization_num_employees_ranges (array of "min,max" strings): e.g. ["25,100"]. Custom ranges are fine, not just presets.
+- organization_num_employees_ranges (array of "min,max" strings): e.g. ["25,100"]. Custom ranges are fine, not just presets. ALWAYS include this -- see the company-size rule below.
+- max_per_company (integer, NOT an Apollo parameter -- a pull-time rule this system applies itself): the most contacts to take from any single company, counting ones already imported. Default 2; always include it. 0 means no cap.
 - revenue_range ({min,max}): company revenue in USD.
 - q_organization_keyword_tags (array of strings): industry/business-description keywords, e.g. ["manufacturing","ecommerce"].
 - q_keywords (string): free-text search across company description.
@@ -63,6 +64,15 @@ ${APOLLO_FILTER_DOCS}
 ${brief}
 </brief>
 ${priorFilter ? `\n## The filter currently in the edit form (Jose may be asking you to adjust THIS, not start over)\n${JSON.stringify(priorFilter, null, 2)}\n` : ''}
+
+## Company size -- decide it per campaign, always include it
+Pick "organization_num_employees_ranges" from what Jose's brief says about the kind of business
+he's targeting; if the brief gives a size, use it exactly. If it doesn't, choose a sensible range
+for that industry and say why in "rationale" (e.g. small founder-led shops vs. larger operations
+that have a real ops/marketing department). The positioning brief's size note is only a default
+for when nothing else is known -- one industry can legitimately be small businesses and another
+larger. Never leave the size unset, and always set "max_per_company" (default 2) so a single big
+company can't absorb the whole pull.
 
 ## Output -- return ONLY this JSON, no prose around it, no markdown code fence
 {

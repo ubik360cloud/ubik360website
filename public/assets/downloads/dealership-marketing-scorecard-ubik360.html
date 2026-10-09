@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dealership Digital Marketing Scorecard | Ubik 360</title>
+  <meta name="robots" content="noindex, nofollow">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --red: #931F1D;
+      --black: #050505;
+      --green: #659157;
+      --oak: #CEC5B5;
+      --oak-light: #F0ECE5;
+      --gray: #4b5563;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--black);
+      background: #fff;
+      -webkit-font-smoothing: antialiased;
+      font-size: 10pt;
+      line-height: 1.6;
+    }
+    h1, h2, h3 { font-family: 'DM Serif Display', serif; }
+    .page { width: 8.5in; min-height: 11in; margin: 0 auto; background: #fff; position: relative; }
+    @media screen {
+      body { background: #e5e7eb; padding: 2rem 0; }
+      .page { box-shadow: 0 4px 32px rgba(0,0,0,.18); margin-bottom: 2rem; }
+    }
+    @media print {
+      body { background: #fff; padding: 0; }
+      .page { box-shadow: none; margin: 0; page-break-after: always; }
+      .no-print { display: none !important; }
+    }
+
+    /* COVER */
+    .cover { background: var(--black); min-height: 11in; display: flex; flex-direction: column; position: relative; overflow: hidden; }
+    .cover-accent { position: absolute; top: 0; right: 0; width: 40%; height: 100%; background: linear-gradient(135deg, transparent 40%, rgba(147,31,29,.14) 100%); pointer-events: none; }
+    .cover-stripe { position: absolute; bottom: 0; left: 0; width: 100%; height: 6px; background: var(--red); }
+    .cover-top { padding: 2.5rem 3rem 0 3.5rem; }
+    .cover-tag { display: inline-block; font-size: 8pt; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--red); border: 1px solid rgba(147,31,29,.5); padding: .3rem .8rem; border-radius: 2px; }
+    .cover-body { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 3rem 3.5rem 2.5rem; }
+    .cover-eyebrow { font-size: 9pt; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--red); margin-bottom: 1.25rem; }
+    .cover-title { font-size: 38pt; line-height: 1.15; color: #fff; margin-bottom: 1.5rem; max-width: 6in; }
+    .cover-title span { color: var(--red); }
+    .cover-subtitle { font-size: 12pt; line-height: 1.65; color: rgba(255,255,255,.72); max-width: 4.9in; margin-bottom: 2rem; }
+    .cover-divider { width: 3rem; height: 3px; background: var(--red); margin-bottom: 2rem; }
+    .cover-footer { padding: 1.5rem 3.5rem 2rem; border-top: 1px solid rgba(255,255,255,.1); }
+    .cover-footer p { font-size: 8pt; color: rgba(255,255,255,.5); letter-spacing: .04em; }
+
+    /* CONTENT */
+    .content { padding: 2.5rem 3rem; }
+    .section-tag { display: inline-block; font-size: 8pt; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--green); margin-bottom: .5rem; }
+    .section-heading { font-size: 18pt; color: var(--black); margin-bottom: .75rem; }
+    .lead-p { font-size: 10pt; color: var(--gray); margin-bottom: 1.5rem; max-width: 6in; }
+
+    .score-item { display: flex; gap: .85rem; padding: .9rem 0; border-bottom: 1px solid #e5e7eb; }
+    .score-num { width: 24px; height: 24px; border-radius: 50%; border: 1.5px solid var(--red); color: var(--red); font-size: 9pt; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .score-item h4 { font-family: 'Inter', sans-serif; font-size: 9.5pt; font-weight: 700; color: var(--black); margin-bottom: .2rem; }
+    .score-item p { font-size: 8.75pt; color: var(--gray); margin: 0; }
+    .score-checkbox { font-size: 8pt; color: #9ca3af; white-space: nowrap; margin-left: auto; padding-left: 1rem; }
+
+    .scoring-box { background: var(--oak-light); border-radius: 8px; padding: 1rem 1.25rem; margin-top: 1.5rem; font-size: 8.75pt; color: var(--gray); }
+    .scoring-box strong { color: var(--black); }
+
+    .cta-box { background: var(--black); border-radius: 8px; padding: 1.5rem 1.75rem; margin-top: 2rem; }
+    .cta-box p { color: rgba(255,255,255,.75); font-size: 9pt; margin-bottom: .5rem; }
+    .cta-box h3 { color: #fff; font-size: 14pt; margin-bottom: .5rem; }
+    .cta-box .cta-link { color: var(--red); font-weight: 700; font-size: 9pt; }
+  </style>
+</head>
+<body>
+
+  <!-- PAGE 1: COVER -->
+  <div class="page cover">
+    <div class="cover-accent"></div>
+    <div class="cover-top">
+      <span class="cover-tag">Free Self-Assessment</span>
+    </div>
+    <div class="cover-body">
+      <p class="cover-eyebrow">For Auto Dealerships</p>
+      <h1 class="cover-title">The Dealership <span>Digital Marketing</span> Scorecard</h1>
+      <div class="cover-divider"></div>
+      <p class="cover-subtitle">
+        10 questions that reveal exactly where your dealership is losing traffic, leads, and sold
+        units to slower systems and disconnected marketing — and what to fix first.
+      </p>
+    </div>
+    <div class="cover-stripe"></div>
+    <div class="cover-footer">
+      <p>UBIK 360 — AUTOMOTIVE MARKETING</p>
+    </div>
+  </div>
+
+  <!-- PAGE 2: THE SCORECARD -->
+  <div class="page">
+    <div class="content">
+      <span class="section-tag">How To Use This</span>
+      <h2 class="section-heading">Score yourself honestly on each question.</h2>
+      <p class="lead-p">
+        For each question, mark whether the answer is genuinely yes. Most dealerships answer "no"
+        or "not sure" to at least half of these — that's normal, and it's exactly what this
+        scorecard is built to surface. Nothing here requires guessing; if you're not sure, that's a "no."
+      </p>
+
+      <div class="score-item">
+        <div class="score-num">1</div>
+        <div style="flex:1;">
+          <h4>Does every vehicle in your physical inventory appear in your Google and Meta ads automatically?</h4>
+          <p>If a unit sells and the ad doesn't pull down same-day, you're paying to advertise cars you can't sell.</p>
+        </div>
+        <div class="score-checkbox">Yes / No</div>
+      </div>
+
+      <div class="score-item">
+        <div class="score-num">2</div>
+        <div style="flex:1;">
+          <h4>Do you know your average lead response time, in minutes, right now?</h4>
+          <p>Dealers who respond within 5 minutes are roughly 10x more likely to make contact than those who wait 30.</p>
+        </div>
+        <div class="score-checkbox">Yes / No</div>
+      </div>
+
+      <div class="score-item">
+        <div class="score-num">3</div>
+        <div style="flex:1;">
+          <h4>Can you say exactly what your cost-per-lead was last month, by channel?</h4>
+          <p>Not total spend — cost per lead, broken out by Google, Meta, and any other channel you run.</p>
+        </div>
+        <div class="score-checkbox">Yes / No</div>
+      </div>
+
+      <div class="score-item">
+        <div class="score-num">4</div>
+        <div style="flex:1;">
+          <h4>Is your ad budget reallocated toward what's working in real time, or reviewed on a fixed schedule?</h4>
+          <p>A monthly review means weeks of underperforming spend before anything changes.</p>
+        </div>
+        <div class="score-checkbox">Yes / No</div>
+      </div>
+
+      <div class="score-item">
+        <div class="score-num">5</div>
+        <div style="flex:1;">
+          <h4>If you manage multiple rooftops, can you push a message or promotion across all of them in minutes?</h4>
+          <p>Not applicable if single-location — otherwise, this is a common bottleneck during time-sensitive sales events.</p>
+        </div>
+        <div class="score-checkbox">Yes / No</div>
+      </div>
+
+      <div class="score-item">
+        <div class="score-num">6</div>
+        <div style="flex:1;">
+          <h4>Do you have a live dashboard for ad performance, or do you wait for a monthly report?</h4>
+          <p>If you can't check performance today, you're always making decisions on stale data.</p>
+        </div>
+        <div class="score-checkbox">Yes / No</div>
+      </div>
+
+      <div class="score-item">
+        <div class="score-num">7</div>
+        <div style="flex:1;">
+          <h4>Can you trace a sold vehicle back to the specific ad or campaign that generated the lead?</h4>
+          <p>Without real attribution, you're guessing which channels actually sell cars versus just generate clicks.</p>
+        </div>
+        <div class="score-checkbox">Yes / No</div>
+      </div>
+
+      <div class="score-item">
+        <div class="score-num">8</div>
+        <div style="flex:1;">
+          <h4>Are your Google Business Profile and reviews actively managed, not just monitored?</h4>
+          <p>97% of shoppers check a business's online presence before visiting — an unmanaged profile is a silent leak.</p>
+        </div>
+        <div class="score-checkbox">Yes / No</div>
+      </div>
+
+      <div class="score-item">
+        <div class="score-num">9</div>
+        <div style="flex:1;">
+          <h4>Do your promotions run across a full funnel — landing page, banners, retargeting, email — or just one channel?</h4>
+          <p>A single-channel promo reaches far fewer in-market shoppers than a coordinated push.</p>
+        </div>
+        <div class="score-checkbox">Yes / No</div>
+      </div>
+
+      <div class="score-item">
+        <div class="score-num">10</div>
+        <div style="flex:1;">
+          <h4>If your marketing stopped producing results tomorrow, would you know why within a day?</h4>
+          <p>This is really a question about visibility — not performance. You can't fix what you can't see.</p>
+        </div>
+        <div class="score-checkbox">Yes / No</div>
+      </div>
+
+      <div class="scoring-box">
+        <strong>Scoring:</strong> 8–10 "yes" answers — your systems are ahead of most dealerships;
+        the gains left are marginal. 4–7 — there's real, recoverable revenue being left on the
+        table. 0–3 — your marketing and your inventory aren't talking to each other yet, and that's
+        usually the single biggest fix available.
+      </div>
+
+      <div class="cta-box">
+        <p>Want a second set of eyes on your answers?</p>
+        <h3>Book a free 30-minute dealership marketing assessment.</h3>
+        <a class="cta-link" href="https://calendly.com/meet-ubik360/30min" target="_blank" rel="noopener">Schedule at calendly.com/meet-ubik360/30min →</a>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

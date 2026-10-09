@@ -1,0 +1,745 @@
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { api } from '../lib/api.js';
+import { parseApolloExport } from '../lib/csv.js';
+import { describePlan, planName } from '../lib/planSummary.js';
+
+const TRACKS = ['ic', 'b2b'];
+const ACTIVE_STATUSES = 'proposed,approved,pulling,staged,enrolling';
+
+async function draftFlowFor(plan, navigate) {
+  const suggestion = await api.suggestFlowForPlan(plan.id);
+  const { flow } = await api.createFlow({
+    track: plan.track,
+    name: suggestion.name || `${plan.label || plan.track} flow`,
+    description: suggestion.description,
+    source_plan_id: plan.id,
+    language: suggestion.language || 'en',
+  });
+  if (suggestion.steps?.length) await api.setFlowSteps(flow.id, suggestion.steps);
+  navigate(`/flows?open=${flow.id}`);
+}
+
+// A plan still needing a decision (approve the pull, or review/import the
+// staged candidates) -- the small number of these at any time get the full
+// card. Once a plan reaches 'completed' it's already been decided and moves
+// to the compact CompletedPlansTable below instead.
+function PlanCard({ plan, onChange }) {
+  const [staged, setStaged] = useState([]);
+  // Tracks who's INCLUDED for import (checked = will be imported), not who's
+  // excluded -- a prior version inverted this (checkbox meant "exclude") and
+  // it read as "click each contact to select it," so checking every row
+  // actually rejected everyone. Defaults to everyone included, matching "I
+  // reviewed this list and it looks right" being the common case.
+  const [included, setIncluded] = useState(new Set());
+
+  // Per-company cap (plan.filter.max_per_company, default 2, 0 = none): the
+  // first N candidates per company start checked, the rest start unchecked.
+  // Credits for the extras were already spent when the pull ran (older pulls
+  // predate the server-side cap), so this just stops them being imported.
+  const maxPerCompany = (() => {
+    const raw = plan.filter?.max_per_company;
+    const n = Number(raw);
+    return raw === undefined || raw === null || raw === '' || !Number.isFinite(n) || n < 0 ? 2 : n;
+  })();
+  function defaultIncluded(list) {
+    if (!maxPerCompany) return new Set(list.map((s) => s.id));
+    const seen = {};
+    const out = new Set();
+    for (const s of list) {
+      const key = String(s.company_domain || s.company || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+      if (!key) { out.add(s.id); continue; }
+      seen[key] = (seen[key] || 0) + 1;
+      if (seen[key] <= maxPerCompany) out.add(s.id);
+    }
+    return out;
+  }
+  useEffect(() => { setIncluded(defaultIncluded(staged)); }, [staged]); // eslint-disable-line react-hooks/exhaustive-deps
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState(null);
+  const [expanded, setExpanded] = useState(false);
+  // Editing a filter only makes sense while a plan is still 'proposed' --
+  // once approved, Apollo's already been paid for whatever that filter
+  // produced, so the stored filter becomes a historical record, not a knob.
+  const [editing, setEditing] = useState(false);
+  const [editFilterText, setEditFilterText] = useState('');
+  const [editTarget, setEditTarget] = useState(plan.filter?.target || 10);
+  const [editLabelText, setEditLabelText] = useState(plan.label || '');
+  const [editBriefText, setEditBriefText] = useState(plan.brief || '');
+  const [editPreview, setEditPreview] = useState(null);
+
+  function openEdit() {
+    setEditFilterText(JSON.stringify(plan.filter || {}, null, 2));
+    setEditTarget(plan.filter?.target || 10);
+    setEditLabelText(plan.label || '');
+    setEditBriefText(plan.brief || '');
+    setEditPreview(null);
+    setEditing(true);
+  }
+
+  async function previewEdit() {
+    setBusy(true); setError(null);
+    try {
+      const filter = JSON.parse(editFilterText);
+      const p = await api.previewFilter(filter, 100);
+      setEditPreview(p);
+    } catch (e) { setError(e.message.includes('JSON') ? 'Invalid JSON in the filter box.' : e.message); }
+    finally { setBusy(false); }
+  }
+
+  async function saveEdit() {
+    setBusy(true); setError(null);
+    try {
+      const filter = JSON.parse(editFilterText);
+      await api.updatePlan(plan.id, { filter, target: Number(editTarget) || 10, label: editLabelText.trim(), brief: editBriefText });
+      setEditing(false);
+      onChange();
+    } catch (e) { setError(e.message.includes('Unexpected token') ? 'Invalid JSON in the filter box.' : e.message); }
+    finally { setBusy(false); }
+  }
+
+  async function loadStaged() {
+    if (plan.status !== 'staged') return;
+    try {
+      const { staged: s } = await api.weeklyPlanStaged(plan.id);
+      setStaged(s);
+    } catch (e) {
+      setError(e.message);
+    }
+  }
+
+  useEffect(() => { loadStaged(); }, [plan.id, plan.status]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  async function approve() {
+    setBusy(true);
+    setError(null);
+    try { await api.approveWeeklyPlan(plan.id); onChange(); }
+    catch (e) { setError(e.message); }
+    finally { setBusy(false); }
+  }
+
+  async function stageApprove() {
+    const excludeIds = staged.filter((s) => !included.has(s.id)).map((s) => s.id);
+    if (included.size === 0) {
+      const ok = window.confirm(`This will REJECT all ${staged.length} candidates and import none. Continue?`);
+      if (!ok) return;
+    }
+    setBusy(true);
+    setError(null);
+    try { await api.stageApprove(plan.id, excludeIds); onChange(); }
+    catch (e) { setError(e.message); }
+    finally { setBusy(false); }
+  }
+
+  function toggleInclude(id) {
+    setIncluded((prev) => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  }
+
+  return (
+    <div className="card" style={{ marginBottom: '1.5rem' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
+        <div>
+          <span className="badge">{plan.status}</span>
+          <span className="badge" style={{ marginLeft: '.5rem' }}>{planName(plan)}</span>
+          <p style={{ margin: '.5rem 0 0' }}>{plan.rationale}</p>
+          {plan.brief && <p style={{ fontSize: '.8125rem', color: '#374151', marginTop: '.25rem' }}>{plan.brief}</p>}
+          <p style={{ fontSize: '.8125rem', color: '#6b7280' }}>
+            Week of {plan.week_of} · target {plan.filter?.target}
+            {` · company size ${plan.filter?.organization_num_employees_ranges?.join(' / ').replace(/,/g, '–') || 'any'}`}
+            {` · max ${plan.filter?.max_per_company ?? 2} per company`}
+            {plan.counts?.staged != null && ` · ${plan.counts.staged} staged`}
+            {plan.counts?.skipped_company_cap > 0 && ` · ${plan.counts.skipped_company_cap} skipped by the per-company cap`}
+          </p>
+          {plan.status === 'proposed' && !editing && (
+            <button className="btn btn-outline" style={{ fontSize: '.75rem', padding: '.15rem .5rem', marginTop: '.25rem' }} onClick={openEdit}>
+              edit filter
+            </button>
+          )}
+          {plan.status !== 'proposed' && (
+            <button className="btn btn-outline" style={{ fontSize: '.75rem', padding: '.15rem .5rem', marginTop: '.25rem' }} onClick={() => setExpanded((v) => !v)}>
+              {expanded ? 'hide filter' : 'show filter'}
+            </button>
+          )}
+          {expanded && (
+            <pre style={{ fontSize: '.75rem', background: '#f9fafb', padding: '.5rem', marginTop: '.25rem', overflowX: 'auto' }}>
+              {JSON.stringify(plan.filter, null, 2)}
+            </pre>
+          )}
+        </div>
+        {plan.status === 'proposed' && !editing && (
+          <button className="btn btn-primary" disabled={busy} onClick={approve}>
+            Approve &amp; pull from Apollo (spends credits)
+          </button>
+        )}
+      </div>
+
+      {editing && (
+        <div style={{ marginTop: '.75rem', borderTop: '1px solid #f3f4f6', paddingTop: '.75rem' }}>
+          <input value={editLabelText} onChange={(e) => setEditLabelText(e.target.value)} placeholder="Segment name (e.g. usa-auto-dealerships)" style={{ width: '100%', boxSizing: 'border-box', marginBottom: '.35rem' }} />
+          <textarea value={editBriefText} onChange={(e) => setEditBriefText(e.target.value)} rows={2} placeholder="Short description: who this targets and why" style={{ width: '100%', boxSizing: 'border-box', fontSize: '.8125rem', marginBottom: '.5rem' }} />
+          <div style={{ display: 'flex', gap: '.75rem', marginBottom: '.5rem' }}>
+            <label style={{ fontSize: '.8125rem', color: '#374151' }}>
+              Target{' '}
+              <input type="number" value={editTarget} onChange={(e) => setEditTarget(e.target.value)} style={{ width: '4rem', display: 'inline-block' }} />
+            </label>
+          </div>
+          <textarea
+            rows={10}
+            style={{ width: '100%', fontSize: '.75rem', fontFamily: 'monospace', padding: '.5rem', boxSizing: 'border-box' }}
+            value={editFilterText}
+            onChange={(e) => setEditFilterText(e.target.value)}
+          />
+          <div style={{ display: 'flex', gap: '.5rem', marginTop: '.5rem' }}>
+            <button className="btn btn-outline" disabled={busy} onClick={previewEdit}>Preview volume (free)</button>
+            <button className="btn btn-primary" disabled={busy} onClick={saveEdit}>Save changes</button>
+            <button className="btn btn-outline" disabled={busy} onClick={() => setEditing(false)}>Cancel</button>
+          </div>
+          {editPreview && (
+            <p style={{ fontSize: '.8125rem', color: '#374151', marginTop: '.5rem' }}>
+              {editPreview.total_entries} total match{editPreview.total_entries === 1 ? '' : 'es'}.
+              {editPreview.sample?.length > 0 && ` First few: ${editPreview.sample.slice(0, 5).map((s) => `${s.name || '?'} (${s.company || '?'})`).join(', ')}.`}
+            </p>
+          )}
+        </div>
+      )}
+
+      {error && <p style={{ color: '#b91c1c' }}>{error}</p>}
+
+      {plan.status === 'staged' && staged.length > 0 && (
+        <div style={{ marginTop: '1rem', borderTop: '1px solid #f3f4f6', paddingTop: '.75rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '.75rem' }}>
+            <h2 style={{ fontSize: '1rem', margin: 0 }}>Staged candidates ({staged.length})</h2>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '.75rem' }}>
+              <button className="btn btn-outline" style={{ fontSize: '.75rem', padding: '.15rem .5rem' }} onClick={() => setIncluded(new Set(staged.map((s) => s.id)))}>
+                select all
+              </button>
+              <button className="btn btn-outline" style={{ fontSize: '.75rem', padding: '.15rem .5rem' }} onClick={() => setIncluded(new Set())}>
+                select none
+              </button>
+              <button className="btn btn-primary" disabled={busy} onClick={stageApprove}>
+                Import {included.size} contact{included.size === 1 ? '' : 's'}
+                {included.size < staged.length && ` (reject ${staged.length - included.size})`}
+              </button>
+            </div>
+          </div>
+          {maxPerCompany > 0 && staged.length - defaultIncluded(staged).size > 0 && (
+            <p style={{ fontSize: '.8125rem', color: '#92400e', background: '#fffbeb', border: '1px solid #fde68a', borderRadius: 4, padding: '.4rem .6rem', marginTop: 0 }}>
+              {staged.length - defaultIncluded(staged).size} candidate{staged.length - defaultIncluded(staged).size === 1 ? ' is' : 's are'} unchecked because
+              they'd be more than {maxPerCompany} contact{maxPerCompany === 1 ? '' : 's'} from the same company
+              (the per-company cap). Tick any you do want.
+            </p>
+          )}
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '.8125rem' }}>
+            <thead>
+              <tr style={{ textAlign: 'left', color: '#6b7280' }}>
+                <th>Import?</th><th>Name</th><th>Title</th><th>Company</th><th>Email</th>
+              </tr>
+            </thead>
+            <tbody>
+              {staged.map((s) => (
+                <tr key={s.id} style={{ borderTop: '1px solid #f3f4f6', opacity: included.has(s.id) ? 1 : 0.4 }}>
+                  <td><input type="checkbox" checked={included.has(s.id)} onChange={() => toggleInclude(s.id)} title="Import this contact" /></td>
+                  <td>{[s.first_name, s.last_name].filter(Boolean).join(' ')}</td>
+                  <td>{s.title}</td>
+                  <td>{s.company}</td>
+                  <td>{s.email}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Already-decided plans (imported/rejected done) -- this list only ever
+// grows as more campaigns run, so it's a compact table with pagination
+// instead of the full card every other status gets. One line per segment:
+// label, how many contacts it actually produced, when, and the one action
+// still worth taking from here (draft a flow for it).
+function CompletedPlansTable({ track }) {
+  const [plans, setPlans] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [page, setPage] = useState(1);
+  const [error, setError] = useState(null);
+  const [draftingId, setDraftingId] = useState(null);
+  const [editId, setEditId] = useState(null);
+  const [editLabel, setEditLabel] = useState('');
+  const [editBrief, setEditBrief] = useState('');
+  const [saving, setSaving] = useState(false);
+  const navigate = useNavigate();
+  const pageSize = 10;
+
+  async function load() {
+    setError(null);
+    try {
+      const { plans: p, total: t } = await api.weeklyPlans(track, { status: 'completed', page, pageSize });
+      setPlans(p);
+      setTotal(t);
+    } catch (e) {
+      setError(e.message);
+    }
+  }
+  useEffect(() => { load(); }, [track, page]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  function startEdit(plan) {
+    setEditId(plan.id);
+    setEditLabel(plan.label || '');
+    setEditBrief(plan.brief || '');
+  }
+
+  async function saveEdit(plan) {
+    if (!editLabel.trim()) { setError('Give the segment a name.'); return; }
+    setSaving(true);
+    setError(null);
+    try {
+      await api.updatePlan(plan.id, { label: editLabel.trim(), brief: editBrief });
+      setEditId(null);
+      await load();
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function draftFlow(plan) {
+    setDraftingId(plan.id);
+    setError(null);
+    try { await draftFlowFor(plan, navigate); }
+    catch (e) { setError(e.message); }
+    finally { setDraftingId(null); }
+  }
+
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
+  if (total === 0) return null;
+
+  return (
+    <div className="card">
+      <h2 style={{ fontSize: '1rem', marginTop: 0 }}>Completed segments ({total})</h2>
+      {error && <p style={{ color: '#b91c1c' }}>{error}</p>}
+      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '.8125rem' }}>
+        <thead>
+          <tr style={{ textAlign: 'left', color: '#6b7280' }}>
+            <th style={{ padding: '.3rem 0' }}>Segment</th><th># contacts</th><th>Created on</th><th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {plans.map((plan) => (
+            <tr key={plan.id} style={{ borderTop: '1px solid #f3f4f6', verticalAlign: 'top' }}>
+              <td style={{ padding: '.4rem 0', maxWidth: 520 }}>
+                {editId === plan.id ? (
+                  <div>
+                    <input value={editLabel} onChange={(e) => setEditLabel(e.target.value)} placeholder="Segment name" style={{ width: '100%', boxSizing: 'border-box', marginBottom: '.35rem' }} />
+                    <textarea
+                      value={editBrief}
+                      onChange={(e) => setEditBrief(e.target.value)}
+                      rows={3}
+                      placeholder="Short description: who this is, how it was built, where the contacts came from"
+                      style={{ width: '100%', boxSizing: 'border-box', fontSize: '.8125rem' }}
+                    />
+                    <div style={{ display: 'flex', gap: '.35rem', marginTop: '.35rem' }}>
+                      <button className="btn btn-primary" style={{ fontSize: '.75rem', padding: '.15rem .5rem' }} disabled={saving} onClick={() => saveEdit(plan)}>{saving ? 'Saving...' : 'Save'}</button>
+                      <button className="btn btn-outline" style={{ fontSize: '.75rem', padding: '.15rem .5rem' }} disabled={saving} onClick={() => setEditId(null)}>Cancel</button>
+                    </div>
+                  </div>
+                ) : (
+                  <div>
+                    <strong>{planName(plan)}</strong>{' '}
+                    <button className="btn btn-outline" style={{ fontSize: '.7rem', padding: '0 .4rem' }} onClick={() => startEdit(plan)}>Edit name / description</button>
+                    {plan.brief && <div style={{ color: '#374151', marginTop: '.15rem' }}>{plan.brief}</div>}
+                    <div style={{ color: '#6b7280', fontSize: '.75rem', marginTop: '.15rem' }}>{describePlan(plan)}</div>
+                  </div>
+                )}
+              </td>
+              <td>{plan.counts?.imported ?? 0}</td>
+              <td>{new Date(plan.created_at).toLocaleDateString()}</td>
+              <td style={{ textAlign: 'right' }}>
+                <button className="btn btn-outline" style={{ fontSize: '.75rem', padding: '.15rem .5rem' }} disabled={draftingId === plan.id} onClick={() => draftFlow(plan)}>
+                  {draftingId === plan.id ? 'Drafting...' : plan.flow_id ? 'Draft another flow' : 'Draft flow'}
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      {totalPages > 1 && (
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '.75rem', marginTop: '.75rem' }}>
+          <button className="btn btn-outline" style={{ fontSize: '.75rem', padding: '.15rem .5rem' }} disabled={page <= 1} onClick={() => setPage((p) => p - 1)}>&larr; Prev</button>
+          <span style={{ fontSize: '.8125rem', color: '#6b7280' }}>Page {page} of {totalPages}</span>
+          <button className="btn btn-outline" style={{ fontSize: '.75rem', padding: '.15rem .5rem' }} disabled={page >= totalPages} onClick={() => setPage((p) => p + 1)}>Next &rarr;</button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Free-text context in, an editable filter proposal out -- what Jose asked
+// for after several rounds of describing a target in chat and Claude Code
+// hand-writing the Apollo filter each time. Nothing here costs Apollo
+// credits: "Suggest" calls DeepInfra only, "Preview" calls only Apollo's
+// free search. Only "Create plan" writes anything, and even that doesn't
+// spend credits -- credits are spent on the resulting plan's own "Approve"
+// button, same as any other plan card.
+function NewPlanForm({ track, onCreated }) {
+  const [brief, setBrief] = useState('');
+  const [label, setLabel] = useState('');
+  const [target, setTarget] = useState(10);
+  const [filterText, setFilterText] = useState('');
+  const [rationale, setRationale] = useState('');
+  const [preview, setPreview] = useState(null);
+  const [busy, setBusy] = useState(null); // 'suggest' | 'preview' | 'create' | null
+  const [error, setError] = useState(null);
+  const [open, setOpen] = useState(false);
+
+  function parsedFilter() {
+    try { return JSON.parse(filterText || '{}'); }
+    catch { throw new Error('The filter box has invalid JSON -- fix the syntax before continuing.'); }
+  }
+
+  async function suggest() {
+    setBusy('suggest'); setError(null); setPreview(null);
+    try {
+      let prior;
+      try { prior = filterText ? parsedFilter() : undefined; } catch { prior = undefined; }
+      const s = await api.suggestFilter(track, brief, prior);
+      setLabel(s.label || label);
+      setTarget(s.target || 10);
+      setFilterText(JSON.stringify(s.filter || {}, null, 2));
+      setRationale(s.rationale || '');
+    } catch (e) { setError(e.message); }
+    finally { setBusy(null); }
+  }
+
+  async function runPreview() {
+    setBusy('preview'); setError(null);
+    try {
+      const filter = parsedFilter();
+      const p = await api.previewFilter(filter, 100);
+      setPreview(p);
+    } catch (e) { setError(e.message); }
+    finally { setBusy(null); }
+  }
+
+  async function create() {
+    setBusy('create'); setError(null);
+    try {
+      const filter = parsedFilter();
+      if (!label.trim()) throw new Error('Give this plan a label first.');
+      await api.createCustomPlan({ track, label: label.trim(), brief: rationale || brief, filter, target: Number(target) || 10 });
+      setBrief(''); setLabel(''); setFilterText(''); setRationale(''); setPreview(null); setOpen(false);
+      onCreated();
+    } catch (e) { setError(e.message); }
+    finally { setBusy(null); }
+  }
+
+  if (!open) {
+    return (
+      <button className="btn btn-outline" style={{ marginBottom: '1.5rem' }} onClick={() => setOpen(true)}>
+        + New custom plan for {track}
+      </button>
+    );
+  }
+
+  return (
+    <div className="card" style={{ marginBottom: '1.5rem' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <h2 style={{ fontSize: '1rem', margin: 0 }}>New custom plan — {track}</h2>
+        <button className="btn btn-outline" style={{ fontSize: '.75rem', padding: '.15rem .5rem' }} onClick={() => setOpen(false)}>close</button>
+      </div>
+
+      <label style={{ display: 'block', fontSize: '.8125rem', color: '#374151', margin: '.75rem 0 .25rem' }}>
+        Context — geography, industry, who to include/exclude, anything you know that a filter alone can't capture
+      </label>
+      <textarea
+        rows={3}
+        style={{ width: '100%', fontSize: '.8125rem', padding: '.5rem', boxSizing: 'border-box' }}
+        value={brief}
+        onChange={(e) => setBrief(e.target.value)}
+        placeholder="e.g. Colombia, small manufacturers 25-100 employees, marketing/sales directors and general managers only -- not IT or production directors."
+      />
+      <button className="btn btn-primary" style={{ marginTop: '.5rem' }} disabled={busy || !brief.trim()} onClick={suggest}>
+        {busy === 'suggest' ? 'Asking...' : filterText ? 'Suggest again (uses the filter below as a starting point)' : 'Suggest filters'}
+      </button>
+
+      {rationale && <p style={{ fontSize: '.8125rem', color: '#374151', marginTop: '.75rem' }}>{rationale}</p>}
+
+      {filterText && (
+        <>
+          <div style={{ display: 'flex', gap: '.75rem', marginTop: '.75rem' }}>
+            <div style={{ flex: 1 }}>
+              <label style={{ display: 'block', fontSize: '.8125rem', color: '#374151', marginBottom: '.25rem' }}>Label</label>
+              <input style={{ width: '100%', fontSize: '.8125rem', padding: '.4rem', boxSizing: 'border-box' }} value={label} onChange={(e) => setLabel(e.target.value)} />
+            </div>
+            <div style={{ width: '6rem' }}>
+              <label style={{ display: 'block', fontSize: '.8125rem', color: '#374151', marginBottom: '.25rem' }}>Target</label>
+              <input type="number" style={{ width: '100%', fontSize: '.8125rem', padding: '.4rem', boxSizing: 'border-box' }} value={target} onChange={(e) => setTarget(e.target.value)} />
+            </div>
+          </div>
+
+          <label style={{ display: 'block', fontSize: '.8125rem', color: '#374151', margin: '.75rem 0 .25rem' }}>
+            Filter (edit directly, or tweak the context above and click Suggest again)
+          </label>
+          <textarea
+            rows={10}
+            style={{ width: '100%', fontSize: '.75rem', fontFamily: 'monospace', padding: '.5rem', boxSizing: 'border-box' }}
+            value={filterText}
+            onChange={(e) => setFilterText(e.target.value)}
+          />
+
+          <div style={{ display: 'flex', gap: '.5rem', marginTop: '.75rem' }}>
+            <button className="btn btn-outline" disabled={busy} onClick={runPreview}>
+              {busy === 'preview' ? 'Checking...' : 'Preview volume (free, no credits)'}
+            </button>
+            <button className="btn btn-primary" disabled={busy} onClick={create}>
+              {busy === 'create' ? 'Creating...' : 'Create plan (still requires Approve to spend credits)'}
+            </button>
+          </div>
+
+          {preview && (
+            <p style={{ fontSize: '.8125rem', color: '#374151', marginTop: '.5rem' }}>
+              {preview.total_entries} total match{preview.total_entries === 1 ? '' : 'es'} in Apollo for this filter.
+              {preview.sample?.length > 0 && ` First few: ${preview.sample.slice(0, 5).map((s) => `${s.name || '?'} (${s.company || '?'})`).join(', ')}.`}
+            </p>
+          )}
+        </>
+      )}
+
+      {error && <p style={{ color: '#b91c1c', marginTop: '.5rem' }}>{error}</p>}
+    </div>
+  );
+}
+
+// Jose: "I can filter and do a better segmentation directly in Apollo (for
+// now)... build a contact import tool for me to manually add Apollo
+// contacts I export from their platform" -- lets a CSV exported from
+// Apollo's own UI become a segment here (or add to one already created
+// this way), so a flow can still be built for those contacts later, same
+// as any Apollo-pull-sourced segment. No Apollo API call, no credits.
+function ManualImportForm({ track, onImported }) {
+  const [open, setOpen] = useState(false);
+  const [mode, setMode] = useState('new'); // 'new' | 'existing'
+  const [label, setLabel] = useState('');
+  const [brief, setBrief] = useState('');
+  const [existingPlans, setExistingPlans] = useState([]);
+  const [existingPlanId, setExistingPlanId] = useState('');
+  const [parsed, setParsed] = useState(null); // {contacts, mappedFields, unmappedHeaders}
+  const [fileName, setFileName] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState(null);
+  const [result, setResult] = useState(null);
+
+  useEffect(() => {
+    if (!open || mode !== 'existing') return;
+    api.weeklyPlans(track, { status: 'completed', pageSize: 50 })
+      .then(({ plans }) => setExistingPlans(plans))
+      .catch((e) => setError(e.message));
+  }, [open, mode, track]);
+
+  function onFile(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setFileName(file.name);
+    setResult(null);
+    setError(null);
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        setParsed(parseApolloExport(String(reader.result)));
+      } catch (err) {
+        setError(`Could not read that file: ${err.message}`);
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  async function doImport() {
+    if (!parsed?.contacts?.length) return;
+    setBusy(true);
+    setError(null);
+    try {
+      const payload = mode === 'existing'
+        ? { track, plan_id: existingPlanId, contacts: parsed.contacts }
+        : { track, label, brief, contacts: parsed.contacts };
+      const r = await api.manualImport(payload);
+      setResult(r);
+      onImported();
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  if (!open) {
+    return (
+      <button className="btn btn-outline" style={{ marginBottom: '1.5rem' }} onClick={() => setOpen(true)}>
+        + Import contacts from Apollo export
+      </button>
+    );
+  }
+
+  const canImport = parsed?.contacts?.length > 0 && (mode === 'new' ? label.trim() : existingPlanId) && !busy;
+
+  return (
+    <div className="card" style={{ marginBottom: '1.5rem' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <h2 style={{ fontSize: '1rem', margin: 0 }}>Import contacts — {track}</h2>
+        <button className="btn btn-outline" style={{ fontSize: '.75rem', padding: '.15rem .5rem' }} onClick={() => setOpen(false)}>close</button>
+      </div>
+      <p style={{ fontSize: '.8125rem', color: '#6b7280', margin: '.5rem 0' }}>
+        Export contacts from Apollo's own UI as CSV, then upload it here. Required column: Email.
+        First/last name, title, company, domain, city/state/country, and LinkedIn URL are picked
+        up automatically if present under Apollo's usual column names.
+      </p>
+
+      <div style={{ display: 'flex', gap: '1rem', marginBottom: '.75rem' }}>
+        <label style={{ fontSize: '.8125rem' }}>
+          <input type="radio" checked={mode === 'new'} onChange={() => setMode('new')} /> New segment
+        </label>
+        <label style={{ fontSize: '.8125rem' }}>
+          <input type="radio" checked={mode === 'existing'} onChange={() => setMode('existing')} /> Add to existing segment
+        </label>
+      </div>
+
+      {mode === 'new' ? (
+        <>
+          <input placeholder="Segment label, e.g. apollo-manual-canada-oct" value={label} onChange={(e) => setLabel(e.target.value)} style={{ marginBottom: '.5rem' }} />
+          <textarea placeholder="Brief (optional) — what this segment is / how you filtered it in Apollo" rows={2} value={brief} onChange={(e) => setBrief(e.target.value)} style={{ marginBottom: '.5rem', width: '100%', boxSizing: 'border-box' }} />
+        </>
+      ) : (
+        <select value={existingPlanId} onChange={(e) => setExistingPlanId(e.target.value)} style={{ marginBottom: '.5rem' }}>
+          <option value="">Choose a segment...</option>
+          {existingPlans.map((p) => <option key={p.id} value={p.id}>{p.label || p.track}</option>)}
+        </select>
+      )}
+
+      <input type="file" accept=".csv" onChange={onFile} style={{ marginBottom: '.5rem' }} />
+
+      {parsed && (
+        <div style={{ fontSize: '.8125rem', color: '#374151', marginBottom: '.5rem' }}>
+          <p style={{ margin: '.25rem 0' }}>
+            <strong>{fileName}</strong>: {parsed.contacts.length} contact{parsed.contacts.length === 1 ? '' : 's'} with a valid email found.
+          </p>
+          {parsed.unmappedHeaders.length > 0 && (
+            <p style={{ margin: '.25rem 0', color: '#6b7280' }}>
+              Columns not recognized (ignored): {parsed.unmappedHeaders.join(', ')}
+            </p>
+          )}
+          {parsed.contacts.length > 0 && (
+            <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '.5rem' }}>
+              <thead>
+                <tr style={{ textAlign: 'left', color: '#6b7280' }}>
+                  <th>Name</th><th>Title</th><th>Company</th><th>Email</th>
+                </tr>
+              </thead>
+              <tbody>
+                {parsed.contacts.slice(0, 5).map((c, i) => (
+                  <tr key={i} style={{ borderTop: '1px solid #f3f4f6' }}>
+                    <td>{[c.first_name, c.last_name].filter(Boolean).join(' ')}</td>
+                    <td>{c.title}</td>
+                    <td>{c.company}</td>
+                    <td>{c.email}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+          {parsed.contacts.length > 5 && <p style={{ margin: '.25rem 0', color: '#6b7280' }}>...and {parsed.contacts.length - 5} more.</p>}
+        </div>
+      )}
+
+      <button className="btn btn-primary" disabled={!canImport} onClick={doImport}>
+        {busy ? 'Importing...' : `Import ${parsed?.contacts?.length || ''} contacts`}
+      </button>
+
+      {result && (
+        <p style={{ fontSize: '.8125rem', color: '#374151', marginTop: '.5rem' }}>
+          Imported {result.imported}{result.skipped > 0 ? ` (skipped ${result.skipped} without a usable email)` : ''} into segment
+          "{result.plan?.label}". It'll show up in the completed-segments table below with a "Draft flow" option.
+        </p>
+      )}
+
+      {error && <p style={{ color: '#b91c1c', marginTop: '.5rem' }}>{error}</p>}
+    </div>
+  );
+}
+
+export default function Apollo() {
+  const [track, setTrack] = useState('ic');
+  const [autoSelected, setAutoSelected] = useState(false);
+  const [plans, setPlans] = useState([]);
+  const [error, setError] = useState(null);
+  // Bumped on every change (create/approve/import/manual-import) and mixed
+  // into CompletedPlansTable's key so it remounts and refetches -- it has
+  // its own pagination state, so it wouldn't otherwise notice a plan that
+  // just became 'completed', or a brand new manually-imported segment.
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  async function load() {
+    setError(null);
+    setRefreshKey((v) => v + 1);
+    try {
+      const { plans: p } = await api.weeklyPlans(track, { status: ACTIVE_STATUSES });
+      setPlans(p);
+    } catch (e) {
+      setError(e.message);
+    }
+  }
+
+  // On first load, jump to whichever track actually has active (not yet
+  // decided) plans instead of silently sitting on 'ic' with an empty state
+  // -- confusing when all the real activity is on 'b2b' (or vice versa) and
+  // looks like the whole pipeline is broken rather than just the wrong tab.
+  useEffect(() => {
+    if (autoSelected) return;
+    (async () => {
+      try {
+        const [{ plans: icPlans }, { plans: b2bPlans }] = await Promise.all([
+          api.weeklyPlans('ic', { status: ACTIVE_STATUSES }),
+          api.weeklyPlans('b2b', { status: ACTIVE_STATUSES }),
+        ]);
+        setAutoSelected(true);
+        if (track === 'ic' && icPlans.length === 0 && b2bPlans.length > 0) {
+          setTrack('b2b');
+          setPlans(b2bPlans);
+        } else {
+          setPlans(track === 'ic' ? icPlans : b2bPlans);
+        }
+      } catch (e) {
+        setAutoSelected(true);
+        setError(e.message);
+      }
+    })();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => { if (autoSelected) load(); }, [track]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  return (
+    <div>
+      <h1 style={{ fontSize: '1.375rem', marginBottom: '1rem' }}>Apollo — weekly &amp; custom plans</h1>
+      <div style={{ display: 'flex', gap: '.5rem', marginBottom: '1.5rem' }}>
+        {TRACKS.map((t) => (
+          <button key={t} className={track === t ? 'btn btn-primary' : 'btn btn-outline'} onClick={() => setTrack(t)}>{t}</button>
+        ))}
+      </div>
+
+      <NewPlanForm track={track} onCreated={load} />
+      <ManualImportForm track={track} onImported={load} />
+
+      {error && <p style={{ color: '#b91c1c' }}>{error}</p>}
+      {plans.length === 0 && <p>No plans currently need review for this track. The standard weekly plan proposes itself every Friday, or start a custom one above.</p>}
+
+      {plans.map((plan) => (
+        <PlanCard key={plan.id} plan={plan} onChange={load} />
+      ))}
+
+      <CompletedPlansTable key={`${track}-${refreshKey}`} track={track} />
+    </div>
+  );
+}

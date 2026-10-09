@@ -1,0 +1,33 @@
+# raw/unprocessed source images (HEIC originals, logo sources, rejected stock
+# photo candidates) -- not meant for the repo, see public/assets/images/ for
+# the processed assets actually used on the site
+images_raw/
+
+# build output
+dist/
+# generated types
+.astro/
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+
+# environment variables
+.env
+.env.local
+.env.*.local
+.env.production
+
+# macOS-specific files
+.DS_Store
+
+# jetbrains setting folder
+.idea/
+
+.vercel

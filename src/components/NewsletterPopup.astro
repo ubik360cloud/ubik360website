@@ -1,0 +1,153 @@
+---
+// Small, dismissible bottom-corner slide-in -- deliberately NOT a full-screen
+// modal (Google penalizes intrusive mobile interstitials for SEO, and on a
+// small screen a big popup just gets closed or bounces the visitor). Sits
+// above the chat widget button (fixed bottom:24px/62px tall, see
+// ubik360-chat-widget.js) so the two never overlap. Two triggers share the
+// same element: (1) scroll past 40% / 20s on page, soft copy; (2) exit
+// intent -- cursor leaves toward the top of the viewport, i.e. heading for
+// the tab bar/address bar -- swaps in a "don't forget" reminder. Browsers
+// no longer allow custom text in the native beforeunload prompt, so this is
+// an on-page popup triggered just before that moment, not the native dialog.
+// Both remember dismissal in localStorage for 14 days.
+interface Props {
+  lang: 'en' | 'es';
+}
+const { lang } = Astro.props;
+
+const copy = lang === 'en'
+  ? {
+      heading: 'Get the newsletter',
+      body: 'Marketing & cross-border growth insights, occasionally.',
+      exitHeading: 'Before you go —',
+      exitBody: 'Don’t forget to sign up for the newsletter. Real insights that help you grow your business, not generic filler.',
+      placeholder: 'Email address',
+      button: 'Join',
+      success: 'You’re in!',
+      error: 'Something went wrong. Please try again.',
+      close: 'Close',
+    }
+  : {
+      heading: 'Únete al boletín',
+      body: 'Ideas sobre marketing y expansión internacional, de vez en cuando.',
+      exitHeading: 'Antes de irte —',
+      exitBody: 'No olvides suscribirte al boletín. Contenido real que te ayuda a crecer tu negocio, no relleno genérico.',
+      placeholder: 'Correo electrónico',
+      button: 'Unirme',
+      success: '¡Listo!',
+      error: 'Algo salió mal. Intenta de nuevo.',
+      close: 'Cerrar',
+    };
+---
+
+<div
+  id="newsletter-popup"
+  class="hidden"
+  style="position:fixed; bottom:7.5rem; right:1.25rem; left:auto; z-index:60; width:min(19.75rem, calc(100vw - 2rem)); background:#fff; border:1px solid #e5e7eb; border-radius:.75rem; box-shadow:0 12px 32px rgba(0,0,0,.18); padding:1.125rem 1.25rem;"
+>
+  <button
+    id="newsletter-popup-close"
+    aria-label={copy.close}
+    style="position:absolute; top:.4rem; right:.4rem; background:transparent; border:none; cursor:pointer; padding:.35rem; color:#9ca3af; line-height:0;"
+  >
+    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+    </svg>
+  </button>
+  <h3 id="newsletter-popup-heading" style="font-family:'DM Serif Display',serif; font-size:.95rem; color:var(--black); margin:0 0 .3375rem; padding-right:1.125rem;">{copy.heading}</h3>
+  <p id="newsletter-popup-body" style="font-size:.73rem; color:#6b7280; margin:0 0 .9rem; line-height:1.5;">{copy.body}</p>
+  <form id="newsletter-popup-form" action="/api/subscribe" method="POST" novalidate style="display:flex; gap:.45rem;">
+    <input type="hidden" name="lang" value={lang} />
+    <input
+      type="email"
+      name="email"
+      required
+      placeholder={copy.placeholder}
+      style="flex:1; min-width:0; padding:.5625rem .675rem; border:1px solid #d1d5db; border-radius:.45rem; font-size:.73rem;"
+    />
+    <button type="submit" class="btn-primary" style="font-size:.73rem; padding:.5625rem .9rem; white-space:nowrap;">{copy.button}</button>
+  </form>
+  <p id="newsletter-popup-msg" style="font-size:.6875rem; color:var(--green); margin:.5625rem 0 0; display:none;">{copy.success}</p>
+  <p id="newsletter-popup-error" style="font-size:.6875rem; color:#dc2626; margin:.5625rem 0 0; display:none;">{copy.error}</p>
+</div>
+
+<script define:vars={{ exitHeading: copy.exitHeading, exitBody: copy.exitBody }}>
+  const STORAGE_KEY = 'ubik360_newsletter_dismissed_until';
+  const popup = document.getElementById('newsletter-popup');
+  const closeBtn = document.getElementById('newsletter-popup-close');
+  const form = document.getElementById('newsletter-popup-form');
+  const msg = document.getElementById('newsletter-popup-msg');
+  const errorMsg = document.getElementById('newsletter-popup-error');
+  const headingEl = document.getElementById('newsletter-popup-heading');
+  const bodyEl = document.getElementById('newsletter-popup-body');
+
+  function isDismissed() {
+    const until = localStorage.getItem(STORAGE_KEY);
+    return until ? Date.now() < Number(until) : false;
+  }
+
+  function dismiss() {
+    popup?.classList.add('hidden');
+    const fourteenDays = 14 * 24 * 60 * 60 * 1000;
+    localStorage.setItem(STORAGE_KEY, String(Date.now() + fourteenDays));
+  }
+
+  closeBtn?.addEventListener('click', dismiss);
+
+  if (!isDismissed()) {
+    let shown = false;
+    const reveal = (exitIntent) => {
+      if (shown || isDismissed()) return;
+      shown = true;
+      if (exitIntent && headingEl && bodyEl) {
+        headingEl.textContent = exitHeading;
+        bodyEl.textContent = exitBody;
+      }
+      popup?.classList.remove('hidden');
+    };
+    const onScroll = () => {
+      const scrolled = window.scrollY / (document.body.scrollHeight - window.innerHeight || 1);
+      if (scrolled > 0.4) {
+        reveal(false);
+        window.removeEventListener('scroll', onScroll);
+      }
+    };
+    const onMouseLeave = (e) => {
+      if (e.clientY <= 0) {
+        reveal(true);
+        document.removeEventListener('mouseleave', onMouseLeave);
+      }
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    document.addEventListener('mouseleave', onMouseLeave);
+    setTimeout(() => reveal(false), 20000);
+  }
+
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const btn = form.querySelector('button[type="submit"]');
+    btn.disabled = true;
+    const email = form.querySelector('input[type="email"]').value;
+    const lang = form.querySelector('input[name="lang"]').value;
+    fetch(form.action, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, lang, source: 'newsletter' }),
+    })
+      .then((res) => {
+        if (res.ok && msg) {
+          if (errorMsg) errorMsg.style.display = 'none';
+          form.style.display = 'none';
+          msg.style.display = 'block';
+          setTimeout(dismiss, 2500);
+        } else {
+          if (errorMsg) errorMsg.style.display = 'block';
+          btn.disabled = false;
+        }
+      })
+      .catch(() => {
+        if (errorMsg) errorMsg.style.display = 'block';
+        btn.disabled = false;
+      });
+  });
+</script>

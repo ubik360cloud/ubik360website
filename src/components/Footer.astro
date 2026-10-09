@@ -1,0 +1,154 @@
+---
+// Footer columns are audience-specific per language -- see MARKETING.md.
+// Fixed the info@ubik360.com -> admin@ubik360.com drift from the legacy footer.js here.
+// TEMPORARY TEST VARIANT (2026-07, Jose): "About"/"Sobre Mí" relabeled to
+// "Team"/"Nuestro Equipo", personal LinkedIn profile link removed (no
+// company page exists yet), and copyright line now carries the Ubik 360
+// Enterprises / Wyoming entity info -- see MARKETING.md "Anonymous/
+// bigger-company positioning test" for full context and revert plan.
+import { getAlternatePath } from '../utils/langMap';
+
+interface Props {
+  lang: 'en' | 'es';
+  currentPath: string;
+}
+const { lang, currentPath } = Astro.props;
+const year = new Date().getFullYear();
+
+const LEGAL = {
+  en: [
+    { href: '/en/privacy-policy.html', label: 'Privacy Policy' },
+    { href: '/en/terms-of-service.html', label: 'Terms of Service' },
+  ],
+  es: [
+    { href: '/es/politica-de-privacidad.html', label: 'Política de Privacidad' },
+    { href: '/es/terminos-de-servicio.html', label: 'Términos de Servicio' },
+  ],
+};
+
+const DATA = {
+  en: {
+    home: '/en/index.html',
+    tagline: 'Nearshore staffing, Hispanic-market marketing, and LatAm sourcing for businesses in the US and Canada.',
+    columns: [
+      {
+        title: 'Digital Marketing',
+        links: [
+          { href: '/en/digital-marketing.html', label: 'Growth Marketing' },
+          { href: '/en/digital-marketing.html#go-to-market', label: 'Go-to-Market Strategy' },
+          { href: '/en/digital-marketing.html#fractional-cmo', label: 'Fractional CMO' },
+          { href: '/en/digital-marketing/printing.html', label: 'For Print Shops' },
+          { href: '/en/digital-marketing/auto-dealership.html', label: 'For Auto Dealerships' },
+          { href: '/en/digital-marketing/ecommerce.html', label: 'For Ecommerce Brands' },
+        ],
+      },
+      {
+        title: 'Nearshore Staffing',
+        links: [
+          { href: '/en/nearshore-staffing.html', label: 'Overseas Staffing' },
+          { href: '/en/nearshore-staffing.html#sourcing', label: 'LatAm Vendor Sourcing' },
+        ],
+      },
+      {
+        title: 'Ubik 360',
+        links: [
+          { href: '/en/about.html', label: 'Team' },
+          { href: '/en/contact.html', label: 'Schedule a Call' },
+          { href: 'mailto:admin@ubik360.com', label: 'admin@ubik360.com' },
+        ],
+      },
+    ],
+    altLabel: 'Español',
+    copy: `© ${year} Ubik 360 Enterprises. All rights reserved. 30 N Gould St Ste R, Sheridan, WY 82801.`,
+  },
+  es: {
+    home: '/es/index.html',
+    tagline: 'Expansión internacional y estrategia de marketing para empresas colombianas creciendo hacia EE.UU. y Canadá.',
+    columns: [
+      {
+        title: 'Expansión Internacional',
+        links: [
+          { href: '/es/expansion-internacional.html', label: 'Incorporación de Empresa' },
+          { href: '/es/expansion-internacional.html#agente-registrado', label: 'Agente Registrado' },
+          { href: '/es/expansion-internacional.html#marketing-en-tu-nuevo-mercado', label: 'Marketing en tu Nuevo Mercado' },
+        ],
+      },
+      {
+        title: 'Soluciones de IA',
+        links: [
+          { href: '/es/soluciones-ia.html', label: 'Chatbots Inteligentes' },
+          { href: '/es/soluciones-ia.html', label: 'Automatización de Procesos' },
+          { href: '/es/soluciones-ia.html', label: 'Integraciones a la Medida' },
+          { href: '/es/soluciones-ia/automotriz.html', label: 'Industria Automotriz' },
+          { href: '/es/soluciones-ia/ecommerce.html', label: 'Ecommerce' },
+        ],
+      },
+      {
+        title: 'Ubik 360',
+        links: [
+          { href: '/es/sobre-mi.html', label: 'Nuestro Equipo' },
+          { href: '/es/contacto.html', label: 'Agenda una Consulta' },
+          { href: 'mailto:admin@ubik360.com', label: 'admin@ubik360.com' },
+        ],
+      },
+    ],
+    altLabel: 'English',
+    copy: `© ${year} Ubik 360 Enterprises. Todos los derechos reservados. 30 N Gould St Ste R, Sheridan, WY 82801.`,
+  },
+};
+
+const d = DATA[lang];
+const altHref = getAlternatePath(currentPath, lang);
+// Tailwind can't see dynamically-interpolated class names, so pick a literal string.
+const colsClass = d.columns.length === 3 ? 'md:grid-cols-3' : 'md:grid-cols-2';
+---
+
+<footer class="bg-brand-black text-white font-sans">
+  <div class="max-w-6xl mx-auto px-6 py-10">
+    <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-10">
+      <div class="max-w-xs flex-shrink-0">
+        <a href={d.home} class="inline-block mb-4">
+          <div class="inline-flex items-center justify-center rounded-lg bg-white" style="width:2.75rem; height:2.75rem; padding:.4rem;">
+            <img
+              src="/assets/images/ubik360logo.png"
+              alt="Ubik 360"
+              style="max-width:100%; max-height:100%; object-fit:contain;"
+            />
+          </div>
+        </a>
+        <p class="text-gray-400 text-sm leading-relaxed">{d.tagline}</p>
+      </div>
+
+      <div class={`grid grid-cols-1 ${colsClass} gap-8 lg:flex lg:gap-14`}>
+        {d.columns.map((col) => (
+          <div>
+            <h4 class="text-white text-sm font-semibold mb-3">{col.title}</h4>
+            <ul class="list-none p-0 m-0 flex flex-col gap-2">
+              {col.links.map((l) => (
+                <li>
+                  <a href={l.href} class="text-gray-400 text-sm no-underline transition-colors hover:text-white">
+                    {l.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <div class="mt-8 pt-6 border-t border-gray-800 flex flex-col items-center gap-3">
+      <p class="text-gray-500 text-[.75rem] text-center">{d.copy}</p>
+      <div class="flex items-center gap-6 flex-wrap justify-center">
+        {LEGAL[lang].map((l) => (
+          <a href={l.href} class="text-gray-500 text-[.75rem] no-underline transition-colors hover:text-white">
+            {l.label}
+          </a>
+        ))}
+        <a href={altHref} id="footer-lang-toggle" class="text-gray-500 text-[.75rem] no-underline transition-colors hover:text-white">
+          {d.altLabel}
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>

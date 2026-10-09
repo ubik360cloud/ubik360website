@@ -1,0 +1,156 @@
+---
+import Layout from '../../layouts/Layout.astro';
+// TEMPORARY TEST VARIANT (2026-07, Jose) -- ver MARKETING.md "Anonymous/
+// bigger-company positioning test". Reemplaza la página personal "Sobre Mí"
+// con una página de equipo anónima para esta prueba de posicionamiento.
+
+const orgSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Ubik 360 Enterprises',
+  url: 'https://ubik360.com',
+  description:
+    'Liderazgo en marketing, ventas y operaciones de negocio internacional para empresas creciendo entre Colombia, EE.UU. y Canadá.',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: '30 N Gould St Ste R',
+    addressLocality: 'Sheridan',
+    addressRegion: 'WY',
+    postalCode: '82801',
+    addressCountry: 'US',
+  },
+};
+---
+
+<Layout
+  lang="es"
+  path="/es/sobre-mi.html"
+  alternatePath="/en/about.html"
+  title="Nuestro Equipo | Ubik 360"
+  description="El liderazgo de Ubik 360 reúne profesionales en marketing, ventas y operaciones de negocio internacional trabajando entre Colombia, EE.UU. y Canadá."
+  structuredData={orgSchema}
+>
+  <!-- 1. POSICIONAMIENTO: banner de ancho completo -->
+  <section class="relative" style="overflow:hidden;">
+    <img
+      src="/assets/images/stock/marketing-team-meeting.jpg"
+      alt="Equipo de marketing en reunión"
+      class="absolute inset-0 w-full h-full object-cover"
+      loading="eager"
+    />
+    <div class="absolute inset-0" style="background:linear-gradient(180deg, rgba(5,5,5,.72) 0%, rgba(5,5,5,.85) 100%);"></div>
+    <div class="relative max-w-3xl mx-auto px-6 text-center" style="padding:7rem 1.5rem 5rem;">
+      <span class="section-tag mb-4" style="display:block; color:var(--oak);">Nuestro Equipo</span>
+      <h1 class="text-4xl lg:text-5xl leading-tight mb-6" style="color:#fff;">
+        Construidos para crecer a ambos lados de la frontera.
+      </h1>
+      <p style="font-size:1.125rem; color:#e5e7eb; line-height:1.8;">
+        El liderazgo de Ubik 360 está compuesto por profesionales en marketing, ventas y
+        operaciones de negocio internacional. Trabajamos como un solo equipo responsable, no como
+        una red suelta de subcontratistas — cada proyecto se ejecuta con supervisión directa, de
+        principio a fin.
+      </p>
+    </div>
+  </section>
+
+  <!-- 2. ENFOQUE (asimétrico: texto izquierda, imagen derecha) -->
+  <section style="background:#f9fafb; padding:4rem 0;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
+        <div>
+          <span class="section-tag mb-3">Cómo Trabajamos</span>
+          <h2 class="text-3xl lg:text-4xl mb-6" style="color:var(--black);">El trabajo habla antes que nosotros.</h2>
+          <div style="display:flex; flex-direction:column; gap:1.25rem; font-size:1.0625rem; color:#374151; line-height:1.85;">
+            <p>
+              Preferimos llegar a una primera conversación preparados para responder preguntas
+              difíciles sobre tu negocio, en lugar de dedicarla a generar cercanía. Los clientes no
+              necesitan un gran discurso de ventas, necesitan un equipo que ya hizo la tarea y puede
+              decir con claridad qué está funcionando, qué no, y qué sigue.
+            </p>
+            <p>
+              Eso significa sin plazos inflados, sin promesas vagas, y sin maquillar un plan débil para
+              que la primera llamada se sienta bien. Si algo no va a funcionar, lo escuchas en la
+              primera conversación — no tres meses después, ya dentro de un contrato.
+            </p>
+          </div>
+        </div>
+        <img
+          src="/assets/images/stock/sales-funnel-whiteboard.jpg"
+          alt="Estrategia de ventas en pizarra"
+          class="w-full rounded-xl object-cover aspect-[4/3]"
+          loading="lazy"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. COMPOSICIÓN DEL LIDERAZGO -->
+  <section style="background:#fff; padding:4rem 0;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="max-w-2xl mb-10">
+        <span class="section-tag mb-3">Liderazgo</span>
+        <h2 class="text-3xl lg:text-4xl mb-4" style="color:var(--black);">Un equipo construido alrededor de cada proyecto.</h2>
+        <p style="font-size:1.0625rem; color:#4b5563; line-height:1.8;">
+          El liderazgo de Ubik 360 reúne estrategia de marketing, liderazgo comercial y operaciones
+          de negocio internacional — experiencia práctica construyendo estrategia go-to-market,
+          growth marketing y expansión transfronteriza para empresas en Colombia, EE.UU. y Canadá.
+        </p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div class="service-card">
+          <h3 class="text-lg mb-2" style="color:var(--black);">Marketing y Crecimiento</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Liderazgo de CMO fraccional, estrategia go-to-market y ejecución de growth marketing.</p>
+        </div>
+        <div class="service-card">
+          <h3 class="text-lg mb-2" style="color:var(--black);">Producto y Diseño</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Diseñadores UX/UI con experiencia de producto en startups y empresas SaaS.</p>
+        </div>
+        <div class="service-card">
+          <h3 class="text-lg mb-2" style="color:var(--black);">Socio en Pauta Digital</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Un socio de growth marketing especializado en pauta digital, junto a nuestra práctica de contenido y SEO.</p>
+        </div>
+        <div class="service-card">
+          <h3 class="text-lg mb-2" style="color:var(--black);">Investigación de Mercado</h3>
+          <p style="font-size:.875rem; color:#4b5563; line-height:1.65;">Un economista con dominio de inglés, español y francés, y amplia experiencia en contratos gubernamentales en Colombia.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. VENTAJA BILINGÜE Y TRANSFRONTERIZA -->
+  <section style="background:var(--oak); padding:4rem 0;">
+    <div class="max-w-4xl mx-auto px-6">
+      <span class="section-tag mb-3" style="color:var(--red); display:block; text-align:center;">Bilingüe y Transfronterizo</span>
+      <h2 class="text-3xl lg:text-4xl mb-6 text-center" style="color:var(--black);">No es una categoría de servicio. Es práctica diaria.</h2>
+      <div style="display:flex; flex-direction:column; gap:1.25rem; font-size:1.0625rem; color:#3d3d3d; line-height:1.85;">
+        <p>
+          Nuestro equipo vive y trabaja entre Colombia, EE.UU. y Canadá. No es una credencial — es
+          la realidad que hace que el lado bilingüe y bicultural de este trabajo sea natural, no
+          teórico.
+        </p>
+        <p>
+          En la práctica, eso significa que el posicionamiento, los mensajes y los planes de
+          entrada a mercado se construyen con fluidez cultural y regulatoria real, no traducidos
+          después — ya sea que la dirección sea una empresa colombiana entrando a EE.UU. o Canadá,
+          o una empresa norteamericana construyendo un equipo o llegando a un mercado en
+          Latinoamérica.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. CTA DE CIERRE (blanco -- evita que se forme una costura negro-sobre-negro con el footer) -->
+  <section style="background:#fff; padding:4rem 0;">
+    <div class="max-w-3xl mx-auto px-6 text-center">
+      <span class="section-tag mb-4">Hablemos</span>
+      <h2 class="text-3xl lg:text-4xl mb-5" style="color:var(--black);">¿Tu negocio está listo para moverse?</h2>
+      <p style="color:#4b5563; font-size:1.125rem; line-height:1.7; max-width:30rem; margin:0 auto 2.5rem;">
+        Si tu negocio está listo para marketing que funciona, personal confiable, o un plan real
+        para entrar a un nuevo mercado — hablemos. Treinta minutos bastan para saber si esto encaja.
+      </p>
+      <a href="https://calendly.com/meet-ubik360/30min" target="_blank" rel="noopener" class="btn-primary" style="font-size:1rem; padding:1rem 2.5rem;">
+        Agenda tu Consulta de Expansión
+      </a>
+    </div>
+  </section>
+</Layout>

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../lib/api.js';
 import { parseApolloExport } from '../lib/csv.js';
+import { describePlan, planName } from '../lib/planSummary.js';
 
 const TRACKS = ['ic', 'b2b'];
 const ACTIVE_STATUSES = 'proposed,approved,pulling,staged,enrolling';
@@ -63,11 +64,15 @@ function PlanCard({ plan, onChange }) {
   const [editing, setEditing] = useState(false);
   const [editFilterText, setEditFilterText] = useState('');
   const [editTarget, setEditTarget] = useState(plan.filter?.target || 10);
+  const [editLabelText, setEditLabelText] = useState(plan.label || '');
+  const [editBriefText, setEditBriefText] = useState(plan.brief || '');
   const [editPreview, setEditPreview] = useState(null);
 
   function openEdit() {
     setEditFilterText(JSON.stringify(plan.filter || {}, null, 2));
     setEditTarget(plan.filter?.target || 10);
+    setEditLabelText(plan.label || '');
+    setEditBriefText(plan.brief || '');
     setEditPreview(null);
     setEditing(true);
   }
@@ -86,7 +91,7 @@ function PlanCard({ plan, onChange }) {
     setBusy(true); setError(null);
     try {
       const filter = JSON.parse(editFilterText);
-      await api.updatePlan(plan.id, { filter, target: Number(editTarget) || 10 });
+      await api.updatePlan(plan.id, { filter, target: Number(editTarget) || 10, label: editLabelText.trim(), brief: editBriefText });
       setEditing(false);
       onChange();
     } catch (e) { setError(e.message.includes('Unexpected token') ? 'Invalid JSON in the filter box.' : e.message); }
@@ -139,7 +144,7 @@ function PlanCard({ plan, onChange }) {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
         <div>
           <span className="badge">{plan.status}</span>
-          {plan.label && <span className="badge" style={{ marginLeft: '.5rem' }}>{plan.label}</span>}
+          <span className="badge" style={{ marginLeft: '.5rem' }}>{planName(plan)}</span>
           <p style={{ margin: '.5rem 0 0' }}>{plan.rationale}</p>
           {plan.brief && <p style={{ fontSize: '.8125rem', color: '#374151', marginTop: '.25rem' }}>{plan.brief}</p>}
           <p style={{ fontSize: '.8125rem', color: '#6b7280' }}>
@@ -174,6 +179,8 @@ function PlanCard({ plan, onChange }) {
 
       {editing && (
         <div style={{ marginTop: '.75rem', borderTop: '1px solid #f3f4f6', paddingTop: '.75rem' }}>
+          <input value={editLabelText} onChange={(e) => setEditLabelText(e.target.value)} placeholder="Segment name (e.g. usa-auto-dealerships)" style={{ width: '100%', boxSizing: 'border-box', marginBottom: '.35rem' }} />
+          <textarea value={editBriefText} onChange={(e) => setEditBriefText(e.target.value)} rows={2} placeholder="Short description: who this targets and why" style={{ width: '100%', boxSizing: 'border-box', fontSize: '.8125rem', marginBottom: '.5rem' }} />
           <div style={{ display: 'flex', gap: '.75rem', marginBottom: '.5rem' }}>
             <label style={{ fontSize: '.8125rem', color: '#374151' }}>
               Target{' '}
@@ -261,6 +268,10 @@ function CompletedPlansTable({ track }) {
   const [page, setPage] = useState(1);
   const [error, setError] = useState(null);
   const [draftingId, setDraftingId] = useState(null);
+  const [editId, setEditId] = useState(null);
+  const [editLabel, setEditLabel] = useState('');
+  const [editBrief, setEditBrief] = useState('');
+  const [saving, setSaving] = useState(false);
   const navigate = useNavigate();
   const pageSize = 10;
 
@@ -275,6 +286,27 @@ function CompletedPlansTable({ track }) {
     }
   }
   useEffect(() => { load(); }, [track, page]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  function startEdit(plan) {
+    setEditId(plan.id);
+    setEditLabel(plan.label || '');
+    setEditBrief(plan.brief || '');
+  }
+
+  async function saveEdit(plan) {
+    if (!editLabel.trim()) { setError('Give the segment a name.'); return; }
+    setSaving(true);
+    setError(null);
+    try {
+      await api.updatePlan(plan.id, { label: editLabel.trim(), brief: editBrief });
+      setEditId(null);
+      await load();
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setSaving(false);
+    }
+  }
 
   async function draftFlow(plan) {
     setDraftingId(plan.id);
@@ -299,8 +331,32 @@ function CompletedPlansTable({ track }) {
         </thead>
         <tbody>
           {plans.map((plan) => (
-            <tr key={plan.id} style={{ borderTop: '1px solid #f3f4f6' }}>
-              <td style={{ padding: '.4rem 0' }}>{plan.label || `${plan.track} weekly plan`}</td>
+            <tr key={plan.id} style={{ borderTop: '1px solid #f3f4f6', verticalAlign: 'top' }}>
+              <td style={{ padding: '.4rem 0', maxWidth: 520 }}>
+                {editId === plan.id ? (
+                  <div>
+                    <input value={editLabel} onChange={(e) => setEditLabel(e.target.value)} placeholder="Segment name" style={{ width: '100%', boxSizing: 'border-box', marginBottom: '.35rem' }} />
+                    <textarea
+                      value={editBrief}
+                      onChange={(e) => setEditBrief(e.target.value)}
+                      rows={3}
+                      placeholder="Short description: who this is, how it was built, where the contacts came from"
+                      style={{ width: '100%', boxSizing: 'border-box', fontSize: '.8125rem' }}
+                    />
+                    <div style={{ display: 'flex', gap: '.35rem', marginTop: '.35rem' }}>
+                      <button className="btn btn-primary" style={{ fontSize: '.75rem', padding: '.15rem .5rem' }} disabled={saving} onClick={() => saveEdit(plan)}>{saving ? 'Saving...' : 'Save'}</button>
+                      <button className="btn btn-outline" style={{ fontSize: '.75rem', padding: '.15rem .5rem' }} disabled={saving} onClick={() => setEditId(null)}>Cancel</button>
+                    </div>
+                  </div>
+                ) : (
+                  <div>
+                    <strong>{planName(plan)}</strong>{' '}
+                    <button className="btn btn-outline" style={{ fontSize: '.7rem', padding: '0 .4rem' }} onClick={() => startEdit(plan)}>Edit name / description</button>
+                    {plan.brief && <div style={{ color: '#374151', marginTop: '.15rem' }}>{plan.brief}</div>}
+                    <div style={{ color: '#6b7280', fontSize: '.75rem', marginTop: '.15rem' }}>{describePlan(plan)}</div>
+                  </div>
+                )}
+              </td>
               <td>{plan.counts?.imported ?? 0}</td>
               <td>{new Date(plan.created_at).toLocaleDateString()}</td>
               <td style={{ textAlign: 'right' }}>

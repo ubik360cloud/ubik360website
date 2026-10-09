@@ -21,6 +21,7 @@ export default function Flows() {
   const [suggestedDescription, setSuggestedDescription] = useState(null);
   const [otherSegments, setOtherSegments] = useState([]);
   const [otherChoice, setOtherChoice] = useState('');
+  const [enrollmentCounts, setEnrollmentCounts] = useState({});
   // Step cards use uncontrolled inputs (defaultValue) for editing
   // performance -- bumping this forces them to remount (fresh defaultValue)
   // whenever `steps` is replaced wholesale (opening a flow, an AI
@@ -46,7 +47,8 @@ export default function Flows() {
     setEnrollResult(null);
     setInstructions('');
     setSuggestedDescription(null);
-    const { flow, steps: s, segment: seg } = await api.flow(f.id);
+    const { flow, steps: s, segment: seg, enrollmentCounts: ec } = await api.flow(f.id);
+    setEnrollmentCounts(ec || {});
     setOtherChoice('');
     // Other finished segments of this track that can also feed this flow.
     api.weeklyPlans(flow.track, { status: 'completed', page: 1, pageSize: 50 })
@@ -94,7 +96,12 @@ export default function Flows() {
 
   async function enrollSegmentNow(planId = segment?.id) {
     setBusy(true); setError(null);
-    try { const r = await api.enrollSegment(selected.id, planId); setEnrollResult(r); }
+    try {
+      const r = await api.enrollSegment(selected.id, planId);
+      setEnrollResult(r);
+      const fresh = await api.flow(selected.id);
+      setEnrollmentCounts(fresh.enrollmentCounts || {});
+    }
     catch (e) { setError(e.message); }
     finally { setBusy(false); }
   }
@@ -192,6 +199,22 @@ export default function Flows() {
                 <span className="badge">{segment.label || 'weekly plan'}</span> — {segment.counts?.imported ?? 0} imported contacts
               </p>
               {segment.brief && <p style={{ fontSize: '.8125rem', color: '#374151', marginTop: '.25rem' }}>{segment.brief}</p>}
+              {(() => {
+                const total = Object.values(enrollmentCounts).reduce((a, b) => a + b, 0);
+                const imported = segment.counts?.imported ?? 0;
+                const parts = Object.entries(enrollmentCounts).map(([st, n]) => `${n} ${st}`).join(', ');
+                return (
+                  <p style={{ fontSize: '.8125rem', color: '#374151', margin: '.25rem 0 0' }}>
+                    <strong>In this flow:</strong> {total > 0 ? parts : 'nobody enrolled yet'}.{' '}
+                    {total >= imported && imported > 0
+                      ? 'Everyone in this segment has been through enrollment already.'
+                      : selected.status === 'active'
+                        ? 'Use "Enroll segment into this flow" to add the rest (anyone already enrolled is skipped).'
+                        : 'Approve & activate the flow first, then enroll.'}
+                    {enrollmentCounts.stopped > 0 && ' "Stopped" = left out on purpose (suppressed, wrong language for this flow, or over the 2-per-company limit).'}
+                  </p>
+                );
+              })()}
               {segment.language_counts && (segment.language_counts.es + segment.language_counts.en > 0) && (
                 <p style={{ fontSize: '.75rem', color: '#6b7280', marginTop: '.25rem', marginBottom: 0 }}>
                   Contacts by language (from their country): {segment.language_counts.es} Spanish, {segment.language_counts.en} English.
@@ -220,7 +243,7 @@ export default function Flows() {
           <div style={{ display: 'flex', gap: '.5rem', alignItems: 'center', marginBottom: '1rem' }}>
             <select value={otherChoice} onChange={(e) => setOtherChoice(e.target.value)} style={{ width: 'auto', fontSize: '.8125rem' }}>
               <option value="">Enroll another segment into this flow...</option>
-              {otherSegments.map((p) => <option key={p.id} value={p.id}>{p.label || 'weekly plan'} ({p.counts?.imported ?? 0} contacts)</option>)}
+              {otherSegments.map((p) => <option key={p.id} value={p.id}>{p.label || `${p.track} weekly plan (week of ${p.week_of})`} ({p.counts?.imported ?? 0} contacts)</option>)}
             </select>
             <button className="btn btn-outline" disabled={!otherChoice || busy} onClick={() => enrollSegmentNow(otherChoice)}>Enroll</button>
           </div>

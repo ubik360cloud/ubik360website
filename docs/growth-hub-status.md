@@ -534,6 +534,33 @@ per-campaign choice (small businesses for one industry, larger for another), not
   pulled before this existed. Credits for those were already spent and can't be recovered.
 - Not covered: manual CSV imports (the Apollo export is whatever Jose chose to export).
 
+## Segment naming/description, and the auto-dealership batch cleanup (2026-10-09)
+
+Jose's first real pull from the Friday weekly proposal (cron now works) came out as a completed
+segment called "ic weekly plan" with no way to rename it or record how it was built.
+- **Editable name + description:** `updatePlan` now allows `label`/`brief` at ANY status; the
+  filter/target still lock after approval (they're the record of what was paid for). The Apollo
+  tab's completed-segments table has "Edit name / description" per row, and the proposed-plan edit
+  form has both fields too. Every segment row also shows an auto-generated "Source: Apollo search ·
+  US · industry: ... · titles: ... · company size ... · week of ..." line (`hub/src/lib/planSummary.js`,
+  built only from the stored filter) so even an unnamed one is understandable. `(track, week_of,
+  label)` is unique, so a duplicate name in the same week gets a friendly error.
+- **The weekly plan was linked to the wrong flow:** `proposeWeeklyPlan` stamps `flow_id` with the
+  track's latest ACTIVE flow at proposal time, which was the Colombian construction flow, not the
+  auto-dealership flow Jose made afterwards. Fixed by hand: plan `usa-auto-dealerships` -> flow
+  "Auto-dealerships-usa" and the flow's `source_plan_id` -> that plan (the two-way link
+  `listCreate` normally sets), so the Flows page shows its segment, language mix and enrollment counts.
+  Still true for the next weekly proposal: check which flow it's linked to.
+- **All 31 contacts were already enrolled** in "Auto-dealerships-usa", but that broke the 2-per-company
+  rule (16 from Sewell Automotive, 4 from Hansel). Set the 16 extras to `stopped` (nothing had been
+  sent), keeping the two most relevant per company (marketing/ecommerce titles first, then
+  general/director/owner/founder, then earliest). Reversible: set the enrollment back to `active`.
+  Contacts stay in the segment. The enforcement is at pull time and in the staged-review checkboxes;
+  `enrollContact` does not itself limit per company (CSV imports and "Enroll segment" can still add many
+  from one company).
+- Flow page now shows "In this flow: N active, N stopped..." with a plain-language hint, and the
+  "Enroll another segment" dropdown uses readable names.
+
 ## What's left before this can actually send anything
 
 1. Add `GROWTH_ADMIN_SECRET` on Vercel (see above) so the two queued test pulls can actually run.

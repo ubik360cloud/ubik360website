@@ -248,23 +248,26 @@ export async function previewSearch(filter, { limit = 100 } = {}) {
   return { total_entries: totalEntries, returned: sample.length, sample };
 }
 
-/** Edits a plan's filter/label/target/brief -- only while it's still
- *  'proposed'. Once approved, the filter is a historical record of what was
- *  actually queried (Apollo was already paid for those exact results) --
- *  editing it after the fact wouldn't change anything already pulled, it'd
- *  just make the stored filter lie about what produced the staged
- *  candidates. To refine after approving, create a new labeled plan (a
- *  "v2") with the adjusted filter instead. */
+/** Edits a plan. The NAME (label) and DESCRIPTION (brief) can be changed at
+ *  any stage -- they're just notes about the segment (2026-10-09, Jose: a
+ *  completed segment was stuck with the generic "ic weekly plan" name and no
+ *  way to say how it was built). The filter and target can only change while
+ *  the plan is still 'proposed': once approved, the filter is a historical
+ *  record of what was actually queried (Apollo was already paid for those
+ *  exact results) -- editing it afterwards wouldn't change anything already
+ *  pulled, it'd just make the stored filter lie about what produced the
+ *  staged candidates. To refine after approving, create a new labeled plan
+ *  (a "v2") with the adjusted filter instead. */
 export async function updatePlan(planId, { label, brief, filter, target }) {
   const db = supabase();
   const { data: plan, error: loadErr } = await db.from('apollo_weekly_plans').select('status, filter, counts').eq('id', planId).single();
-  if (loadErr || !plan) throw new Error('plan not found');
-  if (plan.status !== 'proposed') {
-    throw new Error(`This plan is already '${plan.status}' -- its filter is a record of what was actually queried and can't be edited after the fact. Create a new labeled plan with the adjusted filter instead.`);
+  if (loadErr || !plan) throw new Error('weekly plan not found');
+  if ((filter !== undefined || target !== undefined) && plan.status !== 'proposed') {
+    throw new Error(`This plan is already '${plan.status}' -- its filter is a record of what was actually queried and can't be edited after the fact. Create a new labeled plan with the adjusted filter instead. (Its name and description can still be edited.)`);
   }
 
   const patch = {};
-  if (label !== undefined) patch.label = label;
+  if (label !== undefined) patch.label = String(label).trim();
   if (brief !== undefined) { patch.brief = brief; patch.rationale = brief; }
   if (filter !== undefined || target !== undefined) {
     const base = filter !== undefined ? filter : plan.filter;
@@ -272,9 +275,14 @@ export async function updatePlan(planId, { label, brief, filter, target }) {
     patch.filter = { ...base, target: newTarget };
     patch.counts = { ...(plan.counts || {}), target: newTarget };
   }
+  if (!Object.keys(patch).length) throw new Error('nothing to update');
 
   const { data: updated, error } = await db.from('apollo_weekly_plans').update(patch).eq('id', planId).select().single();
-  if (error) throw error;
+  if (error) {
+    // (track, week_of, label) is unique -- two segments can't share a name within a week.
+    if (error.code === '23505') throw new Error('Another segment from the same week already has that name -- pick a different one.');
+    throw error;
+  }
   return updated;
 }
 
